@@ -15,6 +15,9 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import lombok.Getter;
 import lombok.Setter;
 
 @Entity
@@ -23,6 +26,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class User {
 
     @Id
@@ -44,6 +48,7 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDate createdAt;
+
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
