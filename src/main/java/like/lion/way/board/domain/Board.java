@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import like.lion.way.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +25,9 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
-//    @OneToOne
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "board_name", unique = true, nullable = false)
     private String name;
