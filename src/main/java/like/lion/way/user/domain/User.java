@@ -1,10 +1,20 @@
 package like.lion.way.user.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -14,6 +24,9 @@ import lombok.Setter;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class User {
 
     @Id
@@ -35,4 +48,23 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDate createdAt;
+
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name="user_interest",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "interest_id")
+    )
+    private Set<Interest> interests;
+
+
 }
