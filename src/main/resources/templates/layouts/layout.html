@@ -11,10 +11,19 @@
 <body>
     <div class="wrapper">
         <!-- header fragment 사용 -->
+
+        <div>
+            <th:block th:replace="~{fragments/header :: headerFragment}"></th:block>
+
+            <!-- aside fragment 사용 -->
+            <div th:replace="~{fragments/aside :: asideFragment}"></div>
+        </div>
+
         <th:block th:replace="~{fragments/header :: headerFragment}"></th:block>
 
         <!-- aside fragment 사용 -->
         <div th:replace="~{fragments/aside :: asideFragment}"></div>
+
         <!-- content fragment 사용 -->
         <div class="content">
             <th:block layout:fragment="content"></th:block>
