@@ -1,6 +1,10 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px; /* Header 높이만큼 여백 추가 */
+
 }
 
 header {
@@ -11,6 +15,14 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
+    position: fixed;
+    top: 0;
+    left: 250px; /* Adjust position to start after sidebar */
+    z-index: 2; /* Ensure header is above other content */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+
     position: relative;
     left: 250px; /* Adjust position to start after sidebar */
 }
@@ -27,6 +39,7 @@ header {
     font-weight: bold;
     margin-right: 20px;
 }
+
 .header-icons {
     margin-right: auto;
 }
@@ -60,7 +73,7 @@ header {
     left: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    z-index: 1; /* Ensure sidebar is below header */
 }
 
 .sidebar-header {
@@ -106,6 +119,16 @@ nav ul li a {
 }
 
 nav ul li a:hover {
+    background-color: #ff6746;
+}
+
+/* Ensure content does not overlap header and sidebar */
+.content {
+    margin-left: 280px; /* Offset from sidebar */
+    margin-top: 30px;   /* Offset from header */
+    padding: 20px;     /* Optional padding */
+    flex-grow: 1;      /* Allow content to take available space */
+}
     background-color: #a04000;
 }
 
