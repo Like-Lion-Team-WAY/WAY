@@ -17,8 +17,12 @@ public class BoardEditServiceRequest {
 
 
     @Builder
-    public BoardEditServiceRequest(String name, String introduction) {
+    public BoardEditServiceRequest(
+            AnonymousPermission anonymousPermission,
+            String name,
+            String introduction) {
 
+        this.anonymousPermission = anonymousPermission;
         this.name = name;
         this.introduction = introduction;
 
@@ -30,6 +34,7 @@ public class BoardEditServiceRequest {
                 .name(name)
                 .introduction(introduction)
                 .user(user)
+                .anonymousPermission(anonymousPermission)
                 .build();
     }
 
