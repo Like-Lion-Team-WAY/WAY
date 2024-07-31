@@ -23,10 +23,6 @@ header {
 }
 
 
-    position: relative;
-    left: 250px; /* Adjust position to start after sidebar */
-}
-
 .header-content {
     display: flex;
     align-items: center;
@@ -129,8 +125,7 @@ nav ul li a:hover {
     padding: 20px;     /* Optional padding */
     flex-grow: 1;      /* Allow content to take available space */
 }
-    background-color: #a04000;
-}
+
 
 .sidebar::after {
     content: "";
