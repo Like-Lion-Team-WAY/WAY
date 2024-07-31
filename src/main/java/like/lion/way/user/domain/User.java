@@ -66,5 +66,11 @@ public class User {
     )
     private Set<Interest> interests;
 
-
+    public String getNickname(boolean check) {
+        if(check){
+            return "익명";
+        }else{
+            return nickname;
+        }
+    }
 }
