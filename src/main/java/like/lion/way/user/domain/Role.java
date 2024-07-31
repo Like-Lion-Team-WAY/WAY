@@ -21,7 +21,7 @@ public class Role {
     private Long roleId;
 
     @Column(name = "roles_name")
-    private String roleName;
+    private RoleType roleName;
 
 
 }

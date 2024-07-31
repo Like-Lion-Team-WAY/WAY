@@ -17,6 +17,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
+
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -6,10 +6,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import like.lion.way.config.SecurityConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UrlPathHelper;
 
 @Component
 @Slf4j
@@ -22,6 +26,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     }
     private void handleRestResponse(HttpServletRequest request, HttpServletResponse response, String exception) throws IOException {
+        String requestURI = new UrlPathHelper().getPathWithinApplication(request);
+        // 허용된 경로 확인
+        RequestMatcher permitAllMatcher = new AntPathRequestMatcher(requestURI);
+        if (SecurityConfig.PERMIT_ALL_PATHS.stream().anyMatch(path -> permitAllMatcher.matches(request))) {
+            return;
+        }
         log.error("Rest Request - Commence Get Exception : {}", exception);
 
         if (exception != null) {
