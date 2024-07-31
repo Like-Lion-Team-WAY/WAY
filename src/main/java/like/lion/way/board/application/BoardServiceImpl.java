@@ -1,8 +1,10 @@
 package like.lion.way.board.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
+import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.repository.BoardRepository;
 import like.lion.way.user.domain.User;
@@ -18,9 +20,16 @@ public class BoardServiceImpl implements BoardService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Board> getBoardList() {
+    public List<BoardTitleResponse> getBoardFindAll() {
 
-        return boardRepository.findAll();
+        List<Board> boards = boardRepository.findAll();
+
+        return boards.stream()
+                .map(board -> BoardTitleResponse.builder()
+                        .boardId(board.getId())
+                        .name(board.getName())
+                        .build())
+                .collect(Collectors.toList());
 
     }
 

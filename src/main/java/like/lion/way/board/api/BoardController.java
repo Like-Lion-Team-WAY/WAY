@@ -1,9 +1,11 @@
 package like.lion.way.board.api;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.application.BoardService;
+import like.lion.way.board.application.response.BoardTitleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,9 +29,10 @@ public class BoardController {
     public ModelAndView showBoardList() {
 
         ModelAndView modelAndView = new ModelAndView("pages/boards/board");
-        modelAndView.addObject("boards", boardService.getBoardList());
-
+        List<BoardTitleResponse> boards = boardService.getBoardFindAll();
+        modelAndView.addObject("boards", boards);
         return modelAndView;
+
     }
 
     @GetMapping("/create")
