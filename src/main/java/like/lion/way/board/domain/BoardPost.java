@@ -44,8 +44,9 @@ public class BoardPost {
     private LocalDateTime createdAt;
 
     @Builder
-    public BoardPost(Board board, String title) {
+    public BoardPost(User user, Board board, String title) {
 
+        this.user = user;
         this.board = board;
         this.title = title;
 
