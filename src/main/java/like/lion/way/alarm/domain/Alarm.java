@@ -31,4 +31,10 @@ public class Alarm {
 
     @Column(name = "alarm_url", nullable = false)
     private String url;
+
+    public Alarm(User user, String message, String url) {
+        this.user = user;
+        this.message = message;
+        this.url = url;
+    }
 }
