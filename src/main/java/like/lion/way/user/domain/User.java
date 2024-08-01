@@ -44,8 +44,6 @@ public class User {
     @Column(nullable = false,name = "provider")
     private String provider;
 
-    @Column(name = "provider_id")
-    private String providerId;
 
     @Column(nullable = false, name = "email" , unique = true)
     private String email;

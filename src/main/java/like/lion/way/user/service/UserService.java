@@ -8,5 +8,5 @@ public interface UserService {
     User findByUserId(Long userId);
     User findByUsername(String username);
     User saveOrUpdate(OAuthAttributes attributes);
-    User findByProviderId(String providerId);
+    User findByEmail(String email);
 }

@@ -70,8 +70,8 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/", "/user/login", "/user/logininfo", "/user/duplicate", "/user/sign-up",
                                 "/user/like", "/questions/create", "/questions/answer", "/boards", "/boards/posts",
-                                "/css/**", "/js/**", "/posts/detail/**", "/oauth2/**", "/oauth2/authorization/kakao",
-                                "/login/oauth2/code/kakao").permitAll()
+                                "/css/**", "/js/**", "/posts/detail/**", "/oauth2/**",
+                                "/login/oauth2/code/kakao","/oauth2/authorization/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

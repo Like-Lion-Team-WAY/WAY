@@ -3,6 +3,7 @@ package like.lion.way.user.oauth2.dto;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import like.lion.way.user.domain.Role;
 import like.lion.way.user.domain.RoleType;
 import like.lion.way.user.domain.User;
@@ -17,7 +18,6 @@ public class OAuthAttributes {
     private String name;
     private String email;
     private String provider;
-    private String providerId;
 
 
     public static OAuthAttributes of(String registrationId , String userNameAttributeName , Map<String , Object> attributes){
@@ -31,7 +31,7 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String , Object> attributes){
         return OAuthAttributes.builder()
-                .name((String) attributes.get("name"))
+                .name(UUID.randomUUID().toString())
                 .email((String)attributes.get("email"))
                 .provider("Google")
                 .attributes(attributes)
@@ -41,9 +41,10 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofNaver(String userNameAttributeName , Map<String , Object> attributes){
         Map<String,Object> response = (Map<String, Object>) attributes.get("response");
+        System.out.println(response);
         return OAuthAttributes.builder()
-                .name((String) attributes.get("name"))
-                .email((String)attributes.get("email"))
+                .name(UUID.randomUUID().toString())
+                .email((String)response.get("email"))
                 .provider("Naver")
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
@@ -57,10 +58,9 @@ public class OAuthAttributes {
 
 
         return OAuthAttributes.builder()
-                .name((String) account.get("nickname"))
+                .name(UUID.randomUUID().toString())
                 .email((String) response.get("email"))
                 .provider("Kakao")
-                .providerId(String.valueOf(attributes.get("id")))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
