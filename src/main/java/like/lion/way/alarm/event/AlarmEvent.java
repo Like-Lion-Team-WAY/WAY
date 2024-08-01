@@ -1,19 +1,17 @@
 package like.lion.way.alarm.event;
-
+import like.lion.way.alarm.domain.AlarmType;
 import like.lion.way.user.domain.User;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class AlarmEvent extends ApplicationEvent {
+    private AlarmType type;
     private User user;
-    private String message;
-    private String url;
 
-    public AlarmEvent(Object source, User user, String message, String url) {
+    public AlarmEvent(Object source, AlarmType type, User user) {
         super(source);
+        this.type = type;
         this.user = user;
-        this.message = message;
-        this.url = url;
     }
 }
