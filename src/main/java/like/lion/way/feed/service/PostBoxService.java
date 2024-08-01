@@ -1,2 +1,7 @@
-package like.lion.way.feed.service;public class PostBoxService {
+package like.lion.way.feed.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public interface PostBoxService {
 }

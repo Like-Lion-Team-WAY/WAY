@@ -12,8 +12,8 @@ import java.util.Set;
 import like.lion.way.user.domain.User;
 
 @Entity
-@Table(name = "qeustion_box")
-public class QeustionBox {
+@Table(name = "question_box")
+public class QuestionBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionBoxId;

@@ -9,6 +9,7 @@ body {
 
 header {
     width: calc(100% - 250px); /* Adjust width to exclude sidebar */
+    height: 70px;
     background-color: #ff6746;
     padding: 10px 20px;
     display: flex;
@@ -17,14 +18,9 @@ header {
     border-bottom: 1px solid #ddd;
     position: fixed;
     top: 0;
-    left: 250px; /* Adjust position to start after sidebar */
-    z-index: 2; /* Ensure header is above other content */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-
-    position: relative;
-    left: 250px; /* Adjust position to start after sidebar */
+    left: 250px;
+    z-index: 2;
+    box-sizing: border-box;
 }
 
 .header-content {
@@ -37,15 +33,19 @@ header {
     color: white;
     text-decoration: none;
     font-weight: bold;
+    font-size: 16px;
     margin-right: 20px;
 }
 
 .header-icons {
-    margin-right: auto;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 }
 
 .header-icons a {
     margin: 0 10px;
+    margin-left: 10px;
 }
 
 .header-icons img {
@@ -128,8 +128,6 @@ nav ul li a:hover {
     margin-top: 30px;   /* Offset from header */
     padding: 20px;     /* Optional padding */
     flex-grow: 1;      /* Allow content to take available space */
-}
-    background-color: #a04000;
 }
 
 .sidebar::after {

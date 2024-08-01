@@ -47,21 +47,17 @@
                 <a th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
             </div>
             <div class="feed">
-                <div class="feed-item">
-                    <p>취미</p>
-                    <p>취미</p>
-                    <div class="feed-actions">
-                        <button>채팅</button>
-                        <button>좋아요</button>
-                        <button>보관함</button>
-                    </div>
-                </div>
-                <div class="feed-item">
-                    <p>username의 피드에 오신 것을 환영합니다!! 질문 남겨주세요.</p>
-                    <div class="feed-actions">
-                        <button>댓글</button>
-                        <button>좋아요</button>
-                        <button>보관함</button>
+                <div class="feed-item" th:each="post : ${posts}">
+                    <div class="post">
+                        <h2 th:text="${post.getPostTitle()}"></h2>
+                        <p th:text="${post.getPostContent()}"></p>
+                        <img th:src="@{${post.postImageUrl}}" alt="Post Image">
+                        <a th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        <div class="feed-actions">
+                            <button>좋아요</button>
+                            <button>보관함</button>
+                            <a th:href="@{'/posts/detail/' + ${post.postId}}"><button>피드 상세 보기</button></a>
+                        </div>
                     </div>
                 </div>
             </div>
