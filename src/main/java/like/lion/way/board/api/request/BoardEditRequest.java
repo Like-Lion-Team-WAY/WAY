@@ -1,10 +1,8 @@
 package like.lion.way.board.api.request;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
-import like.lion.way.board.domain.AnonymousPermission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,14 +18,14 @@ public class BoardEditRequest {
     private String introduction;
 
     @NotNull(message = "익명 허용 여부는 필수입니다.")
-    private AnonymousPermission anonymousPermission;
+    private boolean anonymousPermission;
 
 
     @Builder
     public BoardEditRequest(
             String name,
             String introduction,
-            AnonymousPermission anonymousPermission) {
+            boolean anonymousPermission) {
 
         this.name = name;
         this.introduction = introduction;
@@ -40,7 +38,7 @@ public class BoardEditRequest {
         return BoardEditServiceRequest.builder()
                 .name(name)
                 .introduction(introduction)
-                .AnonymousPermission(anonymousPermission)
+                .anonymousPermission(anonymousPermission)
                 .build();
 
     }

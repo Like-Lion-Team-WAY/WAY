@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/boardCreateForm.css">
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="returnPage">
+        <a id="returnPage"><- 돌아가기</a>
+    </div>
+    <h1> 게시판 생성</h1>
+    <div class="input-container">
+        <form id="boardForm">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" required>
+            <label for="information">설명</label>
+            <input type="text" id="information" name="information" required>
+
+            <div class="toggleContainer">
+                <span>익명 허용</span>
+                <input type="checkbox" id="toggle" hidden>
+                <label for="toggle" class="toggleSwitch">
+                    <span class="toggleButton"></span>
+                </label>
+            </div>
+
+            <button type="submit">게시판 생성</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.getElementById('returnPage').addEventListener('click', function () {
+        history.back();
+    });
+
+    document.getElementById('boardForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const information = document.getElementById('information').value;
+        const toggle = document.getElementById('toggle').checked;
+
+        const data = {name: name, information: information, anonymousPermission: toggle};
+
+        fetch('/api/v1/boards/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                window.history.back();
+            })
+            .catch((error) => {
+                console.error('Error', error);
+                alert('게시판 생성에 실패했습니다.');
+            });
+    });
+
+    // 디버깅을 위해 폼 제출 이벤트가 연결되었는지 확인
+    console.log('폼 제출 이벤트 리스너가 연결되었습니다.');
+</script>
+
+</body>
+</html>

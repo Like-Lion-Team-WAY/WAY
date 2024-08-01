@@ -1,8 +1,5 @@
 package like.lion.way.board.application.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import like.lion.way.board.domain.AnonymousPermission;
 import like.lion.way.board.domain.Board;
 import like.lion.way.user.domain.User;
 import lombok.Builder;
@@ -15,14 +12,14 @@ public class BoardCreateServiceRequest {
 
     private String name;
     private String introduction;
-    private AnonymousPermission anonymousPermission;
+    private boolean anonymousPermission;
     private Long userId;
 
     @Builder
     public BoardCreateServiceRequest(
             String name,
             String introduction,
-            AnonymousPermission anonymousPermission,
+            boolean anonymousPermission,
             Long userId) {
 
         this.name = name;

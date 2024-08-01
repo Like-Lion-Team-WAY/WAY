@@ -3,7 +3,6 @@ package like.lion.way.board.api.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
-import like.lion.way.board.domain.AnonymousPermission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ public class BoardCreateRequest {
     private String introduction;
 
     @NotBlank(message = "익명 허용 여부는 필수입니다.")
-    private AnonymousPermission anonymousPermission;
+    private boolean anonymousPermission;
 
     @NotNull(message = "관리 유저는 필수입니다.")
     private Long userId;
@@ -28,7 +27,7 @@ public class BoardCreateRequest {
     public BoardCreateRequest(
             String name,
             String introduction,
-            AnonymousPermission anonymousPermission,
+            boolean anonymousPermission,
             Long userId) {
 
         this.name = name;

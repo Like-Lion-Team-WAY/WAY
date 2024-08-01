@@ -1,6 +1,5 @@
 package like.lion.way.board.application.request;
 
-import like.lion.way.board.domain.AnonymousPermission;
 import like.lion.way.board.domain.Board;
 import like.lion.way.user.domain.User;
 import lombok.Builder;
@@ -13,12 +12,12 @@ public class BoardEditServiceRequest {
 
     private String name;
     private String introduction;
-    private AnonymousPermission anonymousPermission;
+    private boolean anonymousPermission;
 
 
     @Builder
     public BoardEditServiceRequest(
-            AnonymousPermission anonymousPermission,
+            boolean anonymousPermission,
             String name,
             String introduction) {
 
