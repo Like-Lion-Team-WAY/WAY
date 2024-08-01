@@ -40,21 +40,4 @@ public class AlarmSetting {
 
     @Column(name = "alarm_setting_board_comment")
     private boolean boardComment;
-
-    public boolean isAlarmEnabled(AlarmType type) {
-        switch (type) {
-            case NEW_QUESTION:
-                return newQuestion;
-            case REPLY:
-                return reply;
-            case COMMENT:
-                return comment;
-            case ANSWER:
-                return answer;
-            case BOARD_COMMENT:
-                return boardComment;
-            default:
-                return false;
-        }
-    }
 }
