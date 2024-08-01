@@ -1,5 +1,6 @@
 package like.lion.way.alarm.service;
 
+import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.domain.AlarmType;
 import like.lion.way.alarm.event.AlarmEvent;
 import like.lion.way.user.domain.User;
@@ -13,5 +14,10 @@ public interface AlarmService {
     /**
      * 알림 타입에 따른 메시지, url 생성
      */
-    void createAlarm(AlarmEvent alarmEvent);
+    Alarm createAlarm(AlarmEvent alarmEvent);
+
+    /**
+     * 알림 저장
+     */
+    void saveAlarm(Alarm alarm);
 }
