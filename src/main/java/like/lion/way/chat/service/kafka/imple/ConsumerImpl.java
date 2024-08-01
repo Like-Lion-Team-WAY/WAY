@@ -1,7 +1,8 @@
-package like.lion.way.chat.service.kafka.Imple;
+package like.lion.way.chat.service.kafka.imple;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import like.lion.way.chat.domain.Message;
+import like.lion.way.chat.service.kafka.Consumer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ConsumerImpl {
+public class ConsumerImpl implements Consumer {
 
     private final ObjectMapper objectMapper;
     private final SimpMessagingTemplate messagingTemplate;
@@ -17,6 +18,7 @@ public class ConsumerImpl {
 //    @Value("${server.port}")
 //    private String serverPort;
 
+    @Override
 //    @KafkaListener(topics = "topic-messages", groupId = "chat-group-#{@environment.getProperty('server.port')}")
     @KafkaListener(topics = "topic-messages", groupId = "chat-group")
     public void listen(String message) {
