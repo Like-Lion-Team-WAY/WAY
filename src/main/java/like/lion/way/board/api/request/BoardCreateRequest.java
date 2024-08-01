@@ -17,23 +17,19 @@ public class BoardCreateRequest {
     @NotBlank(message = "게시판 설명은 필수입니다.")
     private String introduction;
 
-    @NotBlank(message = "익명 허용 여부는 필수입니다.")
+    @NotNull(message = "익명 허용 여부는 필수입니다.")
     private boolean anonymousPermission;
 
-    @NotNull(message = "관리 유저는 필수입니다.")
-    private Long userId;
 
     @Builder
     public BoardCreateRequest(
             String name,
             String introduction,
-            boolean anonymousPermission,
-            Long userId) {
+            boolean anonymousPermission) {
 
         this.name = name;
         this.introduction = introduction;
         this.anonymousPermission = anonymousPermission;
-        this.userId = userId;
 
     }
 
@@ -43,7 +39,6 @@ public class BoardCreateRequest {
                 .name(name)
                 .introduction(introduction)
                 .anonymousPermission(anonymousPermission)
-                .userId(userId)
                 .build();
 
     }

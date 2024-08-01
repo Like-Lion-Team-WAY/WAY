@@ -7,23 +7,26 @@ import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.repository.BoardRepository;
+import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
-import like.lion.way.user.repository.UserRepository;
+import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @Override
     public List<BoardTitleResponse> getBoardFindAll() {
 
         List<Board> boards = boardRepository.findAll();
-
         return boards.stream()
                 .map(board -> BoardTitleResponse.builder()
                         .boardId(board.getId())
@@ -34,11 +37,9 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void createBoard(BoardCreateServiceRequest request) {
+    public void createBoard(BoardCreateServiceRequest request, String token) {
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
+        User user = getUserByToken(token);
         boardRepository.save(request.toEntity(user));
 
     }
@@ -48,7 +49,6 @@ public class BoardServiceImpl implements BoardService {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
-
         board.updateBoard(request.getName(), request.getIntroduction(), request.isAnonymousPermission());
 
     }
@@ -58,10 +58,20 @@ public class BoardServiceImpl implements BoardService {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
-
         boardRepository.delete(board);
 
     }
 
+    private User getUserByToken(String token) {
+
+        try {
+            String username = jwtUtil.getUsernameFromAccessToken(token);
+            return userService.findByUsername(username);
+        } catch (Exception e) {
+            log.error("Invalid token", e);
+            return null;
+        }
+
+    }
 
 }

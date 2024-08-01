@@ -37,6 +37,7 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "board_anonymous_permission")
     private boolean anonymousPermission;
 
 

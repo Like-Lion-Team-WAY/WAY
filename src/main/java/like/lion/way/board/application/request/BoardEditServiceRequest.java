@@ -27,14 +27,4 @@ public class BoardEditServiceRequest {
 
     }
 
-    public Board toEntity(User user) {
-
-        return Board.builder()
-                .name(name)
-                .introduction(introduction)
-                .user(user)
-                .anonymousPermission(anonymousPermission)
-                .build();
-    }
-
 }

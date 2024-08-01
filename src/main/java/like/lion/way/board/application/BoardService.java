@@ -9,7 +9,7 @@ import like.lion.way.board.domain.Board;
 public interface BoardService {
 
     public List<BoardTitleResponse> getBoardFindAll();
-    public void createBoard(BoardCreateServiceRequest request);
+    public void createBoard(BoardCreateServiceRequest request, String token);
     public void updateBoard(BoardEditServiceRequest request, Long boardId);
     public void deleteBoard(Long boardId);
 

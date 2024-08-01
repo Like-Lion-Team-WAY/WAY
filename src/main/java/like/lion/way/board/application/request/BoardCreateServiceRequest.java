@@ -13,19 +13,16 @@ public class BoardCreateServiceRequest {
     private String name;
     private String introduction;
     private boolean anonymousPermission;
-    private Long userId;
 
     @Builder
     public BoardCreateServiceRequest(
             String name,
             String introduction,
-            boolean anonymousPermission,
-            Long userId) {
+            boolean anonymousPermission) {
 
         this.name = name;
         this.introduction = introduction;
         this.anonymousPermission = anonymousPermission;
-        this.userId = userId;
 
     }
 

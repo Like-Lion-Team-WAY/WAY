@@ -7,6 +7,7 @@ import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/boards")
+@Slf4j
 public class BoardController {
 
     private final BoardService boardService;
@@ -45,12 +47,11 @@ public class BoardController {
     @PostMapping("/create")
     public ResponseEntity<String> createBoard(@RequestBody @Valid BoardCreateRequest request) {
 
-        boardService.createBoard(request.toServiceRequest());
-
+        String token = "테스트 토큰";
+        boardService.createBoard(request.toServiceRequest(), token);
         return ResponseEntity.ok("게시판 등록 성공");
 
     }
-
     @GetMapping("/setting")
     public ModelAndView showBoardSettingForm() {
 
