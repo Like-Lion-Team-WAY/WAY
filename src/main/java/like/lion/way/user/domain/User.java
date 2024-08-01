@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.Table;
@@ -26,7 +27,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class User {
 
     @Id
@@ -34,17 +35,20 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(unique = true, name = "username" , nullable = false)
+    @Column( name = "username" , nullable = false)
     private String username;
 
-    @Column(nullable = false , name = "nickname")
+    @Column( name = "nickname")
     private String nickname;
 
     @Column(nullable = false,name = "provider")
     private String provider;
 
-    @Column(nullable = false,name = "provider_id")
+    @Column(name = "provider_id")
     private String providerId;
+
+    @Column(nullable = false, name = "email" , unique = true)
+    private String email;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
@@ -66,5 +70,16 @@ public class User {
     )
     private Set<Interest> interests;
 
-
+    public String getNickname(boolean check) {
+        if(check){
+            return "익명";
+        }else{
+            return nickname;
+        }
+    }
+    public User update(String name , String provider){
+        this.username = name;
+        this.provider = provider;
+        return this;
+    }
 }
