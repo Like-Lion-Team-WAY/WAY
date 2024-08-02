@@ -1,0 +1,33 @@
+.center {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+
+.chat-room-list {
+    width: 50%; /* 너비를 절반으로 설정 */
+    margin: 0 auto; /* 가로로 가운데 정렬 */
+}
+
+.chat-room-list > a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 텍스트 색상 상속 */
+    display: block; /* a 태그가 블록 요소처럼 작동하도록 설정 */
+    width: 100%; /* 부모 요소의 너비를 꽉 채우도록 설정 */
+}
+
+.chat-room-info {
+    background-color: #FFD6B0; /* 주황색 배경 */
+    border-radius: 10px; /* 둥근 테두리 */
+    padding: 20px;
+    padding-top: 10px; /* 내부 여백 */
+    margin: 50px 0; /* 위아래 여백 */
+    width: 100%; /* 가로로 꽉 차게 설정 */
+}
