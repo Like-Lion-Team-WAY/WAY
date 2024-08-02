@@ -40,7 +40,7 @@ public class BoardEditRequest {
         return BoardEditServiceRequest.builder()
                 .name(name)
                 .introduction(introduction)
-                .AnonymousPermission(anonymousPermission)
+                .anonymousPermission(anonymousPermission)
                 .build();
 
     }
