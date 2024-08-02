@@ -1,35 +1,122 @@
+#returnPage {
+    cursor: pointer;
+    color: #ff6746;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+#returnPage:hover {
+    color: #e55d39;
+}
+
+#returnPage::before {
+    content: '← ';
+    margin-right: 5px;
+}
+
+.main-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-element-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0 5px 0;
+    border-bottom: 1px solid black;
+}
+
+.input-element-container label {
+    flex: 0.5;
+    font-size: 1.1em;
+    /*padding-left: 50px;*/
+}
+
+.input-element-container input[type="text"] {
+    flex: 3;
+    padding: 8px;
+    font-size: 1em;
+    border: none; /* 테두리 제거 */
+    border-radius: 0;
+    outline: none;
+    background-color: transparent; /* 배경 투명화 */
+}
+
+.toggleContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.toggleContainer span {
+    font-size: 1.1em;
+    /*padding-left: 30px;*/
+}
+
+.toggleSwitchContainer {
+    margin-left: auto;
+}
+
 .toggleSwitch {
-    width: 100px;
-    height: 50px;
+    width: 60px;
+    height: 30px;
     display: block;
     position: relative;
-    border-radius: 30px;
-    background-color: #fff;
-    box-shadow: 0 0 16px 3px rgba(0 0 0 / 15%);
+    border-radius: 15px;
+    background-color: #ccc;
     cursor: pointer;
-    margin: 30px;
+    transition: background-color 0.2s;
 }
 
 .toggleSwitch .toggleButton {
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     position: absolute;
-    top: 50%;
-    left: 4px;
-    transform: translateY(-50%);
+    top: 2px;
+    left: 2px;
     border-radius: 50%;
-    background: #f03d3d;
-}
-
-#toggle:checked ~ .toggleSwitch {
-    background: #f03d3d;
-}
-
-#toggle:checked ~ .toggleSwitch .toggleButton {
-    left: calc(100% - 44px);
     background: #fff;
+    transition: left 0.2s;
 }
 
-.toggleSwitch, .toggleButton {
-    transition: all 0.2s ease-in;
+#toggle:checked + .toggleSwitch {
+    background: #ff6746;
+}
+
+#toggle:checked + .toggleSwitch .toggleButton {
+    left: 32px;
+}
+
+button {
+    margin-top: 40px;
+    margin-left: 465px;
+    padding: 10px 20px;
+    background-color: #ff6746;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s;
+    align-self: center;
+}
+
+button:hover {
+    background-color: #e55d39;
 }
