@@ -1,0 +1,39 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.returnPage {
+    margin-bottom: 20px;
+}
+
+#boardTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+#postContent {
+    resize: none;
+}
+
+.btn {
+    width: 100px;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+p {
+    font-size: 14px;
+    color: gray;
+}

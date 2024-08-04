@@ -39,16 +39,24 @@ public class BoardPost {
     @Column(name = "board_post_title", nullable = false)
     private String title;
 
+    @Column(name = "board_post_content", nullable = false)
+    private String content;
+
     @CreationTimestamp
     @Column(name = "board_post_created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "board_post_anonymous_permission")
+    private boolean anonymousPermission;
+
     @Builder
-    public BoardPost(User user, Board board, String title) {
+    public BoardPost(User user, Board board, String title, String content, boolean anonymousPermission) {
 
         this.user = user;
         this.board = board;
         this.title = title;
+        this.content = content;
+        this.anonymousPermission = anonymousPermission;
 
     }
 

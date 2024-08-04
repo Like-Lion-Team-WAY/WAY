@@ -12,22 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const data = { name, introduction, anonymousPermission: toggle };
 
+
         fetch('/api/v1/boards/create', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    window.history.back();
+                } else {
+                    alert('게시판 생성에 실패했습니다.');
                 }
-                return response.text();
-            })
-            .then(message => {
-                alert(message);
-                window.history.back();
             })
             .catch(error => {
                 console.error('Error:', error);
