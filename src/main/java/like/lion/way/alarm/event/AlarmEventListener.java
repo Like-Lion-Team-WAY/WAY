@@ -2,6 +2,7 @@ package like.lion.way.alarm.event;
 
 import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.service.AlarmService;
+import like.lion.way.alarm.service.AlarmSseEmitters;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -16,6 +17,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @AllArgsConstructor // for final field DI
 public class AlarmEventListener {
     private final AlarmService alarmService;
+    private final AlarmSseEmitters emitters;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 서비스의 트랜잭션 커밋 이후에 이벤트 처리
@@ -34,6 +36,6 @@ public class AlarmEventListener {
         alarmService.saveAlarm(alarm);
 
         // 3. SSE를 사용하여 클라이언트로 알람 전송하기
-
+        emitters.send(alarm);
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.repository.PostRepository;
 import like.lion.way.feed.service.PostService;
+import like.lion.way.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Post> getPostByUser(User user) {
+        return postRepository.findPostByUser(user);
     }
 
 
