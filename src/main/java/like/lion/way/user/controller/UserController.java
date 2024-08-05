@@ -1,6 +1,7 @@
 package like.lion.way.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.SettingLoginInfoDto;
@@ -31,8 +32,8 @@ public class UserController {
     }
     @PostMapping("/loginInfo")
     public String loginInfo(@ModelAttribute SettingLoginInfoDto loginInfoDto,
-                            HttpServletRequest request){
-        User user = userService.updateLoginInfo(loginInfoDto,request);
+                            HttpServletRequest request, HttpServletResponse response){
+        User user = userService.updateLoginInfo(loginInfoDto,request, response);
         System.out.println(user);
         if(user!=null){
             return "redirect:/user/like";

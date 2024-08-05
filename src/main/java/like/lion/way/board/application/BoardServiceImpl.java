@@ -105,7 +105,7 @@ public class BoardServiceImpl implements BoardService {
     private User getUserByToken(String token) {
 
         try {
-            String username = jwtUtil.getUsernameFromAccessToken(token);
+            String username = jwtUtil.getUserNameFromToken(token);
             return userService.findByUsername(username);
         } catch (Exception e) {
             log.error("Invalid token", e);

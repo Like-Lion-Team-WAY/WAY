@@ -22,7 +22,7 @@ public class ChatController {
     }
 
     @GetMapping("/{chatId}")
-    public String chatRoom(@PathVariable Long chatId, Model model) {
+    public String chatRoom(@PathVariable("chatId") Long chatId, Model model) {
         List<Message> messages = messageService.findAllMessageByChatId(chatId);
         model.addAttribute("messages", messages);
         return "pages/chat/chat-room";

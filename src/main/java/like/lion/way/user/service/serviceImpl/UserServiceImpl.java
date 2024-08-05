@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail()).orElse(new User());
 
-        user.setUsername(attributes.getName());
+//        user.setUsername(attributes.getName());
         user.setProvider(attributes.getProvider());
         user.setCreatedAt(LocalDate.now());
         user.setEmail(attributes.getEmail());
@@ -122,13 +122,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request) {
+    public User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request, HttpServletResponse response) {
         String token = jwtUtil.getCookieValue(request,"accessToken");
         Long userId = jwtUtil.getUserIdFromToken(token);
         String username = jwtUtil.getUserNameFromToken(token);
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found")) ;
         user.setUsername(loginInfoDto.getUsername());
         user.setNickname(loginInfoDto.getNickname());
+        addCookies(response, user); //추가된 코드
         return saveOrUpdateUser(user);
     }
     @Override
