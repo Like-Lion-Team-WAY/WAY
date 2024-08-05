@@ -27,17 +27,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail()).orElse(new User());
-
+        System.out.println("12312321321");
         user.setUsername(attributes.getName());
         user.setProvider(attributes.getProvider());
-        user.setProviderId(attributes.getProviderId());
         user.setCreatedAt(LocalDate.now());
         user.setEmail(attributes.getEmail());
         return userRepository.save(user);
     }
 
     @Override
-    public User findByProviderId(String providerId) {
-        return userRepository.findByProviderId(providerId);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(new User());
     }
 }

@@ -1,0 +1,152 @@
+/* 전체 레이아웃 설정 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff; /* 배경색 추가 */
+}
+
+.post-container {
+    background-color: white;
+    width: 800px;
+    padding: 20px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* 여백 증가 */
+}
+
+.profile-icon {
+    width: 50px; /* 크기 조정 */
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px; /* 여백 증가 */
+}
+
+.post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 18px; /* 크기 증가 */
+}
+
+.timestamp {
+    font-size: 14px;
+    color: #888;
+}
+
+.post-content {
+    margin-bottom: 20px; /* 여백 증가 */
+    font-size: 16px;
+    line-height: 1.6; /* 행간 증가 */
+}
+
+.post-stats {
+    display: flex;
+    gap: 20px; /* 간격 증가 */
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #555;
+}
+
+.post-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px; /* 여백 증가 */
+}
+
+.tag {
+    background-color: #FF8E75;
+    padding: 8px 15px; /* 패딩 증가 */
+    border-radius: 20px;
+    border: 1px solid #FF6746;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer; /* 마우스 커서 변경 */
+    transition: background-color 0.3s; /* 호버 애니메이션 */
+}
+
+.tag:hover {
+    background-color: #FF6746;
+}
+
+.comment-input {
+    display: flex;
+    align-items: center;
+    margin-top: 20px; /* 상단 여백 추가 */
+}
+
+.comment-input input {
+    flex-grow: 1;
+    padding: 10px 15px; /* 패딩 조정 */
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.comment-input button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #FF6746; /* 버튼 색상 변경 */
+}
+
+.comments-section {
+    margin-top: 30px;
+}
+
+.list-group-item {
+    background-color: #FFD6B0;
+    padding: 15px;
+    border: 1px solid #FF8E75;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-text {
+    margin: 0;
+    font-size: 14px;
+}
+
+.edit-comment-btn, .delete-comment-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: #FF6746;
+    margin-right: 10px; /* 버튼 간 간격 */
+}
+
+#editPostForm, .edit-comment-form {
+    display: none;
+    margin-top: 10px;
+}
+
+#editPostForm input, .edit-comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+#editPostForm button, .edit-comment-form button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FF6746;
+    color: white;
+    cursor: pointer;
+}

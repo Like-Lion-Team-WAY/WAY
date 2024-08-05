@@ -22,9 +22,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         // 인증된 사용자 정보를 가져옴
+
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        String providerId = oAuth2User.getName();
-        User user = userService.findByProviderId(providerId);
+        System.out.println(oAuth2User.getAttributes().get("email"));
+        User user = userService.findByEmail((String)oAuth2User.getAttributes().get("email"));
         if(user.getNickname()!=null){
             response.sendRedirect("/main");
         }else{
