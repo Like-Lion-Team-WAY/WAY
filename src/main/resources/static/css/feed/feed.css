@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    margin:0;
+    margin-top:  100px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-container {
+    background-color: white;
+    width: 800px;
+    height: auto;
+    padding: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 50px;
+    height: 50px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-right: 30px;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-info p {
+    margin: 0;
+    color: gray;
+    margin-bottom: 10px;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.stat {
+    text-align: center;
+}
+.button-container {
+    text-align: right;
+}
+
+.write-post-button {
+    width: 200px;
+    padding: 10px;
+    background-color: #FF8E75;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+.feed {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.feed-item {
+    background-color: #FFD6B0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.feed-item p {
+    margin: 0 0 10px;
+}
+.feed-item img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 100px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.feed-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.feed-actions button {
+    background-color: #eee;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+}
