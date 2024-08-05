@@ -41,7 +41,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveOrUpdate(OAuthAttributes attributes) {
 
+
         User user = userRepository.findByEmail(attributes.getEmail()).orElse(new User());
+
         user.setUsername(attributes.getName());
         user.setProvider(attributes.getProvider());
         user.setCreatedAt(LocalDate.now());
@@ -57,6 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(new User());
+
     }
 
     @Override
@@ -130,5 +133,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveOrUpdateUser(User user){
         return userRepository.save(user);
+
     }
 }

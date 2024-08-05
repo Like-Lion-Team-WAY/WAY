@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/feed/feed.css">
+    <title>사용자 전체 피드 보기</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-picture">
+                    <img src="텀블벅.jpg" alt="Profile Picture" />
+                </div>
+            </div>
+            <div class="profile-header">
+                <div class="profile-info">
+                    <h1>Username</h1>
+                    <p>팔로워 100 | 팔로잉 2</p>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="stat">
+                    <p>답변 완료</p>
+                    <p>7</p>
+                </div>
+                <div class="stat">
+                    <p>거절 질문</p>
+                    <p>15</p>
+                </div>
+                <div class="stat">
+                    <p>새 질문</p>
+                    <p>3</p>
+                </div>
+                <div class="stat">
+                    <p>보낸 질문</p>
+                    <p>20</p>
+                </div>
+            </div>
+            <div class="button-container">
+                <a th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
+            </div>
+            <div class="feed">
+                <div class="feed-item" th:each="post : ${posts}">
+                    <div class="post">
+                        <h2 th:text="${post.getPostTitle()}"></h2>
+                        <p th:text="${post.getPostContent()}"></p>
+                        <img th:src="@{${post.postImageUrl}}" alt="Post Image">
+                        <a th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        <div class="feed-actions">
+                            <button>좋아요</button>
+                            <button>보관함</button>
+                            <a th:href="@{'/posts/detail/' + ${post.postId}}"><button>피드 상세 보기</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

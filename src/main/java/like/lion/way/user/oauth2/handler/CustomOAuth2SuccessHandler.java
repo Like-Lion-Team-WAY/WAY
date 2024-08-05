@@ -35,6 +35,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             user = userService.findByEmail((String)oAuth2User.getAttributes().get("email"));
         }
         userService.addCookies(response,user);
+
         if(user.getNickname()!=null){
             response.sendRedirect("/main");
         }else{

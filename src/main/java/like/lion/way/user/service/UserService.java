@@ -12,10 +12,12 @@ public interface UserService {
     User findByUsername(String username);
     User saveOrUpdate(OAuthAttributes attributes);
     User findByEmail(String email);
+
     void addCookies(HttpServletResponse response, User user);
     void deleteUser(Long userId);
     void deleteCookie(HttpServletResponse response);
 
     User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request);
     User saveOrUpdateUser(User user);
+
 }
