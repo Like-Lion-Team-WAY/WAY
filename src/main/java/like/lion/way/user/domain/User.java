@@ -10,9 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
+import like.lion.way.alarm.domain.AlarmSetting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,13 +55,11 @@ public class User {
     @Column(nullable = false,name = "provider")
     private String provider;
 
-
     @Column(nullable = false, name = "email" , unique = true)
     private String email;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
-
 
     @ManyToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     @JoinTable(
@@ -77,6 +77,9 @@ public class User {
     )
     private Set<Interest> interests;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AlarmSetting alarmSetting;
+
     public String getNickname(boolean check) {
         if(check){
             return "익명";
@@ -84,9 +87,16 @@ public class User {
             return nickname;
         }
     }
+
     public User update(String name , String provider){
         this.username = name;
         this.provider = provider;
         return this;
+    }
+
+    public void initializeAlarmSetting() {
+        if (this.alarmSetting == null) {
+            this.alarmSetting = new AlarmSetting(this);
+        }
     }
 }
