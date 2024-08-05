@@ -34,10 +34,10 @@ public class BoardPostCreateRequest {
     public BoardPostCreateServiceRequest toServiceRequest() {
 
         return BoardPostCreateServiceRequest.builder()
-               .title(title)
-               .content(content)
+                .title(title)
+                .content(content)
                 .anonymousPermission(anonymousPermission)
-               .build();
+                .build();
 
     }
 

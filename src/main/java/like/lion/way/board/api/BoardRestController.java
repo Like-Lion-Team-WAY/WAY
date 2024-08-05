@@ -12,9 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedModel;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/boards")
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardRestController {
 
     private final BoardService boardService;
-    private final PagedResourcesAssembler<BoardPostResponse> pagedResourcesAssembler;
 
     @GetMapping
     public ApiResponse<List<BoardTitleResponse>> getBoardList() {
@@ -67,15 +64,14 @@ public class BoardRestController {
 //    }
 
     @GetMapping("/posts/{boardName}")
-    public ApiResponse<PagedModel<BoardPostResponse>> getPosts(
+    public ApiResponse<Page<BoardPostResponse>> getPosts(
             @PathVariable("boardName") String name,
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<BoardPostResponse> posts = boardService.getPostFindAll(name, pageable);
-        PagedModel<BoardPostResponse> pagedModel = pagedResourcesAssembler.toModel(posts);
-        return ApiResponse.ok(pagedModel);
+        return ApiResponse.ok(posts);
     }
 
 
@@ -84,8 +80,9 @@ public class BoardRestController {
             @PathVariable("boardName") String boardName,
             @RequestBody @Valid BoardPostCreateRequest request) {
 
+        log.info("포스팅 실행");
         //매개변수에 토큰 얻어오는거 필요
-        String token = "test token";
+        String token = "테스트 토큰";
         boardService.createPost(boardName, request.toServiceRequest(), token);
         return ApiResponse.ok();
 

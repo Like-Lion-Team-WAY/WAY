@@ -42,7 +42,7 @@ public class BoardController {
 
     }
 
-    @GetMapping("/posts/create")
+    @GetMapping("/posts/create/{boardName}")
     public String showPostCreateForm() {
 
         return "pages/boards/postCreateForm";

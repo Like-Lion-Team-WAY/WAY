@@ -26,6 +26,8 @@ public class BoardPostCreateServiceRequest {
 
     public BoardPost toEntity(User user, Board board) {
 
+        System.out.println("BoardPost to Entity 포스트 제목 :::" + title);
+
         return BoardPost.builder()
                 .user(user)
                 .board(board)

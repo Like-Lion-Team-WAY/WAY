@@ -93,9 +93,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void createPost(String boardName, BoardPostCreateServiceRequest request, String token) {
+    public void createPost(String name, BoardPostCreateServiceRequest request, String token) {
 
-        Board board = boardRepository.findByName(boardName);
+        Board board = boardRepository.findByName(name);
         log.info("게시판 정보 ::: " + board);
         User user = getUserByToken(token);
         boardPostRepository.save(request.toEntity(user, board));

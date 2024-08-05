@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardPostList = document.getElementById('boardPostList');
     const pagination = document.getElementById('pagination');
 
+    const pathSegments = window.location.pathname.split('/');
+    const boardName = pathSegments[pathSegments.length - 1];
+
     returnPage.addEventListener('click', () => {
         window.history.back();
     });
@@ -15,11 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     createBoardButton.addEventListener('click', () => {
-        window.location.href = '/boards/posts/create';
+        window.location.href = `/boards/posts/create/${boardName}`;
     });
 
-    const pathSegments = window.location.pathname.split('/');
-    const boardName = pathSegments[pathSegments.length - 1];
+
 
     let currentPage = 1;
     const postsPerPage = 8;
