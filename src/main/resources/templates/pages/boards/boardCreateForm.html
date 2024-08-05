@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Board</title>
+    <link rel="stylesheet" href="/css/boards/boardCreate.css">
+    <script th:src="@{/js/boards/boardCreate.js}"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="returnPage">
+        <a id="returnPage">돌아가기</a>
+    </div>
+    <div class="main-container">
+        <h1> 게시판 생성</h1>
+        <div class="input-container">
+            <form id="boardForm">
+                <div class="input-element-container">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="input-element-container">
+                    <label for="introduction">설명</label>
+                    <input type="text" id="introduction" name="introduction" required>
+                </div>
+                <div class="input-element-container">
+                    <div class="toggleContainer">
+                        <span>익명 허용</span>
+                        <div class="toggleSwitchContainer">
+                            <input type="checkbox" id="toggle" hidden>
+                            <label for="toggle" class="toggleSwitch">
+                                <span class="toggleButton"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">게시판 생성</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

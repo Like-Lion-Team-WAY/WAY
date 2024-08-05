@@ -37,8 +37,8 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private AnonymousPermission anonymousPermission;
+    @Column(name = "board_anonymous_permission")
+    private boolean anonymousPermission;
 
 
     @Builder
@@ -46,7 +46,7 @@ public class Board {
             User user,
             String name,
             String introduction,
-            AnonymousPermission anonymousPermission) {
+            boolean anonymousPermission) {
 
         this.user = user;
         this.name = name;
@@ -55,7 +55,7 @@ public class Board {
 
     }
 
-    public void updateBoard(String name, String introduction, AnonymousPermission anonymousPermission) {
+    public void updateBoard(String name, String introduction, boolean anonymousPermission) {
 
         this.name = name;
         this.introduction = introduction;
