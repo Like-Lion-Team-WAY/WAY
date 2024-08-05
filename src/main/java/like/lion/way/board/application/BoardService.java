@@ -1,5 +1,6 @@
 package like.lion.way.board.application;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -14,10 +15,10 @@ import like.lion.way.board.domain.BoardPost;
 public interface BoardService {
 
     public List<BoardTitleResponse> getBoardFindAll();
-    public void createBoard(BoardCreateServiceRequest request, String token);
-    public void updateBoard(BoardEditServiceRequest request, Long boardId);
-    public void deleteBoard(Long boardId);
+    public void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest);
+    public void updateBoard(BoardEditServiceRequest request, String name);
+    public void deleteBoard(String name);
     public Page<BoardPostResponse> getPostFindAll(String name, Pageable pageable);
-    public void createPost(String boardName, BoardPostCreateServiceRequest request, String token);
+    public void createPost(String boardName, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
 }
