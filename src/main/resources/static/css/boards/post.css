@@ -1,0 +1,53 @@
+.category {
+    margin: 20px 0;
+}
+
+.bookmark, .all-boards {
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search {
+    margin-bottom: 20px;
+}
+
+.board-title {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.board-actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.board-list {
+    margin-bottom: 20px;
+}
+
+.board-post-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-post-item span {
+    flex: 1;
+    text-align: center;
+}
+
+.board-post-item-placeholder {
+    text-align: center;
+    color: #999;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    cursor: pointer;
+}

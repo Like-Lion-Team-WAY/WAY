@@ -1,0 +1,189 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    width: 1200px; /* 고정된 너비 */
+    height: 700px; /* 고정된 높이 */
+    box-shadow: 0 0 15px #ff6746;
+    border-radius: 10px;
+    overflow: hidden; /* 자식 요소가 컨테이너를 넘지 않도록 설정 */
+}
+
+.left-side {
+    background-color: #ff6746;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-side .logo {
+    font-size: 40px; /* 약간 키워서 적당한 크기로 설정 */
+    font-weight: bold;
+}
+
+.logo {
+    color: #ffffff;
+    border: solid 1px #ff6746;
+}
+
+.right-side {
+    background-color: #ffffff;
+    width: 60%;
+    padding: 30px; /* 패딩을 약간 확대 */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 세로 중앙 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+}
+
+.right-side h1 {
+    margin: 0;
+    font-size: 28px; /* 약간 키워서 적당한 크기로 설정 */
+}
+
+.right-side p {
+    font-size: 16px; /* 약간 키워서 적당한 크기로 설정 */
+    color: #666;
+}
+
+form {
+    width: 100%;
+    max-width: 350px; /* 폼 너비를 약간 확대 */
+    margin-top: 20px;
+}
+
+.input-group2 {
+    margin-bottom: 20px; /* 마진을 약간 확대 */
+    margin-top: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 7px; /* 마진을 약간 확대 */
+    font-size: 14px; /* 약간 키워서 적당한 크기로 설정 */
+}
+.error-message {
+    color: red;
+    display: none;
+}
+
+.input-with-button {
+    display: flex;
+    align-items: center;
+}
+
+.input-with-button input {
+    flex: 1; /* 버튼 옆의 공간을 차지하도록 설정 */
+    padding: 10px; /* 패딩을 약간 확대 */
+    font-size: 14px; /* 약간 키워서 적당한 크기로 설정 */
+    border: 1px solid #ff6746;
+    border-radius: 5px 0 0 5px;
+    width: calc(100% - 90px); /* 버튼의 너비를 제외한 입력 필드의 너비 */
+}
+
+.input-with-button button {
+    width: 90px; /* 버튼의 고정된 너비 */
+    height: 100%;
+    padding: 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #ff6746;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+.input-group .error-message {
+    color: red;
+    font-size: 12px; /* 약간 키워서 적당한 크기로 설정 */
+    margin-top: 5px; /* 마진을 약간 확대 */
+}
+
+#nickname,
+#tagInput {
+    width: 93%;
+    padding: 10px; /* 패딩을 약간 확대 */
+    font-size: 14px; /* 약간 키워서 적당한 크기로 설정 */
+    border: 1px solid #ff6746;
+    border-radius: 5px;
+}
+
+#nextBtn {
+    background-color: #ff6746;
+    width: 100%;
+    padding: 12px; /* 패딩을 약간 확대 */
+    font-size: 16px; /* 약간 키워서 적당한 크기로 설정 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.right-panel {
+    width: 90%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right-panel h1,
+.right-panel p {
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+.next-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.selected-tags {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    height: 100px; /* 태그 박스의 높이를 고정하여 스크롤이 필요하게 함 */
+    overflow: auto; /* 내용이 넘칠 경우 스크롤바 활성화 */
+    border: 1px solid #ff6746;
+}
+.available-tags {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    height: 150px; /* 태그 박스의 높이를 고정하여 스크롤이 필요하게 함 */
+    overflow: auto; /* 내용이 넘칠 경우 스크롤바 활성화 */
+    border: 1px solid #ff6746;
+}
+
+.available-tags div,
+.selected-tags div {
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 15px; /* 모서리를 둥글게 */
+    display: inline-block; /* 태그들을 인라인으로 나열 */
+    background-color: #ff6746;
+    color: #ffffff;
+}
+.next-button{
+    border-radius: 5px; /* 모서리를 둥글게 */
+}

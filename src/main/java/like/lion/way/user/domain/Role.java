@@ -20,8 +20,9 @@ public class Role {
     @Column(name = "role_id")
     private Long roleId;
 
-    @Column(name = "roles_name")
-    private RoleType roleName;
+    @Column(name = "role_name")
+    private String roleName;
+
 
 
 }

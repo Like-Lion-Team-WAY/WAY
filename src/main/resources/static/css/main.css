@@ -1,139 +1,140 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    padding-top: 50px; /* Header 높이만큼 여백 추가 */
-
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding-top: 50px; /* Header 높이만큼 여백 추가 */
 }
 
 header {
-    width: calc(100% - 250px); /* Adjust width to exclude sidebar */
-    background-color: #ff6746;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    position: fixed;
-    top: 0;
-    left: 250px; /* Adjust position to start after sidebar */
-    z-index: 2; /* Ensure header is above other content */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: calc(100% - 250px); /* Adjust width to exclude sidebar */
+  height: 70px;
+  background-color: #ff6746;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  position: fixed;
+  top: 0;
+  left: 250px; /* Adjust position to start after sidebar */
+  z-index: 2; /* Ensure header is above other content */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
-
 .header-content {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .back-link {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    margin-right: 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  margin-right: 20px;
 }
 
 .header-icons {
-    margin-right: auto;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 .header-icons a {
-    margin: 0 10px;
+  margin: 0 10px;
+  margin-left: 10px;
 }
 
 .header-icons img {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .download-button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    background-color: #ffffff;
-    color: #ff6746;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    z-index: 1; /* Ensure sidebar is below header */
+  width: 250px;
+  height: 100vh;
+  background-color: #ffffff;
+  color: #ff6746;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1; /* Ensure sidebar is below header */
 }
 
 .sidebar-header {
-    text-align: center;
-    margin: 10px 0;
-    font-size: 16px;
-    font-weight: bold;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .profile {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .profile img {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
 }
 
 nav {
-    margin-top: 20px;
-    width: 100%;
+  margin-top: 20px;
+  width: 100%;
 }
 
 nav ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 nav ul li {
-    width: 100%;
-    text-align: center;
-    margin: 15px 0;
+  width: 100%;
+  text-align: center;
+  margin: 15px 0;
 }
 
 nav ul li a {
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    display: block;
-    padding: 10px 0;
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  display: block;
+  padding: 10px 0;
 }
 
 nav ul li a:hover {
-    background-color: #ff6746;
+  background-color: #ff6746;
 }
 
 /* Ensure content does not overlap header and sidebar */
 .content {
-    margin-left: 280px; /* Offset from sidebar */
-    margin-top: 30px;   /* Offset from header */
-    padding: 20px;     /* Optional padding */
-    flex-grow: 1;      /* Allow content to take available space */
+  margin-left: 280px; /* Offset from sidebar */
+  margin-top: 30px; /* Offset from header */
+  padding: 20px; /* Optional padding */
+  flex-grow: 1; /* Allow content to take available space */
 }
-
-
 .sidebar::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 250px;
-    height: 100%;
-    width: 1px;
-    background-color: #ff6746;
-    z-index: 1;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 250px;
+  height: 100%;
+  width: 1px;
+  background-color: #ff6746;
+  z-index: 1;
 }
