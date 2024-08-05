@@ -44,7 +44,8 @@
                 </div>
             </div>
             <div class="button-container">
-                <a th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
+                <a th:if="${user.userId} != ${loginUser.userId}" th:href="@{/questions/create}"><button class="write-post-button">질문 작성</button></a>
+                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
             </div>
             <div class="feed">
                 <div class="feed-item" th:each="post : ${posts}">

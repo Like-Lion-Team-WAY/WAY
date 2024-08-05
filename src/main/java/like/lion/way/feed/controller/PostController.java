@@ -33,10 +33,34 @@ public class PostController {
     @Value("${image.upload.dir}")
     private String uploadDir;
 
-    //전체 게시판 보여주기 (username 로그인 구현되면 GetMapping에 포함돼야 함)
-    @GetMapping("/posts/{userId}")
-    public String getPosts(@PathVariable Long userId, Model model, HttpServletRequest request) {
+    //내 게시판 보여주기
+    @GetMapping("/posts")
+    public String getPosts(Model model, HttpServletRequest request){
+        // JWT 토큰에서 사용자 이름 추출
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
         // 사용자 정보 조회
+        User user = userService.findByUserId(userId);
+        model.addAttribute("user", user);
+        model.addAttribute("posts", postService.getPostByUser(user));
+        model.addAttribute("loginUser", user);
+
+        return "/pages/feed/userFeed";
+    }
+
+    //userId 에 해당하는 게시판 보여주기
+    @GetMapping("/posts/{userId}")
+    public String getPosts(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
+        // JWT 토큰에서 사용자 이름 추출
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long loginId = jwtUtil.getUserIdFromToken(token);
+
+        // 로그인한  정보 조회
+        User loginUser = userService.findByUserId(loginId);
+        model.addAttribute("loginUser", loginUser);
+
+        // 사용자 정보 조회(question 의 user)
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
         model.addAttribute("posts", postService.getPostByUser(user));
