@@ -28,7 +28,7 @@ public class BoardController {
 
     }
 
-    @GetMapping("/setting")
+    @GetMapping("/setting/{boardName}")
     public String showBoardSettingForm() {
 
         return "pages/boards/boardSettingForm";
@@ -36,7 +36,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardName}")
-    public String  showPostForm(@PathVariable("boardName") String boardName) {
+    public String  showPostForm() {
 
         return "pages/boards/postForm";
 
@@ -46,6 +46,13 @@ public class BoardController {
     public String showPostCreateForm() {
 
         return "pages/boards/postCreateForm";
+
+    }
+
+    @GetMapping("/posts/{postTitle}")
+    public String showPostDetail() {
+
+        return "pages/boards/postDetail";
 
     }
 
