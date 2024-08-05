@@ -17,7 +17,7 @@ public interface UserService {
     void deleteUser(Long userId);
     void deleteCookie(HttpServletResponse response);
 
-    User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request);
+    User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request, HttpServletResponse response);
     User saveOrUpdateUser(User user);
 
 }

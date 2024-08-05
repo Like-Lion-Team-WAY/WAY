@@ -134,12 +134,27 @@ body {
     margin-top: 10px;
 }
 
-#editPostForm input, .edit-comment-form textarea {
-    width: 100%;
+#editPostForm input, .edit-comment-form {
+    width: 700px;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 10px;
+    font-size: 16px;
+    font-weight: bolder;
+}
+#editPostForm textarea, .edit-comment-form {
+    width: 700px;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+.post-actions{
+    display: flex;
+    justify-content: end;
+    align-items: end;
 }
 
 #editPostForm button, .edit-comment-form button {
@@ -149,4 +164,12 @@ body {
     background-color: #FF6746;
     color: white;
     cursor: pointer;
+}
+#editPostBtn, #deletePostBtn, #reportPostBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #FF6746;
+    margin-right: 10px;
 }

@@ -34,18 +34,12 @@ public class PostController {
     private String uploadDir;
 
     //전체 게시판 보여주기 (username 로그인 구현되면 GetMapping에 포함돼야 함)
-    @GetMapping("/posts")
-    public String getPosts(Model model, HttpServletRequest request) {
-        model.addAttribute("posts", postService.getAllPosts());
-        // JWT 토큰에서 사용자 이름 추출
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
+    @GetMapping("/posts/{userId}")
+    public String getPosts(@PathVariable Long userId, Model model, HttpServletRequest request) {
         // 사용자 정보 조회
         User user = userService.findByUserId(userId);
-        log.info("userId:::: " + userId);
-        log.info("username::::"+user.getUsername());
         model.addAttribute("user", user);
+        model.addAttribute("posts", postService.getPostByUser(user));
         return "/pages/feed/userFeed";
     }
     //게시판 생성 페이지로 넘어감

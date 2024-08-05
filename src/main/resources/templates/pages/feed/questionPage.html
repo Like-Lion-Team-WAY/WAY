@@ -1,10 +1,88 @@
 <!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>질문 보기+질문하기</title>
+  <link rel="stylesheet" href="/css/feed/questionPage.css">
+  <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--  <script src="/js/feed/answerPage.js"></script>-->
+  <script src="/js/feed/questionCommentEdit.js"></script>
 </head>
 <body>
-$END$
+<div layout:fragment="content">
+  <p class="subtitle" th:text="${user.username} + '님에게 익명으로 질문을 보내세요!!'"></p>
+  <div class="question-section">
+    <form class="question-form" method="post" action="/questions/create" enctype="multipart/form-data">
+      <input type="text" name="question" class="question-input" placeholder="질문 쓰기">
+      <div>
+        <input type="radio" name="isAnonymous" id="anonymousTrue" value="true" checked>
+        <label for="anonymousTrue">익명</label>
+        <input type="radio" name="isAnonymous" id="anonymousFalse" value="false">
+        <label for="anonymousFalse">실명</label>
+      </div>
+      <div class="form-group">
+        <label for="image">이미지</label>
+        <input type="file" id="image" name="image">
+      </div>
+      <div class="form-group">
+        <button type="submit" class="send-button">질문 쓰기</button>
+      </div>
+    </form>
+  </div>
+  <div class="answered-section">
+    <p class="answered-title" th:text="${user.username} + '님이 답변한 질문들'"></p>
+    <!--        <div class="answered-question">-->
+    <!--            <div class="answered-header">-->
+    <!--                <span class="user-icon">Q</span>-->
+    <!--                <span class="user-name">익명</span>-->
+    <!--            </div>-->
+    <!--            <p class="question-text">취미~~</p>-->
+    <!--            <p class="answer-text">먹기~~</p>-->
+    <!--        </div>-->
+    <div class="answered-question" th:each="q : ${question}">
+      <div class="answered-header">
+        <span class="user-icon">Q</span>
+        <span th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
+      </div>
+      <p class="question-text" th:text="${q.getQuestion()}">질문</p>
+      <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
+      <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">질문 작성 날짜</p>
+      <!--            여기 부분에서 답변하기는 유저 정보 가져왔을 때 해당 질문창의 유저만 답변 폼 볼 수 있게 처리할 것임!!!-->
+      <a th:if="${q.getAnswer() == null && user.getUserId() == loginUser.getUserId()}" >
+        <form th:action="@{/questions/answer/{questionId}(questionId=${q.getQuestionId()})}" method="post">
+          <input type="text" name="answer" class="answer-input" placeholder="답장을 입력해주세요.">
+          <div class="form-group">
+            <button type="submit" class="send-button">답변하기</button>
+          </div>
+        </form>
+      </a>
+      <a th:if="${q.getAnswer() != null} ">
+        <p class="answer-text" th:text="${q.getAnswer()}">답변</p>
+        <div class="form-group">
+          <p class="answer-date" th:text="'답장 날짜: '+${#temporals.format(q.getAnswerDate(), 'yyyy년 MM월 dd일')}">답변 작성 날짜</p>
+        </div>
+        <div class="form-group" th:if="${user.getUserId() == loginUser.getUserId()}">
+          <button class="edit-button">답변 수정</button>
+        </div>
+        <!--                답변 수정-->
+        <form id="editForm" style="display:none;" th:action="@{/questions/answer/edit/{questionId}(questionId=${q.getQuestionId()})}" method="post">
+          <input type="text" name="editedAnswer" class="answer-input" th:value="${q.getAnswer()}">
+          <div class="form-group">
+            <button type="submit" class="save-button">저장</button>
+            <button type="button" class="cancel-button">취소</button>
+          </div>
+        </form>
+      </a>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

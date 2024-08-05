@@ -1,11 +1,15 @@
 package like.lion.way.feed.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionService;
+import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.domain.User;
+import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,14 +28,28 @@ import org.springframework.web.multipart.MultipartFile;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final JwtUtil jwtUtil;
+    private final UserService userService;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
 
     //username 추가해줘야 됨
     @GetMapping("/questions/create")
-    public String createQuestion(Model model) {
+    public String createQuestion(Model model, HttpServletRequest request) {
         model.addAttribute("question", questionService.getAllQuestions());
+        // JWT 토큰에서 사용자 이름 추출
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        //얘는 로그인 유저
+        User loginUser= userService.findByUserId(userId);
+        model.addAttribute("loginUser", loginUser);
+
+        // 얘는 질문 페이지 소유자의 유저 정보
+        //임의로 userId 1로 해놓음
+        User user = userService.findByUserId(1L);
+        model.addAttribute("user", user);
+
         return "pages/feed/questionPage";
     }
 
@@ -40,14 +58,25 @@ public class QuestionController {
             @RequestParam("question") String question,
             @RequestParam("isAnonymous") boolean isAnonymous,
             @RequestParam(value = "image", required = false) MultipartFile image,
-            Principal principal) {
+            HttpServletRequest request) {
 
-        String username = isAnonymous ? "익명" : (principal != null ? principal.getName() : "unknown");
+        // JWT 토큰에서 사용자 이름 추출
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
+        // 사용자 정보 조회
+        User user = userService.findByUserId(userId);
         log.info("question: {}", question);
-        log.info("username: {}", username);
         Question newQuestion = new Question();
         newQuestion.setQuestion(question);  //질문 저장
         newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
+        //익명 여부에 따라
+        if(isAnonymous) {
+            newQuestion.setQuestioner(null);
+
+        } else {
+            newQuestion.setQuestioner(user);
+        }
         if (!image.isEmpty()) { //이미지
             try {
                 String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
@@ -60,7 +89,6 @@ public class QuestionController {
             }
         }
         questionService.saveQuestion(newQuestion);
-//        newQuestion.setQuestioner(null); // username 추가해줘야 됨
 //        newQuestion.setAnswer(null);
 //        newQuestion.setAnswerDate(null);
 //        newQuestion.setQuestionDeleteYN(false);
