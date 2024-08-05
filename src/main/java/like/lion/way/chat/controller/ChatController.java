@@ -1,8 +1,14 @@
 package like.lion.way.chat.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
+import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
+import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.domain.User;
+import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,16 +21,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class ChatController {
     private final MessageService messageService;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
+    private final ChatService chatService;
 
     @GetMapping
-    public String chatList(Model model) {
+    public String chatList(Model model, HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User user = userService.findByUserId(userId);
+
+        model.addAttribute("nickname", user.getNickname());
+
         return "pages/chat/chats";
     }
 
     @GetMapping("/{chatId}")
-    public String chatRoom(@PathVariable Long chatId, Model model) {
-        List<Message> messages = messageService.findAllMessageByChatId(chatId);
-        model.addAttribute("messages", messages);
+    public String chatRoom(@PathVariable("chatId") Long chatId, Model model, HttpServletRequest request) {
+        Chat chat = chatService.findById(chatId);
+
+        if (chat == null) {
+            return "error";
+        }
+
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
+        if(!userId.equals(chat.getUser1().getUserId()) && !userId.equals(chat.getUser2().getUserId())) {
+            return "error";
+        }
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("chatName", chat.getName());
+
         return "pages/chat/chat-room";
     }
 }

@@ -2,34 +2,22 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+      layout:decorate="~{layouts/layout}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Chat List</title>
     <script src="https://cdn.jsdelivr.net/sockjs/1.0.2/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/chat/chat.css">
     <script src="/js/chat/chat.js"></script>
 </head>
 <body>
 <div layout:fragment="content" class="center">
-    <h1>[ ] 님의 채팅방 리스트</h1>
-    <div class="chat-room-list">
-        <a href="/chats/1" onclick="return openChat('/chats/1', 1)">
-            <div class="chat-room-info center" id="chat-1">
-                <h3 class="chat-name left">채팅방 1</h3>
-                <div class="last-chatting left">마지막 채팅</div>
-                <div class="last-chatting-time right">마지막 채팅 시간</div>
-            </div>
-        </a>
-        <a href="/chats/2"  onclick="return openChat('/chats/2', 2)">
-            <div class="chat-room-info center" id="chat-2">
-                <h3 class="chat-name left">채팅방 2</h3>
-                <div class="last-chatting left">마지막 채팅</div>
-                <div class="last-chatting-time right">마지막 채팅 시간</div>
-            </div>
-        </a>
-    </div>
+    <h1 th:text="${nickname} + '님의 채팅방 리스트'"></h1>
+    <div class="chat-room-list"></div>
+    <div id="elementToObserve"></div>
 </div>
 </body>
 </html>
