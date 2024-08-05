@@ -59,9 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                         boardPostList.appendChild(row);
 
-                        // boardPostList.addEventListener('click', () =>{
-                        //     window.location.href = `/boards/posts/${post.postTitle}`;
-                        // })
+                        // 게시글 클릭 시 상세보기 요청
+                        row.addEventListener('click', () => {
+                            window.location.href = `/boards/posts/${boardName}/${post.postTitle}`;
+                        });
                     });
                 }
 
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     pageItem.addEventListener('click', (e) => {
                         e.preventDefault();
                         currentPage = i;
-                        fetchBoardPosts(i);
+                        fetchBoardPosts(currentPage);
                     });
                     pagination.appendChild(pageItem);
                 }
