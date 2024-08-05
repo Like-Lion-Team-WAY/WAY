@@ -40,8 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveOrUpdate(OAuthAttributes attributes) {
-
-
         User user = userRepository.findByEmail(attributes.getEmail()).orElse(new User());
 
 //        user.setUsername(attributes.getName());
@@ -53,6 +51,9 @@ public class UserServiceImpl implements UserService {
         Role role =roleService.findByRoleName("USER");
         set.add(role);
         user.setRoles(set);
+
+        user.initializeAlarmSetting();
+
         return userRepository.save(user);
     }
 
