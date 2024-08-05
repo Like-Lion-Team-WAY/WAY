@@ -1,9 +1,7 @@
 package like.lion.way.chat.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 import like.lion.way.chat.domain.Chat;
-import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/chats")
 @RequiredArgsConstructor
 public class ChatController {
-    private final MessageService messageService;
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final ChatService chatService;

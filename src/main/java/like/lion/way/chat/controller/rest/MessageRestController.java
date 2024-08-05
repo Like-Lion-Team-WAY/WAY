@@ -1,22 +1,17 @@
 package like.lion.way.chat.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.ObjectInputFilter.Status;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
-import like.lion.way.chat.domain.dto.ChatInfoDTO;
 import like.lion.way.chat.domain.dto.ReceiveMessageDTO;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;
-import like.lion.way.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class MessageRestController {
     private final ChatService chatService;
     private final MessageService messageService;

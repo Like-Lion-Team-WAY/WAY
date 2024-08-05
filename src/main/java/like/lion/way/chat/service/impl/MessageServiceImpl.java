@@ -1,6 +1,5 @@
 package like.lion.way.chat.service.impl;
 
-import java.util.List;
 import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.MessageService;

@@ -1,6 +1,5 @@
 package like.lion.way.chat.repository;
 
-import java.util.List;
 import like.lion.way.chat.domain.Message;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
