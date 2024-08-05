@@ -18,6 +18,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.Set;
+import like.lion.way.feed.domain.Like;
+import like.lion.way.feed.domain.Post;
+import like.lion.way.feed.domain.PostComment;
+import like.lion.way.feed.domain.QuestionBox;
+import like.lion.way.feed.domain.Question;
 import lombok.Getter;
 import lombok.Setter;
 
