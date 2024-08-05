@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwt = null;
-
+        Long userId = null;
 
         // 허용된 경로 확인
         String requestURI = new UrlPathHelper().getPathWithinApplication(request);
@@ -55,7 +55,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             System.out.println(jwt);
             try {
                 // 토큰에서 사용자 이름 추출
-                username = jwtUtil.getUsernameFromAccessToken(jwt);
+                username = jwtUtil.getUserNameFromToken(jwt);
+                userId = jwtUtil.getUserIdFromToken(jwt);
             } catch (Exception e) {
                 // 토큰이 만료되었거나 유효하지 않음
                 logger.warn("JWT token is either expired or invalid: " + e.getMessage());
@@ -76,17 +77,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 String refreshToken = request.getHeader("Refresh-Token");
                 if (refreshToken != null && jwtUtil.validateRefreshToken(refreshToken)) {
                     // 리프레시 토큰이 유효한 경우
-                    String newJwt = jwtUtil.generateAccessToken(username);
-
-                    //addCookie ?? 해줘야하나 액세스토큰만?? (리프레스토큰을 또 발급하면 로그인 무한유지가능성)
-
-                    response.setHeader("Authorization", "Bearer " + newJwt);
-                    // 새로운 액세스 토큰을 발급하고 설정 후, UserDetailsService를 사용하여 사용자 정보 로드
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    if(jwtUtil.validateRefreshToken(refreshToken)){
+                        response.setHeader("Authorization", "Bearer " + refreshToken);
+                        // 새로운 액세스 토큰을 발급하고 설정 후, UserDetailsService를 사용하여 사용자 정보 로드
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    }
                 }
             }
         }

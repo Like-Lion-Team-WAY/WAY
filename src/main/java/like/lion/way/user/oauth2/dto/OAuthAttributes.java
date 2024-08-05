@@ -56,25 +56,12 @@ public class OAuthAttributes {
         Map<String,Object> response = (Map<String, Object>) attributes.get("kakao_account");
         Map<String,Object> account = (Map<String, Object>) response.get("profile");
 
-
         return OAuthAttributes.builder()
                 .name(UUID.randomUUID().toString())
                 .email((String) response.get("email"))
                 .provider("Kakao")
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
-                .build();
-    }
-    public User toEntity(){
-        Set<Role> roles = new HashSet<>();
-        Role role = new Role();
-        role.setRoleName(RoleType.USER);
-        roles.add(role);
-        return User.builder()
-                .username(name)
-                .email(email)
-                .provider(provider)
-                .roles(roles)
                 .build();
     }
 

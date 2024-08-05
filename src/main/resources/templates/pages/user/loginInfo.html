@@ -1,15 +1,82 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAY Signup</title>
+    <link rel="stylesheet" href="/css/loginInfo.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
 </head>
 <body>
-<div layout:fragment="content">
-    <h1>로그인상세페이지</h1>
+<div class="container">
+    <div class="left-side">
+        <div class="logo">WAY</div>
+    </div>
+    <div class="right-side">
+        <h1>안녕하세요!</h1>
+        <p>WAY에 오신 것을 환영합니다</p>
+        <form th:action="@{/user/loginInfo}" method="post" id="loginInfo">
+            <div class="input-group user-id-group">
+                <label for="user-id">아이디를 정해주세요</label>
+                <div class="input-with-button">
+                    <input type="text" id="user-id" name="username" placeholder="아이디를 입력하세요">
+                    <button type="button" id="check-btn">중복확인</button>
+                </div>
+            </div>
+            <small class="error-message">이미 해당 아이디가 존재합니다</small>
+            <div class="input-group2">
+                <label for="nickname">닉네임을 알려주세요!</label>
+                <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하세요">
+            </div>
+            <button type="submit" id="nextBtn">다음</button>
+        </form>
+    </div>
 </div>
+<script>
+    let idCheck = false;
+    $('#check-btn').click(function(){
+        const username = $("#user-id").val().trim();
+        if (!username) {
+            $(".error-message").text("아이디를 입력하세요.").css("color", "red").show();
+
+            return;
+        }
+        $.ajax({
+            url: '/user/duplicate',
+            method: 'GET',
+            dataType: 'json',
+            data:{
+                username: username
+            },
+            success:function(result){
+                if (result) {
+                    // 사용 가능한 아이디 (true)
+                    $(".error-message").text("사용 가능한 아이디입니다.").css("color", "green").show();
+                    idCheck=true;
+                } else {
+                    // 중복된 아이디 (false)
+                    $(".error-message").text("이미 해당 아이디가 존재합니다.").css("color", "red").show();
+                    idCheck=false;
+                }
+            },
+            error:function(err){
+                console.log(err);
+            }
+        })
+    })
+    $("#user-id").change(function(){
+        idCheck=false;
+    })
+    $('#nextBtn').click(function(e){
+        e.preventDefault();
+        if(!idCheck){
+            $(".error-message").text("아이디 중복 체크를 해주세요.").css("color", "red").show();
+            return;
+        }
+        $('#loginInfo').submit();
+
+    })
+</script>
 </body>
 </html>

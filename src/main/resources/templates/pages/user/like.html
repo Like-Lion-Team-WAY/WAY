@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/loginInfo.css">
+
+</head>
+<body>
+<div class="container">
+    <div class="left-side">
+        <div class="logo">WAY</div>
+    </div>
+    <div class="right-side">
+        <div class="right-panel">
+            <h1>어떤 분야에 관심이 있나요?</h1>
+            <p>
+                관심사 태그를 추가해주세요!<br />태그와 관련된 유저를 추천해드립니다
+                😆
+            </p>
+            <input type="text" placeholder="태그 검색" id="tagInput" />
+            <div class="selected-tags"><!-- 선택된 태그들이 표시될 곳 --></div>
+            <div class="available-tags">
+                <!-- 사용 가능한 태그들 -->
+                <!-- 동적으로 태그들이 생성될 곳 -->
+            </div>
+            <button class="next-button">완료</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var availableTags = [
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+            "철학 태그",
+            "내용이 긴 철학 태그",
+            "역사 태그",
+            "문화 태그",
+            "과학 태그",
+        ];
+
+        var $availableContainer = $(".available-tags");
+        var $selectedContainer = $(".selected-tags");
+
+        // 태그를 동적으로 생성하고 컨테이너에 추가
+        $.each(availableTags, function (index, tag) {
+            var $tagElement = $("<div>").text(tag).appendTo($availableContainer);
+
+            // 클릭 이벤트를 태그에 바인딩
+            $tagElement.on("click", function () {
+                // 선택된 태그 목록에 태그를 이동
+                $(this).appendTo($selectedContainer);
+            });
+        });
+    });
+</script>
+</body>
+</html>
