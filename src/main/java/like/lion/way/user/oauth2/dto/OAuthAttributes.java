@@ -41,7 +41,6 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofNaver(String userNameAttributeName , Map<String , Object> attributes){
         Map<String,Object> response = (Map<String, Object>) attributes.get("response");
-        System.out.println(response);
         return OAuthAttributes.builder()
                 .name(UUID.randomUUID().toString())
                 .email((String)response.get("email"))
@@ -56,25 +55,12 @@ public class OAuthAttributes {
         Map<String,Object> response = (Map<String, Object>) attributes.get("kakao_account");
         Map<String,Object> account = (Map<String, Object>) response.get("profile");
 
-
         return OAuthAttributes.builder()
                 .name(UUID.randomUUID().toString())
                 .email((String) response.get("email"))
                 .provider("Kakao")
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
-                .build();
-    }
-    public User toEntity(){
-        Set<Role> roles = new HashSet<>();
-        Role role = new Role();
-        role.setRoleName(RoleType.USER);
-        roles.add(role);
-        return User.builder()
-                .username(name)
-                .email(email)
-                .provider(provider)
-                .roles(roles)
                 .build();
     }
 

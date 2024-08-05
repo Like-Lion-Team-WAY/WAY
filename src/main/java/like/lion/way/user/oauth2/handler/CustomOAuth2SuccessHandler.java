@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,16 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         // 인증된 사용자 정보를 가져옴
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        System.out.println(oAuth2User.getAttributes().get("email"));
-        User user = userService.findByEmail((String)oAuth2User.getAttributes().get("email"));
+        User user =null;
+        if((Map<String, Object>) oAuth2User.getAttributes().get("kakao_account")!=null){
+            Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
+            String email = (String) kakaoAccount.get("email");
+            user = userService.findByEmail(email);
+
+        }else{
+            user = userService.findByEmail((String)oAuth2User.getAttributes().get("email"));
+        }
+        userService.addCookies(response,user);
         if(user.getNickname()!=null){
             response.sendRedirect("/main");
         }else{
