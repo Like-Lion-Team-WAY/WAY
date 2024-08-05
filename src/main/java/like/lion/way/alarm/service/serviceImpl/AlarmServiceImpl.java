@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AlarmServiceImpl implements AlarmService {
     private final AlarmSettingRepository alarmSettingRepository;
     private final AlarmRepository alarmRepository;
+    private final AlarmSseEmittersImpl emitters;
 
     @Override
     public boolean isAlarmEnabled(User user, AlarmType type) {
