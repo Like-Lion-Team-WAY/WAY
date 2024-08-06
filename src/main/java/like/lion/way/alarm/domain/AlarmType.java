@@ -23,6 +23,8 @@ public enum AlarmType {
     }
 
     public String getMessage(String username) {
+        if (this == NEW_QUESTION)
+            return message;
         return username + message;
     }
 

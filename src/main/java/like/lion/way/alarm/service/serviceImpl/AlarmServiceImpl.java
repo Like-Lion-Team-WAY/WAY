@@ -9,12 +9,14 @@ import like.lion.way.alarm.repository.AlarmSettingRepository;
 import like.lion.way.alarm.service.AlarmService;
 import like.lion.way.user.domain.User;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AlarmServiceImpl implements AlarmService {
     private final AlarmSettingRepository alarmSettingRepository;
     private final AlarmRepository alarmRepository;
@@ -31,6 +33,7 @@ public class AlarmServiceImpl implements AlarmService {
         AlarmType type = alarmEvent.getType();
         String message = type.getMessage(alarmEvent.getFromUser().getNickname());
         String url = type.getUrl(alarmEvent.getPathVariable());
+        log.info("[AlarmService] user: {}", alarmEvent.getToUser().getNickname());
         return new Alarm(alarmEvent.getToUser(), message, url);
     }
 

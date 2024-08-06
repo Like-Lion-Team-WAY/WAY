@@ -27,9 +27,20 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         SseEmitter emitter = new SseEmitter(30 * 60 * 1000L); // 30분
         this.emitters.put(userId, emitter);
 
+        log.info("[SseEmitters] create new emitter!");
         log.info("[SseEmitters] added: {}", emitter);
         log.info("[SseEmitters] list size: {}", emitters.size());
         log.info("[SseEmitters] list: {}", emitters);
+
+        // 더미 데이터 for 503 에러 방지
+        try {
+            emitter.send(SseEmitter.event()
+                    .name("subscribe")
+                    .data("subscribed!!"));
+            log.info("[SseRestController] subscribe: {}", userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // set callbacks
         emitter.onCompletion(() -> {
@@ -38,7 +49,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         });
         emitter.onTimeout(() -> {
             log.info("[SseEmitters] onTimeout callback");
-            emitter.complete();
+            this.emitters.remove(userId);
         });
         emitter.onError((ex) -> {
             log.error("[SseEmitters] onError callback: {}", ex.getMessage());
@@ -49,6 +60,12 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     public void send(User user) {
+        if (user == null) {
+            log.info("[SseEmitters] user is null");
+            return;
+        }
+
+        log.info("[SseEmitters] user Id: {}", user.getUserId());
         SseEmitter emitter = this.emitters.get(user.getUserId());
         if (emitter == null) {
             log.info("[SseEmitters] emitter is null");
@@ -63,6 +80,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
             emitter.send(SseEmitter.event()
                     .name("count")
                     .data(count));
+            // log.info("[SseEmitters] send!! : {}", count);
         } catch (Exception e) {
             log.error("[SseEmitters] send error: {}", e.getMessage());
             emitter.complete();

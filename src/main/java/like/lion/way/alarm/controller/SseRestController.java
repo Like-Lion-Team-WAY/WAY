@@ -23,15 +23,6 @@ public class SseRestController {
     @GetMapping(value = "/sse/subscribe/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> subscribe(@PathVariable Long userId) {
         SseEmitter emitter = emitters.add(userId);
-        // 더미 데이터 for 503 에러 방지
-        try {
-            emitter.send(SseEmitter.event()
-                    .name("subscribe")
-                    .data("subscribed!!"));
-            log.info("[SseRestController] subscribe: {}", userId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         return ResponseEntity.ok(emitter);
     }
 }
