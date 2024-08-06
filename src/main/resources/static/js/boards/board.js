@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 클릭 이벤트 리스너 추가
                     boardItem.addEventListener('click', () => {
                         // 클릭 시 /boards/posts로 이동하며 boardId를 쿼리 파라미터로 포함
-                        window.location.href = `/boards/${board.name}`;
+                        window.location.href = `/boards/${board.boardPostId}`;
                     });
                 });
             }

@@ -53,47 +53,47 @@ public class BoardRestController {
 
     }
 
-    @PatchMapping("/update/{boardName}")
+    @PatchMapping("/update/{boardId}")
     public ApiResponse<Void> updateBoard(
             @RequestBody @Valid BoardEditRequest request,
-            @PathVariable("boardName") String boardName) {
+            @PathVariable("boardId") Long boardId) {
 
-        boardService.updateBoard(request.toServiceRequest(), boardName);
-
-        return ApiResponse.ok();
-
-    }
-
-    @DeleteMapping("/delete/{boardName}")
-    public ApiResponse<Void> deleteBoard(@PathVariable("boardName") String boardName) {
-
-        boardService.deleteBoard(boardName);
+        boardService.updateBoard(request.toServiceRequest(), boardId);
 
         return ApiResponse.ok();
 
     }
 
-    @GetMapping("/posts/{boardName}")
+    @DeleteMapping("/delete/{boardId}")
+    public ApiResponse<Void> deleteBoard(@PathVariable("boardId") Long boardId) {
+
+        boardService.deleteBoard(boardId);
+
+        return ApiResponse.ok();
+
+    }
+
+    @GetMapping("/posts/{boardId}")
     public ApiResponse<Page<BoardPostResponse>> getPosts(
-            @PathVariable("boardName") String name,
+            @PathVariable("boardId") Long boardId,
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<BoardPostResponse> posts = boardService.getPostFindAll(name, pageable);
+        Page<BoardPostResponse> posts = boardService.getPostFindAll(boardId, pageable);
         return ApiResponse.ok(posts);
     }
 
 
-    @PostMapping("/posts/{boardName}")
+    @PostMapping("/posts/{boardId}")
     public ApiResponse<Void> createPost(
-            @PathVariable("boardName") String boardName,
+            @PathVariable("boardId") Long boardId,
             @RequestBody @Valid BoardPostCreateRequest request,
             HttpServletRequest httpServletRequest) {
 
         log.info("포스팅 실행");
 
-        boardService.createPost(boardName, request.toServiceRequest(), httpServletRequest);
+        boardService.createPost(boardId, request.toServiceRequest(), httpServletRequest);
         return ApiResponse.ok();
 
     }
@@ -115,13 +115,13 @@ public class BoardRestController {
 //
 //    }
 
-    @PostMapping("/posts/likes/{postTitle}")
+    @PostMapping("/posts/likes/{postId}")
     public ApiResponse<BoardPostLikeCountResponse> likePost(
-            @PathVariable("postTitle") String postTitle,
+            @PathVariable("postId") Long postId,
             HttpServletRequest httpServletRequest) {
 
-        boardService.likePost(postTitle, httpServletRequest);
-        return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
+        boardService.likePost(postId, httpServletRequest);
+        return ApiResponse.ok(boardService.getPostLikeCount(postId));
 
     }
 

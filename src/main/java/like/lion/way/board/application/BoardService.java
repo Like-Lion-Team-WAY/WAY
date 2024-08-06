@@ -17,17 +17,24 @@ import like.lion.way.board.application.response.BoardTitleResponse;
 public interface BoardService {
 
     List<BoardTitleResponse> getBoardFindAll();
-    void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest);
-    void updateBoard(BoardEditServiceRequest request, String name);
-    void deleteBoard(String name);
-    Page<BoardPostResponse> getPostFindAll(String name, Pageable pageable);
-    void createPost(String boardName, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
-//    BoardPostDetailResponse getPostDetails(String boardName, String postTitle);
-    BoardPostLikeCountResponse getPostLikeCount(String postTitle);
-    void likePost(String postTitle, HttpServletRequest httpServletRequest);
+    void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest);
+
+    void updateBoard(BoardEditServiceRequest request, Long boardId);
+
+    void deleteBoard(Long boardId);
+
+    Page<BoardPostResponse> getPostFindAll(Long boardId, Pageable pageable);
+
+    void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest);
+
+    //    BoardPostDetailResponse getPostDetails(String boardName, String postTitle);
+    BoardPostLikeCountResponse getPostLikeCount(Long postId);
+
+    void likePost(Long postId, HttpServletRequest httpServletRequest);
 
     BoardPostScrapCountResponse getPostScrapCount(Long postId);
+
     void scrapPost(Long postId, HttpServletRequest httpServletRequest);
 
 }

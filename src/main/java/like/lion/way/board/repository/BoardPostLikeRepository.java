@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardPostLikeRepository extends JpaRepository<BoardPostLike, Long> {
 
-    @Query("SELECT COUNT (like) FROM BoardPostLike like WHERE like.boardPost.title = ?1")
-    Long countLikesByTitle(String title);
+    @Query("SELECT COUNT (like) FROM BoardPostLike like WHERE like.boardPost.id = ?1")
+    Long countLikesByBoardPostId(Long postId);
 
     @Query("SELECT postLike FROM BoardPostLike postLike WHERE postLike.boardPost = ?1 AND postLike.user = ?2")
     BoardPostLike findBoardPostLikeByBoardPostAndAndUser(BoardPost boardPost, User user);

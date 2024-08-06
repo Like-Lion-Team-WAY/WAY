@@ -49,6 +49,7 @@ public class BoardServiceImpl implements BoardService {
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
                 .map(board -> BoardTitleResponse.builder()
+                        .boardPostId(board.getId())
                         .name(board.getName())
                         .build())
                 .collect(Collectors.toList());
@@ -67,30 +68,36 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void updateBoard(BoardEditServiceRequest request, String name) {
+    public void updateBoard(BoardEditServiceRequest request, Long boardId) {
 
-        Board board = boardRepository.findByName(name);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
         board.updateBoard(request.getName(), request.getIntroduction(), request.isAnonymousPermission());
 
     }
 
     @Override
     @Transactional
-    public void deleteBoard(String name) {
+    public void deleteBoard(Long boardId) {
 
-        Board board = boardRepository.findByName(name);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
         boardRepository.delete(board);
 
     }
 
     @Override
-    public Page<BoardPostResponse> getPostFindAll(String name, Pageable pageable) {
-        Board board = boardRepository.findByName(name);
+    public Page<BoardPostResponse> getPostFindAll(Long boardId, Pageable pageable) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
         Page<BoardPost> postsPage = boardPostRepository.findAllByBoard(board, pageable);
 
         List<BoardPostResponse> postResponses = postsPage.stream()
                 .map(post -> BoardPostResponse.builder()
-                        .boardName(name)
+                        .boardName(board.getName())
+                        .boardPostId(post.getId())
                         .postTitle(post.getTitle())
                         .author(post.getUser().getNickname(post.isAnonymousPermission()))
                         .created_at(post.getCreatedAt())
@@ -102,9 +109,10 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void createPost(String name, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
+    public void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
 
-        Board board = boardRepository.findByName(name);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
         log.info("게시판 정보 ::: " + board);
         User user = getUserByHttpServletRequest(httpServletRequest);
         boardPostRepository.save(request.toEntity(user, board));
@@ -126,8 +134,8 @@ public class BoardServiceImpl implements BoardService {
 //    }
 
     @Override
-    public BoardPostLikeCountResponse getPostLikeCount(String postTitle) {
-        Long likes = boardPostLikeRepository.countLikesByTitle(postTitle);
+    public BoardPostLikeCountResponse getPostLikeCount(Long postId) {
+        Long likes = boardPostLikeRepository.countLikesByBoardPostId(postId);
         return BoardPostLikeCountResponse.builder()
                 .likes(likes)
                 .build();
@@ -135,9 +143,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void likePost(String postTitle, HttpServletRequest request) {
+    public void likePost(Long postId, HttpServletRequest request) {
 
-        BoardPost post = boardPostRepository.findByTitle(postTitle);
+        BoardPost post = boardPostRepository.findByBoardPostId(postId);
         User user = getUserByHttpServletRequest(request);
 
         BoardPostLike like = boardPostLikeRepository.findBoardPostLikeByBoardPostAndAndUser(post, user);

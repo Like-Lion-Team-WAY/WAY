@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class BoardPostResponse {
 
     private String boardName;
+    private Long boardPostId;
     private String postTitle;
     private String author;
     private LocalDateTime created_at;
@@ -17,11 +18,13 @@ public class BoardPostResponse {
     @Builder
     public BoardPostResponse(
             String boardName,
+            Long boardPostId,
             String postTitle,
             String author,
             LocalDateTime created_at) {
 
         this.boardName = boardName;
+        this.boardPostId = boardPostId;
         this.postTitle = postTitle;
         this.author = author;
         this.created_at = created_at;
