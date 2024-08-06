@@ -12,7 +12,19 @@
 <input type="hidden" id="user-id" th:value="${userId}">
 <div class="header">
     <h2 class="title" th:text="${chatName}"></h2>
-    <div class="menu">≡</div>
+    <button class="open-btn" onclick="openSide()">☰</button>
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeSide()">&times;</a>
+        <div class="chat-name">
+            <h3 th:text="${chatName}"></h3>
+            <button>이름 변경</button>
+        </div>
+        <div class="chat-func">
+            <button>닉네임 공개 요청</button>
+            <button>신고하기</button>
+            <button>나가기</button>
+        </div>
+    </div>
 </div>
 <div class="container" id="chat-container">
     <div id="elementToObserve"></div>

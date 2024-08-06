@@ -43,15 +43,51 @@ body, html {
 .chat-message {
     display: flex;
     flex-direction: column;
-    background-color: #FFD6B0;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    color: black;
+    margin-bottom: 20px;
 }
 
-.user-icon, .text, .message-time {
+.user-message {
+    margin-top: 10px;
+    margin-right: 20px;
+    text-align: right;
+}
+
+.partner-message {
+    margin-top: 10px;
+    margin-right: 20px;
+    text-align: left;
+}
+
+.user-message .text,
+.partner-message .text {
+    display: inline-block;
+    position: relative;
+    background-color: #FFD6B0;
+    border-radius: 20px;
+    color: black;
+    padding: 7px 12px;
+    margin-bottom: 10px;
+    max-width: 230px;
+}
+
+.message-time {
+    color: #aaa;
+    font-size: 0.8em;
+}
+
+.user-nickname, .text, .message-time {
     margin: 5px 0;
+}
+
+.system-message {
+    display: flex;
+    flex-direction: column;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 3px;
+    margin-bottom: 10px;
+    color: black;
+    text-align: center;
 }
 
 .footer {
@@ -85,4 +121,82 @@ body, html {
 
 .footer button:hover {
     background-color: #e55a34;
+}
+
+.open-btn {
+    background-color: white;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+}
+
+.side-menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #FFD6B0;
+    border-left: 3px solid white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+.side-menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #363636;
+    display: block;
+    transition: 0.3s;
+}
+
+.side-menu .close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 36px;
+    margin: 10px; /* 마진 추가 */
+}
+
+.side-menu div {
+    text-align: center;
+    color: black;
+    margin: 10px 0; /* 각 요소 사이에 마진 추가 */
+}
+
+.chat-name, .chat-func {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+.chat-name button, .chat-func button {
+    margin-top: 10px; /* 버튼 사이에 마진 추가 */
+    background-color: white;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+}
+
+.chat-name button:hover,
+.chat-func button:hover {
+    background-color: #e55a34;
+    color: white;
+}
+
+@media screen and (max-height: 450px) {
+    .side-menu {
+        padding-top: 15px;
+    }
+
+    .side-menu a {
+        font-size: 18px;
+    }
 }

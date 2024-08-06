@@ -39,33 +39,41 @@ function sendMessage() {
     const text = document.getElementById('message-input').value;
     const userId = document.getElementById('user-id').value;
     console.log(userId);
-    stompClient.send("/app/sendMessage", {}, JSON.stringify({'chatId': chatId, 'text': text, 'userId': userId, 'type': 'message'}));
+    stompClient.send("/app/sendMessage", {}, JSON.stringify({
+        'chatId': chatId,
+        'text': text,
+        'userId': userId,
+        'type': 'message'
+    }));
     document.getElementById('message-input').value = '';
 }
 
 function showMessageOutput(messageOutput) {
     const chatBody = document.getElementById('chat-container');
 
-    const chatMessage = document.createElement('div');
-    chatMessage.classList.add('chat-message');
+    const userId = Number(document.getElementById('user-id').value);
+    const messageDiv = document.createElement('div');
+    if (messageOutput.type !== "message") {
+        messageDiv.classList.add('system-message');
+        messageDiv.innerHTML = `
+            <div class="text">${messageOutput.text}</div>
+        `;
+    } else if (messageOutput.userId === userId) {
+        messageDiv.classList.add('user-message');
+        messageDiv.innerHTML = `
+            <div class="text">${messageOutput.text}</div>
+            <div class="message-time">${messageOutput.sendTime}</div>                    
+       `;
+    } else {
+        messageDiv.classList.add('partner-message');
+        messageDiv.innerHTML = `
+            <div class="user-nickname">${messageOutput.userNickname}</div>
+            <div class="text">${messageOutput.text}</div>
+            <div class="message-time">${messageOutput.sendTime}</div>
+        `;
+    }
 
-    const userIcon = document.createElement('div');
-    userIcon.classList.add('user-icon');
-    userIcon.textContent = messageOutput.userNickname;
-
-    const text = document.createElement('div');
-    text.classList.add('text');
-    text.textContent = messageOutput.text;
-
-    const responseTime = document.createElement('div');
-    responseTime.classList.add('message-time');
-    responseTime.textContent = messageOutput.sendTime;
-
-    chatMessage.appendChild(userIcon);
-    chatMessage.appendChild(text);
-    chatMessage.appendChild(responseTime);
-
-    chatBody.appendChild(chatMessage);
+    chatBody.appendChild(messageDiv);
 }
 
 function loadMessages() {
@@ -73,20 +81,34 @@ function loadMessages() {
     isLoading = true; // 데이터 로드 시작
 
     const observerElement = $("#elementToObserve")
+    const userId = document.getElementById('user-id').value;
 
     $.ajax({
         url: '/api/messages/' + chatId + '?lastLoadMessageId=' + lastLoadMessageId,
         type: 'GET',
         success: function (response) {
-            console.log(response);
-            response.messages.forEach(function (message){
+            response.messages.forEach(function (message) {
+                const userId = Number(document.getElementById('user-id').value);
                 const messageDiv = document.createElement('div');
-                messageDiv.classList.add('chat-message');
-                messageDiv.innerHTML = `
-                    <div class="user-icon">${message.userNickname}</div>
-                    <div class="text">${message.text}</div>
-                    <div class="message-time">${message.sendTime}</div>
-                `;
+                if (message.type !== "message") {
+                    messageDiv.classList.add('system-message');
+                    messageDiv.innerHTML = `
+                        <div class="text">${message.text}</div>
+                    `;
+                } else if (message.userId === userId) {
+                    messageDiv.classList.add('user-message');
+                    messageDiv.innerHTML = `
+                        <div class="text">${message.text}</div>
+                        <div class="message-time">${message.sendTime}</div>                    
+                    `;
+                } else {
+                    messageDiv.classList.add('partner-message');
+                    messageDiv.innerHTML = `
+                        <div class="user-nickname">${message.userNickname}</div>
+                        <div class="text">${message.text}</div>
+                        <div class="message-time">${message.sendTime}</div>
+                    `;
+                }
 
                 observerElement.after(messageDiv);
                 lastLoadMessageId = message.id;
@@ -128,4 +150,13 @@ document.addEventListener('DOMContentLoaded', function () {
     loadMessages();
     scrollToBottom();
     setupIntersectionObserver();
+    closeSide();
 });
+
+function openSide() {
+    document.getElementById("side-menu").style.width = "250px";
+}
+
+function closeSide() {
+    document.getElementById("side-menu").style.width = "0"
+}
