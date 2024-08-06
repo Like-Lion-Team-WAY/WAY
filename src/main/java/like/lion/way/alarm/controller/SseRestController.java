@@ -27,7 +27,8 @@ public class SseRestController {
         try {
             emitter.send(SseEmitter.event()
                     .name("subscribe")
-                    .data("subscribe!"));
+                    .data("subscribed!!"));
+            log.info("[SseRestController] subscribe: {}", userId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
