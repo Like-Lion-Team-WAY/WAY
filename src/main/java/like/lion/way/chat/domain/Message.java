@@ -15,5 +15,6 @@ public class Message {
     private Long chatId;
     private Long userId;
     private String text;
+    private String type;
     private LocalDateTime createdAt;
 }

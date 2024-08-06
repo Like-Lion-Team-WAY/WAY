@@ -39,7 +39,7 @@ function sendMessage() {
     const text = document.getElementById('message-input').value;
     const userId = document.getElementById('user-id').value;
     console.log(userId);
-    stompClient.send("/app/sendMessage", {}, JSON.stringify({'chatId': chatId, 'text': text, 'userId': userId}));
+    stompClient.send("/app/sendMessage", {}, JSON.stringify({'chatId': chatId, 'text': text, 'userId': userId, 'type': 'message'}));
     document.getElementById('message-input').value = '';
 }
 

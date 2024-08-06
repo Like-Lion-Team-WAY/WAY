@@ -85,9 +85,24 @@ document.addEventListener('DOMContentLoaded', function () {
     loadChatList();
     connect();
     setupIntersectionObserver();
+
+    $('button').click(function(){
+        const questionId = $(this).val();
+        $.ajax({
+            url: '/api/chats', // 서버의 엔드포인트 URL
+            type: 'POST',
+            data: {
+                'questionId': questionId
+            },
+            success: function(response) {
+                console.log(response.message);
+            }
+        });
+    });
 });
 
 function openChat(url, id) {
     window.open(url, 'chatPopup' + id, 'width=400,height=600');
     return false;
 }
+

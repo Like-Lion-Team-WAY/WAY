@@ -13,6 +13,7 @@ public class ReceiveMessageDTO {
     private String id;
     private String text;
     private String sendTime;
+    private String type;
     private Long chatId;
     private Long userId;
     private String userNickname;
@@ -20,6 +21,7 @@ public class ReceiveMessageDTO {
     public ReceiveMessageDTO(Message message, String userNickname) {
         this.id = message.getId();
         this.text = message.getText();
+        this.type = message.getType();
         this.chatId = message.getChatId();
         this.userId = message.getUserId();
         this.userNickname = userNickname;
