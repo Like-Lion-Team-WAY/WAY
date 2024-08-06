@@ -24,14 +24,14 @@
             </div>
         </div>
         <div class="post-actions">
-            <button id="editPostBtn">수정</button>
-            <button id="deletePostBtn">삭제</button>
+            <button th:if="${post.getUser().getUserId() == loginUser.getUserId()}" id="editPostBtn">수정</button>
+            <button th:if="${post.getUser().getUserId() == loginUser.getUserId()}" id="deletePostBtn">삭제</button>
             <button id="reportPostBtn">신고</button>
         </div>
 
         <div class="post-content">
             <h1 id="postTitle" th:text="${post.getPostTitle()}"></h1>
-            <img th:src="'/display?filename='+${post.getPostImageUrl()}" alt="이미지 확인하기" width="500px" />
+            <img th:if="${post.getPostImageUrl() != null}" th:src="'/display?filename='+${post.getPostImageUrl()}" alt="이미지 확인하기" width="500px" />
             <p id="postContent" th:text="${post.getPostContent()}"></p>
 
             <div id="editPostForm" style="display:none;">

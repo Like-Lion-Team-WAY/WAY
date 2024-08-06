@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>filterQuestionPage</title>
+  <link rel="stylesheet" th:href="@{/css/feed/questionPage.css}">
+</head>
+<body>
+<div layout:fragment="content">
+  <h1>거절 질문 목록</h1>
+  <!-- 자기가 팔로우 한 사람들의 게시글과 질문이 떠야 됨 -->
+  <!-- 해당 유저의 피드로 가서 질문 창으로 갈 수 있게끔 -->
+  <div class="answered-section">
+    <div class="answered-question" th:each="q : ${question}">
+      <div class="answered-header">
+        <span class="user-icon">Q</span>
+        <span th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
+      </div>
+      <p class="question-text" th:text="${q.getQuestion()}">질문</p>
+      <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
+      <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">질문 작성 날짜</p>
+      <a th:if="${q.getAnswer() != null} ">
+        <p class="answer-text" th:text="${q.getAnswer()}">답변</p>
+        <div class="form-group">
+          <p class="answer-date" th:text="'답장 날짜: '+${#temporals.format(q.getAnswerDate(), 'yyyy년 MM월 dd일')}">답변 작성 날짜</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

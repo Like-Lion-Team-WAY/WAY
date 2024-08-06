@@ -17,39 +17,39 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <p class="subtitle" th:text="${user.username} + '님에게 익명으로 질문을 보내세요!!'"></p>
-  <div class="question-section">
-    <form class="question-form" method="post" action="/questions/create" enctype="multipart/form-data">
-      <input type="text" name="question" class="question-input" placeholder="질문 쓰기">
-      <div>
-        <input type="radio" name="isAnonymous" id="anonymousTrue" value="true" checked>
-        <label for="anonymousTrue">익명</label>
-        <input type="radio" name="isAnonymous" id="anonymousFalse" value="false">
-        <label for="anonymousFalse">실명</label>
+  <a th:if="${user.getUserId() != loginUser.getUserId()}" >
+      <p class="subtitle" th:text="${user.username} + '님에게 익명으로 질문을 보내세요!!'"></p>
+      <div class="question-section">
+        <form class="question-form" method="post" th:action="@{/questions/create/{userId}(userId=${user.userId})}" enctype="multipart/form-data">
+          <input type="text" name="question" class="question-input" placeholder="질문 쓰기">
+          <div>
+            <input type="radio" name="isAnonymous" id="anonymousTrue" value="true" checked>
+            <label for="anonymousTrue">익명</label>
+            <input type="radio" name="isAnonymous" id="anonymousFalse" value="false">
+            <label for="anonymousFalse">실명</label>
+          </div>
+          <div class="form-group">
+            <label for="image">이미지</label>
+            <input type="file" id="image" name="image">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="send-button">질문 쓰기</button>
+          </div>
+        </form>
       </div>
-      <div class="form-group">
-        <label for="image">이미지</label>
-        <input type="file" id="image" name="image">
-      </div>
-      <div class="form-group">
-        <button type="submit" class="send-button">질문 쓰기</button>
-      </div>
-    </form>
-  </div>
+  </a>
   <div class="answered-section">
-    <p class="answered-title" th:text="${user.username} + '님이 답변한 질문들'"></p>
-    <!--        <div class="answered-question">-->
-    <!--            <div class="answered-header">-->
-    <!--                <span class="user-icon">Q</span>-->
-    <!--                <span class="user-name">익명</span>-->
-    <!--            </div>-->
-    <!--            <p class="question-text">취미~~</p>-->
-    <!--            <p class="answer-text">먹기~~</p>-->
-    <!--        </div>-->
+    <p class="answered-title" th:text="${user.username} + '님에게 온 질문들'"></p>
     <div class="answered-question" th:each="q : ${question}">
       <div class="answered-header">
         <span class="user-icon">Q</span>
         <span th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
+      </div>
+      <div class="form-group" th:if="${user.getUserId() == loginUser.getUserId()}">
+        <form action="/questions/enroll/rejected" method="post">
+            <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+            <button type="submit" class="rejectedBtn">질문 거절</button>
+        </form>
       </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>
       <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">

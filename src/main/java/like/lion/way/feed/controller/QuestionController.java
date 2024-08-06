@@ -32,38 +32,52 @@ public class QuestionController {
     @Value("${image.upload.dir}")
     private String uploadDir;
 
+    //로그인한 사용자
+    private User getLoginUser(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long loginId = jwtUtil.getUserIdFromToken(token);
+        return userService.findByUserId(loginId);
+    }
+    //내 질문 창으로만
+    @GetMapping("/questions/create")
+    public String createMyQuestion(Model model, HttpServletRequest request) {
+        //얘는 로그인 유저 (==질문 페이지 소유자)
+        User loginUser= getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
+        // 얘는 질문 페이지 소유자의 유저 정보
+        User user = userService.findByUserId(loginUser.getUserId());
+        model.addAttribute("user", user);
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected()));
+
+        return "pages/feed/questionPage";
+    }
+    //userId 는 질문 페이지의 소유자의 userId
     //username 추가해줘야 됨
     @GetMapping("/questions/create/{userId}")
     public String createQuestion(Model model, HttpServletRequest request, @PathVariable("userId") Long userId) {
-        // JWT 토큰에서 사용자 이름 추출
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long loginId = jwtUtil.getUserIdFromToken(token);
         //얘는 로그인 유저
-        User loginUser= userService.findByUserId(loginId);
+        User loginUser= getLoginUser(request);
         model.addAttribute("loginUser", loginUser);
 
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByUser(user));
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected()));
 
         return "pages/feed/questionPage";
     }
-
-    @PostMapping("/questions/create")
-    public String createQuestion(
+    //질문 등록
+    //userId 질문 페이지의 소유자 아이디
+    @PostMapping("/questions/create/{userId}")
+    public String createQuestion(@PathVariable("userId") Long userId,
             @RequestParam("question") String question,
             @RequestParam("isAnonymous") boolean isAnonymous,
             @RequestParam(value = "image", required = false) MultipartFile image,
             HttpServletRequest request) {
 
-        // JWT 토큰에서 사용자 이름 추출
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
+        // 로그인한 사용자
+        User user = getLoginUser(request);
 
-        // 사용자 정보 조회
-        User user = userService.findByUserId(userId);
-        log.info("question: {}", question);
         Question newQuestion = new Question();
         newQuestion.setQuestion(question);  //질문 저장
         newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
@@ -85,22 +99,32 @@ public class QuestionController {
                 e.printStackTrace();
             }
         }
+        User questionPageUser= userService.findByUserId(userId);
+        newQuestion.setAnswerer(questionPageUser);
+        newQuestion.setQuestionDeleteYN(false);
+        newQuestion.setQuestionStatus(false);
+        newQuestion.setQuestionPinStatus(false);
+        newQuestion.setQuestionRejected(false);
         questionService.saveQuestion(newQuestion);
-//        newQuestion.setAnswer(null);
-//        newQuestion.setAnswerDate(null);
-//        newQuestion.setQuestionDeleteYN(false);
-//        newQuestion.setQuestionStatus(false);
-//        newQuestion.setQuestionPinStatus(false);
-//        newQuestion.setQuestionRejected(false);
-        return "redirect:/questions/create";
+        return "redirect:/questions/create/"+userId;
     }
-
+    //질문 답변
     @PostMapping("/questions/answer/{questionId}")
     public String answerQuestion(@RequestParam("answer") String answer, @PathVariable("questionId") Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         question.setAnswer(answer);
+        question.setQuestionStatus(true);
         question.setAnswerDate(LocalDateTime.now());
         questionService.saveQuestion(question);
         return "redirect:/questions/create";
+    }
+    //거절 질문 등록
+    @PostMapping("/questions/enroll/rejected")
+    public String enrollRejected(@RequestParam("questionId") Long questionId) {
+        Question question = questionService.getQuestionById(questionId);
+        question.setQuestionRejected(true);
+        questionService.saveQuestion(question);
+
+        return "redirect:/questions/create"; //자기 질문 창으로 넘어가게!
     }
 }

@@ -39,7 +39,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestionByUser(User user) {
-        return questionRepository.findQuestionsByUser(user);
+    public List<Question> getQuestionByAnswerer(User user) {
+        return questionRepository.findQuestionsByAnswerer(user);
     }
+
+    @Override
+    public List<Question> getQuestionByQuestioner(User user) {
+        return questionRepository.findQuestionsByQuestioner(user);
+    }
+
 }

@@ -15,5 +15,7 @@ public interface QuestionService {
 
     Question updateAnswer(Long questionId, String answer);
 
-    List<Question> getQuestionByUser(User user);
+    List<Question> getQuestionByAnswerer(User user);
+
+    List<Question> getQuestionByQuestioner(User user);
 }

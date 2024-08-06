@@ -1,6 +1,5 @@
 package like.lion.way.feed.controller;
 
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +7,7 @@ import java.time.LocalDateTime;
 import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.domain.dto.PostDto;
 import like.lion.way.feed.service.PostService;
+import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -28,22 +28,40 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostController {
     private final PostService postService;
     private final UserService userService;
+    private final QuestionService questionService;
     private final JwtUtil jwtUtil;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
 
+    //로그인한 사용자
+    private User getLoginUser(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long loginId = jwtUtil.getUserIdFromToken(token);
+        return userService.findByUserId(loginId);
+    }
+
     //내 게시판 보여주기
     @GetMapping("/posts")
     public String getPosts(Model model, HttpServletRequest request){
-        // JWT 토큰에서 사용자 이름 추출
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
-        // 사용자 정보 조회
-        User user = userService.findByUserId(userId);
+        User user = getLoginUser(request);
         model.addAttribute("user", user);
         model.addAttribute("posts", postService.getPostByUser(user));
+        model.addAttribute("rejectedQuestions", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> q.getQuestionRejected())
+                .toList().size());
+        model.addAttribute("newQuestions", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() == null)
+                .toList().size());
+        model.addAttribute("replyQuestions", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() != null)
+                .toList().size());
+        model.addAttribute("sendQuestions", questionService.getQuestionByQuestioner(user)
+                .stream()
+                .toList().size());
         model.addAttribute("loginUser", user);
 
         return "/pages/feed/userFeed";
@@ -52,18 +70,29 @@ public class PostController {
     //userId 에 해당하는 게시판 보여주기
     @GetMapping("/posts/{userId}")
     public String getPosts(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
-        // JWT 토큰에서 사용자 이름 추출
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long loginId = jwtUtil.getUserIdFromToken(token);
-
         // 로그인한  정보 조회
-        User loginUser = userService.findByUserId(loginId);
+        User loginUser = getLoginUser(request);
         model.addAttribute("loginUser", loginUser);
 
         // 사용자 정보 조회(question 의 user)
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
         model.addAttribute("posts", postService.getPostByUser(user));
+        model.addAttribute("rejectedQuestions", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> q.getQuestionRejected())
+                .toList().size());
+        model.addAttribute("newQuestions", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() == null)
+                .toList().size());
+        model.addAttribute("replyQuestions", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() != null)
+                .toList().size());
+        model.addAttribute("sendQuestions", questionService.getQuestionByQuestioner(user)
+                .stream()
+                .toList().size());
         return "/pages/feed/userFeed";
     }
     //게시판 생성 페이지로 넘어감
@@ -90,13 +119,9 @@ public class PostController {
                 e.printStackTrace();
             }
         }
-        // JWT 토큰에서 사용자 이름 추출
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
 
         // 사용자 정보 조회
-        User user = userService.findByUserId(userId);
-        log.info("userId:::: " + userId);
+        User user = getLoginUser(request);
         log.info("username::::"+user.getUsername());
 
         post.setUser(user); // 작성자 설정
@@ -107,10 +132,13 @@ public class PostController {
     }
     //게시판 상세(게시판 == 피드)
     @GetMapping("/posts/detail/{postId}")
-    public String showDetailPost(@PathVariable("postId") Long postId, Model model){
+    public String showDetailPost(@PathVariable("postId") Long postId, Model model, HttpServletRequest request){
         log.info("postId:::: " + postId);
         Post post = postService.getPostById(postId);
         model.addAttribute("post", post);
+
+        User loginUser= getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
         return "/pages/feed/detailFeed";
     }
 }
