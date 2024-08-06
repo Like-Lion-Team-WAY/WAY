@@ -53,6 +53,7 @@
       </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>
       <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
+      <button class="likeBtn">❤ 공감</button>
       <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">질문 작성 날짜</p>
       <!--            여기 부분에서 답변하기는 유저 정보 가져왔을 때 해당 질문창의 유저만 답변 폼 볼 수 있게 처리할 것임!!!-->
       <a th:if="${q.getAnswer() == null && user.getUserId() == loginUser.getUserId()}" >

@@ -200,3 +200,16 @@ body {
     color: #FF6746;
     margin-right: 10px;
 }
+.likeBtn{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #FF6746;
+    margin-right: 10px;
+}

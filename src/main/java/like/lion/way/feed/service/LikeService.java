@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LikeService {
-    Like likePost(Long postId, Long userId);
+    void likePost(Long postId, Long userId);
 }
