@@ -95,6 +95,7 @@ public class BoardRestController {
 
     }
 
+    //get 요청 필요 없이 postDetail 로드할 때 getPostLikeCount 해서 postDetailResponse에 likes 담으면 될 것 같음
     @GetMapping("/{postTitle}")
     public ApiResponse<BoardPostLikeCountResponse> getBoardPostLikeCount(@PathVariable("postTitle") String postTitle) {
 
@@ -102,12 +103,12 @@ public class BoardRestController {
 
     }
 
-    @PostMapping("/{postTitle}")
-    public ApiResponse<Void> likePost(@PathVariable("postTitle") String postTitle,
+    @PostMapping("/posts/likes/{postTitle}")
+    public ApiResponse<BoardPostLikeCountResponse> likePost(@PathVariable("postTitle") String postTitle,
                                    HttpServletRequest httpServletRequest) {
 
         boardService.likePost(postTitle, httpServletRequest);
-        return ApiResponse.ok();
+        return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
 
     }
 

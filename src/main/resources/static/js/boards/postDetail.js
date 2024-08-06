@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const returnPage = document.getElementById('returnPage');
-    const boardName = '특정 게시판 이름'; // 여기에 실제 게시판 이름을 입력하세요
+    const likeAction = document.getElementById('likeAction');
+
     const pathSegments = window.location.pathname.split('/');
+    const boardName = pathSegments[pathSegments.length - 2];
     const postTitle = pathSegments[pathSegments.length - 1];
 
     returnPage.addEventListener('click', () => {
@@ -29,6 +31,24 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching post details:', error));
     }
 
+    likeAction.addEventListener('click', () => {
+        fetch(`/api/v1/boards/posts/likes/${postTitle}`, { // 경로 수정
+            method: 'POST', // 좋아요 요청을 POST로 전송
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(apiResponse => {
+                if (!apiResponse.success) {
+                    throw new Error(apiResponse.message || 'Error liking post');
+                }
+                const data = apiResponse.data;
+                document.querySelector('.likes').textContent = `👍 ${data.likes}`; // 새로운 좋아요 수 업데이트
+            })
+            .catch(error => console.error('Error liking post:', error));
+    });
+
     // 댓글을 입력하는 함수
     function submitComment() {
         const commentBox = document.querySelector('.comment-box');
@@ -40,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 실제 API 요청으로 대체
-        fetch(`/api/v1/boards/posts/${boardName}/1/comments`, { // 게시글 ID 1을 예시로 사용
+        fetch(`/api/v1/boards/posts/${boardName}/${postTitle}/comments`, { // 경로 수정
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -70,5 +90,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 게시글 상세 정보를 불러옵니다.
     fetchPostDetails();
-
 });
