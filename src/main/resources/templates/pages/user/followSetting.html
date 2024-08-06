@@ -140,7 +140,26 @@
             //차단해제
             $('.unblock-btn').click(function(){
                 let username = $(this).data('username');
+                let userItem = $(this).closest('.user-item');
                 console.log(username);
+                $.ajax({
+                    url:'/block/unblock',
+                    method:'DELETE',
+                    data:{
+                        username:username
+                    },
+                    success:function(result){
+                        if(result==="success"){
+                            userItem.remove();
+                        }else{
+                            alert('에러');
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+
             })
         });
     </script>
