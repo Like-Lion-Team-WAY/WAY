@@ -19,84 +19,109 @@
                 😆
             </p>
             <input type="text" placeholder="태그 검색" id="tagInput" />
+            <button class="next-button" id="viewAll">전체보기</button>
             <div class="selected-tags"><!-- 선택된 태그들이 표시될 곳 --></div>
             <div class="available-tags">
                 <!-- 사용 가능한 태그들 -->
                 <!-- 동적으로 태그들이 생성될 곳 -->
             </div>
-            <button class="next-button">완료</button>
+            <button class="next-button" id="finishBtn">완료</button>
         </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        var availableTags = [
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-            "철학 태그",
-            "내용이 긴 철학 태그",
-            "역사 태그",
-            "문화 태그",
-            "과학 태그",
-        ];
-
-        var $availableContainer = $(".available-tags");
-        var $selectedContainer = $(".selected-tags");
-
-        // 태그를 동적으로 생성하고 컨테이너에 추가
-        $.each(availableTags, function (index, tag) {
-            var $tagElement = $("<div>").text(tag).appendTo($availableContainer);
-
-            // 클릭 이벤트를 태그에 바인딩
-            $tagElement.on("click", function () {
-                // 선택된 태그 목록에 태그를 이동
-                $(this).appendTo($selectedContainer);
-            });
+        viewAll();
+        $('#viewAll').click(function(){
+            viewAll();
         });
+        let availableContainer = $(".available-tags");
+        let selectedContainer = $(".selected-tags");
+        //전체 태그 불러오기
+        function viewAll(){
+            $.ajax({
+                url:'/interest/all',
+                method:'GET',
+                success:function(result){
+                    availableContainer.empty();
+                    $.each(result, function(index, tag) {
+                        let tagElement = $("<div>").text(tag.name).appendTo(availableContainer);
+
+
+                        tagElement.on("click", function () {
+                            if (!isTagAlreadySelected(tag.name)) {
+                                $(this).appendTo(selectedContainer);
+                            }
+                        });
+                    });
+                },
+                error:function (err){
+                    console.log(err);
+                }
+            })
+        }
+        //이미선택했는지 체크
+        function isTagAlreadySelected(tagName) {
+            let isSelected = false;
+            selectedContainer.find("div").each(function() {
+                if ($(this).text() === tagName) {
+                    isSelected = true;
+                }
+            });
+            return isSelected;
+        }
+
+        //검색에 따라 밑 요소 바뀌게
+        $('#tagInput').on('input',function(){
+            let keyword = $('#tagInput').val();
+            $.ajax({
+                url:'/interest/search?keyword='+keyword,
+                method: 'GET',
+                success:function (result){
+                    console.log(result);
+                    availableContainer.empty();
+                    $.each(result, function(index, tag) {
+                        console.log(tag);
+                        let tagElement = $("<div>").text(tag).appendTo(availableContainer);
+
+
+                        tagElement.on("click", function () {
+                            if (!isTagAlreadySelected(tag.name)) {
+                                $(this).appendTo(selectedContainer);
+                            }
+                        });
+                    });
+                },error:function(err){
+                    console.log(err);
+                }
+            })
+        })
+
+        //완료버튼 클릭
+        $('#finishBtn').click(function(){
+            selectedContainer = $(".selected-tags");
+            let value = [];
+            selectedContainer.find("div").each(function() {
+                value.push($(this).text());
+            });
+            $.ajax({
+                url:'/user/addInterests',
+                method:'POST',
+                contentType:'application/json',
+                data: JSON.stringify(value),
+                success:function(result){
+                    if(result!=='success'){
+                        alert('관심 설정 오류');
+                    }
+                    window.location.href='/main'
+
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })
+        })
     });
 </script>
 </body>
