@@ -3,6 +3,7 @@ package like.lion.way.alarm.event;
 import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.service.AlarmService;
 import like.lion.way.alarm.service.AlarmSseEmitters;
+import like.lion.way.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -36,6 +37,7 @@ public class AlarmEventListener {
         alarmService.saveAlarm(alarm);
 
         // 3. SSE를 사용하여 클라이언트로 알람 전송하기
-        emitters.send(alarm);
+        User user = alarm.getUser();
+        emitters.send(user);
     }
 }

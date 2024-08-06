@@ -51,4 +51,10 @@ public class AlarmServiceImpl implements AlarmService {
             default -> false;
         };
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countAlarm(User user) {
+        return alarmRepository.countByUser(user);
+    }
 }

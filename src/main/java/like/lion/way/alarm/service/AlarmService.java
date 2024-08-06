@@ -20,4 +20,9 @@ public interface AlarmService {
      * 알림 저장
      */
     void saveAlarm(Alarm alarm);
+
+    /**
+     * 특정 유저의 알림 개수 조회
+     */
+    Long countAlarm(User user);
 }
