@@ -3,7 +3,6 @@ package like.lion.way.feed.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionService;
@@ -13,7 +12,6 @@ import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,20 +33,19 @@ public class QuestionController {
     private String uploadDir;
 
     //username 추가해줘야 됨
-    @GetMapping("/questions/create")
-    public String createQuestion(Model model, HttpServletRequest request) {
-        model.addAttribute("question", questionService.getAllQuestions());
+    @GetMapping("/questions/create/{userId}")
+    public String createQuestion(Model model, HttpServletRequest request, @PathVariable("userId") Long userId) {
         // JWT 토큰에서 사용자 이름 추출
         String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
+        Long loginId = jwtUtil.getUserIdFromToken(token);
         //얘는 로그인 유저
-        User loginUser= userService.findByUserId(userId);
+        User loginUser= userService.findByUserId(loginId);
         model.addAttribute("loginUser", loginUser);
 
         // 얘는 질문 페이지 소유자의 유저 정보
-        //임의로 userId 1로 해놓음
-        User user = userService.findByUserId(1L);
+        User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
+        model.addAttribute("question", questionService.getQuestionByUser(user));
 
         return "pages/feed/questionPage";
     }

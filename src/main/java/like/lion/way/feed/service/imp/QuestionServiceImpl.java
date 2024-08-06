@@ -5,6 +5,7 @@ import java.util.List;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.repository.QuestionRepository;
 import like.lion.way.feed.service.QuestionService;
+import like.lion.way.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +36,10 @@ public class QuestionServiceImpl implements QuestionService {
         question.setAnswer(answer);
         question.setAnswerDate(LocalDateTime.now());
         return questionRepository.save(question);
+    }
+
+    @Override
+    public List<Question> getQuestionByUser(User user) {
+        return questionRepository.findQuestionsByUser(user);
     }
 }
