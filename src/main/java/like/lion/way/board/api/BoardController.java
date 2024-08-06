@@ -4,7 +4,6 @@ import like.lion.way.board.application.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -28,7 +27,7 @@ public class BoardController {
 
     }
 
-    @GetMapping("/setting")
+    @GetMapping("/setting/{boardName}")
     public String showBoardSettingForm() {
 
         return "pages/boards/boardSettingForm";
@@ -36,7 +35,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardName}")
-    public String  showPostForm(@PathVariable("boardName") String boardName) {
+    public String  showPostForm() {
 
         return "pages/boards/postForm";
 
@@ -46,6 +45,13 @@ public class BoardController {
     public String showPostCreateForm() {
 
         return "pages/boards/postCreateForm";
+
+    }
+
+    @GetMapping("/posts/{boardName}/{postTitle}")
+    public String showPostDetail() {
+
+        return "pages/boards/postDetailForm";
 
     }
 
