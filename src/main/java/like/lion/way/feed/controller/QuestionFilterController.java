@@ -42,6 +42,9 @@ public class QuestionFilterController {
     //새 질문 리스트
     @GetMapping("/questions/new/{userId}")
     public String showNewQuestion(@PathVariable("userId") Long userId, Model model, HttpServletRequest request){
+        //얘는 로그인 유저(==질문 페이지 소유자)
+        User loginUser= getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
@@ -52,6 +55,9 @@ public class QuestionFilterController {
     //답변 질문 리스트
     @GetMapping("/questions/reply/{userId}")
     public String showReplyQuestion(@PathVariable("userId") Long userId, Model model, HttpServletRequest request){
+        //얘는 로그인 유저(==질문 페이지 소유자)
+        User loginUser= getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
@@ -62,6 +68,9 @@ public class QuestionFilterController {
     //보낸 질문 리스트
     @GetMapping("/questions/send/{userId}")
     public String showSendQuestion(@PathVariable("userId") Long userId,Model model, HttpServletRequest request){
+        //얘는 로그인 유저(==질문 페이지 소유자)
+        User loginUser= getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);

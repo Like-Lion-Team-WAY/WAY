@@ -61,8 +61,7 @@ header {
   border-radius: 5px;
   font-weight: bold;
 }
-.sidebar-header h1 a,
-.sidebar nav ul li a {
+.sidebar-header h1 a{
   text-decoration: none;
   color: inherit;
   cursor: default;

@@ -207,9 +207,15 @@ body {
     justify-content: end;
     align-items: end;
     background: none;
-    border: none;
+    border: 1px solid #ff6746;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
     color: #FF6746;
     margin-right: 10px;
+}
+.likeCount {
+    margin-left: 5px;
+    font-size: 16px;
+    color: #FF6347; /* Text color */
 }

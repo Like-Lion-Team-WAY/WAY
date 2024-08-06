@@ -12,6 +12,7 @@
     <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/feed/postEdit.js"></script>
     <script src="/js/feed/commentEdit.js"></script>
+    <script src="/js/feed/postLike.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -54,7 +55,7 @@
 
         </div>
         <div class="post-tags">
-            <form th:action="@{/posts/like/{postId}(postId=${post.getPostId()})}" method="post">
+            <form th:action="@{/posts/like}" method="post">
                 <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
                 <input type="hidden" name="postId" th:value="${post.getPostId()}" />
                 <button type="submit" class="liketag">공감</button>

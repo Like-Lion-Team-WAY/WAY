@@ -2,8 +2,10 @@ package like.lion.way.feed.service.imp;
 
 import like.lion.way.feed.domain.Like;
 import like.lion.way.feed.domain.Post;
+import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.repository.LikeRepository;
 import like.lion.way.feed.repository.PostRepository;
+import like.lion.way.feed.repository.QuestionRepository;
 import like.lion.way.feed.service.LikeService;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.repository.UserRepository;
@@ -18,6 +20,7 @@ public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final QuestionRepository questionRepository;
 
     @Override
     public void likePost(Long postId, Long userId) {
@@ -40,5 +43,27 @@ public class LikeServiceImpl implements LikeService {
             postRepository.save(post);
             likeRepository.delete(existingLike);
         }
+    }
+
+    @Override
+    public void likeQuestion(Long questionId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("invalid userId"));
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new IllegalArgumentException("invalid questionId"));
+
+        Like existingLike = likeRepository.findByUserAndQuestion(user, question);
+
+        if(existingLike == null){
+            Like like= new Like();
+            like.setQuestion(question);
+            like.setUser(user);
+            question.setQuestionLike(question.getQuestionLike() + 1);
+            questionRepository.save(question);
+            likeRepository.save(like);
+        }else{
+            question.setQuestionLike(question.getQuestionLike() - 1);
+            questionRepository.save(question);
+            likeRepository.delete(existingLike);
+        }
+
     }
 }

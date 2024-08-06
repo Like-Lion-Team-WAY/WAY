@@ -53,7 +53,20 @@
       </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>
       <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
-      <button class="likeBtn">❤ 공감</button>
+      <div class="form-group" th:if="${user.getUserId()} != ${loginUser.getUserId()}">
+        <form th:action="@{/questions/like}" method="post" class="likeForm">
+          <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
+          <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+          <button type="submit" class="likeBtn">
+            ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
+          </button>
+        </form>
+      </div>
+      <div class="form-group" th:if="${user.getUserId()} == ${loginUser.getUserId()}">
+        <button type="submit" class="likeBtn" disabled>
+          ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
+        </button>
+      </div>
       <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">질문 작성 날짜</p>
       <!--            여기 부분에서 답변하기는 유저 정보 가져왔을 때 해당 질문창의 유저만 답변 폼 볼 수 있게 처리할 것임!!!-->
       <a th:if="${q.getAnswer() == null && user.getUserId() == loginUser.getUserId()}" >
