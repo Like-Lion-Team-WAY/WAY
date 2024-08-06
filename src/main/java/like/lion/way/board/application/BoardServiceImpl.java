@@ -1,5 +1,6 @@
 package like.lion.way.board.application;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
@@ -47,29 +48,28 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void createBoard(BoardCreateServiceRequest request, String token) {
+    public void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest) {
 
-        User user = getUserByToken(token);
+        User user = getUserByHttpServletRequest(httpServletRequest);
+        log.info("사용자 정보 테스트 :::" + user);
         boardRepository.save(request.toEntity(user));
 
     }
 
     @Override
     @Transactional
-    public void updateBoard(BoardEditServiceRequest request, Long boardId) {
+    public void updateBoard(BoardEditServiceRequest request, String name) {
 
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+        Board board = boardRepository.findByName(name);
         board.updateBoard(request.getName(), request.getIntroduction(), request.isAnonymousPermission());
 
     }
 
     @Override
     @Transactional
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(String name) {
 
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+        Board board = boardRepository.findByName(name);
         boardRepository.delete(board);
 
     }
@@ -93,20 +93,22 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void createPost(String name, BoardPostCreateServiceRequest request, String token) {
+    public void createPost(String name, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
 
         Board board = boardRepository.findByName(name);
         log.info("게시판 정보 ::: " + board);
-        User user = getUserByToken(token);
+        User user = getUserByHttpServletRequest(httpServletRequest);
         boardPostRepository.save(request.toEntity(user, board));
 
     }
 
-    private User getUserByToken(String token) {
+
+    private User getUserByHttpServletRequest(HttpServletRequest httpRequest) {
 
         try {
-            String username = jwtUtil.getUserNameFromToken(token);
-            return userService.findByUsername(username);
+            String token = jwtUtil.getCookieValue(httpRequest, "accessToken");
+            Long userId = jwtUtil.getUserIdFromToken(token);
+            return userService.findByUserId(userId);
         } catch (Exception e) {
             log.error("Invalid token", e);
             return null;
