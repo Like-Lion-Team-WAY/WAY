@@ -45,7 +45,7 @@ public class BoardController {
 
     }
 
-    @GetMapping("/posts/{postTitle}")
+    @GetMapping("/posts/{boardName}/{postTitle}")
     public String showPostDetail() {
 
         return "pages/boards/postDetailForm";

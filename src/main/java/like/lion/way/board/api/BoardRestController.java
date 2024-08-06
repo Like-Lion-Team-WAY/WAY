@@ -7,6 +7,7 @@ import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
+import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import lombok.RequiredArgsConstructor;
@@ -90,6 +91,22 @@ public class BoardRestController {
         log.info("포스팅 실행");
 
         boardService.createPost(boardName, request.toServiceRequest(), httpServletRequest);
+        return ApiResponse.ok();
+
+    }
+
+    @GetMapping("/{postTitle}")
+    public ApiResponse<BoardPostLikeCountResponse> getBoardPostLikeCount(@PathVariable("postTitle") String postTitle) {
+
+        return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
+
+    }
+
+    @PostMapping("/{postTitle}")
+    public ApiResponse<Void> likePost(@PathVariable("postTitle") String postTitle,
+                                   HttpServletRequest httpServletRequest) {
+
+        boardService.likePost(postTitle, httpServletRequest);
         return ApiResponse.ok();
 
     }

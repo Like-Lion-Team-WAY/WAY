@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
+import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.domain.BoardPost;
+import like.lion.way.board.domain.BoardPostLike;
+import like.lion.way.board.repository.BoardPostLikeRepository;
 import like.lion.way.board.repository.BoardPostRepository;
 import like.lion.way.board.repository.BoardRepository;
 import like.lion.way.jwt.util.JwtUtil;
@@ -31,6 +34,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardPostRepository boardPostRepository;
+    private final BoardPostLikeRepository boardPostLikeRepository;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -99,6 +103,34 @@ public class BoardServiceImpl implements BoardService {
         log.info("게시판 정보 ::: " + board);
         User user = getUserByHttpServletRequest(httpServletRequest);
         boardPostRepository.save(request.toEntity(user, board));
+
+    }
+
+    @Override
+    public BoardPostLikeCountResponse getPostLikeCount(String postTitle) {
+        Long likes = boardPostLikeRepository.countLikesByTitle(postTitle);
+        return BoardPostLikeCountResponse.builder()
+                .likes(likes)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void likePost(String postTitle, HttpServletRequest request) {
+
+        BoardPost post = boardPostRepository.findByTitle(postTitle);
+        User user = getUserByHttpServletRequest(request);
+
+        BoardPostLike like = boardPostLikeRepository.findBoardPostLikeByBoardPostAndAndUser(post, user);
+
+        if (like != null) {
+            boardPostLikeRepository.delete(like);
+        } else {
+            boardPostLikeRepository.save(BoardPostLike.builder()
+                    .post(post)
+                    .user(user)
+                    .build());
+        }
 
     }
 
