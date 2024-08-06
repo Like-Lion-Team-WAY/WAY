@@ -80,7 +80,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
             emitter.send(SseEmitter.event()
                     .name("count")
                     .data(count));
-            // log.info("[SseEmitters] send!! : {}", count);
+             log.info("[SseEmitters] send!! : {}", count);
         } catch (Exception e) {
             log.error("[SseEmitters] send error: {}", e.getMessage());
             emitter.complete();
