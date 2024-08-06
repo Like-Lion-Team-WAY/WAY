@@ -91,7 +91,7 @@ public class ChatRestController {
         Chat chat = chatService.findByQuestion(question);
 
         Map<String, Object> response = new HashMap<>();
-        if (chat != null) {
+        if (chat != null && chat.isUserActive1()) {
             response.put("message", "이미 생성된 채팅방입니다.");
             response.put("chatId", chat.getId());
             return ResponseEntity.ok(response);

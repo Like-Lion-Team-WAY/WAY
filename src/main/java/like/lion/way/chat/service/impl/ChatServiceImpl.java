@@ -21,7 +21,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Chat findByQuestion(Question question) {
-        return chatRepository.findByQuestion(question);
+        return chatRepository.findFirstByQuestionOrderByCreatedAtDesc(question);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ChatServiceImpl implements ChatService {
             chat.setUserActive2(false);
         }
 
-        if (chat.userExist()) {
+        if (!chat.userExist()) {
             messageRepository.deleteByChatId(chat.getId());
             chatRepository.delete(chat);
 

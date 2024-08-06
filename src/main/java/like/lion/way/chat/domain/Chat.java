@@ -33,7 +33,7 @@ public class Chat {
     @JoinColumn(name = "user_id2", nullable = false)
     private User user2;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
@@ -68,7 +68,7 @@ public class Chat {
         return userId.equals(getUser2().getUserId());
     }
 
-    public Object isActive() {
+    public boolean isActive() {
         return isUserActive1() && isUserActive2();
     }
 

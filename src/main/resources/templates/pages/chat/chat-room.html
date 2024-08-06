@@ -9,15 +9,16 @@
     <script src="/js/chat/chat-room.js"></script>
 </head>
 <body>
-<input type="hidden" id="user-id" th:value="${userId}">
-<input type="hidden" id="is-active" th:value="${isActive}">
+<input type="hidden" id="user-id" th:value="${chatRoomViewDTO.userId}">
+<input type="hidden" id="is-active" th:value="${chatRoomViewDTO.isActive}">
+<input type="hidden" id="is-user2" th:value="${chatRoomViewDTO.isUser2}">
 <div class="header">
-    <h2 class="title" th:text="${chatName}"></h2>
+    <h2 class="title" th:text="${chatRoomViewDTO.chatName}"></h2>
     <button class="open-btn" onclick="openSide()">☰</button>
     <div id="side-menu" class="side-menu">
         <a href="javascript:void(0)" class="close-btn" onclick="closeSide()">&times;</a>
         <div class="chat-name">
-            <h3 th:text="${chatName}"></h3>
+            <h3 th:text="${chatRoomViewDTO.chatName}"></h3>
             <button id="change-name-btn">이름 변경</button>
         </div>
         <div class="chat-func">

@@ -2,6 +2,7 @@ package like.lion.way.chat.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.chat.domain.Chat;
+import like.lion.way.chat.domain.dto.ChatRoomViewDTO;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
@@ -47,9 +48,10 @@ public class ChatController {
             return "error";
         }
 
-        model.addAttribute("userId", userId);
-        model.addAttribute("chatName", chat.getName());
-        model.addAttribute("isActive", chat.isActive());
+        ChatRoomViewDTO chatRoomViewDTO
+                = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(), chat.isUser2(userId));
+
+        model.addAttribute("chatRoomViewDTO", chatRoomViewDTO);
 
         return "pages/chat/chat-room";
     }

@@ -13,6 +13,10 @@ function noActiveSetting() {
     document.getElementById("submit-button").disabled = true;
 }
 
+function user2Setting() {
+    document.getElementById("nickname-request-btn").remove();
+}
+
 ////////// 메세지 통신 연결
 function getChatIdFromUrl() {
     // URL 경로에서 chatId 추출
@@ -207,11 +211,15 @@ function leaveChat() {
 
 document.addEventListener('DOMContentLoaded', function () {
     const isActive = document.getElementById('is-active').value;
+    const isUser2 = document.getElementById('is-user2').value;
     getChatIdFromUrl();
 
     if (isActive === 'false') {
         noActiveSetting();
     } else {
+        if (isUser2 === 'true') {
+            user2Setting();
+        }
         connect(chatId);
     }
     loadMessages(true);
