@@ -29,6 +29,7 @@ public class ChatController {
         User user = userService.findByUserId(userId);
 
         model.addAttribute("nickname", user.getNickname());
+        model.addAttribute("userId", userId);
 
         return "pages/chat/chats";
     }

@@ -3,28 +3,66 @@ let currentPage = 1;
 let isLoading = false;
 let observer = null;
 
-
+// 나중에 질문페이지에도 적용해야함
 function connect() {
     const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/messages/0', function (messageOutput) {// 채팅방 생성시 0번으로 메세지 보냄
+            addNewChatRoomInfo(JSON.parse(messageOutput.body));
+        });
     });
+}
+
+function addNewChatRoomInfo(messageOutput) {
+    const userId = (Number)(document.getElementById('user-id').value);
+
+    if (messageOutput.senderId === userId || messageOutput.receiverId === userId) {
+        const chatListElement = $(".chat-room-list");
+        const chatId = messageOutput.type.substring(6);
+
+        const chatHtml = `
+                    <a href="/chats/${chatId}" onclick="return openChat('/chats/${chatId}', ${chatId})">
+                        <div class="chat-room-info center" id="chat-${chatId}">
+                            <h3 class="chat-name left">${messageOutput.chatName}</h3>
+                            <div class="last-chatting left">${messageOutput.text}</div>
+                            <div class="last-chatting-time right">${messageOutput.sendTime}</div>
+                        </div>
+                    </a>
+                `;
+
+        chatListElement.prepend(chatHtml);
+
+        subscribeToChat(chatId);
+    }
 }
 
 function subscribeToChat(chatId) {
-    stompClient.subscribe('/topic/messages/' + chatId, function (messageOutput) {
-        updateLastMessage(JSON.parse(messageOutput.body));
+    const subscription = stompClient.subscribe('/topic/messages/' + chatId, function (messageOutput) {
+        updateChatRoomInfo(JSON.parse(messageOutput.body), subscription);
     });
 }
 
-function updateLastMessage(messageOutput) {
+function updateChatRoomInfo(messageOutput, subscription) {
     const chatId = messageOutput.chatId;
+
     const chatRoomElement = document.getElementById(`chat-${chatId}`);
+    const userId = document.getElementById('user-id').value;
+
+    if ((messageOutput.type === 'leave' && messageOutput.senderId === Number(userId)) || messageOutput.type === 'delete') {
+        chatRoomElement.remove();
+        subscription.unsubscribe();
+        return;
+    }
+
     if (chatRoomElement) {
         const lastChattingElement = chatRoomElement.querySelector('.last-chatting');
         const lastChattingTimeElement = chatRoomElement.querySelector('.last-chatting-time');
         lastChattingElement.textContent = messageOutput.text.length > 50 ? messageOutput.text.substring(0, 50) + '...' : messageOutput.text; // 메시지 내용 업데이트
         lastChattingTimeElement.textContent = messageOutput.sendTime; // 메시지 시간 업데이트
+
+        const chatListElement = $(".chat-room-list")
+        chatListElement.prepend(chatRoomElement);
     }
 }
 
@@ -86,7 +124,8 @@ document.addEventListener('DOMContentLoaded', function () {
     connect();
     setupIntersectionObserver();
 
-    $('button').click(function(){
+    // 나중에 질문페이지로 옳길 예정
+    $('button').click(function () {
         const questionId = $(this).val();
         $.ajax({
             url: '/api/chats', // 서버의 엔드포인트 URL
@@ -94,8 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {
                 'questionId': questionId
             },
-            success: function(response) {
-                console.log(response.message);
+            success: function (response) {
             }
         });
     });

@@ -46,8 +46,6 @@ public class MessageRestController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 메세지에 대한 접근 권한이 없습니다");
         }
 
-        String userNickname1 = chat.getUser1().getNickname();
-        String userNickname2 = chat.getUser2().getNickname(!chat.isNicknameOpen2());
 
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id").descending());
 
@@ -58,12 +56,15 @@ public class MessageRestController {
             messages = messageService.findAllByChatId(chatId, pageable);
         }
 
+        String userNickname1 = chat.getUser1().getNickname();
+        String userNickname2 = chat.getUser2().getNickname(!chat.isNicknameOpen2());
+
         List<ReceiveMessageDTO> receiveMessageDTOs = new ArrayList<>();
         for (Message message : messages) {
-            if (chat.isUser1(message.getUserId())) {
-                receiveMessageDTOs.add(new ReceiveMessageDTO(message, userNickname1));
+            if (chat.isUser1(message.getSenderId())) {
+                receiveMessageDTOs.add(new ReceiveMessageDTO(message, chat.getName(), userNickname1));
             } else {
-                receiveMessageDTOs.add(new ReceiveMessageDTO(message, userNickname2));
+                receiveMessageDTOs.add(new ReceiveMessageDTO(message, chat.getName(), userNickname2));
             }
         }
 

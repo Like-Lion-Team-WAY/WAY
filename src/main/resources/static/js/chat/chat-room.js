@@ -44,7 +44,6 @@ function connect(chatId) {
 ////////// 메세지 송신
 function submitBtn() {
     $("#input-form").submit(function (event) {
-        console.log("hi")
         event.preventDefault(); // 폼 제출의 기본 동작 방지
         const text = document.getElementById('message-input').value;
         sendMessage(text, 'message'); // sendMessage 함수 호출
@@ -58,11 +57,10 @@ function sendMessage(text, type) {
     }
 
     const userId = document.getElementById('user-id').value;
-    console.log(userId);
     stompClient.send("/app/sendMessage", {}, JSON.stringify({
         'chatId': chatId,
         'text': text,
-        'userId': userId,
+        'senderId': userId,
         'type': type
     }));
     document.getElementById('message-input').value = '';
@@ -79,7 +77,7 @@ function showMessageOutput(messageOutput) {
         messageDiv.innerHTML = `
             <div class="text">${messageOutput.text}</div>
         `;
-    } else if (messageOutput.userId === userId) {
+    } else if (messageOutput.senderId === userId) {
         messageDiv.classList.add('user-message');
         messageDiv.innerHTML = `
             <div class="text">${messageOutput.text}</div>
@@ -96,7 +94,7 @@ function showMessageOutput(messageOutput) {
 
     chatBody.appendChild(messageDiv);
 
-    if (messageOutput.userId === userId) {
+    if (messageOutput.senderId === userId) {
         scrollToBottom(false);
     }
 }
@@ -121,7 +119,7 @@ function loadMessages(firstCall) {
                     messageDiv.innerHTML = `
                         <div class="text">${message.text}</div>
                     `;
-                } else if (message.userId === userId) {
+                } else if (message.senderId === userId) {
                     messageDiv.classList.add('user-message');
                     messageDiv.innerHTML = `
                         <div class="text">${message.text}</div>
@@ -201,9 +199,7 @@ function leaveChat() {
         url: '/api/chats/leave/' + chatId,
         type: 'PUT',
         success: function (response) {
-            if (response.result === 'leave') {
-                sendMessage(response.text, response.result);
-            }
+            sendMessage(response.text, response.result);
             window.open('', '_self').close();
         }
     });
@@ -216,12 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (isActive === 'false') {
         noActiveSetting();
-    } else {
-        if (isUser2 === 'true') {
-            user2Setting();
-        }
-        connect(chatId);
+    } else if (isUser2 === 'true') {
+        user2Setting();
     }
+    connect(chatId);
     loadMessages(true);
     setupIntersectionObserver();
     closeSide();

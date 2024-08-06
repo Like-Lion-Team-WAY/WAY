@@ -13,7 +13,8 @@ public class Message {
     @Id
     private String id;
     private Long chatId;
-    private Long userId;
+    private Long senderId;
+    private Long receiverId;
     private String text;
     private String type;
     private LocalDateTime createdAt;

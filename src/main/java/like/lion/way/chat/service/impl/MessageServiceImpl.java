@@ -5,6 +5,7 @@ import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.MessageService;
+import like.lion.way.chat.service.kafka.Producer;
 import like.lion.way.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
+    private final Producer producer;
 
     @Override
     public Message findLastByChatId(Long id) {
@@ -38,11 +40,15 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = new Message();
         message.setChatId(chat.getId());
-        message.setUserId(chatMaker.getUserId());
+        message.setSenderId(chatMaker.getUserId());
+        message.setReceiverId(chat.getUser2().getUserId());
         message.setText("[" + chatMaker.getNickname() + "] 님이 채팅을 시작했습니다");
-        message.setType("start");
+        message.setType("create" + chat.getId());
         message.setCreatedAt(LocalDateTime.now());
 
         messageRepository.save(message);
+
+        message.setChatId(0L);
+        producer.sendMessage(message);
     }
 }
