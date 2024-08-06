@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const returnPage = document.getElementById('returnPage');
     const boardForm = document.getElementById('boardForm');
 
-    returnPage.addEventListener('click', () => history.back());
+    returnPage.addEventListener('click', () => {
+        window.location.href = '/boards';
+    });
 
     boardForm.addEventListener('submit', (e) => {
         e.preventDefault();
