@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const returnPage = document.getElementById('returnPage');
     const likeAction = document.getElementById('likeAction');
+    const scrapAction = document.getElementById('scrapAction');
 
     const pathSegments = window.location.pathname.split('/');
-    const boardName = pathSegments[pathSegments.length - 2];
-    const postTitle = pathSegments[pathSegments.length - 1];
+    const boardName = pathSegments[pathSegments.length - 2]; //boardId로 수정 예정
+    const postTitle = pathSegments[pathSegments.length - 1]; //postId로 수정 예정
+
+    // const postId = pathSegments[pathSegments.length - 1];
+    const postId = 4; //임시 테스트용으로 postId 직접 부여
 
     returnPage.addEventListener('click', () => {
         window.location.href = '/boards';
@@ -13,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 게시글 데이터를 가져오는 함수
     function fetchPostDetails() {
         // 실제 API 요청으로 대체
-        fetch(`/api/v1/boards/posts/${boardName}/${postTitle}`) // 게시글 ID 1을 예시로 사용
+        fetch(`/api/v1/boards/posts/${boardName}/${postTitle}`)
             .then(response => response.json())
             .then(apiResponse => {
                 if (!apiResponse.success) {
@@ -48,6 +52,24 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error('Error liking post:', error));
     });
+
+    scrapAction.addEventListener('click', () => {
+        fetch(`/api/v1/boards/posts/scraps/${postId}`, { // 경로 수정
+            method: 'POST', // 좋아요 요청을 POST로 전송
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(apiResponse => {
+                if (!apiResponse.success) {
+                    throw new Error(apiResponse.message || 'Error liking post');
+                }
+                const data = apiResponse.data;
+                document.querySelector('.scraps').textContent = `⭐ ${data.scraps}`;
+            })
+            .catch(error => console.error('Error Scrap post:', error));
+    })
 
     // 댓글을 입력하는 함수
     function submitComment() {

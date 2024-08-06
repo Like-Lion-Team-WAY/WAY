@@ -6,14 +6,18 @@ import java.util.stream.Collectors;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
+import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
+import like.lion.way.board.application.response.BoardPostScrapCountResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.domain.BoardPost;
 import like.lion.way.board.domain.BoardPostLike;
+import like.lion.way.board.domain.BoardPostScrap;
 import like.lion.way.board.repository.BoardPostLikeRepository;
 import like.lion.way.board.repository.BoardPostRepository;
+import like.lion.way.board.repository.BoardPostScrapRepository;
 import like.lion.way.board.repository.BoardRepository;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
@@ -35,6 +39,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BoardPostRepository boardPostRepository;
     private final BoardPostLikeRepository boardPostLikeRepository;
+    private final BoardPostScrapRepository boardPostScrapRepository;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -106,6 +111,20 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+//    @Override
+//    public BoardPostDetailResponse getPostDetails(String boardName, String postTitle) {
+//        Board board = boardRepository.findByName(boardName);
+//        BoardPost post = boardPostRepository.findByTitleAndBoard(postTitle, board);
+//
+//        return BoardPostDetailResponse.builder()
+//               .boardName(boardName)
+//               .postTitle(post.getTitle())
+//               .author(post.getUser().getNickname(post.isAnonymousPermission()))
+//               .content(post.getContent())
+//               .created_at(post.getCreatedAt())
+//               .build();
+//    }
+
     @Override
     public BoardPostLikeCountResponse getPostLikeCount(String postTitle) {
         Long likes = boardPostLikeRepository.countLikesByTitle(postTitle);
@@ -128,6 +147,36 @@ public class BoardServiceImpl implements BoardService {
         } else {
             boardPostLikeRepository.save(BoardPostLike.builder()
                     .post(post)
+                    .user(user)
+                    .build());
+        }
+
+    }
+
+    @Override
+    public BoardPostScrapCountResponse getPostScrapCount(Long postId) {
+        Long scraps = boardPostScrapRepository.countByBoardPostId(postId);
+        return BoardPostScrapCountResponse.builder()
+                .scraps(scraps)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void scrapPost(Long postId, HttpServletRequest httpServletRequest) {
+
+        BoardPost post = boardPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = getUserByHttpServletRequest(httpServletRequest);
+
+        BoardPostScrap scrap = boardPostScrapRepository.findBoardPostScrapByBoardPostAndUser(post, user);
+
+        if (scrap != null) {
+            boardPostScrapRepository.delete(scrap);
+        } else {
+            boardPostScrapRepository.save(BoardPostScrap.builder()
+                    .boardPost(post)
                     .user(user)
                     .build());
         }

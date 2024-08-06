@@ -7,9 +7,12 @@ import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
+import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
+import like.lion.way.board.application.response.BoardPostScrapCountResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
+import like.lion.way.board.domain.BoardPostScrap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -95,20 +98,40 @@ public class BoardRestController {
 
     }
 
-    //get 요청 필요 없이 postDetail 로드할 때 getPostLikeCount 해서 postDetailResponse에 likes 담으면 될 것 같음
-    @GetMapping("/{postTitle}")
-    public ApiResponse<BoardPostLikeCountResponse> getBoardPostLikeCount(@PathVariable("postTitle") String postTitle) {
+//    @GetMapping("/posts/${boardName}/${postTitle}")
+//    public ApiResponse<BoardPostDetailResponse> getPostDetails(
+//            @PathVariable("boardName") String boardName,
+//            @PathVariable("postTitle") String postTitle) {
+//
+//        return ApiResponse.ok(boardService.getPostDetails(boardName, postTitle));
+//
+//    }
 
+    //get 요청 필요 없이 postDetail 로드할 때 getPostLikeCount 해서 postDetailResponse에 likes 담으면 될 것 같음
+//    @GetMapping("/{postTitle}")
+//    public ApiResponse<BoardPostLikeCountResponse> getBoardPostLikeCount(@PathVariable("postTitle") String postTitle) {
+//
+//        return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
+//
+//    }
+
+    @PostMapping("/posts/likes/{postTitle}")
+    public ApiResponse<BoardPostLikeCountResponse> likePost(
+            @PathVariable("postTitle") String postTitle,
+            HttpServletRequest httpServletRequest) {
+
+        boardService.likePost(postTitle, httpServletRequest);
         return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
 
     }
 
-    @PostMapping("/posts/likes/{postTitle}")
-    public ApiResponse<BoardPostLikeCountResponse> likePost(@PathVariable("postTitle") String postTitle,
-                                   HttpServletRequest httpServletRequest) {
+    @PostMapping("/posts/scraps/{postId}")
+    public ApiResponse<BoardPostScrapCountResponse> scrapPost(
+            @PathVariable("postId") Long postId,
+            HttpServletRequest httpServletRequest) {
 
-        boardService.likePost(postTitle, httpServletRequest);
-        return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
+        boardService.scrapPost(postId, httpServletRequest);
+        return ApiResponse.ok(boardService.getPostScrapCount(postId));
 
     }
 
