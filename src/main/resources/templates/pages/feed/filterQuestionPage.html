@@ -10,9 +10,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <h1>거절 질문 목록</h1>
-  <!-- 자기가 팔로우 한 사람들의 게시글과 질문이 떠야 됨 -->
-  <!-- 해당 유저의 피드로 가서 질문 창으로 갈 수 있게끔 -->
+  <h1>질문 목록</h1>
   <div class="answered-section">
     <div class="answered-question" th:each="q : ${question}">
       <div class="answered-header">

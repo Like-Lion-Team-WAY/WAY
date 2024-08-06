@@ -50,10 +50,15 @@
             <span class="comments">💬 <a id="commentCount" th:text="${post.getPostComments().size()}">댓글 수</a></span>
             <span class="stars">⭐ 2</span>
         </div>
+        <div>
 
-
+        </div>
         <div class="post-tags">
-            <button class="tag">공감</button>
+            <form th:action="@{/posts/like/{postId}(postId=${post.getPostId()})}" method="post">
+                <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
+                <input type="hidden" name="postId" th:value="${post.getPostId()}" />
+                <button type="submit" class="liketag">공감</button>
+            </form>
             <button class="tag">스크랩</button>
         </div>
         <div>

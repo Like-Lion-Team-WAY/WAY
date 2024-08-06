@@ -55,6 +55,7 @@ public class QuestionController {
     //username 추가해줘야 됨
     @GetMapping("/questions/create/{userId}")
     public String createQuestion(Model model, HttpServletRequest request, @PathVariable("userId") Long userId) {
+        //질문은 로그인하지 않은 사용자도 할 수 있잖아? 그걸 고려해서 다시 로직 짜보기.
         //얘는 로그인 유저
         User loginUser= getLoginUser(request);
         model.addAttribute("loginUser", loginUser);

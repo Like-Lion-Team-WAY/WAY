@@ -18,7 +18,7 @@
         <p th:text="${post.postContent}"></p>
         <p th:text="${post.postCreatedAt}"></p>
         <p>
-            <a th:href="@{/posts/{userId}(userId=${post.getUser().getUserId()})}" th:text="${post.getUser().username}"></a>
+            <a th:href="@{/posts/{userId}(userId=${post.getUser().userId})}" th:text="${post.getUser().username}"></a>
         </p>
         <a th:href="@{'/posts/detail/' + ${post.postId}}"><button> 상세 보기</button></a>
     </div>
