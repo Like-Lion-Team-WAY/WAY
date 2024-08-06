@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ChatService {
     Chat findById(Long chatId);
-    Page<Chat> findAllByUser1OrUser2(User user, Pageable pageable);
+    Page<Chat> findUserChatList(User user, Pageable pageable);
     Chat findByQuestion(Question question);
     Chat createChat(Question question);
+    String userLeave(Chat chat, Long userId);
 }

@@ -33,7 +33,7 @@ public class MessageRestController {
     @GetMapping("/api/messages/{chatId}")
     public ResponseEntity<?> getMessages(@PathVariable("chatId") Long chatId,
                                          @RequestParam(name = "page", defaultValue = "1") int page,
-                                         @RequestParam(name = "size", defaultValue = "5") int size,
+                                         @RequestParam(name = "size", defaultValue = "50") int size,
                                          @RequestParam(name = "lastLoadMessageId") String lastLoadMessageId,
                                          HttpServletRequest request) {
 
@@ -42,12 +42,12 @@ public class MessageRestController {
 
         Chat chat = chatService.findById(chatId);
 
-        if (!userId.equals(chat.getUser1().getUserId()) && !userId.equals(chat.getUser2().getUserId())) {
+        if (!chat.isAccessibleUser(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 메세지에 대한 접근 권한이 없습니다");
         }
 
         String userNickname1 = chat.getUser1().getNickname();
-        String userNickname2 = chat.isNicknameOpen2() ? chat.getUser2().getNickname() : "익명";
+        String userNickname2 = chat.getUser2().getNickname(!chat.isNicknameOpen2());
 
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id").descending());
 
@@ -60,7 +60,7 @@ public class MessageRestController {
 
         List<ReceiveMessageDTO> receiveMessageDTOs = new ArrayList<>();
         for (Message message : messages) {
-            if (message.getUserId().equals(chat.getUser1().getUserId())) {
+            if (chat.isUser1(message.getUserId())) {
                 receiveMessageDTOs.add(new ReceiveMessageDTO(message, userNickname1));
             } else {
                 receiveMessageDTOs.add(new ReceiveMessageDTO(message, userNickname2));

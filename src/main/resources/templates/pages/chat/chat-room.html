@@ -10,6 +10,7 @@
 </head>
 <body>
 <input type="hidden" id="user-id" th:value="${userId}">
+<input type="hidden" id="is-active" th:value="${isActive}">
 <div class="header">
     <h2 class="title" th:text="${chatName}"></h2>
     <button class="open-btn" onclick="openSide()">☰</button>
@@ -17,12 +18,12 @@
         <a href="javascript:void(0)" class="close-btn" onclick="closeSide()">&times;</a>
         <div class="chat-name">
             <h3 th:text="${chatName}"></h3>
-            <button>이름 변경</button>
+            <button id="change-name-btn">이름 변경</button>
         </div>
         <div class="chat-func">
-            <button>닉네임 공개 요청</button>
-            <button>신고하기</button>
-            <button>나가기</button>
+            <button id="nickname-request-btn">닉네임 공개 요청</button>
+            <button id="report-btn">신고하기</button>
+            <button id="leave-btn">나가기</button>
         </div>
     </div>
 </div>
@@ -30,8 +31,10 @@
     <div id="elementToObserve"></div>
 </div>
 <div class="footer">
-    <input type="text" id="message-input" placeholder="메시지를 입력하세요">
-    <button onclick="sendMessage()" class="submit-button right">보내기</button>
+    <form id="input-form">
+        <input type="text" id="message-input" placeholder="메시지를 입력하세요">
+        <button type="submit" id="submit-button" class="right">보내기</button>
+    </form>
 </div>
 </body>
 </html>

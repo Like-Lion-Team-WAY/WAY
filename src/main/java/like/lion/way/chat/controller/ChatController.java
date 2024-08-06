@@ -3,7 +3,6 @@ package like.lion.way.chat.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.service.ChatService;
-import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -44,12 +43,13 @@ public class ChatController {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         Long userId = jwtUtil.getUserIdFromToken(token);
 
-        if(!userId.equals(chat.getUser1().getUserId()) && !userId.equals(chat.getUser2().getUserId())) {
+        if (!chat.isAccessibleUser(userId)) {
             return "error";
         }
 
         model.addAttribute("userId", userId);
         model.addAttribute("chatName", chat.getName());
+        model.addAttribute("isActive", chat.isActive());
 
         return "pages/chat/chat-room";
     }

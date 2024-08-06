@@ -11,4 +11,5 @@ public interface MessageRepository extends MongoRepository<Message, String> {
     Page<Message> findAllByChatId(Long chatId, Pageable pageable);
     Message findFirstByChatIdOrderByCreatedAtDesc(Long id);
     Page<Message> findAllByChatIdAndIdLessThan(Long chatId, String lastLoadMessageId, Pageable pageable);
+    void deleteByChatId(Long chatId);
 }

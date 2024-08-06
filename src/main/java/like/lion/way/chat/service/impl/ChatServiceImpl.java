@@ -4,6 +4,7 @@ package like.lion.way.chat.service.impl;
 import java.time.LocalDateTime;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.repository.ChatRepository;
+import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.user.domain.User;
@@ -16,11 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
-
-    @Override
-    public Page<Chat> findAllByUser1OrUser2(User user, Pageable pageable) {
-        return chatRepository.findAllByUser1OrUser2(user, user, pageable);
-    }
+    private final MessageRepository messageRepository;
 
     @Override
     public Chat findByQuestion(Question question) {
@@ -37,6 +34,31 @@ public class ChatServiceImpl implements ChatService {
         chat.setCreatedAt(LocalDateTime.now());
 
         return chatRepository.save(chat);
+    }
+
+    @Override
+    public String userLeave(Chat chat, Long userId) {
+
+        if (chat.isUser1(userId)) {
+            chat.setUserActive1(false);
+        } else {
+            chat.setUserActive2(false);
+        }
+
+        if (chat.userExist()) {
+            messageRepository.deleteByChatId(chat.getId());
+            chatRepository.delete(chat);
+
+            return "delete";
+        } else {
+            chatRepository.save(chat);
+            return "leave";
+        }
+    }
+
+    @Override
+    public Page<Chat> findUserChatList(User user, Pageable pageable) {
+        return chatRepository.findByUser1AndUserActive1TrueOrUser2AndUserActive2True(user, user, pageable);
     }
 
     @Override

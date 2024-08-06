@@ -34,7 +34,7 @@ public class Chat {
     private User user2;
 
     @OneToOne
-    @JoinColumn(name="question_id", nullable=false)
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @Column(name = "chat_nickname_open", nullable = false)
@@ -55,4 +55,24 @@ public class Chat {
     @Column(name = "chat_created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    public boolean isAccessibleUser(Long userId) {
+        return (userId.equals(getUser1().getUserId()) && isUserActive1()) ||
+                (userId.equals(getUser2().getUserId()) && isUserActive2());
+    }
+
+    public boolean isUser1(Long userId) {
+        return userId.equals(getUser1().getUserId());
+    }
+
+    public boolean isUser2(Long userId) {
+        return userId.equals(getUser2().getUserId());
+    }
+
+    public Object isActive() {
+        return isUserActive1() && isUserActive2();
+    }
+
+    public boolean userExist() {
+        return userActive1 || userActive2;
+    }
 }

@@ -4,7 +4,16 @@ let isLoading = false;
 let observer = null;
 let lastLoadMessageId = "";
 
+/////////
+function noActiveSetting() {
+    document.getElementById("change-name-btn").remove();
+    document.getElementById("nickname-request-btn").remove();
+    document.getElementById("report-btn").remove();
+    document.getElementById("message-input").disabled = true;
+    document.getElementById("submit-button").disabled = true;
+}
 
+////////// 메세지 통신 연결
 function getChatIdFromUrl() {
     // URL 경로에서 chatId 추출
     const path = window.location.pathname;
@@ -15,8 +24,6 @@ function getChatIdFromUrl() {
         console.error('chatId not found in URL');
         return;
     }
-
-    connect(chatId);
 }
 
 function connect(chatId) {
@@ -26,28 +33,38 @@ function connect(chatId) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages/' + chatId, function (messageOutput) {
             showMessageOutput(JSON.parse(messageOutput.body));
-            scrollToBottom();
         });
     });
 }
 
-function sendMessage() {
+////////// 메세지 송신
+function submitBtn() {
+    $("#input-form").submit(function (event) {
+        console.log("hi")
+        event.preventDefault(); // 폼 제출의 기본 동작 방지
+        const text = document.getElementById('message-input').value;
+        sendMessage(text, 'message'); // sendMessage 함수 호출
+    });
+}
+
+function sendMessage(text, type) {
     if (!chatId) {
         console.error('chatId is not set');
         return;
     }
-    const text = document.getElementById('message-input').value;
+
     const userId = document.getElementById('user-id').value;
     console.log(userId);
     stompClient.send("/app/sendMessage", {}, JSON.stringify({
         'chatId': chatId,
         'text': text,
         'userId': userId,
-        'type': 'message'
+        'type': type
     }));
     document.getElementById('message-input').value = '';
 }
 
+////////// 메세지 수신
 function showMessageOutput(messageOutput) {
     const chatBody = document.getElementById('chat-container');
 
@@ -74,9 +91,14 @@ function showMessageOutput(messageOutput) {
     }
 
     chatBody.appendChild(messageDiv);
+
+    if (messageOutput.userId === userId) {
+        scrollToBottom(false);
+    }
 }
 
-function loadMessages() {
+////////// 이전 메세지 로드
+function loadMessages(firstCall) {
     if (isLoading) return;
     isLoading = true; // 데이터 로드 시작
 
@@ -112,6 +134,10 @@ function loadMessages() {
 
                 observerElement.after(messageDiv);
                 lastLoadMessageId = message.id;
+
+                if (firstCall === true) {
+                    scrollToBottom();
+                }
             })
 
             if (response.lastPage) {
@@ -123,6 +149,7 @@ function loadMessages() {
     });
 }
 
+////////// 무한 스크롤 세팅
 function setupIntersectionObserver() {
     const scrollArea = document.getElementById('chat-container');
     observer = new IntersectionObserver((entries) => {
@@ -145,14 +172,7 @@ function scrollToBottom() {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    getChatIdFromUrl();
-    loadMessages();
-    scrollToBottom();
-    setupIntersectionObserver();
-    closeSide();
-});
-
+////////// 사이드바 설정
 function openSide() {
     document.getElementById("side-menu").style.width = "250px";
 }
@@ -160,3 +180,43 @@ function openSide() {
 function closeSide() {
     document.getElementById("side-menu").style.width = "0"
 }
+
+/////////// 채팅방 나가기
+function leaveBtn() {
+    $("#leave-btn").click(function () {
+        const confirmation = confirm("채팅방을 나가시겠습니까?");
+
+        if (confirmation) {
+            leaveChat()
+        }
+    });
+}
+
+function leaveChat() {
+    $.ajax({
+        url: '/api/chats/leave/' + chatId,
+        type: 'PUT',
+        success: function (response) {
+            if (response.result === 'leave') {
+                sendMessage(response.text, response.result);
+            }
+            window.open('', '_self').close();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const isActive = document.getElementById('is-active').value;
+    getChatIdFromUrl();
+
+    if (isActive === 'false') {
+        noActiveSetting();
+    } else {
+        connect(chatId);
+    }
+    loadMessages(true);
+    setupIntersectionObserver();
+    closeSide();
+    submitBtn();
+    leaveBtn();
+});

@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function openChat(url, id) {
-    window.open(url, 'chatPopup' + id, 'width=400,height=600');
+    window.open(url, 'chatPopup' + id, 'width=500,height=600');
     return false;
 }
 

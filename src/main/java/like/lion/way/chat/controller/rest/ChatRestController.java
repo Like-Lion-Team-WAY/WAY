@@ -23,7 +23,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,13 +46,12 @@ public class ChatRestController {
                                          @RequestParam(name = "size", defaultValue = "10") int size,
                                          HttpServletRequest request) {
 
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
+        Long userId = getUserId(request);
         User user = userService.findByUserId(userId);
 
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id"));
 
-        Page<Chat> chats = chatService.findAllByUser1OrUser2(user, pageable);
+        Page<Chat> chats = chatService.findUserChatList(user, pageable);
 
         List<ChatInfoDTO> chatInfoDTOs = new ArrayList<>();
         for (Chat chat : chats) {
@@ -75,18 +76,16 @@ public class ChatRestController {
     public ResponseEntity<?> createChat(@RequestParam(name = "questionId") Long questionId,
                                         HttpServletRequest request) {
 
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
+        Long userId = getUserId(request);
 
         Question question = questionService.getQuestionById(questionId);
-
 
         if (question == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 질문을 찾을 수 없습니다.");
         }
 
         if (!question.getAnswerer().getUserId().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("채팅 생성 권한이 없습니다");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("채팅방 생성 권한이 없습니다");
         }
 
         Chat chat = chatService.findByQuestion(question);
@@ -105,4 +104,37 @@ public class ChatRestController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/leave/{chatId}")
+    public ResponseEntity<?> leaveChat(@PathVariable("chatId") Long chatId, HttpServletRequest request) {
+        Long userId = getUserId(request);
+
+        Chat chat = chatService.findById(chatId);
+
+        if (chat == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+        }
+
+        if (!chat.isAccessibleUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 채팅방에 대한 권한이 없습니다.");
+        }
+
+        String result = chatService.userLeave(chat, userId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result);
+
+        String nickname = null;
+        if (chat.isUser1(userId)) {
+            nickname = chat.getUser1().getNickname();
+        } else {
+            nickname = chat.getUser2().getNickname(!chat.isNicknameOpen2());
+        }
+        response.put("text", "[" + nickname + "] 님이 나가셨습니다");
+
+        return ResponseEntity.ok(response);
+    }
+
+    private Long getUserId(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        return jwtUtil.getUserIdFromToken(token);
+    }
 }
