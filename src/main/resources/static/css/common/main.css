@@ -1,0 +1,7 @@
+.feed-item {
+    background-color: #FFD6B0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}

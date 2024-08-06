@@ -1,8 +1,10 @@
 package like.lion.way.board.api;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import like.lion.way.board.api.request.BoardCreateRequest;
+import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
 import like.lion.way.board.application.response.BoardPostResponse;
@@ -12,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,31 +41,33 @@ public class BoardRestController {
     }
 
     @PostMapping("/create")
-    public ApiResponse<Void> createBoard(@RequestBody @Valid BoardCreateRequest request) {
+    public ApiResponse<Void> createBoard(@RequestBody @Valid BoardCreateRequest request,
+                                         HttpServletRequest httpRequest) {
 
-        String token = "테스트 토큰";
-        boardService.createBoard(request.toServiceRequest(), token);
+        boardService.createBoard(request.toServiceRequest(), httpRequest);
         return ApiResponse.ok();
 
     }
 
-//    @PatchMapping("{boardName}")
-//    public ResponseEntity<String> updateBoard(@RequestBody @Valid BoardEditRequest request, @PathVariable Long boardId) {
-//
-//        boardService.updateBoard(request.toServiceRequest(), boardId);
-//
-//        return ResponseEntity.ok("게시판 수정 성공");
-//
-//    }
-//
-//    @DeleteMapping("{boardName}")
-//    public ResponseEntity<String> deleteBoard(@PathVariable Long boardId) {
-//
-//        boardService.deleteBoard(boardId);
-//
-//        return ResponseEntity.ok("게시판 삭제 성공");
-//
-//    }
+    @PatchMapping("/update/{boardName}")
+    public ApiResponse<Void> updateBoard(
+            @RequestBody @Valid BoardEditRequest request,
+            @PathVariable("boardName") String boardName) {
+
+        boardService.updateBoard(request.toServiceRequest(), boardName);
+
+        return ApiResponse.ok();
+
+    }
+
+    @DeleteMapping("/delete/{boardName}")
+    public ApiResponse<Void> deleteBoard(@PathVariable("boardName") String boardName) {
+
+        boardService.deleteBoard(boardName);
+
+        return ApiResponse.ok();
+
+    }
 
     @GetMapping("/posts/{boardName}")
     public ApiResponse<Page<BoardPostResponse>> getPosts(
@@ -78,12 +84,10 @@ public class BoardRestController {
     @PostMapping("/posts/{boardName}")
     public ApiResponse<Void> createPost(
             @PathVariable("boardName") String boardName,
-            @RequestBody @Valid BoardPostCreateRequest request) {
+            @RequestBody @Valid BoardPostCreateRequest request,
+            HttpServletRequest httpServletRequest) {
 
-        log.info("포스팅 실행");
-        //매개변수에 토큰 얻어오는거 필요
-        String token = "테스트 토큰";
-        boardService.createPost(boardName, request.toServiceRequest(), token);
+        boardService.createPost(boardName, request.toServiceRequest(), httpServletRequest);
         return ApiResponse.ok();
 
     }

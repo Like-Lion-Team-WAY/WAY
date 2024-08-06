@@ -31,7 +31,7 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String , Object> attributes){
         return OAuthAttributes.builder()
-                .name(UUID.randomUUID().toString())
+//                .name(UUID.randomUUID().toString())
                 .email((String)attributes.get("email"))
                 .provider("Google")
                 .attributes(attributes)
@@ -43,7 +43,7 @@ public class OAuthAttributes {
         Map<String,Object> response = (Map<String, Object>) attributes.get("response");
         System.out.println(response);
         return OAuthAttributes.builder()
-                .name(UUID.randomUUID().toString())
+//                .name(UUID.randomUUID().toString())
                 .email((String)response.get("email"))
                 .provider("Naver")
                 .attributes(response)
@@ -57,7 +57,7 @@ public class OAuthAttributes {
         Map<String,Object> account = (Map<String, Object>) response.get("profile");
 
         return OAuthAttributes.builder()
-                .name(UUID.randomUUID().toString())
+//                .name(UUID.randomUUID().toString())
                 .email((String) response.get("email"))
                 .provider("Kakao")
                 .attributes(attributes)

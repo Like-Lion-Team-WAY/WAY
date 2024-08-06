@@ -1,5 +1,6 @@
 package like.lion.way.alarm.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import like.lion.way.user.domain.User;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "alarm_settings")
@@ -21,9 +23,9 @@ public class AlarmSetting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alarm_setting_id", nullable = false)
     private Long id;
-    
+
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     @Column(name = "alarm_setting_new_question")
@@ -40,4 +42,14 @@ public class AlarmSetting {
 
     @Column(name = "alarm_setting_board_comment")
     private boolean boardComment;
+
+    // User와의 관계를 설정하는 생성자
+    public AlarmSetting(User user) {
+        this.user = user;
+        newQuestion = true;
+        reply = true;
+        comment = true;
+        answer = true;
+        boardComment = true;
+    }
 }
