@@ -23,11 +23,6 @@ function getChatIdFromUrl() {
     const path = window.location.pathname;
     const pathParts = path.split('/');
     chatId = pathParts[pathParts.length - 1]; // chatId가 URL의 마지막 부분에 위치
-
-    if (!chatId) {
-        console.error('chatId not found in URL');
-        return;
-    }
 }
 
 function connect(chatId) {
@@ -105,7 +100,6 @@ function loadMessages(firstCall) {
     isLoading = true; // 데이터 로드 시작
 
     const observerElement = $("#elementToObserve")
-    const userId = document.getElementById('user-id').value;
 
     $.ajax({
         url: '/api/messages/' + chatId + '?lastLoadMessageId=' + lastLoadMessageId,
