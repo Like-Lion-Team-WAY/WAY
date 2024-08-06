@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/user/usersetting.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="tab-container">
+        <button class="tab-link" onclick="showTab('followers')">팔로워</button>
+        <button class="tab-link" onclick="showTab('following')">팔로잉</button>
+        <button class="tab-link" onclick="showTab('blocked')">차단</button>
+    </div>
+
+    <div id="followers" class="tab-content">
+        <div class="user-item" th:each="followers:${follower}">
+            <img th:if="${followers.userImgPath}!=null" th:src="${followers.userImgPath}" alt="사용자1" class="user-img">
+            <img th:unless="${followers.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
+
+            <span class="user-name" th:text="${followers.username}">사용자1</span>
+            <button class="follow-btn">삭제</button>
+        </div>
+    </div>
+    <div id="following" class="tab-content" style="display:none">
+        <div class="user-item" th:each="followings:${following}">
+            <img th:if="${followings.userImgPath}!=null" th:src="${followings.userImgPath}" alt="사용자1" class="user-img">
+            <img th:unless="${followings.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
+
+            <span class="user-name" th:text="${followings.username}">사용자1</span>
+            <button class="follow-btn">언팔로잉</button>
+        </div>
+    </div>
+    <div id="blocked" class="tab-content" style="display:none">
+        <div class="user-item" th:each="blcoked:${block}">
+            <img src="/image/image.jpg" alt="사용자5" class="user-img">
+            <span class="user-name" th:text="${blcoked}">사용자5</span>
+            <button class="follow-btn">차단 해제</button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            $('.tab-content').hide(); // 모든 탭 내용을 숨깁니다.
+            $('#' + tabName).show(); // 선택된 탭의 내용만 표시합니다.
+
+            $('.tab-link').removeClass('active'); // 모든 탭 링크에서 'active' 클래스를 제거합니다.
+            $(`button[onclick="showTab('${tabName}')"]`).addClass('active'); // 선택된 탭 링크에 'active' 클래스를 추가합니다.
+        }
+
+        $(document).ready(function() {
+            showTab('followers'); // 페이지 로드 시 기본적으로 '팔로워' 탭을 표시합니다.
+        });
+    </script>
+</div>
+</body>
+</html>
