@@ -42,16 +42,12 @@ public class ChatRestController {
     private final QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<?> getChatList(@RequestParam(name = "page", defaultValue = "1") int page,
-                                         @RequestParam(name = "size", defaultValue = "10") int size,
-                                         HttpServletRequest request) {
+    public ResponseEntity<?> getChatList(HttpServletRequest request) {
 
         Long userId = getUserId(request);
         User user = userService.findByUserId(userId);
 
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("id"));
-
-        Page<Chat> chats = chatService.findUserChatList(user, pageable);
+        List<Chat> chats = chatService.findUserChatList(user);
 
         List<ChatInfoDTO> chatInfoDTOs = new ArrayList<>();
         for (Chat chat : chats) {
@@ -67,7 +63,6 @@ public class ChatRestController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("chats", chatInfoDTOs);
-        response.put("lastPage", chats.isLast());
 
         return ResponseEntity.ok(response);
     }

@@ -2,6 +2,7 @@ package like.lion.way.chat.service.impl;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.repository.ChatRepository;
 import like.lion.way.chat.repository.MessageRepository;
@@ -57,8 +58,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Page<Chat> findUserChatList(User user, Pageable pageable) {
-        return chatRepository.findByUser1AndUserActive1TrueOrUser2AndUserActive2True(user, user, pageable);
+    public List<Chat> findUserChatList(User user) {
+        return chatRepository.findByUser1AndUserActive1TrueOrUser2AndUserActive2True(user, user);
     }
 
     @Override

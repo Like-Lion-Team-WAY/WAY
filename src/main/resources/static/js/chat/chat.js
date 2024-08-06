@@ -1,7 +1,4 @@
 let stompClient = null;
-let currentPage = 1;
-let isLoading = false;
-let observer = null;
 
 // 나중에 질문페이지에도 적용해야함
 function connect() {
@@ -67,13 +64,10 @@ function updateChatRoomInfo(messageOutput, subscription) {
 }
 
 function loadChatList() {
-    if (isLoading) return;
-    isLoading = true; // 데이터 로드 시작
-
     const chatListElement = $(".chat-room-list")
 
     $.ajax({
-        url: '/api/chats?page=' + currentPage,
+        url: '/api/chats',
         type: 'GET',
         success: function (response) {
             response.chats.forEach(function (chat) {
@@ -91,38 +85,13 @@ function loadChatList() {
 
                 subscribeToChat(chat.id);
             })
-
-            currentPage++;
-
-            if (response.lastPage) {
-                observer.unobserve(document.getElementById("elementToObserve"));
-            }
-
-            isLoading = false; // 데이터 로드 완료
         }
     });
-}
-
-function setupIntersectionObserver() {
-    observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                loadChatList();
-            }
-        });
-    }, {
-        root: null,
-        rootMargin: '0px',
-        threshold: 1.0
-    });
-
-    observer.observe(document.getElementById('elementToObserve'));
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     loadChatList();
     connect();
-    setupIntersectionObserver();
 
     // 나중에 질문페이지로 옳길 예정
     $('button').click(function () {
