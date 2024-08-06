@@ -4,12 +4,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import java.time.LocalDateTime;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 
 public class BoardPostResponse {
 
     private String boardName;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postNum;
     private String postTitle;
     private String author;
     private LocalDateTime created_at;

@@ -10,18 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardName = pathSegments[pathSegments.length - 1];
 
     returnPage.addEventListener('click', () => {
-        window.history.back();
+        window.location.href = '/boards';
     });
 
     editBoardButton.addEventListener('click', () => {
-        window.location.href = '/boards/setting';
+        window.location.href = `/boards/setting/${boardName}`;
     });
 
     createBoardButton.addEventListener('click', () => {
         window.location.href = `/boards/posts/create/${boardName}`;
     });
-
-
 
     let currentPage = 1;
     const postsPerPage = 8;
@@ -29,12 +27,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function fetchBoardPosts(page) {
         fetch(`/api/v1/boards/posts/${boardName}?page=${page}&size=${postsPerPage}`)
             .then(response => response.json())
-            .then(data => {
+            .then(apiResponse => {
+                if (!apiResponse.success) {
+                    throw new Error(apiResponse.message || 'Error fetching board posts');
+                }
+
+                const data = apiResponse.data;
+                const posts = data.content;  // assuming data.content contains the list of posts
+                const totalPages = data.totalPages;  // assuming data.totalPages contains the total number of pages
+
                 boardTitle.textContent = `${boardName} 게시판`;
                 boardPostList.innerHTML = '';
                 pagination.innerHTML = '';
 
-                if (data.posts.length === 0) {
+                if (posts.length === 0) {
                     const placeholder = document.createElement('tr');
                     const td = document.createElement('td');
                     td.colSpan = 4;
@@ -43,19 +49,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     placeholder.appendChild(td);
                     boardPostList.appendChild(placeholder);
                 } else {
-                    data.posts.forEach((post, index) => {
+                    posts.forEach((post, index) => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <th scope="row">${post.postNum}</th>
+                            <th scope="row">${index + 1 + (currentPage - 1) * postsPerPage}</th>
                             <td>${post.postTitle}</td>
                             <td>${post.author}</td>
                             <td>${new Date(post.created_at).toLocaleDateString()}</td>
                         `;
                         boardPostList.appendChild(row);
+
+                        // 게시글 클릭 시 상세보기 요청
+                        row.addEventListener('click', () => {
+                            window.location.href = `/boards/posts/${boardName}/${post.postTitle}`;
+                        });
                     });
                 }
-
-                const totalPages = Math.ceil(data.totalPosts / postsPerPage);
 
                 for (let i = 1; i <= totalPages; i++) {
                     const pageItem = document.createElement('li');
@@ -64,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     pageItem.addEventListener('click', (e) => {
                         e.preventDefault();
                         currentPage = i;
-                        fetchBoardPosts(i);
+                        fetchBoardPosts(currentPage);
                     });
                     pagination.appendChild(pageItem);
                 }
