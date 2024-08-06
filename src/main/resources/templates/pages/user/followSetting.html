@@ -21,8 +21,8 @@
             <img th:if="${followers.userImgPath}!=null" th:src="${followers.userImgPath}" alt="사용자1" class="user-img">
             <img th:unless="${followers.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
-            <span class="user-name" th:text="${followers.username}">사용자1</span>
-            <button class="follow-btn">삭제</button>
+            <span class="user-name"  th:text="${followers.username}">사용자1</span>
+            <button class="delete-btn" th:data-username="${followers.username}">삭제</button>
         </div>
     </div>
     <div id="following" class="tab-content" style="display:none">
@@ -31,28 +31,117 @@
             <img th:unless="${followings.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
             <span class="user-name" th:text="${followings.username}">사용자1</span>
-            <button class="follow-btn">언팔로잉</button>
+            <button class="unFollowing-btn" th:data-username="${followings.username}">언팔로잉</button>
         </div>
     </div>
     <div id="blocked" class="tab-content" style="display:none">
-        <div class="user-item" th:each="blcoked:${block}">
+        <div class="user-item" th:each="blocked:${block}">
             <img src="/image/image.jpg" alt="사용자5" class="user-img">
-            <span class="user-name" th:text="${blcoked}">사용자5</span>
-            <button class="follow-btn">차단 해제</button>
+            <span class="user-name" th:text="${blocked}">사용자5</span>
+            <button class="unblock-btn" th:data-username="${blocked}">차단 해제</button>
         </div>
     </div>
 
     <script>
         function showTab(tabName) {
-            $('.tab-content').hide(); // 모든 탭 내용을 숨깁니다.
-            $('#' + tabName).show(); // 선택된 탭의 내용만 표시합니다.
-
-            $('.tab-link').removeClass('active'); // 모든 탭 링크에서 'active' 클래스를 제거합니다.
-            $(`button[onclick="showTab('${tabName}')"]`).addClass('active'); // 선택된 탭 링크에 'active' 클래스를 추가합니다.
+            $('.tab-content').hide();
+            $('#' + tabName).show();
+            $('.tab-link').removeClass('active');
+            $(`button[onclick="showTab('${tabName}')"]`).addClass('active');
         }
 
         $(document).ready(function() {
-            showTab('followers'); // 페이지 로드 시 기본적으로 '팔로워' 탭을 표시합니다.
+            showTab('followers');
+            unfollow();
+
+            //삭제버튼
+            $('.delete-btn').click(function(){
+                let username = $(this).data('username');
+                let userItem = $(this).closest('.user-item');
+                console.log(username);
+                $.ajax({
+                    url:'/follow/deleteFollower',
+                    method:'DELETE',
+                    data:{
+                        username:username
+                    },
+                    success:function(result){
+                        if(result==="success"){
+                            userItem.remove();
+                        }else{
+                            alert('에러');
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            })
+            function followUser(username, userItem, followButton){
+                $.ajax({
+                    url:'/follow/following',
+                    method: 'POST',
+                    data:{
+                        username:username
+                    },
+                    success:function(result){
+                        if(result==='success'){
+                            followButton
+                                .removeClass('follow-btn')
+                                .addClass('unFollowing-btn')
+                                .text('언팔로잉')
+                                .off('click') // Remove the current click event
+                                .click(function() {
+                                    unfollow();
+                                });
+                        }
+
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            }
+            //언팔로잉버튼
+            function unfollow(){
+                $('.unFollowing-btn').click(function(){
+                    let username = $(this).data('username');
+                    let userItem = $(this).closest('.user-item');
+                    let unfollowButton = $(this);
+                    console.log(username);
+                    $.ajax({
+                        url:'/follow/unFollowing',
+                        method:'DELETE',
+                        data:{
+                            username:username
+                        },
+                        success:function(result){
+                            if(result==='success'){
+                                unfollowButton
+                                    .removeClass('unFollowing-btn')
+                                    .addClass('follow-btn')
+                                    .text('팔로우')
+                                    .off('click') // Remove the current click event
+                                    .click(function() {
+                                        followUser(username, userItem, $(this));
+                                    });
+                            }
+
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
+                    })
+                })
+            }
+
+
+
+            //차단해제
+            $('.unblock-btn').click(function(){
+                let username = $(this).data('username');
+                console.log(username);
+            })
         });
     </script>
 </div>

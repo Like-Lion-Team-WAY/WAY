@@ -11,7 +11,9 @@ import like.lion.way.user.repository.FollowRepository;
 import like.lion.way.user.service.FollowService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +59,45 @@ public class FollowServiceImpl implements FollowService {
 
         }
         return followingDtos;
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<?> deleteFollower(HttpServletRequest request, String username) {
+        String token  = jwtUtil.getCookieValue(request,"accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User deleteUser = userService.findByUserId(userId);
+        User deletedUser = userService.findByUsername(username);
+
+        followRepository.deleteByFollowerAndFollowing(deleteUser,deletedUser);
+        return ResponseEntity.ok("success");
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<?> unFollowing(HttpServletRequest request, String username) {
+        String token  = jwtUtil.getCookieValue(request,"accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User user = userService.findByUserId(userId);
+        User unfollowingUser = userService.findByUsername(username);
+        followRepository.deleteByFollowerAndFollowing(unfollowingUser,user);
+        return ResponseEntity.ok("success");
+    }
+
+    @Override
+    public ResponseEntity<?> following(HttpServletRequest request, String username) {
+        String token  = jwtUtil.getCookieValue(request,"accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User following = userService.findByUserId(userId);
+        User followed = userService.findByUsername(username);
+        Follow follow = new Follow();
+        follow.setFollower(followed);
+        follow.setFollowing(following);
+        Follow result = followRepository.save(follow);
+        if(result.getFollowId()!=null){
+            return ResponseEntity.ok("success");
+        }else{
+            return ResponseEntity.ofNullable("null");
+        }
     }
 }
