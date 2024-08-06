@@ -3,7 +3,6 @@ package like.lion.way.chat.service.impl;
 import java.time.LocalDateTime;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
-import like.lion.way.chat.repository.ChatRepository;
 import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.MessageService;
 import like.lion.way.user.domain.User;
@@ -16,8 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
-    final private MessageRepository messageRepository;
-    private final ChatRepository chatRepository;
+    private final MessageRepository messageRepository;
 
     @Override
     public Message findLastByChatId(Long id) {
