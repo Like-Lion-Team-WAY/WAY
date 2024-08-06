@@ -2,6 +2,8 @@ package like.lion.way.chat.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,9 @@ public class ChatRestController {
                 chatInfoDTOs.add(new ChatInfoDTO(chat.getId(), chat.getName(), "메세지가 없습니다", null));
             }
         }
+
+        chatInfoDTOs.sort(
+                Comparator.comparing(ChatInfoDTO::getLastMessageTime, Comparator.nullsLast(Comparator.reverseOrder())));
 
         Map<String, Object> response = new HashMap<>();
         response.put("chats", chatInfoDTOs);
