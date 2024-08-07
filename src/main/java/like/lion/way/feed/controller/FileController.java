@@ -23,6 +23,7 @@ public class FileController {
     @Value("${image.upload.dir}")
     private String uploadDir;
 
+    //로컬 이미지 보여주기
     @GetMapping("/display")
     public ResponseEntity<Resource> display(@RequestParam("filename") String filename) {
         if (!StringUtils.hasText(filename)) {

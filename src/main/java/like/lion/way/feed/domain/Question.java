@@ -50,6 +50,9 @@ public class Question {
     @Column(name = "question_rejected", columnDefinition = "TINYINT DEFAULT 0")
     private Boolean questionRejected;
 
+    @Column(name = "question_like", columnDefinition = "INT DEFAULT 0")
+    private Integer questionLike = 0;
+
     @ManyToOne
     @JoinColumn(name = "questioner_id", referencedColumnName = "user_id")
     private User questioner;
@@ -61,5 +64,7 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "question_box_id", referencedColumnName = "questionBoxId")
     private QuestionBox questionBox;
+
+
 
 }

@@ -64,7 +64,7 @@ body {
     margin-bottom: 20px; /* 여백 증가 */
 }
 
-.tag {
+.liketag, .tag {
     background-color: #FF8E75;
     padding: 8px 15px; /* 패딩 증가 */
     border-radius: 20px;
@@ -105,6 +105,10 @@ body {
 
 .comments-section {
     margin-top: 30px;
+}
+.comments-section h1{
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 
 .list-group-item {

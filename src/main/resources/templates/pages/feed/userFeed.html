@@ -27,24 +27,25 @@
             </div>
             <div class="profile-stats">
                 <div class="stat">
-                    <p>답변 완료</p>
-                    <p>7</p>
+                    <p><a th:href="@{'/questions/reply/'+${user.userId}}"> 답변 완료</a></p>
+                    <p th:text="${replyQuestions}"></p>
+                </div>
+                <div class="stat" th:if="${user.userId}==${loginUser.userId}">
+                    <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
+                    <p th:text="${rejectedQuestions}"></p>
                 </div>
                 <div class="stat">
-                    <p>거절 질문</p>
-                    <p>15</p>
+                    <p><a th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
+                    <p th:text="${newQuestions}">3</p>
                 </div>
                 <div class="stat">
-                    <p>새 질문</p>
-                    <p>3</p>
-                </div>
-                <div class="stat">
-                    <p>보낸 질문</p>
-                    <p>20</p>
+                    <p><a th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
+                    <p th:text="${sendQuestions}">20</p>
                 </div>
             </div>
             <div class="button-container">
-                <a th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
+                <a th:if="${user.userId} != ${loginUser.userId}" th:href="@{'/questions/create/'+${user.userId}}"><button class="write-post-button">질문 작성</button></a>
+                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
             </div>
             <div class="feed">
                 <div class="feed-item" th:each="post : ${posts}">
@@ -54,8 +55,6 @@
                         <img th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">
                         <a th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
                         <div class="feed-actions">
-                            <button>좋아요</button>
-                            <button>보관함</button>
                             <a th:href="@{'/posts/detail/' + ${post.postId}}"><button>피드 상세 보기</button></a>
                         </div>
                     </div>

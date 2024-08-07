@@ -22,12 +22,8 @@ public class PostCommentController {
     private final UserService userService;
 
     @PostMapping("/posts/comments/{postId}")
-    public String saveComments(@PathVariable("postId") Long postId, PostCommentDto postCommentDto) {
-        PostComment postComment= new PostComment();
-        postComment.setPostCommentContent(postCommentDto.getPostCommentContent());
-        postComment.setPostCommentCreatedAt(LocalDateTime.now());
-        postComment.setPost(postService.getPostById(postId));
-        postCommentService.saveComment(postComment);
+    public String saveComments(@PathVariable("postId") Long postId,@RequestParam("userId") Long userId, PostCommentDto postCommentDto) {
+        postCommentService.saveComment(postId, postCommentDto, userId);
         return "redirect:/posts/detail/" + postId;
     }
 }

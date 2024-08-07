@@ -10,9 +10,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Set;
 import like.lion.way.user.domain.User;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "question_box")
+@Getter
+@Setter
 public class QuestionBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

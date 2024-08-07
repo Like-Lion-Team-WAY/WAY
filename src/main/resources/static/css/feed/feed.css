@@ -96,7 +96,7 @@ body {
 .feed-actions {
     margin-top: 10px;
     display: flex;
-    justify-content: space-around;
+    justify-content: end;
 }
 
 .feed-actions button {
