@@ -1,6 +1,5 @@
 package like.lion.way.feed.controller;
 
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +34,7 @@ public class PostController {
 
     //전체 게시판 보여주기 (username 로그인 구현되면 GetMapping에 포함돼야 함)
     @GetMapping("/posts/{userId}")
-    public String getPosts(@PathVariable Long userId, Model model, HttpServletRequest request) {
+    public String getPosts(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
         // 사용자 정보 조회
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);

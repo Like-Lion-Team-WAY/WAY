@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoardTitleResponse {
 
+    private Long boardId;
     private String name;
 
     @Builder
-    public BoardTitleResponse(String name) {
+    public BoardTitleResponse(Long boardId, String name) {
 
+        this.boardId = boardId;
         this.name = name;
 
     }
