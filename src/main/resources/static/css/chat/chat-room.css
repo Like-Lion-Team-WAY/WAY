@@ -114,6 +114,8 @@ body, html {
     border: none;
     border-radius: 5px;
     margin-right: 10px;
+    outline: none;
+    text-decoration: none;
 }
 
 .footer button {
@@ -197,6 +199,13 @@ body, html {
     color: white;
 }
 
+.chat-name button:focus,
+.chat-func button:focus {
+    background-color: #e55a34;
+    color: white;
+    outline: none;
+}
+
 @media screen and (max-height: 450px) {
     .side-menu {
         padding-top: 15px;
@@ -205,4 +214,22 @@ body, html {
     .side-menu a {
         font-size: 18px;
     }
+}
+
+.chat-name input {
+    border-radius: 5px;
+    border: 0;
+    border-bottom: 1px solid white;
+    padding: 2px;
+    background-color: #FFD6B0;
+    text-align: center;
+    outline: none;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.chat-name form {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
 }

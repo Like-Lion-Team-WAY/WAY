@@ -199,6 +199,70 @@ function leaveChat() {
     });
 }
 
+/////// 채팅방 이름 변경
+function changNameBtn() {
+    $("#change-name-btn").click(function () {
+
+        $(".chat-name h3").hide();
+        $("#change-name-btn").hide();
+        const oldName = $(".chat-name h3").text();
+
+        const changeNameHtml = `
+            <form id="edit-chat-name">
+                <input type="text" id="new-chat-name" value="${oldName}" placeholder="새 이름 입력" autocomplete="off">
+                <button type=submit id="edit-name-btn">수정</button>
+            </form>
+            <button id="cancel-btn">취소</button>
+        `;
+
+        $(".chat-name").append(changeNameHtml);
+
+        submitEditName(oldName);
+        cancelBtn(oldName);
+    });
+}
+
+function submitEditName(oldName) {
+    $("#edit-chat-name").submit(function (event) {
+        event.preventDefault(); // 폼 제출의 기본 동작 방지
+        const newName = document.getElementById('new-chat-name').value;
+        editName(newName, oldName); // sendMessage 함수 호출
+    });
+}
+
+function editName(newName, oldName) {
+    $.ajax({
+        url: '/api/chats/name/' + chatId,
+        type: 'PUT',
+        data: {
+            'name': newName
+        },
+        success: function (response) {
+            if (response.result === 'noChange') {
+                updateNameField(oldName);
+            } else {
+                updateNameField(newName);
+                sendMessage(response.text, response.result);
+            }
+        }
+    });
+}
+
+function cancelBtn(oldName) {
+    $("#cancel-btn").click(function () {
+        updateNameField(oldName);
+    });
+
+}
+
+function updateNameField(name) {
+    $(".chat-name h3").text(name).show();
+    $(".title").text(name);
+    $("#change-name-btn").show();
+    $("#edit-chat-name").remove();
+    $("#cancel-btn").remove();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const isActive = document.getElementById('is-active').value;
     const isUser2 = document.getElementById('is-user2').value;
@@ -215,4 +279,5 @@ document.addEventListener('DOMContentLoaded', function () {
     closeSide();
     submitBtn();
     leaveBtn();
+    changNameBtn();
 });

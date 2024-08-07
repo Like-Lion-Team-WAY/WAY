@@ -56,6 +56,12 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    public void changeName(Chat chat, String name) {
+        chat.setName(name);
+        chatRepository.save(chat);
+    }
+
+    @Override
     public List<Chat> findUserChatList(User user) {
         return chatRepository.findByUser1AndUserActive1TrueOrUser2AndUserActive2True(user, user);
     }

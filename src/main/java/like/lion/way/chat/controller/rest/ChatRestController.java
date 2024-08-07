@@ -2,7 +2,6 @@ package like.lion.way.chat.controller.rest;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -118,13 +117,42 @@ public class ChatRestController {
         Map<String, Object> response = new HashMap<>();
         response.put("result", result);
 
-        String nickname = null;
-        if (chat.isUser1(userId)) {
-            nickname = chat.getUser1().getNickname();
-        } else {
-            nickname = chat.getUser2().getNickname(!chat.isNicknameOpen2());
-        }
+        String nickname = getNickname(chat, userId);
         response.put("text", "[" + nickname + "] 님이 나가셨습니다");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("name/{chatId}")
+    public ResponseEntity<?> updateChatName(@PathVariable("chatId") Long chatId, @RequestParam("name") String name,
+                                            HttpServletRequest request) {
+        Long userId = getUserId(request);
+        Chat chat = chatService.findById(chatId);
+
+        if (chat == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+        }
+
+        if (!chat.isAccessibleUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 채팅방에 대한 권한이 없습니다.");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+
+        String oldName = chat.getName();
+        if (oldName.equals(name)) {
+            response.put("result", "noChange");
+            return ResponseEntity.ok(response);
+        }
+
+        chatService.changeName(chat, name);
+
+        response.put("result", "change");
+
+        String nickname = getNickname(chat, userId);
+        String text = "[" + nickname + "] 님이 채팅방 이름을 변경하였습니다<br>"
+                + "[" + oldName + "] => [" + name + "]";
+        response.put("text", text);
 
         return ResponseEntity.ok(response);
     }
@@ -132,5 +160,13 @@ public class ChatRestController {
     private Long getUserId(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         return jwtUtil.getUserIdFromToken(token);
+    }
+
+    private String getNickname(Chat chat, Long userId) {
+        if (chat.isUser1(userId)) {
+            return chat.getUser1().getNickname();
+        } else {
+            return chat.getUser2().getNickname(!chat.isNicknameOpen2());
+        }
     }
 }
