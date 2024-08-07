@@ -9,15 +9,13 @@ public class AlarmEvent extends ApplicationEvent {
     private final AlarmType type;
     private final User fromUser;
     private final User toUser;
-    private final String previewContent;
     private final String pathVariable; // post_id 등 경로 설정 시 필요한 변수
 
-    public AlarmEvent(Object source, AlarmType type, User fromUser, User toUser, String messageContent, String pathVariable) {
+    public AlarmEvent(Object source, AlarmType type, User fromUser, User toUser, String pathVariable) {
         super(source);
         this.type = type;
         this.fromUser = fromUser;
         this.toUser = toUser;
-        this.previewContent = messageContent;
         this.pathVariable = pathVariable;
     }
 }

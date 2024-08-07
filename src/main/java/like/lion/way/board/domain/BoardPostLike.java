@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import like.lion.way.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,14 +30,15 @@ public class BoardPostLike {
     @JoinColumn(name = "board_post_id")
     private BoardPost boardPost;
 
-    @Column(name = "board_post_like_user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch  = FetchType.LAZY)
+    @JoinColumn(name = "board_post_like_user_id")
+    private User user;
 
     @Builder
-    public BoardPostLike (BoardPost post, Long userId) {
+    public BoardPostLike (BoardPost post, User user) {
 
         this.boardPost = post;
-        this.userId = userId;
+        this.user = user;
 
     }
 

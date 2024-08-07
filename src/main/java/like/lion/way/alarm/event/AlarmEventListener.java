@@ -3,14 +3,12 @@ package like.lion.way.alarm.event;
 import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.service.AlarmService;
 import like.lion.way.alarm.service.AlarmSseEmitters;
+import like.lion.way.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Component
@@ -19,10 +17,11 @@ public class AlarmEventListener {
     private final AlarmService alarmService;
     private final AlarmSseEmitters emitters;
 
-    @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 서비스의 트랜잭션 커밋 이후에 이벤트 처리
+    @Async("asyncTaskExecutor")
+    //@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 서비스의 트랜잭션 커밋 이후에 이벤트 처리
+    @EventListener
     public void handleAlarmEvent(AlarmEvent alarmEvent) {
-        log.info("[AlarmEventListener] : ");
+        log.info("[AlarmEventListener] 알림 생성");
 
         // 1. 알림 여부
         boolean alarmEnabled = alarmService.isAlarmEnabled(alarmEvent.getFromUser(), alarmEvent.getType());
@@ -36,6 +35,7 @@ public class AlarmEventListener {
         alarmService.saveAlarm(alarm);
 
         // 3. SSE를 사용하여 클라이언트로 알람 전송하기
-        emitters.send(alarm);
+        Long userId = alarm.getUser().getUserId();
+        emitters.send(userId);
     }
 }

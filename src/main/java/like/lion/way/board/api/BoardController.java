@@ -1,6 +1,5 @@
 package like.lion.way.board.api;
 
-import like.lion.way.board.application.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/boards")
 public class BoardController {
-
-    private final BoardService boardService;
 
     @GetMapping
     public String showBoardList() {
@@ -27,28 +24,28 @@ public class BoardController {
 
     }
 
-    @GetMapping("/setting/{boardName}")
+    @GetMapping("/setting/{boardId}")
     public String showBoardSettingForm() {
 
         return "pages/boards/boardSettingForm";
 
     }
 
-    @GetMapping("/{boardName}")
+    @GetMapping("/{boardId}")
     public String  showPostForm() {
 
         return "pages/boards/postForm";
 
     }
 
-    @GetMapping("/posts/create/{boardName}")
+    @GetMapping("/posts/create/{boardId}")
     public String showPostCreateForm() {
 
         return "pages/boards/postCreateForm";
 
     }
 
-    @GetMapping("/posts/{boardName}/{postTitle}")
+    @GetMapping("/posts/{boardId}/{postId}")
     public String showPostDetail() {
 
         return "pages/boards/postDetailForm";

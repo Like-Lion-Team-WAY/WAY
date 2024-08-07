@@ -2,9 +2,11 @@ package like.lion.way.board.api;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
+@NoArgsConstructor
 public class ApiResponse<T> {
 
     private int code;

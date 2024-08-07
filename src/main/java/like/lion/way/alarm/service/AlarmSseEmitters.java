@@ -1,6 +1,7 @@
 package like.lion.way.alarm.service;
 
 import like.lion.way.alarm.domain.Alarm;
+import like.lion.way.user.domain.User;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface AlarmSseEmitters {
@@ -12,5 +13,5 @@ public interface AlarmSseEmitters {
     /**
      * 알림 전송
      */
-    void send(Alarm alarm);
+    void send(Long userId);
 }

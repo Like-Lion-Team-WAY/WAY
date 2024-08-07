@@ -4,24 +4,38 @@
     <title>Chat Application</title>
     <script src="https://cdn.jsdelivr.net/sockjs/1.0.2/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/chat/chat-room.css">
     <script src="/js/chat/chat-room.js"></script>
 </head>
 <body>
+<input type="hidden" id="user-id" th:value="${chatRoomViewDTO.userId}">
+<input type="hidden" id="is-active" th:value="${chatRoomViewDTO.isActive}">
+<input type="hidden" id="is-user2" th:value="${chatRoomViewDTO.isUser2}">
 <div class="header">
-    <h2 class="title">여긴 제목</h2>
-    <div class="menu">≡</div>
-</div>
-<div class="container" id="chat-container">
-    <div class="chat-message" th:each="message : ${messages}">
-        <div class="user-icon">유저이름</div>
-        <div class="text" th:text="${message.text}"></div>
-        <div class="message-time" th:text="${message.createdAt}"></div>
+    <h2 class="title" th:text="${chatRoomViewDTO.chatName}"></h2>
+    <button class="open-btn" onclick="openSide()">☰</button>
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeSide()">&times;</a>
+        <div class="chat-name">
+            <h3 th:text="${chatRoomViewDTO.chatName}"></h3>
+            <button id="change-name-btn">이름 변경</button>
+        </div>
+        <div class="chat-func">
+            <button id="nickname-request-btn">닉네임 공개 요청</button>
+            <button id="report-btn">신고하기</button>
+            <button id="leave-btn">나가기</button>
+        </div>
     </div>
 </div>
+<div class="container" id="chat-container">
+    <div id="elementToObserve"></div>
+</div>
 <div class="footer">
-    <input type="text" id="message-input" placeholder="메시지를 입력하세요">
-    <button onclick="sendMessage()" class="submit-button right">보내기</button>
+    <form id="input-form">
+        <input type="text" id="message-input" placeholder="메시지를 입력하세요" autocomplete="off">
+        <button type="submit" id="submit-button" class="right">보내기</button>
+    </form>
 </div>
 </body>
 </html>
