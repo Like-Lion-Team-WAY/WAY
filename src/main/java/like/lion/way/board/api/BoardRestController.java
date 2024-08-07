@@ -100,6 +100,7 @@ public class BoardRestController {
             HttpServletRequest httpServletRequest) {
 
         boardService.createPost(boardId, request.toServiceRequest(), httpServletRequest);
+
         return ApiResponse.ok();
 
     }

@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     boardPostList.appendChild(placeholder);
                 } else {
                     posts.forEach((post, index) => {
+
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <th scope="row">${index + 1 + (currentPage - 1) * postsPerPage}</th>

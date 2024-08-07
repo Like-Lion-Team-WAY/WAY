@@ -1,95 +1,108 @@
 package like.lion.way.jwt.filter;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import like.lion.way.config.SecurityConfig;
+import java.util.stream.Collectors;
+import like.lion.way.jwt.exception.JwtExceptionCode;
+import like.lion.way.jwt.token.JwtAuthenticationToken;
 import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.controller.security.CustomUserDetails;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.UrlPathHelper;
 
 @Component
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        final String authorizationHeader = request.getHeader("Authorization");
-
-        String username = null;
-        String jwt = null;
-        Long userId = null;
-
-        // 허용된 경로 확인
-        String requestURI = new UrlPathHelper().getPathWithinApplication(request);
-        RequestMatcher permitAllMatcher = new AntPathRequestMatcher(requestURI);
-        if (SecurityConfig.PERMIT_ALL_PATHS.stream().anyMatch(path -> permitAllMatcher.matches(request))) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        System.out.println("필터탔어요");
-        // 요청 헤더에서 JWT 토큰 추출
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            System.out.println(jwt);
-            try {
-                // 토큰에서 사용자 이름 추출
-                username = jwtUtil.getUserNameFromToken(jwt);
-                userId = jwtUtil.getUserIdFromToken(jwt);
+        String token = getToken(request);
+        if(StringUtils.hasText(token)){
+            try{
+                getAuthentication(token);
+            }catch (ExpiredJwtException e){
+                request.setAttribute("exception", JwtExceptionCode.EXPIRED_TOKEN.getCode());
+                log.error("Expired Token : {}",token,e);
+                throw new BadCredentialsException("Expired token exception", e);
+            }catch (UnsupportedJwtException e){
+                request.setAttribute("exception", JwtExceptionCode.UNSUPPORTED_TOKEN.getCode());
+                log.error("Unsupported Token: {}", token, e);
+                throw new BadCredentialsException("Unsupported token exception", e);
+            } catch (MalformedJwtException e) {
+                request.setAttribute("exception", JwtExceptionCode.INVALID_TOKEN.getCode());
+                log.error("Invalid Token: {}", token, e);
+                throw new BadCredentialsException("Invalid token exception", e);
+            } catch (IllegalArgumentException e) {
+                request.setAttribute("exception", JwtExceptionCode.NOT_FOUND_TOKEN.getCode());
+                log.error("Token not found: {}", token, e);
+                throw new BadCredentialsException("Token not found exception", e);
             } catch (Exception e) {
-                // 토큰이 만료되었거나 유효하지 않음
-                logger.warn("JWT token is either expired or invalid: " + e.getMessage());
+                log.error("JWT Filter - Internal Error: {}", token, e);
+                throw new BadCredentialsException("JWT filter internal exception", e);
             }
         }
+        chain.doFilter(request, response);
+    }
 
-        // 사용자 이름이 존재하고, 현재 컨텍스트에 인증 정보가 없는 경우
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            if (jwtUtil.validateAccessToken(jwt)) {
-                // 토큰이 유효한 경우, UserDetailsService를 사용하여 사용자 정보 로드
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            } else {
-                // 토큰이 유효하지 않거나 만료된 경우
-                String refreshToken = request.getHeader("Refresh-Token");
-                if (refreshToken != null && jwtUtil.validateRefreshToken(refreshToken)) {
-                    // 리프레시 토큰이 유효한 경우
-                    if(jwtUtil.validateRefreshToken(refreshToken)){
-                        response.setHeader("Authorization", "Bearer " + refreshToken);
-                        // 새로운 액세스 토큰을 발급하고 설정 후, UserDetailsService를 사용하여 사용자 정보 로드
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
+    private String getToken(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
+            return authorization.substring(7);
+        }
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
                 }
             }
         }
 
-        chain.doFilter(request, response);
+        return null;
+    }
+
+    private void getAuthentication(String token){
+        Claims claims = jwtUtil.parseAccessToken(token);
+        String email = claims.getSubject();
+        Long userId = claims.get("userId", Long.class);
+        String name = claims.get("name", String.class);
+        String username = claims.get("username", String.class);
+        List<GrantedAuthority> authorities = getGrantedAuthorities(claims);
+
+        CustomUserDetails userDetails = new CustomUserDetails(username,authorities.stream().map(GrantedAuthority::getAuthority).collect(
+                Collectors.toList()));
+
+        Authentication authentication = new JwtAuthenticationToken(authorities,userDetails,null);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(Claims claims){
+        List<String> roles = (List<String>)claims.get("roles");
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String role : roles){
+            authorities.add(()->role);
+        }
+        return authorities;
     }
 }

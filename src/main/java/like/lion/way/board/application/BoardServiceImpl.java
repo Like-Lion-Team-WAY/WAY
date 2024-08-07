@@ -81,17 +81,16 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void updateBoard(BoardEditServiceRequest request, Long boardId) {
+    public void updateBoard(BoardEditServiceRequest request, String name) {
 
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+        Board board = boardRepository.findByName(name);
         board.updateBoard(request.getName(), request.getIntroduction(), request.isAnonymousPermission());
 
     }
 
     @Override
     @Transactional
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(String name) {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
@@ -123,6 +122,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
+
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
