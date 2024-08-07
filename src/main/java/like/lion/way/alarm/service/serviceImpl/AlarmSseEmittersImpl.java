@@ -24,6 +24,11 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     public SseEmitter add(Long userId) {
+        if (this.emitters.containsKey(userId)) {
+            log.info("[SseEmitters] already exists emitter!");
+            return this.emitters.get(userId);
+        }
+
         SseEmitter emitter = new SseEmitter(30 * 60 * 1000L); // 30분
         this.emitters.put(userId, emitter);
 
