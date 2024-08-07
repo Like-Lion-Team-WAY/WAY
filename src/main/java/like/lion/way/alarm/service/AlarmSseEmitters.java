@@ -13,5 +13,5 @@ public interface AlarmSseEmitters {
     /**
      * 알림 전송
      */
-    void send(User user);
+    void send(Long userId);
 }

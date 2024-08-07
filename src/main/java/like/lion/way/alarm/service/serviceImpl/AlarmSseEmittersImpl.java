@@ -32,15 +32,9 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         log.info("[SseEmitters] list size: {}", emitters.size());
         log.info("[SseEmitters] list: {}", emitters);
 
-        // 더미 데이터 for 503 에러 방지
-        try {
-            emitter.send(SseEmitter.event()
-                    .name("subscribe")
-                    .data("subscribed!!"));
-            log.info("[SseRestController] subscribe: {}", userId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        // 첫 데이터
+        Long count = alarmService.countAlarm(userId);
+        send(emitter, count);
 
         // set callbacks
         emitter.onCompletion(() -> {
@@ -59,28 +53,31 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         return emitter;
     }
 
-    public void send(User user) {
-        if (user == null) {
-            log.info("[SseEmitters] user is null");
-            return;
-        }
+    public void send(Long userId) {
+//        if (user == null) {
+//            log.info("[SseEmitters] user is null");
+//            return;
+//        }
 
-        log.info("[SseEmitters] user Id: {}", user.getUserId());
-        SseEmitter emitter = this.emitters.get(user.getUserId());
+        log.info("[SseEmitters] user Id: {}", userId);
+        SseEmitter emitter = this.emitters.get(userId);
         if (emitter == null) {
             log.info("[SseEmitters] emitter is null");
             return;
         }
 
-        // 전송할 데이터 : 해당 유저의 알람의 개수\
-        Long count = alarmService.countAlarm(user);
+        // 전송할 데이터 : 해당 유저의 알람의 개수
+        Long count = alarmService.countAlarm(userId);
+        send(emitter, count);
+    }
 
+    public void send(SseEmitter emitter, Long count) {
         // 전송
         try {
             emitter.send(SseEmitter.event()
                     .name("count")
                     .data(count));
-             log.info("[SseEmitters] send!! : {}", count);
+            log.info("[SseEmitters] send!! : {}", count);
         } catch (Exception e) {
             log.error("[SseEmitters] send error: {}", e.getMessage());
             emitter.complete();

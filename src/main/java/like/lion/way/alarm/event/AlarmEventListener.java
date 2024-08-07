@@ -35,7 +35,7 @@ public class AlarmEventListener {
         alarmService.saveAlarm(alarm);
 
         // 3. SSE를 사용하여 클라이언트로 알람 전송하기
-        User user = alarm.getUser();
-        emitters.send(user);
+        Long userId = alarm.getUser().getUserId();
+        emitters.send(userId);
     }
 }

@@ -59,4 +59,10 @@ public class AlarmServiceImpl implements AlarmService {
     public Long countAlarm(User user) {
         return alarmRepository.countByUser(user);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countAlarm(Long userId) {
+        return alarmRepository.countByUser_UserId(userId);
+    }
 }

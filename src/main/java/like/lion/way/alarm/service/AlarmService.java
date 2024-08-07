@@ -25,4 +25,5 @@ public interface AlarmService {
      * 특정 유저의 알림 개수 조회
      */
     Long countAlarm(User user);
+    Long countAlarm(Long userId);
 }
