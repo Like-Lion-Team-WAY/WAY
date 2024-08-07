@@ -24,6 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     const postsPerPage = 8;
 
+    // 페이지가 로드될 때 게시판 제목을 가져옵니다.
+    fetch(`/api/v1/boards/${boardId}`)
+        .then(response => response.json())
+        .then(apiResponse => {
+            if (!apiResponse.success) {
+                throw new Error(apiResponse.message || 'Error fetching board title');
+            }
+            boardTitle.textContent = `${apiResponse.data.name} 게시판`;
+        })
+        .catch(error => console.error('Error fetching board title:', error));
+
     function fetchBoardPosts(page) {
         fetch(`/api/v1/boards/posts/${boardId}?page=${page}&size=${postsPerPage}`)
             .then(response => response.json())
@@ -36,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const posts = data.content;  // assuming data.content contains the list of posts
                 const totalPages = data.totalPages;  // assuming data.totalPages contains the total number of pages
 
-                boardTitle.textContent = `${posts[0].boardName} 게시판`;
                 boardPostList.innerHTML = '';
                 pagination.innerHTML = '';
 

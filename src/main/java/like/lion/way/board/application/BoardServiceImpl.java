@@ -49,10 +49,23 @@ public class BoardServiceImpl implements BoardService {
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
                 .map(board -> BoardTitleResponse.builder()
-                        .boardPostId(board.getId())
+                        .boardId(board.getId())
                         .name(board.getName())
                         .build())
                 .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public BoardTitleResponse getBoardTitle(Long boardId) {
+
+        Board board = boardRepository.findById(boardId)
+               .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
+        return BoardTitleResponse.builder()
+                .boardId(board.getId())
+                .name(board.getName())
+                .build();
 
     }
 

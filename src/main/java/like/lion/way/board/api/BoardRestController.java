@@ -44,6 +44,13 @@ public class BoardRestController {
 
     }
 
+    @GetMapping("/{boardId}")
+    public ApiResponse<BoardTitleResponse> getBoardTitle(@PathVariable("boardId") Long boardId) {
+
+        return ApiResponse.ok(boardService.getBoardTitle(boardId));
+
+    }
+
     @PostMapping("/create")
     public ApiResponse<Void> createBoard(@RequestBody @Valid BoardCreateRequest request,
                                          HttpServletRequest httpRequest) {
@@ -82,6 +89,7 @@ public class BoardRestController {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<BoardPostResponse> posts = boardService.getPostFindAll(boardId, pageable);
         return ApiResponse.ok(posts);
+
     }
 
 
@@ -90,8 +98,6 @@ public class BoardRestController {
             @PathVariable("boardId") Long boardId,
             @RequestBody @Valid BoardPostCreateRequest request,
             HttpServletRequest httpServletRequest) {
-
-        log.info("포스팅 실행");
 
         boardService.createPost(boardId, request.toServiceRequest(), httpServletRequest);
         return ApiResponse.ok();

@@ -18,6 +18,8 @@ public interface BoardService {
 
     List<BoardTitleResponse> getBoardFindAll();
 
+    BoardTitleResponse getBoardTitle(Long boardId);
+
     void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
     void updateBoard(BoardEditServiceRequest request, Long boardId);
