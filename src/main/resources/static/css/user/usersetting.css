@@ -1,0 +1,70 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center; /* 중앙 정렬 */
+}
+
+.tab-container {
+    margin-top: 20px;
+}
+
+.tab-link {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: transparent; /* 배경 없음 */
+}
+
+.tab-link.active {
+    border-bottom: 2px solid #ff6746; /* 활성 탭 표시 */
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.user-item {
+    margin: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.user-item button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.user-item {
+    margin: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-around; /* 요소 사이 공간 균등 분배, space-between에서 space-around로 변경 */
+}
+
+.user-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px; /* 이미지와 이름 사이의 간격 조정 */
+}
+
+.user-name {
+    margin-right: 15px; /* 이름과 버튼 사이의 간격 조정 */
+}
+
+.follow-btn {
+    padding: 5px 10px;
+}
+

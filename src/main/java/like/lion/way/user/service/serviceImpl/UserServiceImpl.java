@@ -6,15 +6,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.domain.Interest;
 import like.lion.way.user.domain.Role;
 import like.lion.way.user.domain.RoleType;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.SettingLoginInfoDto;
 import like.lion.way.user.oauth2.dto.OAuthAttributes;
 import like.lion.way.user.repository.UserRepository;
+import like.lion.way.user.service.InterestService;
 import like.lion.way.user.service.RoleService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final RoleService roleService;
+    private final InterestService interestService;
 
     @Override
     public User findByUserId(Long userId) {
@@ -136,5 +140,19 @@ public class UserServiceImpl implements UserService {
     public User saveOrUpdateUser(User user){
         return userRepository.save(user);
 
+    }
+
+    @Override
+    public User addInterests(HttpServletRequest request, HttpServletResponse response, Set<String> interests) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User user = findByUserId(userId);
+        Set<Interest> set = new HashSet<>();
+        for(String str  : interests){
+            Interest interest = interestService.findOrSaveInterest(str);
+            set.add(interest);
+        }
+        user.setInterests(set);
+        return userRepository.save(user);
     }
 }
