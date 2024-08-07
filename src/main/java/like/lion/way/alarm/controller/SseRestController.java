@@ -1,5 +1,6 @@
 package like.lion.way.alarm.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.alarm.domain.AlarmType;
 import like.lion.way.alarm.event.AlarmEvent;
 import like.lion.way.alarm.service.AlarmSseEmitters;
@@ -21,13 +22,20 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @AllArgsConstructor
 public class SseRestController {
     private final AlarmSseEmitters emitters;
+    private final JwtUtil jwtUtil;
 
     /**
      * 클라이언트가 SSE를 구독할 때 사용하는 엔드포인트
      */
-    @GetMapping(value = "/sse/subscribe/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> subscribe(@PathVariable Long userId) {
-        SseEmitter emitter = emitters.add(userId);
+    @GetMapping(value = "/sse/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> subscribe(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        if (token == null) {
+            log.info("[SseRestController] token is null");
+            return ResponseEntity.ok(null);
+        }
+        Long loginId = jwtUtil.getUserIdFromToken(token);
+        SseEmitter emitter = emitters.add(loginId);
         return ResponseEntity.ok(emitter);
     }
 
