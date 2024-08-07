@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteBoardButton = document.getElementById('deleteBoardButton');
 
     const pathSegments = window.location.pathname.split('/');
-    const boardName = pathSegments[pathSegments.length - 1];
+    const boardId = pathSegments[pathSegments.length - 1];
 
     returnPage.addEventListener('click', () => {
         window.history.back();
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             anonymousPermission: allowAnonymous
         };
 
-        fetch(`/api/v1/boards/update/${boardName}`, {
+        fetch(`/api/v1/boards/update/${boardId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(apiResponse => {
                 if (apiResponse.success) {
                     alert(apiResponse.message);
-                    window.location.href = `/boards/${newBoardName}`;
+                    window.location.href = `/boards/${boardId}`;
                 } else {
                     throw new Error(apiResponse.message || 'Error fetching board posts');
                 }
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     deleteBoardButton.addEventListener('click', () => {
         if (confirm('정말로 이 게시판을 삭제하시겠습니까?')) {
-            fetch(`/api/v1/boards/delete/${boardName}`, {
+            fetch(`/api/v1/boards/delete/${boardId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
