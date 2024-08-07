@@ -10,6 +10,7 @@ import like.lion.way.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class SseRestController {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         if (token == null) {
             log.info("[SseRestController] token is null");
-            return ResponseEntity.ok(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Long loginId = jwtUtil.getUserIdFromToken(token);
         SseEmitter emitter = emitters.add(loginId);
