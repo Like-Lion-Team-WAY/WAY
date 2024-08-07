@@ -12,7 +12,6 @@
   <title>질문 보기+질문하기</title>
   <link rel="stylesheet" href="/css/feed/questionPage.css">
   <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!--  <script src="/js/feed/answerPage.js"></script>-->
   <script src="/js/feed/questionCommentEdit.js"></script>
 </head>
 <body>
@@ -45,10 +44,16 @@
         <span class="user-icon">Q</span>
         <span th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
       </div>
-      <div class="form-group" th:if="${user.getUserId() == loginUser.getUserId()}">
-        <form action="/questions/enroll/rejected" method="post">
-            <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
-            <button type="submit" class="rejectedBtn">질문 거절</button>
+      <div class="form-group">
+        <p th:if="${user.getUserId() == loginUser.getUserId()}">
+          <form action="/questions/enroll/rejected" method="post">
+              <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+              <button type="submit" class="rejectedBtn">질문 거절</button>
+          </form>
+        </p>
+        <form action="/questions/archieve" method="post">
+          <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+          <button type="submit" class="archieveBtn">질문 보관</button>
         </form>
       </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>

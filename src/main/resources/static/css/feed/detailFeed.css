@@ -106,6 +106,10 @@ body {
 .comments-section {
     margin-top: 30px;
 }
+.comments-section h1{
+    margin-bottom: 10px;
+    font-size: 14px;
+}
 
 .list-group-item {
     background-color: #FFD6B0;

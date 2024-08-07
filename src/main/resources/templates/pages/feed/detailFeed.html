@@ -49,7 +49,7 @@
         <div class="post-stats">
             <span class="likes">👍 <a id="likeCount" th:text="${post.getPostLike()}">좋아요 수</a></span>
             <span class="comments">💬 <a id="commentCount" th:text="${post.getPostComments().size()}">댓글 수</a></span>
-            <span class="stars">⭐ 2</span>
+            <span class="stars">⭐ <a id="scrapCount" th:text="${postBox}"></a></span>
         </div>
         <div>
 
@@ -60,19 +60,24 @@
                 <input type="hidden" name="postId" th:value="${post.getPostId()}" />
                 <button type="submit" class="liketag">공감</button>
             </form>
-            <button class="tag">스크랩</button>
+            <form th:action="@{/posts/archieve/{postId}(postId=${post.getPostId()})}" method="post">
+                <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
+                <input type="hidden" name="postId" th:value="${post.getPostId()}" />
+                <button type="submit" class="tag">스크랩</button>
+            </form>
         </div>
         <div>
             <form class="comment-input" th:action="@{/posts/comments/{postId}(postId=${post.getPostId()})}" method="post">
                 <input type="text" name="postCommentContent" id="postCommentContent" placeholder="댓글을 입력하세요." />
                 <input type="hidden" name="postId" th:value="${post.getPostId()}" />
-                <!--                   <input type="hidden" name="userId" th:value="${post.getUser().getUserId()}" />-->
+                <input type="hidden" name="userId" th:value="${loginUser.userId}" />
                 <input type="hidden" name="parentCommentPreCommentId" th:value="null">
                 <button type="submit">➤</button>
             </form>
         </div>
         <div class="comments-section">
             <div th:each="comment : ${post.postComments}" class="list-group-item">
+                <h1 class="comment-text" th:text="${comment.getUser().getUsername()}"></h1>
                 <p class="comment-text" th:text="${comment.getPostCommentContent()}"></p>
                 <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
                 <button class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>

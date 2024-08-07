@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import like.lion.way.feed.domain.Post;
+import like.lion.way.feed.domain.PostBox;
 import like.lion.way.feed.domain.dto.PostDto;
+import like.lion.way.feed.service.PostBoxService;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
@@ -31,6 +33,7 @@ public class PostController {
     private final UserService userService;
     private final QuestionService questionService;
     private final JwtUtil jwtUtil;
+    private final PostBoxService postBoxService;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
@@ -123,6 +126,8 @@ public class PostController {
         log.info("postId:::: " + postId);
         Post post = postService.getPostById(postId);
         model.addAttribute("post", post);
+
+        model.addAttribute("postBox", postBoxService.getPostBoxByPostId(post).size());
 
         User loginUser = getLoginUser(request);
         model.addAttribute("loginUser", loginUser);
