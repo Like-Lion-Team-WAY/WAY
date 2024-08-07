@@ -30,7 +30,6 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         log.info("[SseEmitters] create new emitter!");
         log.info("[SseEmitters] added: {}", emitter);
         log.info("[SseEmitters] list size: {}", emitters.size());
-        log.info("[SseEmitters] list: {}", emitters);
 
         // 첫 데이터
         Long count = alarmService.countAlarm(userId);
@@ -54,11 +53,6 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     public void send(Long userId) {
-//        if (user == null) {
-//            log.info("[SseEmitters] user is null");
-//            return;
-//        }
-
         log.info("[SseEmitters] user Id: {}", userId);
         SseEmitter emitter = this.emitters.get(userId);
         if (emitter == null) {
