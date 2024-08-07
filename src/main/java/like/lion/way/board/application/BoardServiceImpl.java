@@ -6,11 +6,18 @@ import java.util.stream.Collectors;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
+import like.lion.way.board.application.response.BoardPostDetailResponse;
+import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
+import like.lion.way.board.application.response.BoardPostScrapCountResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.domain.BoardPost;
+import like.lion.way.board.domain.BoardPostLike;
+import like.lion.way.board.domain.BoardPostScrap;
+import like.lion.way.board.repository.BoardPostLikeRepository;
 import like.lion.way.board.repository.BoardPostRepository;
+import like.lion.way.board.repository.BoardPostScrapRepository;
 import like.lion.way.board.repository.BoardRepository;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
@@ -31,6 +38,8 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardPostRepository boardPostRepository;
+    private final BoardPostLikeRepository boardPostLikeRepository;
+    private final BoardPostScrapRepository boardPostScrapRepository;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -40,9 +49,23 @@ public class BoardServiceImpl implements BoardService {
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
                 .map(board -> BoardTitleResponse.builder()
+                        .boardId(board.getId())
                         .name(board.getName())
                         .build())
                 .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public BoardTitleResponse getBoardTitle(Long boardId) {
+
+        Board board = boardRepository.findById(boardId)
+               .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
+        return BoardTitleResponse.builder()
+                .boardId(board.getId())
+                .name(board.getName())
+                .build();
 
     }
 
@@ -69,19 +92,24 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void deleteBoard(String name) {
 
-        Board board = boardRepository.findByName(name);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
         boardRepository.delete(board);
 
     }
 
     @Override
-    public Page<BoardPostResponse> getPostFindAll(String name, Pageable pageable) {
-        Board board = boardRepository.findByName(name);
+    public Page<BoardPostResponse> getPostFindAll(Long boardId, Pageable pageable) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
         Page<BoardPost> postsPage = boardPostRepository.findAllByBoard(board, pageable);
 
         List<BoardPostResponse> postResponses = postsPage.stream()
                 .map(post -> BoardPostResponse.builder()
-                        .boardName(name)
+                        .boardName(board.getName())
+                        .boardPostId(post.getId())
                         .postTitle(post.getTitle())
                         .author(post.getUser().getNickname(post.isAnonymousPermission()))
                         .created_at(post.getCreatedAt())
@@ -93,12 +121,86 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void createPost(String name, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
+    public void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
 
-        Board board = boardRepository.findByName(name);
+
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
         log.info("게시판 정보 ::: " + board);
         User user = getUserByHttpServletRequest(httpServletRequest);
         boardPostRepository.save(request.toEntity(user, board));
+
+    }
+
+//    @Override
+//    public BoardPostDetailResponse getPostDetails(String boardName, String postTitle) {
+//        Board board = boardRepository.findByName(boardName);
+//        BoardPost post = boardPostRepository.findByTitleAndBoard(postTitle, board);
+//
+//        return BoardPostDetailResponse.builder()
+//               .boardName(boardName)
+//               .postTitle(post.getTitle())
+//               .author(post.getUser().getNickname(post.isAnonymousPermission()))
+//               .content(post.getContent())
+//               .created_at(post.getCreatedAt())
+//               .build();
+//    }
+
+    @Override
+    public BoardPostLikeCountResponse getPostLikeCount(Long postId) {
+        Long likes = boardPostLikeRepository.countLikesByBoardPostId(postId);
+        return BoardPostLikeCountResponse.builder()
+                .likes(likes)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void likePost(Long postId, HttpServletRequest request) {
+
+        BoardPost post = boardPostRepository.findByBoardPostId(postId);
+        User user = getUserByHttpServletRequest(request);
+
+        BoardPostLike like = boardPostLikeRepository.findBoardPostLikeByBoardPostAndAndUser(post, user);
+
+        if (like != null) {
+            boardPostLikeRepository.delete(like);
+        } else {
+            boardPostLikeRepository.save(BoardPostLike.builder()
+                    .post(post)
+                    .user(user)
+                    .build());
+        }
+
+    }
+
+    @Override
+    public BoardPostScrapCountResponse getPostScrapCount(Long postId) {
+        Long scraps = boardPostScrapRepository.countByBoardPostId(postId);
+        return BoardPostScrapCountResponse.builder()
+                .scraps(scraps)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void scrapPost(Long postId, HttpServletRequest httpServletRequest) {
+
+        BoardPost post = boardPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = getUserByHttpServletRequest(httpServletRequest);
+
+        BoardPostScrap scrap = boardPostScrapRepository.findBoardPostScrapByBoardPostAndUser(post, user);
+
+        if (scrap != null) {
+            boardPostScrapRepository.delete(scrap);
+        } else {
+            boardPostScrapRepository.save(BoardPostScrap.builder()
+                    .boardPost(post)
+                    .user(user)
+                    .build());
+        }
 
     }
 

@@ -13,7 +13,6 @@ public class WebSocketController {
 
     @MessageMapping("/sendMessage")
     public void sendMessage(Message message) {
-        System.out.println("[socket] Sending message: " + message.getText());
-        producer.sendMessage(message); // JSON 변환 후 Kafka로 전송
+        producer.sendMessage(message);
     }
 }

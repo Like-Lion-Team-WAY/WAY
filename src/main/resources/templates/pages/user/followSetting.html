@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/user/usersetting.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="tab-container">
+        <button class="tab-link" onclick="showTab('followers')">팔로워</button>
+        <button class="tab-link" onclick="showTab('following')">팔로잉</button>
+        <button class="tab-link" onclick="showTab('blocked')">차단</button>
+    </div>
+
+    <div id="followers" class="tab-content">
+        <div class="user-item" th:each="followers:${follower}">
+            <img th:if="${followers.userImgPath}!=null" th:src="${followers.userImgPath}" alt="사용자1" class="user-img">
+            <img th:unless="${followers.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
+
+            <span class="user-name"  th:text="${followers.username}">사용자1</span>
+            <button class="delete-btn" th:data-username="${followers.username}">삭제</button>
+        </div>
+    </div>
+    <div id="following" class="tab-content" style="display:none">
+        <div class="user-item" th:each="followings:${following}">
+            <img th:if="${followings.userImgPath}!=null" th:src="${followings.userImgPath}" alt="사용자1" class="user-img">
+            <img th:unless="${followings.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
+
+            <span class="user-name" th:text="${followings.username}">사용자1</span>
+            <button class="unFollowing-btn" th:data-username="${followings.username}">언팔로잉</button>
+        </div>
+    </div>
+    <div id="blocked" class="tab-content" style="display:none">
+        <div class="user-item" th:each="blocked:${block}">
+            <img src="/image/image.jpg" alt="사용자5" class="user-img">
+            <span class="user-name" th:text="${blocked}">사용자5</span>
+            <button class="unblock-btn" th:data-username="${blocked}">차단 해제</button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            $('.tab-content').hide();
+            $('#' + tabName).show();
+            $('.tab-link').removeClass('active');
+            $(`button[onclick="showTab('${tabName}')"]`).addClass('active');
+        }
+
+        $(document).ready(function() {
+            showTab('followers');
+            unfollow();
+
+            //삭제버튼
+            $('.delete-btn').click(function(){
+                let username = $(this).data('username');
+                let userItem = $(this).closest('.user-item');
+                console.log(username);
+                $.ajax({
+                    url:'/follow/deleteFollower',
+                    method:'DELETE',
+                    data:{
+                        username:username
+                    },
+                    success:function(result){
+                        if(result==="success"){
+                            userItem.remove();
+                        }else{
+                            alert('에러');
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            })
+            function followUser(username, userItem, followButton){
+                $.ajax({
+                    url:'/follow/following',
+                    method: 'POST',
+                    data:{
+                        username:username
+                    },
+                    success:function(result){
+                        if(result==='success'){
+                            followButton
+                                .removeClass('follow-btn')
+                                .addClass('unFollowing-btn')
+                                .text('언팔로잉')
+                                .off('click') // Remove the current click event
+                                .click(function() {
+                                    unfollow();
+                                });
+                        }
+
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            }
+            //언팔로잉버튼
+            function unfollow(){
+                $('.unFollowing-btn').click(function(){
+                    let username = $(this).data('username');
+                    let userItem = $(this).closest('.user-item');
+                    let unfollowButton = $(this);
+                    console.log(username);
+                    $.ajax({
+                        url:'/follow/unFollowing',
+                        method:'DELETE',
+                        data:{
+                            username:username
+                        },
+                        success:function(result){
+                            if(result==='success'){
+                                unfollowButton
+                                    .removeClass('unFollowing-btn')
+                                    .addClass('follow-btn')
+                                    .text('팔로우')
+                                    .off('click') // Remove the current click event
+                                    .click(function() {
+                                        followUser(username, userItem, $(this));
+                                    });
+                            }
+
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
+                    })
+                })
+            }
+
+
+
+            //차단해제
+            $('.unblock-btn').click(function(){
+                let username = $(this).data('username');
+                let userItem = $(this).closest('.user-item');
+                console.log(username);
+                $.ajax({
+                    url:'/block/unblock',
+                    method:'DELETE',
+                    data:{
+                        username:username
+                    },
+                    success:function(result){
+                        if(result==="success"){
+                            userItem.remove();
+                        }else{
+                            alert('에러');
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+
+            })
+        });
+    </script>
+</div>
+</body>
+</html>

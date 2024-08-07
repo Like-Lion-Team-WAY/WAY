@@ -38,6 +38,7 @@ public class PostController {
     @Value("${image.upload.dir}")
     private String uploadDir;
 
+
     // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
@@ -47,6 +48,7 @@ public class PostController {
 
     // 공통된 Model 설정 메서드(새 질문, 답변 완료, 보낸 질문, 거절한 질문)
     private void setCommonModelFilterAttributes(Model model, User user) {
+
         model.addAttribute("user", user);
         model.addAttribute("posts", postService.getPostByUser(user));
         model.addAttribute("rejectedQuestions", questionService.getQuestionByAnswerer(user)
