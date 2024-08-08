@@ -42,7 +42,7 @@ public class Chat {
     @Column(name = "chat_answerer_active", nullable = false)
     private boolean answererActive = true;
 
-    @Column(name = "chat_user_active2", nullable = false)
+    @Column(name = "chat_questioner_active", nullable = false)
     private boolean questionerActive = true;
 
     @Column(name = "chat_name", nullable = false)
@@ -61,6 +61,8 @@ public class Chat {
     }
 
     public boolean isQuestioner(Long userId) {
+        System.out.println(userId);
+        System.out.println(questioner.getUserId());
         return userId.equals(questioner.getUserId());
     }
 

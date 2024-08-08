@@ -29,6 +29,42 @@ body, html {
     cursor: pointer;
 }
 
+.request-banner {
+    background-color: lightgrey;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 50px;
+    width: 100%;
+    z-index: 1;
+    box-sizing: border-box;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Optional: Adds space above the buttons */
+}
+
+.button-container button {
+    border-radius: 20px;
+    border: 0;
+    background-color: white;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.button-container button:hover {
+    background-color: #e55a34;
+    color: white;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -38,6 +74,11 @@ body, html {
     overflow-y: auto; /* Enable scrolling within the container */
     padding: 10px;
     box-sizing: border-box;
+}
+
+.with-banner {
+    height: calc(100% - 170px); /* Adjust based on header and footer height */
+    margin-top: 120px;
 }
 
 .chat-message {
@@ -197,13 +238,6 @@ body, html {
 .chat-func button:hover {
     background-color: #e55a34;
     color: white;
-}
-
-.chat-name button:focus,
-.chat-func button:focus {
-    background-color: #e55a34;
-    color: white;
-    outline: none;
 }
 
 @media screen and (max-height: 450px) {

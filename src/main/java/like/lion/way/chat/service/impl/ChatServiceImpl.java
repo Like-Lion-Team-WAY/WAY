@@ -62,6 +62,12 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    public void changeNicknameOpen(Chat chat, int nicknameOpenType) {
+        chat.setNicknameOpen(nicknameOpenType);
+        chatRepository.save(chat);
+    }
+
+    @Override
     public List<Chat> findUserChatList(User user) {
         return chatRepository.findByAnswererAndAnswererActiveTrueOrQuestionerAndQuestionerActiveTrue(user, user);
     }

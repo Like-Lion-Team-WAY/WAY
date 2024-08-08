@@ -1,5 +1,6 @@
 package like.lion.way.chat.controller.rest;
 
+import co.elastic.clients.elasticsearch.nodes.Http;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,9 +21,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -99,7 +100,7 @@ public class ChatRestController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/leave/{chatId}")
+    @PatchMapping("/leave/{chatId}")
     public ResponseEntity<?> leaveChat(@PathVariable("chatId") Long chatId, HttpServletRequest request) {
         Long userId = getUserId(request);
 
@@ -123,8 +124,9 @@ public class ChatRestController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("name/{chatId}")
-    public ResponseEntity<?> updateChatName(@PathVariable("chatId") Long chatId, @RequestParam("newName") String newName,
+    @PatchMapping("name/{chatId}")
+    public ResponseEntity<?> updateChatName(@PathVariable("chatId") Long chatId,
+                                            @RequestParam("newName") String newName,
                                             HttpServletRequest request) {
         Long userId = getUserId(request);
         Chat chat = chatService.findById(chatId);
@@ -153,6 +155,94 @@ public class ChatRestController {
         String text = "[" + nickname + "] 님이 채팅방 이름을 변경하였습니다<br>"
                 + "[" + oldName + "] => [" + newName + "]";
         response.put("text", text);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/nickname-request/{chatId}")
+    public ResponseEntity<?> nicknameRequest(@PathVariable("chatId") Long chatId, @RequestParam("type") String type,
+                                             HttpServletRequest request) {
+
+        Long userId = getUserId(request);
+
+        Chat chat = chatService.findById(chatId);
+
+        if (chat == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+        }
+
+        if (!chat.isAnswerer(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("닉네임 요청에 대한 권한이 없습니다.");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        if (type.equals("request")) {
+            if (chat.getNicknameOpen() == 0) {
+                chatService.changeNicknameOpen(chat, 1);
+                String nickname = getNickname(chat, userId);
+                String text = "[" + nickname + "] 님이 닉네임을 요청하였습니다.";
+                response.put("text", text);
+                response.put("result", type);
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 처리된 요청입니다.");
+            }
+        } else if (type.equals("cancel")) {
+            if (chat.getNicknameOpen() == 1) {
+                chatService.changeNicknameOpen(chat, 0);
+                String nickname = getNickname(chat, userId);
+                String text = "[" + nickname + "] 님이 닉네임을 요청을 취소하였습니다.";
+                response.put("text", text);
+                response.put("result", type);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("취소할 요청이 없습니다.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("적절한 타입이 아닙니다.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/nickname-response/{chatId}")
+    public ResponseEntity<?> nicknameResponse(@PathVariable("chatId") Long chatId, @RequestParam("type") String type,
+                                              HttpServletRequest request) {
+
+        Long userId = getUserId(request);
+
+        Chat chat = chatService.findById(chatId);
+
+        if (chat == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+        }
+
+        if (!chat.isQuestioner(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("닉네임 수락에 대한 권한이 없습니다.");
+        }
+
+        if (chat.getNicknameOpen() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임에 대한 요청이 없습니다.");
+        }
+
+        if (chat.getNicknameOpen() == 2) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 처리된 요청입니다.");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        if (type.equals("accept")) {
+            chatService.changeNicknameOpen(chat, 2);
+            String nickname = getNickname(chat, userId);
+            String text = "[" + nickname + "] 님이 닉네임 요청을 수락하셨습니다.";
+            response.put("text", text);
+            response.put("result", type);
+        } else if (type.equals("reject")) {
+            chatService.changeNicknameOpen(chat, 0);
+            String nickname = getNickname(chat, userId);
+            String text = "[" + nickname + "] 님이 닉네임 요청을 거절하셨습니다.";
+            response.put("text", text);
+            response.put("result", type);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("적절한 타입이 아닙니다.");
+        }
 
         return ResponseEntity.ok(response);
     }
