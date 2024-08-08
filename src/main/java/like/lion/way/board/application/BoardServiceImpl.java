@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import like.lion.way.board.application.request.BoardCreateServiceRequest;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
+import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
+import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
@@ -13,8 +15,10 @@ import like.lion.way.board.application.response.BoardPostScrapCountResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.domain.BoardPost;
+import like.lion.way.board.domain.BoardPostComment;
 import like.lion.way.board.domain.BoardPostLike;
 import like.lion.way.board.domain.BoardPostScrap;
+import like.lion.way.board.repository.BoardPostCommentRepository;
 import like.lion.way.board.repository.BoardPostLikeRepository;
 import like.lion.way.board.repository.BoardPostRepository;
 import like.lion.way.board.repository.BoardPostScrapRepository;
@@ -40,6 +44,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardPostRepository boardPostRepository;
     private final BoardPostLikeRepository boardPostLikeRepository;
     private final BoardPostScrapRepository boardPostScrapRepository;
+    private final BoardPostCommentRepository boardPostCommentRepository;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -204,6 +209,29 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    @Override
+    public BoardPostCommentCountResponse getPostCommentCount(Long postId) {
+
+        Long comments = boardPostCommentRepository.countCommentsByBoardPostIdt(postId);
+        return BoardPostCommentCountResponse.builder()
+                .comments(comments)
+                .build();
+
+    }
+
+
+    @Override
+    @Transactional
+    public void commentPost(Long postId, BoardPostCommentServiceRequest request, HttpServletRequest httpServletRequest) {
+
+        BoardPost post = boardPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = getUserByHttpServletRequest(httpServletRequest);
+
+        boardPostCommentRepository.save(request.toEntity(post, user));
+
+    }
 
     private User getUserByHttpServletRequest(HttpServletRequest httpRequest) {
 
