@@ -48,7 +48,7 @@ public class Question {
     private Boolean questionStatus;
 
     @Column(name = "question_rejected", columnDefinition = "TINYINT DEFAULT 0")
-    private Boolean questionRejected;
+    private Boolean questionRejected= false;
 
     @Column(name = "question_like", columnDefinition = "INT DEFAULT 0")
     private Integer questionLike = 0;

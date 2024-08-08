@@ -21,7 +21,7 @@
             </div>
             <div class="profile-header">
                 <div class="profile-info">
-                    <h1 th:text="${user.username}">Username</h1>
+                    <h1 th:text="${user.getUsername()}"></h1>
                     <p>팔로워 100 | 팔로잉 2</p>
                 </div>
             </div>
@@ -45,6 +45,7 @@
             </div>
             <div class="button-container">
                 <a th:if="${user.userId} != ${loginUser.userId}" th:href="@{'/questions/create/'+${user.userId}}"><button class="write-post-button">질문 작성</button></a>
+                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{'/all/archieve/'+${user.userId}}"><button class="write-post-button">보관함</button></a>
                 <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
             </div>
             <div class="feed">
