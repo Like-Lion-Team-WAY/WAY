@@ -23,8 +23,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         eventSource.onerror = function (event) {
             console.error("[SSE] connection error");
-            eventSource.close();
-            setTimeout(connectSSE, 10 * 1000); // 재연결 시도
+            if (eventSource.readyState === EventSource.CLOSED) {
+                connectSSE();
+            } else {
+                eventSource.close();
+                setTimeout(connectSSE, 10 * 1000); // 재연결 시도
+            }
         };
     }
 

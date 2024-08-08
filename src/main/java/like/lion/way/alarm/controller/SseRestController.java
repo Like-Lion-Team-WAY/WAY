@@ -29,15 +29,15 @@ public class SseRestController {
      * 클라이언트가 SSE를 구독할 때 사용하는 엔드포인트
      */
     @GetMapping(value = "/sse/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> subscribe(HttpServletRequest request) {
+    public SseEmitter subscribe(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         if (token == null) {
             log.debug("[SseRestController] token is null");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return null;
         }
         Long loginId = jwtUtil.getUserIdFromToken(token);
         SseEmitter emitter = emitters.add(loginId);
-        return ResponseEntity.ok(emitter);
+        return emitter;
     }
 
     /**

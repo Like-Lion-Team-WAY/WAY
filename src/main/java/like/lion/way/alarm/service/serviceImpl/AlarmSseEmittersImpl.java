@@ -39,7 +39,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
 
         // 첫 데이터
         Long count = alarmService.countAlarm(userId);
-        send(emitter, count);
+        send(userId);
 
         // set callbacks
         emitter.onCompletion(() -> {
@@ -52,15 +52,14 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         });
         emitter.onError((ex) -> {
             log.error("[SseEmitters] onError callback: {}", ex.getMessage());
-            this.emitters.remove(userId);
+            emitter.complete();
         });
 
         return emitter;
     }
 
     public void send(Long userId) {
-        log.debug("[SseEmitters][send] try to send");
-        log.debug("[SseEmitters][send] send to no.{} user", userId);
+        log.debug("[SseEmitters][send] try to send to no.{} user", userId);
 
         SseEmitter emitter = this.emitters.get(userId);
         if (emitter == null) {
@@ -74,6 +73,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     public synchronized void send(SseEmitter emitter, Long count) {
+        log.debug("[SseEmitters][send] emitter exists");
         // 전송
         try {
             emitter.send(SseEmitter.event()
