@@ -72,6 +72,10 @@ function showMessageOutput(messageOutput) {
         messageDiv.innerHTML = `
             <div class="text">${messageOutput.text}</div>
         `;
+
+        if (messageOutput.type === 'change') {
+            updateNameField(messageOutput.chatName);
+        }
     } else if (messageOutput.senderId === userId) {
         messageDiv.classList.add('user-message');
         messageDiv.innerHTML = `
@@ -235,13 +239,12 @@ function editName(newName, oldName) {
         url: '/api/chats/name/' + chatId,
         type: 'PUT',
         data: {
-            'name': newName
+            'newName': newName
         },
         success: function (response) {
             if (response.result === 'noChange') {
                 updateNameField(oldName);
             } else {
-                updateNameField(newName);
                 sendMessage(response.text, response.result);
             }
         }

@@ -124,7 +124,7 @@ public class ChatRestController {
     }
 
     @PutMapping("name/{chatId}")
-    public ResponseEntity<?> updateChatName(@PathVariable("chatId") Long chatId, @RequestParam("name") String name,
+    public ResponseEntity<?> updateChatName(@PathVariable("chatId") Long chatId, @RequestParam("newName") String newName,
                                             HttpServletRequest request) {
         Long userId = getUserId(request);
         Chat chat = chatService.findById(chatId);
@@ -140,18 +140,18 @@ public class ChatRestController {
         Map<String, Object> response = new HashMap<>();
 
         String oldName = chat.getName();
-        if (oldName.equals(name)) {
+        if (oldName.equals(newName)) {
             response.put("result", "noChange");
             return ResponseEntity.ok(response);
         }
 
-        chatService.changeName(chat, name);
+        chatService.changeName(chat, newName);
 
         response.put("result", "change");
 
         String nickname = getNickname(chat, userId);
         String text = "[" + nickname + "] 님이 채팅방 이름을 변경하였습니다<br>"
-                + "[" + oldName + "] => [" + name + "]";
+                + "[" + oldName + "] => [" + newName + "]";
         response.put("text", text);
 
         return ResponseEntity.ok(response);
