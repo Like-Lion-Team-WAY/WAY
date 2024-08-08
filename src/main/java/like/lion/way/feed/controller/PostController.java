@@ -78,10 +78,10 @@ public class PostController {
     }
 
     // userId에 해당하는 게시판 보여주기
-    @GetMapping("/posts/{userId}")
-    public String getPostsByUserId(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
+    @GetMapping("/posts/{username}")
+    public String getPostsByUserId(@PathVariable("username") String username, Model model, HttpServletRequest request) {
         User loginUser = getLoginUser(request);
-        User user = userService.findByUserId(userId);
+        User user = userService.findByUsername(username);
         model.addAttribute("loginUser", loginUser);
         setCommonModelFilterAttributes(model, user);
         return "/pages/feed/userFeed";

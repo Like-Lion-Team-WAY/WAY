@@ -50,6 +50,4 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostByUser(User user) {
         return postRepository.findPostByUser(user);
     }
-
-
 }
