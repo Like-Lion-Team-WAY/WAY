@@ -5,22 +5,29 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Main</title>
     <link rel="stylesheet" th:href="@{/css/common/main.css}">
 </head>
 <body>
 <div layout:fragment="content">
     <h1>메인페이지</h1>
-    <!-- 자기가 팔로우 한 사람들의 게시글과 질문이 떠야 됨 -->
     <!-- 해당 유저의 피드로 가서 질문 창으로 갈 수 있게끔 -->
     <div class="feed-item" th:each="post : ${posts}">
         <h2 th:text="${post.postTitle}"></h2>
         <p th:text="${post.postContent}"></p>
-        <p th:text="${post.postCreatedAt}"></p>
+        <p th:text="${#temporals.format(post.postCreatedAt,'yyyy년 MM월 dd일')}"></p>
         <p>
             <a th:href="@{/posts/{username}(username=${post.getUser().username})}" th:text="${post.getUser().username}"></a>
         </p>
-        <a th:href="@{'/posts/detail/' + ${post.postId}}"><button> 상세 보기</button></a>
+        <div class="btnContainer">
+            <button class="detailBtn"><a th:href="@{'/posts/detail/' + ${post.postId}}"> 상세 보기</a></button>
+        </div>
+    </div>
+    <div class="feed-item" th:each="question: ${questions}">
+        <h2 th:if="${question.getQuestioner()} != null" th:text="${question.getQuestioner().getUsername()}"></h2>
+        <h2 th:if="${question.getQuestioner()} == null" th:text="익명"></h2>
+        <p th:text=" ${question.getQuestion()}"></p>
+        <p th:text="${#temporals.format(question.getQuestionDate(),'yyyy년 MM월 dd일')}"></p>
     </div>
 </div>
 </body>
