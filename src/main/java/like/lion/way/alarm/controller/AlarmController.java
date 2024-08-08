@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AlarmController {
-    @GetMapping("/alarms")
+    @GetMapping("/alarm")
     public String showAlarmList() {
         return "/pages/alarm/alarm";
     }

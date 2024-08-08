@@ -1,12 +1,10 @@
 package like.lion.way.alarm.service.serviceImpl;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.service.AlarmService;
 import like.lion.way.alarm.service.AlarmSseEmitters;
-import like.lion.way.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,64 +14,94 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Slf4j
 public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     private final AlarmService alarmService;
-    private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>(); // thread-safe
+    private final Map<Long, Map<String, SseEmitter>> emitters = new ConcurrentHashMap<>(); // thread-safe
 
     @Autowired
     public AlarmSseEmittersImpl(AlarmService alarmService) {
         this.alarmService = alarmService;
     }
 
-    public SseEmitter add(Long userId) {
-        SseEmitter emitter = new SseEmitter(30 * 60 * 1000L); // 30분
-        this.emitters.put(userId, emitter);
+    private void removeEmitter(Long userId, String windowId) {
+        var userEmitters = this.emitters.get(userId);
+        if (userEmitters == null) {
+            return;
+        }
+        userEmitters.remove(windowId);
+        if (userEmitters.isEmpty()) {
+            this.emitters.remove(userId);
+        }
+    }
 
-        log.info("[SseEmitters] create new emitter!");
-        log.info("[SseEmitters] added: {}", emitter);
-        log.info("[SseEmitters] list size: {}", emitters.size());
+    public SseEmitter add(Long userId, String windowId) {
+        var userEmitters = this.emitters.computeIfAbsent(userId, k -> new ConcurrentHashMap<>());
+        SseEmitter emitter = new SseEmitter(10 * 60 * 1000L); // 10분
+        userEmitters.put(windowId, emitter);
 
-        // 첫 데이터
-        Long count = alarmService.countAlarm(userId);
-        send(emitter, count);
+        log.debug("[SseEmitters][add] userId={}, windowId={}", userId, windowId);
+        log.debug("[SseEmitters][add] number of emitters: {}", userEmitters.size());
+
+        // 첫 데이터 전송
+        send(userId);
 
         // set callbacks
         emitter.onCompletion(() -> {
-            log.info("[SseEmitters] onComplete callback");
-            this.emitters.remove(userId);
+            log.debug("[SseEmitters] onComplete callback");
+            removeEmitter(userId, windowId);
         });
         emitter.onTimeout(() -> {
-            log.info("[SseEmitters] onTimeout callback");
-            this.emitters.remove(userId);
+            log.debug("[SseEmitters] onTimeout callback");
+            removeEmitter(userId, windowId);
         });
         emitter.onError((ex) -> {
             log.error("[SseEmitters] onError callback: {}", ex.getMessage());
-            this.emitters.remove(userId);
+            removeEmitter(userId, windowId);
         });
 
         return emitter;
     }
 
     public void send(Long userId) {
-        log.info("[SseEmitters] user Id: {}", userId);
-        SseEmitter emitter = this.emitters.get(userId);
-        if (emitter == null) {
-            log.info("[SseEmitters] emitter is null");
+        log.debug("[SseEmitters][send] try to send to no.{} user", userId);
+
+        var userEmitters = this.emitters.get(userId);
+        if (userEmitters == null) {
+            log.debug("[SseEmitters][send] userEmitters is null");
             return;
         }
 
         // 전송할 데이터 : 해당 유저의 알람의 개수
         Long count = alarmService.countAlarm(userId);
-        send(emitter, count);
+        for (String windowId : userEmitters.keySet()) {
+            SseEmitter emitter = userEmitters.get(windowId);
+            if (emitter != null) {
+                if (!isInvalid(emitter)) {
+                    send(emitter, count);
+                } else {
+                    removeEmitter(userId, windowId);
+                }
+            }
+        }
     }
 
-    public void send(SseEmitter emitter, Long count) {
+    private boolean isInvalid(SseEmitter emitter) {
+        try {
+            emitter.send(SseEmitter.event().name("ping").data("keep-alive"));
+            return false;
+        } catch (IOException e) {
+            return true;
+        }
+    }
+
+    public synchronized void send(SseEmitter emitter, Long count) {
         // 전송
         try {
-            emitter.send(SseEmitter.event()
-                    .name("count")
-                    .data(count));
-            log.info("[SseEmitters] send!! : {}", count);
+            emitter.send(SseEmitter.event().name("count").data(count));
+            log.debug("[SseEmitters][send] succeeded !!!  : {}", count);
+        } catch (IOException | IllegalStateException e) {
+            log.error("[SseEmitters][send] Exception: {}", e.getMessage());
+            emitter.completeWithError(e);
         } catch (Exception e) {
-            log.error("[SseEmitters] send error: {}", e.getMessage());
+            log.error("[SseEmitters][send]error: {}", e.getMessage());
             emitter.complete();
         }
     }

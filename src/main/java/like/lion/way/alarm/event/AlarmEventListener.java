@@ -21,7 +21,7 @@ public class AlarmEventListener {
     //@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // 서비스의 트랜잭션 커밋 이후에 이벤트 처리
     @EventListener
     public void handleAlarmEvent(AlarmEvent alarmEvent) {
-        log.info("[AlarmEventListener] 알림 생성");
+        log.debug("[AlarmEventListener] 알림 생성");
 
         // 1. 알림 여부
         boolean alarmEnabled = alarmService.isAlarmEnabled(alarmEvent.getFromUser(), alarmEvent.getType());

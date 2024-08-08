@@ -1,8 +1,14 @@
 // header.js
 
 document.addEventListener("DOMContentLoaded", function() {
+    // 브라우저 창마다 고유한 ID를 생성
+    if (!sessionStorage.getItem('windowID')) {
+        sessionStorage.setItem('windowID', 'window-' + Date.now() + '-' + Math.random());
+    }
+    const windowID = sessionStorage.getItem('windowID');
+
     const bellBadge = document.getElementById("bellBadge");
-    const sseUrl = `/sse/subscribe`; // sse 연결 주소
+    const sseUrl = `/sse/subscribe?windowId=${windowID}`; // sse 연결 주소
 
     function connectSSE() {
         // SSE 연결 설정
@@ -15,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
             updateBellBadge(count);
         });
 
+        eventSource.addEventListener('ping', function (event) {
+            console.log("[SSE] test connection");
+        });
+
         // 이벤트 리스너 설정
         eventSource.onmessage = function (event) {
             const data = JSON.parse(event.data);
@@ -23,8 +33,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         eventSource.onerror = function (event) {
             console.error("[SSE] connection error");
-            eventSource.close();
-            setTimeout(connectSSE, 10 * 1000); // 재연결 시도
+            if (eventSource.readyState === EventSource.CLOSED) {
+                setTimeout(connectSSE, 10 * 1000); // todo: 비로그인 헤더 추가하면 타임아웃 없이 바로 재시도 하도록 수정할 것
+            } else {
+                eventSource.close();
+                setTimeout(connectSSE, 1000);
+            }
         };
     }
 
