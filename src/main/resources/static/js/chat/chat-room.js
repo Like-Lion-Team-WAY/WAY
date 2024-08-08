@@ -7,8 +7,11 @@ let lastLoadMessageId = "";
 /////////
 function noActiveSetting() {
     document.getElementById("change-name-btn").remove();
-    document.getElementById("nickname-request-btn").remove();
     document.getElementById("report-btn").remove();
+    const requestBtn = document.getElementById("nickname-request-btn");
+    if (requestBtn) {
+        requestBtn.remove();
+    }
     document.getElementById("message-input").disabled = true;
     document.getElementById("submit-button").disabled = true;
 }
@@ -75,6 +78,10 @@ function showMessageOutput(messageOutput) {
 
         if (messageOutput.type === 'change') {
             updateNameField(messageOutput.chatName);
+        }
+
+        if (messageOutput.type === 'leave') {
+            noActiveSetting();
         }
     } else if (messageOutput.senderId === userId) {
         messageDiv.classList.add('user-message');
