@@ -27,9 +27,7 @@ public class FollowServiceImpl implements FollowService {
         String token  = jwtUtil.getCookieValue(request,"accessToken");
         Long userId = jwtUtil.getUserIdFromToken(token);
         User user = userService.findByUserId(userId);
-        System.out.println("userid:"+userId);
         List<Follow> followers = followRepository.findAllByFollower(user);
-        System.out.println("followers: "+followers);
         List<FollowDto> followDtos = new ArrayList<>();
         for(Follow follow : followers){
             User followUser = follow.getFollowing();

@@ -28,5 +28,4 @@ public class Interest {
     @Column(name = "interest_name")
     private String interestName;
 
-
 }

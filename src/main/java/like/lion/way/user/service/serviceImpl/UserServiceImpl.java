@@ -4,7 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,16 +15,19 @@ import java.util.stream.Collectors;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.Interest;
 import like.lion.way.user.domain.Role;
-import like.lion.way.user.domain.RoleType;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.SettingLoginInfoDto;
+import like.lion.way.user.dto.UserProfileDto;
 import like.lion.way.user.oauth2.dto.OAuthAttributes;
 import like.lion.way.user.repository.UserRepository;
 import like.lion.way.user.service.InterestService;
 import like.lion.way.user.service.RoleService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +37,10 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final RoleService roleService;
     private final InterestService interestService;
+
+
+    @Value("${image.upload.dir}")
+    private String uploadDir;
 
     @Override
     public User findByUserId(Long userId) {
@@ -127,10 +137,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request, HttpServletResponse response) {
-        String token = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        String username = jwtUtil.getUserNameFromToken(token);
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found")) ;
+        User user = getUserByToken(request);
+
         user.setUsername(loginInfoDto.getUsername());
         user.setNickname(loginInfoDto.getNickname());
         addCookies(response, user); //추가된 코드
@@ -144,9 +152,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addInterests(HttpServletRequest request, HttpServletResponse response, Set<String> interests) {
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User user = findByUserId(userId);
+
+        User user = getUserByToken(request);
+
         Set<Interest> set = new HashSet<>();
         for(String str  : interests){
             Interest interest = interestService.findOrSaveInterest(str);
@@ -154,5 +162,66 @@ public class UserServiceImpl implements UserService {
         }
         user.setInterests(set);
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserProfileDto getProfile(HttpServletRequest request) throws NullPointerException{
+        User user = getUserByToken(request);
+        UserProfileDto dto = new UserProfileDto();
+        dto.setUserImage(user.getUserImage());
+        dto.setNickname(user.getNickname());
+        dto.setUsername(user.getUsername());
+        dto.setInterests(user.getInterests());
+        dto.setUserImage(user.getUserImage());
+
+        return dto;
+    }
+
+    @Override
+    public User updateUserInfo(SettingLoginInfoDto updateUserDto, HttpServletRequest request) {
+        User user = getUserByToken(request);
+
+        user.setUsername(updateUserDto.getUsername());
+        user.setNickname(updateUserDto.getNickname());
+        return saveOrUpdateUser(user);
+    }
+
+    @Override
+    public ResponseEntity<String> updateOrSaveImg(MultipartFile file, String deleteFileName , HttpServletRequest request) {
+        User user = getUserByToken(request);
+        if(!deleteFileName.isEmpty()){
+            String deleteFilePath = uploadDir + File.separator + deleteFileName;
+            File fileToDelete = new File(deleteFilePath);
+
+            if (fileToDelete.exists() && fileToDelete.isFile()) {
+                if (fileToDelete.delete()) {
+                    System.out.println("File deleted successfully: " + deleteFilePath);
+                } else {
+                    System.out.println("Failed to delete the file: " + deleteFilePath);
+                }
+            }
+        }
+
+        if(!file.isEmpty()){
+            try{
+                String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
+                String filePath =uploadDir+ File.separator+fileName;
+                File dest = new File(filePath);
+                file.transferTo(dest);
+                user.setUserImage(fileName);
+                saveOrUpdateUser(user);
+                return ResponseEntity.ok(fileName);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return ResponseEntity.ok("fail");
+    }
+
+    @Override
+    public User getUserByToken(HttpServletRequest request){
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        return findByUserId(userId);
     }
 }
