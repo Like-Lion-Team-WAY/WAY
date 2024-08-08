@@ -36,12 +36,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void createStartMessage(Chat chat) {
-        User chatMaker = chat.getUser1();
+        User chatMaker = chat.getAnswerer();
 
         Message message = new Message();
         message.setChatId(chat.getId());
         message.setSenderId(chatMaker.getUserId());
-        message.setReceiverId(chat.getUser2().getUserId());
+        message.setReceiverId(chat.getQuestioner().getUserId());
         message.setText("[" + chatMaker.getNickname() + "] 님이 채팅을 시작했습니다");
         message.setType("create" + chat.getId());
         message.setCreatedAt(LocalDateTime.now());

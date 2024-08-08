@@ -43,7 +43,7 @@ function subscribeToChat(chatId) {
 function updateChatRoomInfo(messageOutput, subscription) {
     const chatId = messageOutput.chatId;
 
-    const chatRoomElement = document.getElementById(`chat-${chatId}`);
+    const chatRoomElement = document.getElementById(`chat-${chatId}`).closest('a');
     const userId = document.getElementById('user-id').value;
 
     if ((messageOutput.type === 'leave' && messageOutput.senderId === Number(userId)) || messageOutput.type === 'delete') {

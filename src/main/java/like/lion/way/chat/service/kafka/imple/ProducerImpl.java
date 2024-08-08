@@ -43,19 +43,19 @@ public class ProducerImpl implements Producer {
 
             } else {
                 Chat chat = chatRepository.findById(message.getChatId()).orElse(null);
-                if (chat.isUser1(message.getSenderId())) {
-                    message.setReceiverId(chat.getUser2().getUserId());
+                if (chat.isAnswerer(message.getSenderId())) {
+                    message.setReceiverId(chat.getQuestioner().getUserId());
                 } else {
-                    message.setReceiverId(chat.getUser1().getUserId());
+                    message.setReceiverId(chat.getAnswerer().getUserId());
                 }
 
                 messageRepository.save(message);
 
                 String nickname;
-                if (chat.isUser1(message.getSenderId())) {
-                    nickname = chat.getUser1().getNickname();
+                if (chat.isAnswerer(message.getSenderId())) {
+                    nickname = chat.getAnswerer().getNickname();
                 } else {
-                    nickname = chat.getUser2().getNickname(!chat.isNicknameOpen2());
+                    nickname = chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
                 }
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), nickname);
             }

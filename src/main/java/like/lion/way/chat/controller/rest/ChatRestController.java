@@ -86,7 +86,7 @@ public class ChatRestController {
         Chat chat = chatService.findByQuestion(question);
 
         Map<String, Object> response = new HashMap<>();
-        if (chat != null && chat.isUserActive1()) {
+        if (chat != null && chat.isAnswererActive()) {
             response.put("message", "exist");
             response.put("chatId", chat.getId());
             return ResponseEntity.ok(response);
@@ -163,10 +163,10 @@ public class ChatRestController {
     }
 
     private String getNickname(Chat chat, Long userId) {
-        if (chat.isUser1(userId)) {
-            return chat.getUser1().getNickname();
+        if (chat.isAnswerer(userId)) {
+            return chat.getAnswerer().getNickname();
         } else {
-            return chat.getUser2().getNickname(!chat.isNicknameOpen2());
+            return chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
         }
     }
 }

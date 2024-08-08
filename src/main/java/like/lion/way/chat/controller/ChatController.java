@@ -50,7 +50,7 @@ public class ChatController {
         }
 
         ChatRoomViewDTO chatRoomViewDTO
-                = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(), chat.isUser2(userId));
+                = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(), chat.isQuestioner(userId));
 
         model.addAttribute("chatRoomViewDTO", chatRoomViewDTO);
 
