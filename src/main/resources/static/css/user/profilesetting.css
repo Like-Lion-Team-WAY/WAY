@@ -1,0 +1,243 @@
+body, html {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    width: 950px;
+    height: 500px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.profile-icon {
+    text-align: center;
+    margin-bottom: 20px; // Added margin for spacing
+}
+
+.user-icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50px;
+}
+
+.file-input {
+    display: block; // Changed to block to make it visible
+margin: 10px auto; // Centered input below the icon
+cursor: pointer;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-row label {
+    flex: 0 0 100px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.form-row input, .form-row .input-group {
+    flex: 1; // Flex property to maintain size consistency
+}
+
+.input-group {
+    display: flex;
+}
+
+.input-group input {
+    flex-grow: 1;
+    margin-right: 5px;
+
+}
+
+.btn-copy {
+    padding: 10px 15px;
+    color: white;
+    background-color: #ff6746;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-copy:hover {
+    background-color: #ff6746;
+}
+
+.interests-box {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    resize: none;
+    border: 1px solid black; // Restored borders
+}
+
+.buttons {
+    display: flex;
+    justify-content: center; // Center-aligning buttons
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    color: white;
+    background-color: #ff6746;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff6746;
+}
+
+.btn-cancel {
+    background-color: red;
+}
+
+.btn-cancel:hover {
+    background-color: darkred;
+}
+.change-photo-btn{
+    margin: 0 auto;
+}
+#user-id , #profile-url,#nickname ,#bio{
+    border: 1px solid #ff6746; // Restored borders
+}
+/* 모달 배경 스타일 */
+.modal-overlay {
+    display: none; /* 초기 상태: 숨김 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
+    z-index: 1000;
+}
+
+/* 모달 배경 스타일 */
+.modal-overlay {
+    display: none; /* 초기 상태: 숨김 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정 배경 */
+    z-index: 1000;
+}
+
+/* 모달 콘텐츠 스타일 */
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    width: 700px; /* 모달의 너비 */
+    display: flex;
+    flex-direction: column;
+    z-index: 1001;
+    overflow: hidden; /* 내용이 넘칠 경우 숨기기 */
+}
+
+.modal-logo {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-right-side {
+    flex-basis: 70%; /* 오른쪽 영역 크기 비율 */
+    padding: 30px; /* 내부 여백을 넓게 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto; /* 세로 스크롤 추가 */
+    overflow-x: hidden; /* 가로 스크롤은 숨김 */
+}
+
+.modal-right-side h1 {
+    font-size: 1.8em; /* 헤더 폰트 크기 */
+    margin-bottom: 15px;
+}
+
+.modal-right-side p {
+    margin-bottom: 20px;
+    font-size: 1.2em; /* 콘텐츠 폰트 크기 */
+}
+
+.modal-right-side input[type="text"] {
+    width: calc(100% - 20px); /* 인풋 너비 */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.modal-right-side .next-button {
+    padding: 10px 20px; /* 버튼 크기 */
+    background-color: #ff6746; /* 버튼 배경색 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.modal-right-side .next-button:hover {
+    background-color: #ff6746; /* 버튼 호버 시 색상 */
+}
+
+.modal-right-side .selected-tags,
+.modal-right-side .available-tags {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    height: 100px; /* 태그 박스의 높이를 고정하여 스크롤이 필요하게 함 */
+    overflow: auto; /* 내용이 넘칠 경우 스크롤바 활성화 */
+    border: 1px solid #ff6746;
+}
+
+.modal-right-side .selected-tags span,
+.modal-right-side .available-tags span {
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.modal-right-side .selected-tags span:hover,
+.modal-right-side .available-tags span:hover {
+    background-color: #c0c0c0; /* 태그 호버 시 색상 */
+}
+.available-tags div,
+.selected-tags div {
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 15px; /* 모서리를 둥글게 */
+    display: inline-block; /* 태그들을 인라인으로 나열 */
+    background-color: #ff6746;
+    color: #ffffff;
+}

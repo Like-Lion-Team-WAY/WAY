@@ -52,7 +52,10 @@ public class User {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    @ManyToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
+    @Column(name = "user_image")
+    private String userImage;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
