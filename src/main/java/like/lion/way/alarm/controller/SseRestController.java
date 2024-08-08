@@ -32,7 +32,7 @@ public class SseRestController {
     public ResponseEntity<SseEmitter> subscribe(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         if (token == null) {
-            log.info("[SseRestController] token is null");
+            log.debug("[SseRestController] token is null");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         Long loginId = jwtUtil.getUserIdFromToken(token);
@@ -49,7 +49,7 @@ public class SseRestController {
     @GetMapping("/sse/send")
     public void send() {
         // test
-        log.info("[Alarm Test] AlarmEvent 발생");
+        log.debug("[SseRestController] 알람 추가 테스트 : AlarmEvent 발생");
         AlarmEvent event = new AlarmEvent(this, AlarmType.NEW_QUESTION,
                 userService.findByUserId(1L), userService.findByUserId(1L),
                 "1");

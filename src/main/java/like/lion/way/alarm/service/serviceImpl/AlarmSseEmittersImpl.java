@@ -1,5 +1,6 @@
 package like.lion.way.alarm.service.serviceImpl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,17 +25,17 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     public SseEmitter add(Long userId) {
+        SseEmitter emitter;
+
         if (this.emitters.containsKey(userId)) {
-            log.info("[SseEmitters] already exists emitter!");
-            return this.emitters.get(userId);
+            emitter = this.emitters.get(userId);
+            log.debug("[SseEmitters][add] already exists emitter!");
+        } else {
+            emitter = new SseEmitter(30 * 60 * 1000L); // 30분
+            this.emitters.put(userId, emitter);
+            log.debug("[SseEmitters][add] create new emitter!");
+            log.debug("[SseEmitters][add] list size: {}", emitters.size());
         }
-
-        SseEmitter emitter = new SseEmitter(30 * 60 * 1000L); // 30분
-        this.emitters.put(userId, emitter);
-
-        log.info("[SseEmitters] create new emitter!");
-        log.info("[SseEmitters] added: {}", emitter);
-        log.info("[SseEmitters] list size: {}", emitters.size());
 
         // 첫 데이터
         Long count = alarmService.countAlarm(userId);
@@ -42,11 +43,11 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
 
         // set callbacks
         emitter.onCompletion(() -> {
-            log.info("[SseEmitters] onComplete callback");
+            log.debug("[SseEmitters] onComplete callback");
             this.emitters.remove(userId);
         });
         emitter.onTimeout(() -> {
-            log.info("[SseEmitters] onTimeout callback");
+            log.debug("[SseEmitters] onTimeout callback");
             this.emitters.remove(userId);
         });
         emitter.onError((ex) -> {
@@ -58,10 +59,12 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     public void send(Long userId) {
-        log.info("[SseEmitters] user Id: {}", userId);
+        log.debug("[SseEmitters][send] try to send");
+        log.debug("[SseEmitters][send] send to no.{} user", userId);
+
         SseEmitter emitter = this.emitters.get(userId);
         if (emitter == null) {
-            log.info("[SseEmitters] emitter is null");
+            log.debug("[SseEmitters][send] emitter is null");
             return;
         }
 
@@ -70,15 +73,21 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         send(emitter, count);
     }
 
-    public void send(SseEmitter emitter, Long count) {
+    public synchronized void send(SseEmitter emitter, Long count) {
         // 전송
         try {
             emitter.send(SseEmitter.event()
                     .name("count")
                     .data(count));
-            log.info("[SseEmitters] send!! : {}", count);
+            log.debug("[SseEmitters][send] succeeded !!!  : {}", count);
+        } catch (IllegalStateException e) {
+            log.error("[SseEmitters][send] IllegalStateException: {}", e.getMessage());
+            emitter.completeWithError(e);
+        } catch (IOException e) {
+            log.error("[SseEmitters][send] IOException: {}", e.getMessage());
+            emitter.completeWithError(e);
         } catch (Exception e) {
-            log.error("[SseEmitters] send error: {}", e.getMessage());
+            log.error("[SseEmitters][send]error: {}", e.getMessage());
             emitter.complete();
         }
     }
