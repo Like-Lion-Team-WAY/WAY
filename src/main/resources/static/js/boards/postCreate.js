@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const pathSegments = window.location.pathname.split('/');
-        const boardName = pathSegments[pathSegments.length - 1];
+        const boardId = pathSegments[pathSegments.length - 1];
 
 
-        fetch(`/api/v1/boards/posts/${boardName}`, {
+        fetch(`/api/v1/boards/posts/${boardId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.success) {
                     alert('게시물이 등록되었습니다.');
-                    window.location.href = `/boards/${boardName}`;
+                    window.location.href = `/boards/${boardId}`;
                 } else {
                     alert('게시물 등록에 실패했습니다.');
                 }

@@ -8,7 +8,7 @@ public interface AlarmSseEmitters {
     /**
      * SseEmitter 추가 (SSE 구독)
      */
-    SseEmitter add(Long userId);
+    SseEmitter add(Long userId, String windowId);
 
     /**
      * 알림 전송
