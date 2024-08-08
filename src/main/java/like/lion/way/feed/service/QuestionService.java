@@ -18,4 +18,6 @@ public interface QuestionService {
     List<Question> getQuestionByAnswerer(User user);
 
     List<Question> getQuestionByQuestioner(User user);
+
+    Question pinQuestion(Long questionId);
 }

@@ -35,9 +35,6 @@ public class PostController {
     private final JwtUtil jwtUtil;
     private final PostBoxService postBoxService;
 
-    @Value("${image.upload.dir}")
-    private String uploadDir;
-
 
     // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
@@ -62,7 +59,8 @@ public class PostController {
         } else {
             model.addAttribute("user", user);
             log.info("user::::" + user.getUsername());
-            model.addAttribute("posts", postService.getPostByUser(user));
+            model.addAttribute("posts", postService.getPostByUser(user).stream().filter(p -> p.isPostPinStatus() == false).toList());
+            model.addAttribute("pinPosts", postService.getPostByUser(user).stream().filter(p -> p.isPostPinStatus() == true).toList());
 
             model.addAttribute("rejectedQuestions", questionService.getQuestionByAnswerer(user)
                     .stream()
@@ -120,34 +118,6 @@ public class PostController {
         return "/pages/feed/feedCreate";
     }
 
-    // 게시판 생성
-    @PostMapping("/posts/create")
-    public String savePost(PostDto postDto, @RequestPart(value = "image") MultipartFile file, HttpServletRequest request){
-        Post post = new Post();
-        post.setPostTitle(postDto.getTitle()); // 제목
-        post.setPostContent(postDto.getContent()); // 내용
-
-        // 이미지 파일 저장
-        if (!file.isEmpty()) {
-            try {
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
-                File dest = new File(filePath);
-                file.transferTo(dest);
-                post.setPostImageUrl(fileName); // 웹에서 접근할 경로
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        User user = getLoginUser(request);
-        log.info("username::::" + user.getUsername());
-        post.setUser(user); // 작성자 설정
-        post.setPostCreatedAt(LocalDateTime.now()); // 작성일
-        post.setPostLike(0); // 좋아요 수
-        postService.savePost(post);
-        return "redirect:/posts";
-    }
 
     // 게시판 상세 (게시판 == 피드)
     @GetMapping("/posts/detail/{postId}")

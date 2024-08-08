@@ -1,6 +1,7 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
@@ -54,12 +55,16 @@ public class QuestionFilterController {
         return "pages/feed/filterQuestionPage";
     }
 
-    // 새 질문 리스트
+    // 새 질문 리스트 내림차순 정렬
     @GetMapping("/questions/new/{userId}")
     public String showNewQuestion(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
         User user = userService.findByUserId(userId);
         setCommonModelAttributes(model, user, request);
-        setFilteredQuestions(model, user, q -> !q.getQuestionRejected() && q.getAnswer() == null);
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user)
+                .stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() == null)
+                .sorted(Comparator.comparing(Question::getQuestionDate).reversed())
+                .collect(Collectors.toList()));
         return "pages/feed/filterQuestionPage";
     }
 

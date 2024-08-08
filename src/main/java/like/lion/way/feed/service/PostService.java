@@ -20,4 +20,5 @@ public interface PostService {
 
     List<Post> getPostByUser(User user);
 
+    Post pinPost(Long postId);
 }

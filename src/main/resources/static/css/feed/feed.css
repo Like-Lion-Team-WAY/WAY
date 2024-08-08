@@ -108,3 +108,21 @@ body {
     font-weight: bold;
     font-size: 11px;
 }
+.pinIcon{
+    display: flex;
+    justify-content: end;
+}
+.icon-button {
+    display: flex;
+    justify-items: center;
+    background: #FFD6B0; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    padding: 0; /* 패딩 제거 */
+    font-size: 20px; /* 아이콘 크기 조절 */
+    color: #FF6746; /* 아이콘 색상 설정 (필요에 따라 변경) */
+    cursor: pointer; /* 클릭 가능하게 설정 */
+}
+
+.icon-button:focus {
+    outline: none; /* 포커스 시 외곽선 제거 */
+}

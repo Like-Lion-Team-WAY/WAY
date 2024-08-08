@@ -9,6 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/feed/feed.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <title>사용자 전체 피드 보기</title>
 </head>
 <body>
@@ -49,8 +50,43 @@
                 <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
             </div>
             <div class="feed">
+                <h2 th:if="${pinPosts.size()}>0">고정된 피드</h2>
+                <div class="feed-item" th:each="p : ${pinPosts}">
+                    <div class="post">
+                        <div class="pinIcon">
+                            <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${p.postId}" method="post">
+                                <button type="submit" class="icon-button">
+                                    <i class="bi bi-pin-fill"></i>
+                                </button>
+                            </form>
+                            <button th:if="${loginUser.userId} != ${user.userId}" type="submit" class="icon-button">
+                                <i class="bi bi-pin-fill"></i>
+                            </button>
+                        </div>
+                        <h2 th:text="${p.getPostTitle()}"></h2>
+                        <p th:text="${p.getPostContent()}"></p>
+                        <img th:src="'/display?filename='+${p.getPostImageUrl()}" alt="Post Image">
+                        <a th:text="${#temporals.format(p.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        <div class="feed-actions">
+                            <a th:href="@{'/posts/detail/' + ${p.postId}}"><button>피드 상세 보기</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feed">
+                <h2 th:if="${posts.size()} > 0">피드</h2>
                 <div class="feed-item" th:each="post : ${posts}">
                     <div class="post">
+                        <div class="pinIcon">
+                            <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${post.postId}" method="post">
+                                <button type="submit" class="icon-button">
+                                    <i class="bi bi-pin-fill"></i>
+                                </button>
+                            </form>
+                            <button th:if="${loginUser.userId} != ${user.userId}" type="submit" class="icon-button">
+                                <i class="bi bi-pin-fill"></i>
+                            </button>
+                        </div>
                         <h2 th:text="${post.getPostTitle()}"></h2>
                         <p th:text="${post.getPostContent()}"></p>
                         <img th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">

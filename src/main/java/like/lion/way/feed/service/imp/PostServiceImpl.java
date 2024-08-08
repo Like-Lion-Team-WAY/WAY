@@ -50,4 +50,15 @@ public class PostServiceImpl implements PostService {
     public List<Post> getPostByUser(User user) {
         return postRepository.findPostByUser(user);
     }
+
+    @Override
+    public Post pinPost(Long postId) {
+        Post post= postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+        if(post.isPostPinStatus()==true) {
+            post.setPostPinStatus(false);
+        }else{
+            post.setPostPinStatus(true);
+        }
+        return postRepository.save(post);
+    }
 }

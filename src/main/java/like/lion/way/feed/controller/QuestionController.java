@@ -47,7 +47,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(loginUser.getUserId());
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected()));
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -63,7 +64,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected()));
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }

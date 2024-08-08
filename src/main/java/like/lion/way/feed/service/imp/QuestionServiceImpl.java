@@ -48,4 +48,14 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findQuestionsByQuestioner(user);
     }
 
+    @Override
+    public Question pinQuestion(Long questionId) {
+        Question question = questionRepository.getByQuestionId(questionId);
+        if(question.getQuestionPinStatus() ==true){
+            question.setQuestionPinStatus(false);
+        }else{
+            question.setQuestionPinStatus(true);
+        }
+        return questionRepository.save(question);
+    }
 }
