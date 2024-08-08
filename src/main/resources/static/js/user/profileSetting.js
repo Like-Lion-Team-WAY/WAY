@@ -200,6 +200,39 @@ $(document).ready(function () {
 
             }
         });
-
     })
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    $('#copyProfileUrl').click(function(e) {
+        e.preventDefault();
+        // 입력 필드의 값 가져오기
+        let profileUrl = $('#profile-url').val();
+
+        // 클립보드에 복사
+        navigator.clipboard.writeText(profileUrl).then(function() {
+            // 복사 성공 시 처리
+            Toast.fire({
+                icon: 'success',
+                title: '클립보드에 복사되었습니다.'
+            })
+        }).catch(function(error) {
+            // 복사 실패 시 처리
+            Toast.fire({
+                icon: 'error',
+                title: '복사실패'
+            })
+
+        });
+    });
 });
