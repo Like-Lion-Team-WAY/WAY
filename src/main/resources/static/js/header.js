@@ -1,8 +1,14 @@
 // header.js
 
 document.addEventListener("DOMContentLoaded", function() {
+    // 브라우저 창마다 고유한 ID를 생성
+    if (!sessionStorage.getItem('windowID')) {
+        sessionStorage.setItem('windowID', 'window-' + Date.now() + '-' + Math.random());
+    }
+    const windowID = sessionStorage.getItem('windowID');
+
     const bellBadge = document.getElementById("bellBadge");
-    const sseUrl = `/sse/subscribe`; // sse 연결 주소
+    const sseUrl = `/sse/subscribe?windowId=${windowID}`; // sse 연결 주소
 
     function connectSSE() {
         // SSE 연결 설정
@@ -27,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 connectSSE();
             } else {
                 eventSource.close();
-                setTimeout(connectSSE, 10 * 1000); // 재연결 시도
+                setTimeout(connectSSE, 1000); // 재연결 시도
             }
         };
     }
