@@ -1,11 +1,10 @@
 let stompClient = null;
 
-// 나중에 질문페이지에도 적용해야함
 function connect() {
     const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/topic/messages/0', function (messageOutput) {// 채팅방 생성시 0번으로 메세지 보냄
+        stompClient.subscribe('/topic/messages/0', function (messageOutput) {
             addNewChatRoomInfo(JSON.parse(messageOutput.body));
         });
     });
@@ -18,10 +17,17 @@ function addNewChatRoomInfo(messageOutput) {
         const chatListElement = $(".chat-room-list");
         const chatId = messageOutput.type.substring(6);
 
+        const newMessageElement = messageOutput.senderId === userId
+            ? '<div class="new-message" style="display: none;">NEW</div>'
+            : '<div class="new-message">NEW</div>';
+
         const chatHtml = `
                     <a href="/chats/${chatId}" onclick="return openChat('/chats/${chatId}', ${chatId})">
                         <div class="chat-room-info center" id="chat-${chatId}">
-                            <h3 class="chat-name left">${messageOutput.chatName}</h3>
+                            <div class="top">
+                                <h3 class="chat-name left">${messageOutput.chatName}</h3>
+                                ${newMessageElement}
+                            </div>
                             <div class="last-chatting left">${messageOutput.text}</div>
                             <div class="last-chatting-time right">${messageOutput.sendTime}</div>
                         </div>
@@ -44,19 +50,25 @@ function updateChatRoomInfo(messageOutput, subscription) {
     const chatId = messageOutput.chatId;
 
     const chatRoomElement = document.getElementById(`chat-${chatId}`).closest('a');
-    const userId = document.getElementById('user-id').value;
+    const userId = Number(document.getElementById('user-id').value);
 
-    if ((messageOutput.type === 'leave' && messageOutput.senderId === Number(userId)) || messageOutput.type === 'delete') {
+    if ((messageOutput.type === 'leave' && messageOutput.senderId === userId) || messageOutput.type === 'delete') {
         chatRoomElement.remove();
         subscription.unsubscribe();
         return;
     }
+
 
     if (chatRoomElement) {
         const lastChattingElement = chatRoomElement.querySelector('.last-chatting');
         const lastChattingTimeElement = chatRoomElement.querySelector('.last-chatting-time');
         lastChattingElement.textContent = messageOutput.text.length > 50 ? messageOutput.text.substring(0, 50) + '...' : messageOutput.text; // 메시지 내용 업데이트
         lastChattingTimeElement.textContent = messageOutput.sendTime; // 메시지 시간 업데이트
+        if (messageOutput.isRead === true || messageOutput.senderId === userId) {
+            chatRoomElement.querySelector(`.new-message`).style.display = 'none';
+        } else {
+            chatRoomElement.querySelector(`.new-message`).style.display = 'block';
+        }
 
         const chatListElement = $(".chat-room-list")
         chatListElement.prepend(chatRoomElement);
@@ -64,6 +76,7 @@ function updateChatRoomInfo(messageOutput, subscription) {
 }
 
 function loadChatList() {
+    const userId = (Number)(document.getElementById('user-id').value);
     const chatListElement = $(".chat-room-list")
 
     $.ajax({
@@ -71,12 +84,21 @@ function loadChatList() {
         type: 'GET',
         success: function (response) {
             response.chats.forEach(function (chat) {
+                const formattedLastMessageTime = formatDateTime(chat.lastMessageTime);
+
+                const newMessageElement = (chat.isRead === true || chat.senderId === userId)
+                    ? '<div class="new-message" style="display: none;">NEW</div>'
+                    : '<div class="new-message">NEW</div>';
+
                 const chatHtml = `
                     <a href="/chats/${chat.id}" onclick="return openChat('/chats/${chat.id}', ${chat.id})">
-                        <div class="chat-room-info center" id="chat-${chat.id}">
-                            <h3 class="chat-name left">${chat.name}</h3>
+                        <div class="chat-room-info" id="chat-${chat.id}">
+                            <div class="top">
+                                <h3 class="chat-name">${chat.name}</h3>
+                                ${newMessageElement}                  
+                            </div>
                             <div class="last-chatting left">${chat.lastMessage}</div>
-                            <div class="last-chatting-time right">${chat.lastMessageTime}</div>
+                            <div class="last-chatting-time right">${formattedLastMessageTime}</div>
                         </div>
                     </a>
                 `;
@@ -87,6 +109,18 @@ function loadChatList() {
             })
         }
     });
+}
+
+function formatDateTime(dateTimeStr) {
+    const date = new Date(dateTimeStr);
+
+    const year = String(date.getFullYear()).slice(-2); // 연도의 마지막 두 자리를 가져옴
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

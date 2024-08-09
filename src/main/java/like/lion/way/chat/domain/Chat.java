@@ -61,8 +61,6 @@ public class Chat {
     }
 
     public boolean isQuestioner(Long userId) {
-        System.out.println(userId);
-        System.out.println(questioner.getUserId());
         return userId.equals(questioner.getUserId());
     }
 

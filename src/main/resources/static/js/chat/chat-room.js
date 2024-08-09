@@ -58,6 +58,7 @@ function connect(chatId) {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
+        sendMessage('open', 'open');
         stompClient.subscribe('/topic/messages/' + chatId, function (messageOutput) {
             showMessageOutput(JSON.parse(messageOutput.body));
         });
@@ -309,9 +310,9 @@ function updateNameField(name) {
 function nicknameRequestBtn() {
     $("#nickname-request-btn").click(function () {
         if (this.value === 'request') {
-            confirmNicknameRequest();
+            confirmNickname("상대에게 닉네임을 요청하시겠습니까?", 'request');
         } else {
-            confirmNicknameRequestCancel();
+            confirmNickname("상대 닉네임 요청을 취소하시겠습니까?", 'cancel');
         }
     });
 }
@@ -320,64 +321,34 @@ function requestBtns() {
     document.body.addEventListener('click', function (event) {
         if (event.target) {
             if (event.target.id === 'cancel-request') {
-                confirmNicknameRequestCancel();
+                confirmNickname("상대 닉네임 요청을 취소하시겠습니까?", 'cancel');
             } else if (event.target.id === 'accept-request') {
-                confirmNicknameRequestAccept();
+                confirmNickname("닉네임 요청을 수락하시겠습니까?", 'accept');
             } else if (event.target.id === 'reject-request') {
-                confirmNicknameRequestReject();
+                confirmNickname("닉네임 요청을 거절하시겠습니까?", 'reject');
             }
         }
     });
 }
 
-function confirmNicknameRequest() {
-    const confirmation = confirm("상대에게 닉네임을 요청하시겠습니까?");
+function confirmNickname(message, type) {
+    const confirmation = confirm(message);
 
     if (confirmation) {
-        nicknameRequest('request');
+        callNicknameApi(type);
     }
 }
 
-function confirmNicknameRequestCancel() {
-    const confirmation = confirm("상대 닉네임 요청을 취소하시겠습니까?");
-
-    if (confirmation) {
-        nicknameRequest('cancel');
+function callNicknameApi(type) {
+    let url;
+    if (type === 'request' || type === 'cancel') {
+        url = 'request';
+    } else {
+        url = 'response';
     }
-}
 
-function confirmNicknameRequestAccept() {
-    const confirmation = confirm("닉네임 요청을 수락하시겠습니까?");
-
-    if (confirmation) {
-        nicknameResponse('accept');
-    }
-}
-
-function confirmNicknameRequestReject() {
-    const confirmation = confirm("닉네임 요청을 거절하시겠습니까?");
-
-    if (confirmation) {
-        nicknameResponse('reject');
-    }
-}
-
-function nicknameRequest(type) {
     $.ajax({
-        url: '/api/chats/nickname-request/' + chatId,
-        type: 'PATCH',
-        data: {
-            'type': type
-        },
-        success: function (response) {
-            sendMessage(response.text, response.result);
-        }
-    });
-}
-
-function nicknameResponse(type) {
-    $.ajax({
-        url: '/api/chats/nickname-response/' + chatId,
+        url: '/api/chats/nickname-' + url + '/' + chatId,
         type: 'PATCH',
         data: {
             'type': type
@@ -443,9 +414,9 @@ function updateAcceptNickname(nickname) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const isActive = document.getElementById('is-active').value;
+
     const isQuestioner = document.getElementById('is-questioner').value;
     const isNicknameOpen = document.getElementById('is-nicknameOpen').value;
-
     getChatIdFromUrl();
     connect(chatId);
 
@@ -472,3 +443,7 @@ document.addEventListener('DOMContentLoaded', function () {
     leaveBtn();
     changNameBtn();
 });
+
+window.onbeforeunload = function (event) {
+    sendMessage("close", "close");
+};

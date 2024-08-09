@@ -1,7 +1,13 @@
 package like.lion.way.chat.service.kafka.imple;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.domain.dto.ReceiveMessageDTO;
+import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.kafka.Consumer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,8 +18,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ConsumerImpl implements Consumer {
 
+    private static final Map<Long, Set<Long>> enterUser = new HashMap<>();
     private final ObjectMapper objectMapper;
     private final SimpMessagingTemplate messagingTemplate;
+    private final MessageRepository messageRepository;
 
 //    @Value("${server.port}")
 //    private String serverPort;
@@ -25,7 +33,32 @@ public class ConsumerImpl implements Consumer {
         try {
             // JSON 문자열을 Message 객체로 변환
             ReceiveMessageDTO receiveMessageDTO = objectMapper.readValue(message, ReceiveMessageDTO.class);
-            messagingTemplate.convertAndSend("/topic/messages/" + receiveMessageDTO.getChatId(), receiveMessageDTO);
+
+            if (receiveMessageDTO.getType().equals("open")) {
+                if (!enterUser.containsKey(receiveMessageDTO.getChatId())) {
+                    enterUser.put(receiveMessageDTO.getChatId(), new HashSet<>());
+                }
+                enterUser.get(receiveMessageDTO.getChatId()).add(receiveMessageDTO.getSenderId());
+
+            } else if (receiveMessageDTO.getType().equals("close")) {
+                enterUser.get(receiveMessageDTO.getChatId()).remove(receiveMessageDTO.getSenderId());
+                if (enterUser.get(receiveMessageDTO.getChatId()).isEmpty()) {
+                    enterUser.remove(receiveMessageDTO.getChatId());
+                }
+
+            } else {
+                if (!receiveMessageDTO.getType().equals("delete") && enterUser.get(receiveMessageDTO.getChatId())
+                        .contains(receiveMessageDTO.getReceiverId())) {
+                    Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
+                    messageFromDB.setIsRead(true);
+                    messageRepository.save(messageFromDB);
+
+                    receiveMessageDTO.setIsRead(true);
+                }
+
+                messagingTemplate.convertAndSend("/topic/messages/" + receiveMessageDTO.getChatId(), receiveMessageDTO);
+            }
+
         } catch (Exception e) {
             e.printStackTrace(); // JSON 역직렬화 오류 처리
         }

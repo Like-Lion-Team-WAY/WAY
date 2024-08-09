@@ -32,11 +32,13 @@ public class ProducerImpl implements Producer {
             message.setCreatedAt(LocalDateTime.now());
 
             ReceiveMessageDTO receiveMessageDTO = null;
-            if (message.getType().equals("delete")) {
+            String messageType = message.getType();
+
+            if (messageType.equals("delete") || messageType.equals("open") || messageType.equals("close")) {
                 message.setReceiverId(0L);
                 receiveMessageDTO = new ReceiveMessageDTO(message, null, null);
 
-            } else if (message.getType().startsWith("create")) {
+            } else if (messageType.startsWith("create")) {
                 Long newChatId = Long.valueOf(message.getType().substring(6));
                 Chat chat = chatRepository.findById(newChatId).orElse(null);
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), null);

@@ -1,6 +1,5 @@
 package like.lion.way.chat.controller.rest;
 
-import co.elastic.clients.elasticsearch.nodes.Http;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -53,9 +52,11 @@ public class ChatRestController {
 
             if (message != null) {
                 chatInfoDTOs.add(
-                        new ChatInfoDTO(chat.getId(), chat.getName(), message.getText(), message.getCreatedAt()));
+                        new ChatInfoDTO(chat.getId(), chat.getName(), message.getText(), message.getSenderId(),
+                                message.getCreatedAt(), message.getIsRead()));
             } else {
-                chatInfoDTOs.add(new ChatInfoDTO(chat.getId(), chat.getName(), "메세지가 없습니다", null));
+                chatInfoDTOs.add(
+                        new ChatInfoDTO(chat.getId(), chat.getName(), "메세지가 없습니다", null, null, true));
             }
         }
 
