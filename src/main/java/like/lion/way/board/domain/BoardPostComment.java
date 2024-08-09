@@ -46,13 +46,17 @@ public class BoardPostComment {
     @JoinColumn(name = "board_post_comment_user_id")
     private User user;
 
+    @Column(name = "board_post_comment_anonymous_permission")
+    private boolean anonymousPermission;
+
     @Builder
-    private BoardPostComment(BoardPost boardPost, String content, Long preCommentId, User user) {
+    private BoardPostComment(BoardPost boardPost, String content, Long preCommentId, User user, boolean anonymousPermission) {
 
         this.boardPost = boardPost;
         this.content = content;
         this.preCommentId = preCommentId;
         this.user = user;
+        this.anonymousPermission = anonymousPermission;
 
     }
 

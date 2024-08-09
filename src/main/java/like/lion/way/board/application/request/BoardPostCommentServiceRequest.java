@@ -13,23 +13,26 @@ public class BoardPostCommentServiceRequest {
 
     private String content;
     private Long preCommentId;
+    private boolean anonymousPermission;
 
     @Builder
-    public BoardPostCommentServiceRequest(String content, Long preCommentId) {
+    public BoardPostCommentServiceRequest(String content, Long preCommentId, boolean anonymousPermission) {
 
         this.content = content;
         this.preCommentId = preCommentId;
+        this.anonymousPermission = anonymousPermission;
 
     }
 
     public BoardPostComment toEntity(BoardPost boardPost, User user) {
 
         return BoardPostComment.builder()
-               .boardPost(boardPost)
-               .content(content)
-               .preCommentId(preCommentId)
-               .user(user)
-               .build();
+                .boardPost(boardPost)
+                .content(content)
+                .preCommentId(preCommentId)
+                .anonymousPermission(anonymousPermission)
+                .user(user)
+                .build();
 
     }
 

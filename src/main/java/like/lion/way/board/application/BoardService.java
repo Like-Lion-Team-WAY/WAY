@@ -33,7 +33,8 @@ public interface BoardService {
 
     void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
-    //    BoardPostDetailResponse getPostDetails(String boardName, String postTitle);
+    BoardPostDetailResponse getPostDetails(Long postId);
+
     BoardPostLikeCountResponse getPostLikeCount(Long postId);
 
     void likePost(Long postId, HttpServletRequest httpServletRequest);

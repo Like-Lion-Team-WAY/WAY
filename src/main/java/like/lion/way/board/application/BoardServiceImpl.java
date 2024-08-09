@@ -8,6 +8,7 @@ import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
+import like.lion.way.board.application.response.BoardPostCommentResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
@@ -137,19 +138,32 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-//    @Override
-//    public BoardPostDetailResponse getPostDetails(String boardName, String postTitle) {
-//        Board board = boardRepository.findByName(boardName);
-//        BoardPost post = boardPostRepository.findByTitleAndBoard(postTitle, board);
-//
-//        return BoardPostDetailResponse.builder()
-//               .boardName(boardName)
-//               .postTitle(post.getTitle())
-//               .author(post.getUser().getNickname(post.isAnonymousPermission()))
-//               .content(post.getContent())
-//               .created_at(post.getCreatedAt())
-//               .build();
-//    }
+    @Override
+    public BoardPostDetailResponse getPostDetails(Long postId) {
+        BoardPost post = boardPostRepository.findByBoardPostId(postId);
+
+        List<BoardPostCommentResponse> comments = boardPostCommentRepository.findByBoardPostId(postId).stream()
+                .map(comment -> BoardPostCommentResponse.builder()
+                        .commentId(comment.getId())
+                        .commentUsername(comment.getUser().getNickname(comment.isAnonymousPermission()))
+                        .commentContent(comment.getContent())
+                        .commentCreatedAt(comment.getCreatedAt())
+                        .preCommentId(comment.getPreCommentId())
+                        .build())
+                .collect(Collectors.toList());
+
+        return BoardPostDetailResponse.builder()
+                .author(post.getUser().getNickname(post.isAnonymousPermission()))
+                .postCreatedAt(post.getCreatedAt())
+                .postTitle(post.getTitle())
+                .postContent(post.getContent())
+                .postLikes(boardPostLikeRepository.countLikesByBoardPostId(postId))
+                .postComments(boardPostCommentRepository.countCommentsByBoardPostId(postId))
+                .postScraps(boardPostScrapRepository.countScrapsByBoardPostId(postId))
+                .boardPostCommentsList(comments)
+                .build();
+
+    }
 
     @Override
     public BoardPostLikeCountResponse getPostLikeCount(Long postId) {
@@ -181,7 +195,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardPostScrapCountResponse getPostScrapCount(Long postId) {
-        Long scraps = boardPostScrapRepository.countByBoardPostId(postId);
+        Long scraps = boardPostScrapRepository.countScrapsByBoardPostId(postId);
         return BoardPostScrapCountResponse.builder()
                 .scraps(scraps)
                 .build();
@@ -212,7 +226,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardPostCommentCountResponse getPostCommentCount(Long postId) {
 
-        Long comments = boardPostCommentRepository.countCommentsByBoardPostIdt(postId);
+        Long comments = boardPostCommentRepository.countCommentsByBoardPostId(postId);
         return BoardPostCommentCountResponse.builder()
                 .comments(comments)
                 .build();
