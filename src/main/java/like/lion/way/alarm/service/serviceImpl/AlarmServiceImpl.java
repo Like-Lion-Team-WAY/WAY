@@ -1,5 +1,6 @@
 package like.lion.way.alarm.service.serviceImpl;
 
+import java.util.HashMap;
 import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.domain.AlarmSetting;
 import like.lion.way.alarm.domain.AlarmType;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -83,5 +85,34 @@ public class AlarmServiceImpl implements AlarmService {
     @Transactional
     public void deleteAlarm(Long alarmId) {
         alarmRepository.deleteById(alarmId);
+    }
+
+    @Override
+    @Transactional
+    public void updateAlarmSetting(Long userId, AlarmType type, boolean enabled) {
+        AlarmSetting alarmSetting = alarmSettingRepository.findByUser_UserId(userId).orElseThrow();
+
+        switch (type) {
+            case NEW_QUESTION -> alarmSetting.setNewQuestion(enabled);
+            case REPLY -> alarmSetting.setReply(enabled);
+            case COMMENT -> alarmSetting.setComment(enabled);
+            case ANSWER -> alarmSetting.setAnswer(enabled);
+            case BOARD_COMMENT -> alarmSetting.setBoardComment(enabled);
+        }
+        alarmSettingRepository.save(alarmSetting);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Boolean> getAlarmSetting(Long userId) {
+        Map<String, Boolean> settings = new HashMap<>();
+        AlarmSetting alarmSetting = alarmSettingRepository.findByUser_UserId(userId).orElseThrow();
+
+        settings.put(AlarmType.NEW_QUESTION.getType(), alarmSetting.isNewQuestion());
+        settings.put(AlarmType.ANSWER.getType(), alarmSetting.isAnswer());
+        settings.put(AlarmType.COMMENT.getType(), alarmSetting.isComment());
+        settings.put(AlarmType.REPLY.getType(), alarmSetting.isReply());
+
+        return settings;
     }
 }

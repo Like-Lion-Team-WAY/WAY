@@ -6,7 +6,7 @@ import like.lion.way.alarm.dto.AlarmMessageDto;
 import like.lion.way.alarm.event.AlarmEvent;
 import like.lion.way.user.domain.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.Map;
 
 public interface AlarmService {
     /**
@@ -39,4 +39,14 @@ public interface AlarmService {
      * 알림 삭제
      */
     void deleteAlarm(Long alarmId);
+
+    /**
+     * 알림 세팅 변경
+     */
+    void updateAlarmSetting(Long userId, AlarmType type, boolean enabled);
+
+    /**
+     * 알림 세팅 조회
+     */
+    Map<String, Boolean> getAlarmSetting(Long userId);
 }
