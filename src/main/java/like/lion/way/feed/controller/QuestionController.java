@@ -91,11 +91,14 @@ public class QuestionController {
             @RequestParam(value = "image", required = false) MultipartFile image,
             HttpServletRequest request) {
 
-        // 로그인한 사용자
+        // 로그인 사용자
         User user = getLoginUser(request);
+        //로그인한 사용자 여부 확인
         if(user == null) {
+            //익명 - 비로그인 처리
             questionService.saveQuestion(userId, question, image, request);
         }else{
+            //로그인 사용자 처리
             questionService.saveQuestion(user, userId, question, isAnonymous, image, request);
         }
         return "redirect:/questions/create/"+userId;
