@@ -28,7 +28,7 @@ public class LikeController {
         likeService.likePost(postId, userId);
         return "redirect:/posts/detail/"+postId;
     }
-
+    //질문에 대한 좋아요
     @PostMapping("/questions/like")
     public String likeQuestion(@RequestParam("questionId") Long questionId, @RequestParam("userId") Long userId) {
         likeService.likeQuestion(questionId, userId);

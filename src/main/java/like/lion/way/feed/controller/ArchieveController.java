@@ -19,6 +19,7 @@ public class ArchieveController {
     private final PostBoxService postBoxService;
     private final QuestionBoxService questionBoxService;
     private final UserService userService;
+    //전체 보관함 (스크랩한 질문과 피드)
     @GetMapping("/all/archieve/{userId}")
     public String archieveAll(@PathVariable("userId") Long userId, Model model) {
         User user= userService.findByUserId(userId);

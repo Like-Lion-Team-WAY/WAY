@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostCommentController {
 
     private final PostCommentService postCommentService;
-
+    //피드의 댓글 저장
     @PostMapping("/posts/comments/{postId}")
     public String saveComments(@PathVariable("postId") Long postId,@RequestParam("userId") Long userId, PostCommentDto postCommentDto) {
         postCommentService.saveComment(postId, postCommentDto, userId);
         return "redirect:/posts/detail/" + postId;
     }
+    //피드의 대댓글 저장
     @PostMapping("/posts/comments/pre/{postId}")
     public String savePreComments(@PathVariable Long postId, @RequestParam Long userId, @RequestParam String postCommentContent, @RequestParam(required = false) Long parentCommentPreCommentId){
         postCommentService.savePreComment(postId, userId, postCommentContent, parentCommentPreCommentId);

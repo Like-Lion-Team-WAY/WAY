@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostRestController {
 
     private final PostService postService;
-
+    //게시글 (피드) 수정
     @PatchMapping("/posts/{postId}")
     public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId, @RequestParam String title, @RequestParam String content) {
         try {
@@ -26,7 +26,7 @@ public class PostRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update post.");
         }
     }
-
+    //게시글 삭제
     @DeleteMapping("/posts")
     public ResponseEntity<String> deletePost(@RequestParam Long id) {
         try {

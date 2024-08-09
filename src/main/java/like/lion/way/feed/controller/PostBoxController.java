@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class PostBoxController {
     private final PostBoxService postBoxService;
+    //게시글 보관
     @PostMapping("/posts/archieve/{postId}")
     public String archievePost(@PathVariable("postId") Long postId,@RequestParam Long userId){
         log.info("postId: {}", postId);

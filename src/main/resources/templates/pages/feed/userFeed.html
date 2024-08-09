@@ -89,7 +89,7 @@
                         </div>
                         <h2 th:text="${post.getPostTitle()}"></h2>
                         <p th:text="${post.getPostContent()}"></p>
-                        <img th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">
+                        <img th:if="${post.getPostImageUrl() != null}" th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">
                         <a th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
                         <div class="feed-actions">
                             <a th:href="@{'/posts/detail/' + ${post.postId}}"><button>피드 상세 보기</button></a>

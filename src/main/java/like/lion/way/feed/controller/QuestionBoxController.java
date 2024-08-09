@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class QuestionBoxController {
     private final QuestionBoxService questionBoxService;
     private final UserService userService;
+    //질문 보관
     @PostMapping("/questions/archieve")
     public String archieveQuestion(@RequestParam("questionId") Long questionId, @RequestParam("userId") Long userId) {
         questionBoxService.archieveQuestion(questionId, userId);

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionRestcontroller {
     private final QuestionService questionService;
-
+    //답변 수정
     @PatchMapping("/questions/answer/edit/{questionId}")
     public ResponseEntity<String> editAnswer(@PathVariable Long questionId, @RequestParam(name = "answer") String response) {
         try {

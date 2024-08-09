@@ -29,8 +29,6 @@ public class QuestionController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    @Value("${image.upload.dir}")
-    private String uploadDir;
 
     //로그인한 사용자
     private User getLoginUser(HttpServletRequest request) {
@@ -38,25 +36,7 @@ public class QuestionController {
         Long loginId = jwtUtil.getUserIdFromToken(token);
         return userService.findByUserId(loginId);
     }
-    private static String getRemoteIP(HttpServletRequest request){
-        String ip = request.getHeader("X-FORWARDED-FOR");
 
-        //proxy 환경일 경우
-        if (ip == null || ip.length() == 0) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-
-        //웹로직 서버일 경우
-        if (ip == null || ip.length() == 0) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-
-        if (ip == null || ip.length() == 0) {
-            ip = request.getRemoteAddr() ;
-        }
-
-        return ip;
-    }
     //내 질문 창으로만
     @GetMapping("/questions/create")
     public String createMyQuestion(Model model, HttpServletRequest request) {
@@ -99,46 +79,14 @@ public class QuestionController {
 
         // 로그인한 사용자
         User user = getLoginUser(request);
-
-        Question newQuestion = new Question();
-        newQuestion.setQuestion(question);  //질문 저장
-        newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
-        //익명 여부에 따라
-        if(isAnonymous) {
-            newQuestion.setQuestioner(null);
-            newQuestion.setUserIp(getRemoteIP(request));
-
-        } else {
-            newQuestion.setQuestioner(user);
-        }
-        if (!image.isEmpty()) { //이미지
-            try {
-                String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
-                File dest = new File(filePath);
-                image.transferTo(dest);
-                newQuestion.setQuestionImageUrl(fileName); // 웹에서 접근할 경로
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        User questionPageUser= userService.findByUserId(userId);
-        newQuestion.setAnswerer(questionPageUser);
-        newQuestion.setQuestionDeleteYN(false);
-        newQuestion.setQuestionStatus(false);
-        newQuestion.setQuestionPinStatus(false);
-        newQuestion.setQuestionRejected(false);
-        questionService.saveQuestion(newQuestion);
+        questionService.saveQuestion(user, userId, question, isAnonymous, image, request);
         return "redirect:/questions/create/"+userId;
     }
     //질문 답변
     @PostMapping("/questions/answer/{questionId}")
     public String answerQuestion(@RequestParam("answer") String answer, @PathVariable("questionId") Long questionId) {
         Question question = questionService.getQuestionById(questionId);
-        question.setAnswer(answer);
-        question.setQuestionStatus(true);
-        question.setAnswerDate(LocalDateTime.now());
-        questionService.saveQuestion(question);
+        questionService.saveQuestion(question, answer);
         return "redirect:/questions/create";
     }
     //거절 질문 등록

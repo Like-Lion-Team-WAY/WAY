@@ -24,7 +24,6 @@ public class PostController {
     private final UserService userService;
     private final QuestionService questionService;
     private final JwtUtil jwtUtil;
-    private final PostBoxService postBoxService;
 
 
     // 로그인한 사용자 정보 조회
@@ -101,26 +100,5 @@ public class PostController {
         model.addAttribute("loginUser", loginUser);
         setCommonModelFilterAttributes(model, user);
         return "/pages/feed/userFeed";
-    }
-
-    // 게시판 생성 페이지로 넘어감
-    @GetMapping("/posts/create")
-    public String createPost() {
-        return "/pages/feed/feedCreate";
-    }
-
-
-    // 게시판 상세 (게시판 == 피드)
-    @GetMapping("/posts/detail/{postId}")
-    public String showDetailPost(@PathVariable("postId") Long postId, Model model, HttpServletRequest request){
-        log.info("postId:::: " + postId);
-        Post post = postService.getPostById(postId);
-        model.addAttribute("post", post);
-
-        model.addAttribute("postBox", postBoxService.getPostBoxByPostId(post).size());
-
-        User loginUser = getLoginUser(request);
-        model.addAttribute("loginUser", loginUser);
-        return "/pages/feed/detailFeed";
     }
 }
