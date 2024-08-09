@@ -1,5 +1,5 @@
 let page = 0;
-const size = 30;
+const size = 20;
 let isLoading = false;
 
 async function handleButtonClick(alarm) {
@@ -19,7 +19,6 @@ async function handleButtonClick(alarm) {
         console.error('API 호출 실패:', error);
     }
 }
-
 
 async function loadAlarmList() {
     if (isLoading) return; // 이미 로딩 중이면 추가 요청 방지
