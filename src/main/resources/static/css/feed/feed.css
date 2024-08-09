@@ -22,11 +22,11 @@ body {
 }
 
 .profile-picture {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     background-color: #ddd;
     border-radius: 50%;
-    margin-right: 30px;
+    margin-right: 10px;
 }
 
 .profile-info h1 {
@@ -48,6 +48,10 @@ body {
 
 .stat {
     text-align: center;
+}
+.stat a {
+    text-decoration: none;
+    color: inherit;
 }
 .button-container {
     text-align: right;
@@ -124,5 +128,18 @@ body {
 }
 
 .icon-button:focus {
+    outline: none; /* 포커스 시 외곽선 제거 */
+}
+.icon-button2{
+    display: flex;
+    justify-items: center;
+    background: #FFD6B0; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    padding: 0; /* 패딩 제거 */
+    font-size: 20px; /* 아이콘 크기 조절 */
+    color: #f90707; /* 아이콘 색상 설정 (필요에 따라 변경) */
+    cursor: pointer; /* 클릭 가능하게 설정 */
+}
+.icon-button2:focus {
     outline: none; /* 포커스 시 외곽선 제거 */
 }

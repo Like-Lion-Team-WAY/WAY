@@ -18,7 +18,7 @@
 <div layout:fragment="content">
     <div class="post-container">
         <div class="post-header">
-            <img src="프로필.png" alt="프로필 아이콘" class="profile-icon">
+            <img class="profile-icon" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
             <div class="post-info">
                 <span class="username" th:text="${post.getUser().username}">username</span>
                 <span class="timestamp" th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}">작성일</span>

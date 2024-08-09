@@ -39,12 +39,12 @@
       </div>
   </a>
   <div class="answered-section">
-    <p class="answered-title" th:text="${user.username} + '님에게 온 질문들'"></p>
+    <h1 class="answered-title" th:text="${user.username} + '님에게 온 질문들'"></h1>
     <h2 th:if="${pinQuestion.size()}>0"> 고정된 질문 </h2>
     <div class="answered-question" th:each="q : ${pinQuestion}">
       <div class="pinIcon">
         <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/questions/pin/'+${q.getQuestionId()}" method="post">
-          <button type="submit" class="icon-button">
+          <button type="submit" class="icon-button2">
             <i class="bi bi-pin-fill"></i>
           </button>
         </form>

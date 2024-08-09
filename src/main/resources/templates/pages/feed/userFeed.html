@@ -16,14 +16,14 @@
     <div layout:fragment="content">
         <div class="profile-container">
             <div class="profile-header">
-                <div class="profile-picture">
-                    <img src="텀블벅.jpg" alt="Profile Picture" />
+                <div>
+                    <img class="profile-picture" th:src="'/display?filename='+${user.getUserImage()}" alt="Profile Picture" />
                 </div>
             </div>
             <div class="profile-header">
                 <div class="profile-info">
                     <h1 th:text="${user.getUsername()}"></h1>
-                    <p>팔로워 100 | 팔로잉 2</p>
+                    <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                 </div>
             </div>
             <div class="profile-stats">
@@ -55,7 +55,7 @@
                     <div class="post">
                         <div class="pinIcon">
                             <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${p.postId}" method="post">
-                                <button type="submit" class="icon-button">
+                                <button type="submit" class="icon-button2">
                                     <i class="bi bi-pin-fill"></i>
                                 </button>
                             </form>

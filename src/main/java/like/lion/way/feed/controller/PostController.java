@@ -1,10 +1,13 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.domain.Follow;
 import like.lion.way.user.domain.User;
+import like.lion.way.user.service.FollowService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,7 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final QuestionService questionService;
+    private final FollowService followService;
     private final JwtUtil jwtUtil;
 
 
@@ -73,6 +77,8 @@ public class PostController {
     @GetMapping("/posts")
     public String getPosts(Model model, HttpServletRequest request){
         User user = getLoginUser(request);
+        model.addAttribute("followers", followService.getFollowerList(request).size());
+        model.addAttribute("followings", followService.getFollowingList(request).size());
         setCommonModelFilterAttributes(model, user);
         model.addAttribute("loginUser", user);
         return "/pages/feed/userFeed";
@@ -83,6 +89,8 @@ public class PostController {
     public String getPostsByUserId(@PathVariable("username") String username, Model model, HttpServletRequest request) {
         log.info("username::::" + username);
         User loginUser = getLoginUser(request);
+        model.addAttribute("followers", followService.getFollowerList(request).size());
+        model.addAttribute("followings", followService.getFollowingList(request).size());
         if (loginUser == null) {
             // 로그인 사용자가 없는 경우 처리
             log.error("Login user not found.");
