@@ -23,10 +23,7 @@ public class FollowServiceImpl implements FollowService {
     private final FollowRepository followRepository;
 
     @Override
-    public List<FollowDto> getFollowerList(HttpServletRequest request) {
-        String token  = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User user = userService.findByUserId(userId);
+    public List<FollowDto> getFollowerList(User user) {
         List<Follow> followers = followRepository.findAllByFollower(user);
         List<FollowDto> followDtos = new ArrayList<>();
         for(Follow follow : followers){
@@ -35,17 +32,12 @@ public class FollowServiceImpl implements FollowService {
             followDto.setUsername(followUser.getUsername());
 //            followDto.setUserImgPath(followUser.getImgPath());
             followDtos.add(followDto);
-
         }
         return followDtos;
     }
 
     @Override
-    public List<FollowDto> getFollowingList(HttpServletRequest request) {
-        String token  = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User user = userService.findByUserId(userId);
-
+    public List<FollowDto> getFollowingList(User user) {
         List<Follow> followings = followRepository.findAllByFollowing(user);
         List<FollowDto> followingDtos = new ArrayList<>();
         for(Follow follow : followings){

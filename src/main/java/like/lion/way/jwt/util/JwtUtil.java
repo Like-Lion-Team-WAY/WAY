@@ -57,6 +57,9 @@ public class JwtUtil {
     }
 
     public Long getUserIdFromToken(String token){
+        if(token==null){
+            return null;
+        }
         String[] tokenArr = token.split(" ");
         if (tokenArr.length > 1) {
             token = tokenArr[1];
