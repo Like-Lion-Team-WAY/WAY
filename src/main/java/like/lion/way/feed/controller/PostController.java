@@ -27,7 +27,6 @@ public class PostController {
     private final FollowService followService;
     private final JwtUtil jwtUtil;
 
-
     // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");

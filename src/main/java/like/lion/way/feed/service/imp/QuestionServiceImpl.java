@@ -125,4 +125,31 @@ public class QuestionServiceImpl implements QuestionService {
         question.setAnswerDate(LocalDateTime.now());
         return questionRepository.save(question);
     }
+
+    @Override
+    public Question saveQuestion(Long userId, String question,  MultipartFile image, HttpServletRequest request) {
+        Question newQuestion = new Question();
+        newQuestion.setQuestion(question);  //질문 저장
+        newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
+        newQuestion.setQuestioner(null);
+        newQuestion.setUserIp(getRemoteIP(request));
+        if (!image.isEmpty()) { //이미지
+            try {
+                String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                String filePath = uploadDir + File.separator + fileName;
+                File dest = new File(filePath);
+                image.transferTo(dest);
+                newQuestion.setQuestionImageUrl(fileName); // 웹에서 접근할 경로
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        User questionPageUser= userService.findByUserId(userId);
+        newQuestion.setAnswerer(questionPageUser);
+        newQuestion.setQuestionDeleteYN(false);
+        newQuestion.setQuestionStatus(false);
+        newQuestion.setQuestionPinStatus(false);
+        newQuestion.setQuestionRejected(false);
+        return questionRepository.save(newQuestion);
+    }
 }
