@@ -5,8 +5,10 @@ import jakarta.validation.Valid;
 import java.util.List;
 import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
+import like.lion.way.board.api.request.BoardPostCommentRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
+import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
@@ -105,14 +107,13 @@ public class BoardRestController {
 
     }
 
-//    @GetMapping("/posts/${boardName}/${postTitle}")
-//    public ApiResponse<BoardPostDetailResponse> getPostDetails(
-//            @PathVariable("boardName") String boardName,
-//            @PathVariable("postTitle") String postTitle) {
-//
-//        return ApiResponse.ok(boardService.getPostDetails(boardName, postTitle));
-//
-//    }
+    @GetMapping("/posts/details/{postId}")
+    public ApiResponse<BoardPostDetailResponse> getPostDetails(
+            @PathVariable("postId") Long postId) {
+
+        return ApiResponse.ok(boardService.getPostDetails(postId));
+
+    }
 
     //get 요청 필요 없이 postDetail 로드할 때 getPostLikeCount 해서 postDetailResponse에 likes 담으면 될 것 같음
 //    @GetMapping("/{postTitle}")
@@ -139,6 +140,17 @@ public class BoardRestController {
 
         boardService.scrapPost(postId, httpServletRequest);
         return ApiResponse.ok(boardService.getPostScrapCount(postId));
+
+    }
+
+    @PostMapping("/posts/comments/{postId}")
+    public ApiResponse<BoardPostCommentCountResponse> commentPost(
+            @PathVariable("postId") Long postId,
+            @RequestBody @Valid BoardPostCommentRequest request,
+            HttpServletRequest httpServletRequest) {
+
+        boardService.commentPost(postId, request.toServiceRequest(), httpServletRequest);
+        return ApiResponse.ok(boardService.getPostCommentCount(postId));
 
     }
 
