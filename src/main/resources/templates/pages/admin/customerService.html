@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>CustomerService</title>
+    <link rel="stylesheet" th:href="@{/css/admin/customerService.css}">
+
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <h1>WAY 고객센터</h1>
+        <ul class="menu">
+            <li><a th:href="@{/posts/way_official}">공지사항</a></li>
+            <li><a href="#">의견 보내기</a></li>
+            <li><a th:href="@{/admin/termsOfuse}">서비스 이용 약관</a></li>
+            <li><a th:href="@{/admin/policyPersonalInfo}">개인정보 처리방침</a></li>
+            <li><a href="#">청소년 보호정책</a></li>
+            <li><a href="#">open source license</a></li>
+            <li><a href="#">open font license</a></li>
+            <li><a href="#">파란 배지 신청</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
