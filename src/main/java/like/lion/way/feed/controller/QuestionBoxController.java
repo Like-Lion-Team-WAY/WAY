@@ -1,6 +1,5 @@
 package like.lion.way.feed.controller;
 
-import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionBoxService;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;

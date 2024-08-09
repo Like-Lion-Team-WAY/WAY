@@ -1,7 +1,6 @@
 package like.lion.way.feed.service.imp;
 
 import java.util.List;
-import like.lion.way.feed.domain.PostBox;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.domain.QuestionBox;
 import like.lion.way.feed.repository.QuestionBoxRepository;
@@ -10,7 +9,6 @@ import like.lion.way.feed.service.QuestionService;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service

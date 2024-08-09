@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import like.lion.way.feed.controller.GetUserIp;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.repository.QuestionRepository;
 import like.lion.way.feed.service.QuestionService;

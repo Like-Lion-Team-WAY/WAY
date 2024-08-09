@@ -1,19 +1,13 @@
 package like.lion.way.feed.controller;
 
-import java.util.Collections;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.LikeService;
 import like.lion.way.feed.service.QuestionService;
-import like.lion.way.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,8 +1,6 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import like.lion.way.feed.domain.Post;
-import like.lion.way.feed.service.PostBoxService;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
