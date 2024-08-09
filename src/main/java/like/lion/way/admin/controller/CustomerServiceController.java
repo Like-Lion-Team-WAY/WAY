@@ -20,4 +20,9 @@ public class CustomerServiceController {
     public String policyPersonalInfo() {
         return "pages/admin/policyPersonalInfo";
     }
+    //청소년보호정책
+    @GetMapping("/admin/youthProtectionPolicy")
+    public String youthProtectionPolicy() {
+        return "pages/admin/youthProtectionPolicy";
+    }
 }
