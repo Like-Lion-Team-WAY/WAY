@@ -38,6 +38,25 @@ public class QuestionController {
         Long loginId = jwtUtil.getUserIdFromToken(token);
         return userService.findByUserId(loginId);
     }
+    private static String getRemoteIP(HttpServletRequest request){
+        String ip = request.getHeader("X-FORWARDED-FOR");
+
+        //proxy 환경일 경우
+        if (ip == null || ip.length() == 0) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+
+        //웹로직 서버일 경우
+        if (ip == null || ip.length() == 0) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+
+        if (ip == null || ip.length() == 0) {
+            ip = request.getRemoteAddr() ;
+        }
+
+        return ip;
+    }
     //내 질문 창으로만
     @GetMapping("/questions/create")
     public String createMyQuestion(Model model, HttpServletRequest request) {
@@ -87,6 +106,7 @@ public class QuestionController {
         //익명 여부에 따라
         if(isAnonymous) {
             newQuestion.setQuestioner(null);
+            newQuestion.setUserIp(getRemoteIP(request));
 
         } else {
             newQuestion.setQuestioner(user);

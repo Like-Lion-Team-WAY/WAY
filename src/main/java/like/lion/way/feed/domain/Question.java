@@ -53,6 +53,9 @@ public class Question {
     @Column(name = "question_like", columnDefinition = "INT DEFAULT 0")
     private Integer questionLike = 0;
 
+    @Column(name= "user_ip")
+    private String userIp;
+
     @ManyToOne
     @JoinColumn(name = "questioner_id", referencedColumnName = "user_id")
     private User questioner;
