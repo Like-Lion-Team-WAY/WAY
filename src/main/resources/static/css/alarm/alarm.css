@@ -45,5 +45,6 @@ button {
 #alarm-container {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* 각 알람 div 사이에 10px의 간격 추가 */
+    gap: 20px; /* 각 알람 div 사이 간격 */
+    margin-top: 100px;
 }
