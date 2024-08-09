@@ -46,4 +46,9 @@ public class PostBoxServiceImpl implements PostBoxService {
     public List<PostBox> getPostBoxByPostId(Post post) {
         return postBoxRepository.findByPost(post);
     }
+
+    @Override
+    public List<PostBox> getPostBoxByUserId(User user) {
+        return postBoxRepository.findByUser(user);
+    }
 }

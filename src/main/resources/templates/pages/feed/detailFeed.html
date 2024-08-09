@@ -12,13 +12,13 @@
     <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/feed/postEdit.js"></script>
     <script src="/js/feed/commentEdit.js"></script>
-    <script src="/js/feed/postLike.js"></script>
+
 </head>
 <body>
 <div layout:fragment="content">
     <div class="post-container">
         <div class="post-header">
-            <img src="프로필.png" alt="프로필 아이콘" class="profile-icon">
+            <img class="profile-icon" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
             <div class="post-info">
                 <span class="username" th:text="${post.getUser().username}">username</span>
                 <span class="timestamp" th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}">작성일</span>
@@ -76,26 +76,49 @@
             </form>
         </div>
         <div class="comments-section">
-            <div th:each="comment : ${post.postComments}" class="list-group-item">
-                <h1 class="comment-text" th:text="${comment.getUser().getUsername()}"></h1>
-                <p class="comment-text" th:text="${comment.getPostCommentContent()}"></p>
-                <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
-                <button class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>
-                <button class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제</button>
-                <div th:id="'editCommentForm-' + ${comment.getPostCommentId()}" class="edit-comment-form" style="display:none;">
-                    <textarea th:id="'editCommentContent-' + ${comment.getPostCommentId()}"></textarea>
-                    <input type="hidden" th:id="'commentId-' + ${comment.getPostCommentId()}" th:value="${comment.getPostCommentId()}" />
-                    <button class="save-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">저장</button>
-                    <button class="cancel-edit-btn" th:data-comment-id="${comment.getPostCommentId()}">취소</button>
+            <div th:each="comment : ${post.postComments}">
+                <div th:if="${comment.postCommentPreCommentId == null}" class="list-group-item">
+                    <h1 class="comment-text" th:text="${comment.getUser().getUsername()}"></h1>
+                    <p class="comment-text" th:text="${comment.getPostCommentContent()}"></p>
+                    <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
+                    <button class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>
+                    <button class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제</button>
+                    <button class="reply-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">답글</button>
+                    <div th:id="'editCommentForm-' + ${comment.getPostCommentId()}" class="edit-comment-form" style="display:none;">
+                        <textarea th:id="'editCommentContent-' + ${comment.getPostCommentId()}"></textarea>
+                        <input type="hidden" th:id="'commentId-' + ${comment.getPostCommentId()}" th:value="${comment.getPostCommentId()}" />
+                        <button class="save-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">저장</button>
+                        <button class="cancel-edit-btn" th:data-comment-id="${comment.getPostCommentId()}">취소</button>
+                    </div>
+                    <div th:id="'replyCommentForm-' + ${comment.getPostCommentId()}" class="reply-comment-form" style="display:none;">
+                        <textarea th:id="'replyCommentContent-' + ${comment.getPostCommentId()}"></textarea>
+                        <input type="hidden" name="postId" th:value="${post.getPostId()}" />
+                        <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
+                        <input type="hidden" th:value="${comment.getPostCommentId()}" />
+                        <button class="submit-reply-btn" th:data-comment-id="${comment.getPostCommentId()}">답글 작성</button>
+                        <button class="cancel-reply-btn" th:data-comment-id="${comment.getPostCommentId()}">취소</button>
+                    </div>
+
+                    <div th:each="reply : ${post.postComments}"
+                         th:if="${reply.postCommentPreCommentId == comment.postCommentId}"
+                         class="reply-item">
+                        <h1 class="comment-text" th:text="${reply.getUser().getUsername()}"></h1>
+                        <p class="comment-text" th:text="${reply.getPostCommentContent()}"></p>
+                        <input type="hidden" id="replyId" th:value="${reply.getPostCommentId()}">
+                        <button class="edit-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">수정</button>
+                        <button class="delete-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">삭제</button>
+                        <div th:id="'editReplyForm-' + ${reply.getPostCommentId()}" class="edit-reply-form" style="display:none;">
+                            <textarea th:id="'editCommentContent-' + ${reply.getPostCommentId()}"></textarea>
+                            <input type="hidden" th:id="'commentId-' + ${reply.getPostCommentId()}" th:value="${reply.getPostCommentId()}" />
+                            <button class="save-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">저장</button>
+                            <button class="cancel-reply-edit-btn" th:data-comment-id="${reply.getPostCommentId()}">취소</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 </body>
 </html>
-
-<!--현재 User 가 not null 제약조건으로 user가 없는데 그렇게 되면 댓글 저장이 안 됨-->
-<!--그래서 내가 그냥 post_comment 의 user_id 를 null로 제약 조건 바꿔줌-->
-<!--임의로 바꾼거라 다시 not null 로 user 로그인 성공시 바꿔줘야 됨-->

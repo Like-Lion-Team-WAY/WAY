@@ -1,14 +1,19 @@
 package like.lion.way.feed.service.imp;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import like.lion.way.feed.domain.Post;
+import like.lion.way.feed.domain.dto.PostDto;
 import like.lion.way.feed.repository.PostRepository;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -16,11 +21,8 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    @Override
-    @Transactional
-    public Post savePost(Post post) {
-        return postRepository.save(post);
-    }
+    @Value("${image.upload.dir}")
+    private String uploadDir;
 
     @Override
     public List<Post> getAllPosts() {
@@ -51,5 +53,41 @@ public class PostServiceImpl implements PostService {
         return postRepository.findPostByUser(user);
     }
 
+    @Override
+    public Post pinPost(Long postId) {
+        Post post= postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+        if(post.isPostPinStatus()==true) {
+            post.setPostPinStatus(false);
+        }else{
+            post.setPostPinStatus(true);
+        }
+        return postRepository.save(post);
+    }
 
+    @Override
+    @Transactional
+    public Post savePost(PostDto postDto, MultipartFile file, User user) {
+        Post post = new Post();
+        post.setPostTitle(postDto.getTitle()); // 제목
+        post.setPostContent(postDto.getContent()); // 내용
+
+        // 이미지 파일 저장
+        if (!file.isEmpty()) {
+            try {
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String filePath = uploadDir + File.separator + fileName;
+                File dest = new File(filePath);
+                file.transferTo(dest);
+                post.setPostImageUrl(fileName); // 웹에서 접근할 경로
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        post.setUser(user); // 작성자 설정
+        post.setPostCreatedAt(LocalDateTime.now()); // 작성일
+        post.setPostLike(0); // 좋아요 수
+
+        return postRepository.save(post);
+    }
 }

@@ -2,13 +2,19 @@ $(document).ready(function() {
 
     // 답변 수정 버튼 클릭
     $(document).on('click', '.edit-button', function() {
-        $('.answer-text').hide();
-        $('.edit-button').hide();
-        $('#editForm').show();
+        // 현재 클릭된 버튼과 연관된 폼만 처리
+        const form = $(this).closest('.form-group').next('.editForm');
+
+        // 기존 답변 텍스트와 수정 버튼 숨기기
+        $(this).closest('.form-group').prev('.answer-text').hide();
+        $(this).hide();
+
+        // 수정 폼 보여주기
+        form.show();
     });
 
     // 수정된 답변 저장
-    $('#editForm').on('submit', function(event) {
+    $(document).on('submit', '.editForm', function(event) {
         event.preventDefault();
 
         const form = $(this);
@@ -20,7 +26,7 @@ $(document).ready(function() {
             url: url,
             data: { answer: editedAnswer },
             success: function(response) {
-                $('#editForm').hide();
+                form.hide();
                 window.location.reload();
             },
             error: function() {
@@ -31,8 +37,9 @@ $(document).ready(function() {
 
     // 취소 버튼 클릭
     $(document).on('click', '.cancel-button', function() {
-        $('#editForm').hide();
-        $('.answer-text').show();
-        $('.edit-button').show();
+        const form = $(this).closest('.editForm');
+        form.hide();
+        form.prev('.form-group').find('.edit-button').show();
+        form.prev('.form-group').prev('.answer-text').show();
     });
 });

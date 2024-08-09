@@ -11,4 +11,6 @@ public interface PostCommentService {
     PostComment updateComment(Long commentId, String content);
 
     void deleteComment(Long commentId);
+
+    PostComment savePreComment(Long postId, Long userId, String postCommentContent, Long parentCommentPreCommentId);
 }

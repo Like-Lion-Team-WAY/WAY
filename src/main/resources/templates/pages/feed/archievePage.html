@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>Box</title>
+  <link rel="stylesheet" th:href="@{/css/common/main.css}">
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>보관 페이지</h1>
+    <!-- 자기가 팔로우 한 사람들의 게시글과 질문이 떠야 됨 -->
+    <!-- 해당 유저의 피드로 가서 질문 창으로 갈 수 있게끔 -->
+    <h3>피드</h3>
+    <div th:if="${posts.size() == 0}">
+      <p>보관된 피드가 없습니다.</p>
+    </div>
+    <div th:if="${posts.size() > 0}" class="feed-item" th:each="post : ${posts}">
+      <h2 th:text="${post.getPost().postTitle}"></h2>
+      <p th:text="${post.getPost().postContent}"></p>
+      <p th:text="${post.getPost().postCreatedAt}"></p>
+      <p>
+        <a th:href="@{/posts/{username}(username=${post.getPost().getUser().username})}" th:text="${post.getPost().getUser().username}"></a>
+      </p>
+      <a th:href="@{'/posts/detail/' + ${post.getPost().postId}}"><button> 상세 보기</button></a>
+    </div>
+    <h3>질문</h3>
+    <div th:if="${questions.size() == 0}">
+      <p>보관된 질문이 없습니다.</p>
+    </div>
+    <div th:if="${questions.size() > 0}" class="feed-item" th:each="question : ${questions}">
+      <a th:if="${question.getQuestion().getQuestioner()} != null">
+        <p th:text="${question.getQuestion().getQuestioner().getUsername()}"></p>
+      </a>
+      <a th:if="${question.getQuestion().getQuestioner()}== null">
+        <p th:text="익명"></p>
+      </a>
+      <h2 th:text="${question.getQuestion().getQuestion()}"></h2>
+      <p th:text="${question.getQuestion().getQuestionDate()}"></p>
+    </div>
+  </div>
+</body>
+</html>
