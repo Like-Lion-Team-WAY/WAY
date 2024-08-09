@@ -39,6 +39,10 @@ body {
     color: gray;
     margin-bottom: 10px;
 }
+.profile-info a{
+    text-decoration: none;
+    color: inherit;
+}
 
 .profile-stats {
     display: flex;
