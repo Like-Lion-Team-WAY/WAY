@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface BoardPostScrapRepository extends JpaRepository<BoardPostScrap, Long> {
 
     @Query("SELECT count(scrap) from BoardPostScrap scrap where scrap.boardPost.id = ?1")
-    Long countByBoardPostId(Long postId);
+    Long countScrapsByBoardPostId(Long postId);
     BoardPostScrap findBoardPostScrapByBoardPostAndUser(BoardPost boardPost, User user);
 
 }

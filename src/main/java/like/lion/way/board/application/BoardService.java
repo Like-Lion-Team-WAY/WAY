@@ -1,6 +1,8 @@
 package like.lion.way.board.application;
 
 import jakarta.servlet.http.HttpServletRequest;
+import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
+import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostScrapCountResponse;
@@ -31,7 +33,8 @@ public interface BoardService {
 
     void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
-    //    BoardPostDetailResponse getPostDetails(String boardName, String postTitle);
+    BoardPostDetailResponse getPostDetails(Long postId);
+
     BoardPostLikeCountResponse getPostLikeCount(Long postId);
 
     void likePost(Long postId, HttpServletRequest httpServletRequest);
@@ -40,5 +43,8 @@ public interface BoardService {
 
     void scrapPost(Long postId, HttpServletRequest httpServletRequest);
 
+    BoardPostCommentCountResponse getPostCommentCount(Long postId);
+
+    void commentPost(Long postId, BoardPostCommentServiceRequest request, HttpServletRequest httpServletRequest);
 
 }

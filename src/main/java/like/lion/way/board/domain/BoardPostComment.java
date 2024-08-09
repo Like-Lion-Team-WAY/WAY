@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import like.lion.way.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,16 +42,21 @@ public class BoardPostComment {
     @Column(name = "board_post_comment_pre_comment_id")
     private Long preCommentId;
 
-    @Column(name = "board_post_comment_user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_post_comment_user_id")
+    private User user;
+
+    @Column(name = "board_post_comment_anonymous_permission")
+    private boolean anonymousPermission;
 
     @Builder
-    private BoardPostComment(BoardPost boardPost, String content, Long preCommentId, Long userId) {
+    private BoardPostComment(BoardPost boardPost, String content, Long preCommentId, User user, boolean anonymousPermission) {
 
         this.boardPost = boardPost;
         this.content = content;
         this.preCommentId = preCommentId;
-        this.userId = userId;
+        this.user = user;
+        this.anonymousPermission = anonymousPermission;
 
     }
 

@@ -1,7 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff; /* 배경색 추가 */
+}
 .feed-item {
     background-color: #FFD6B0;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
+    display: flex;
+    width: 900px;
+    flex-direction: column;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    align-items: center; /* Center items vertically */
+    margin-top: auto; /* Push the button to the bottom */
+}
+
+.detailBtn {
+    background-color: #ff6746;
+    border: none;
+    color: white;
+    padding: 5px 10px; /* Adjust padding */
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.detailBtn a {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    width: auto;
+    height: auto;
+    text-align: center;
+    line-height: normal;
+    font-size: inherit;
+    font-weight: inherit;
+    padding: 0; /* Remove any padding */
+    margin: 0; /* Remove any margin */
 }

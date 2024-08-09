@@ -21,7 +21,7 @@ public class CommonController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/main")
-    public String mainView(Model model, HttpServletRequest request){
+    public String mainView(Model model){
         model.addAttribute("posts", postService.getAllPosts());
         model.addAttribute("questions", questionService.getAllQuestions());
         return "pages/common/main";

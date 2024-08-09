@@ -27,12 +27,12 @@
                     <div class="post-author">익명</div>
                 </div>
             </div>
-            <div class="post-title">오늘 자료구조 휴강인가여?</div>
-            <div class="post-content">ㅠㅠ 휴강,,,,</div>
+            <div class="post-title"></div>
+            <div class="post-content"></div>
             <div class="post-interactions">
-                <div class="likes">👍 2</div>
+                <div class="likes">👍 0</div>
                 <div class="comments">💬 0</div>
-                <div class="scraps">⭐ 2</div>
+                <div class="scraps">⭐ 0</div>
             </div>
             <div class="post-actions">
                 <button class="action-button" id="likeAction">공감</button>
@@ -42,11 +42,14 @@
         <div class="comment-section">
             <div class="comment-input">
                 <input type="text" placeholder="댓글을 입력하세요..." class="comment-box">
-                <button class="send-button">➤</button>
+                <input type="checkbox" id="anonymousPermission" class="anonymous-checkbox"> 익명
+                <button class="send-button" onclick="submitComment(0)">➤</button>
+            </div>
+            <div class="comments-list">
+                <!-- 댓글 목록이 여기에 동적으로 추가됩니다 -->
             </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

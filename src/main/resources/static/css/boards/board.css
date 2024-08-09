@@ -18,10 +18,11 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    margin-right: 300px; /* 오른쪽 여백 추가 */
 }
 
 .search input {
-    max-width: 300px;
+    width:200px;
 }
 
 .board-list {
@@ -60,4 +61,16 @@
 .custom-btn:hover {
     background-color: #e55d39;
     border-color: #e55d39;
+}
+#createBoardButton {
+    padding: 10px 15px;
+    color: white;
+    background-color: #ff6746;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+#createBoardButton {
+    background-color: #ff6746;
 }

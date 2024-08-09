@@ -1,9 +1,6 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
@@ -11,7 +8,6 @@ import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +25,6 @@ public class QuestionController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    @Value("${image.upload.dir}")
-    private String uploadDir;
 
     //로그인한 사용자
     private User getLoginUser(HttpServletRequest request) {
@@ -38,6 +32,7 @@ public class QuestionController {
         Long loginId = jwtUtil.getUserIdFromToken(token);
         return userService.findByUserId(loginId);
     }
+
     //내 질문 창으로만
     @GetMapping("/questions/create")
     public String createMyQuestion(Model model, HttpServletRequest request) {
@@ -47,7 +42,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(loginUser.getUserId());
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected()));
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -63,7 +59,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected()));
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -78,54 +75,21 @@ public class QuestionController {
 
         // 로그인한 사용자
         User user = getLoginUser(request);
-
-        Question newQuestion = new Question();
-        newQuestion.setQuestion(question);  //질문 저장
-        newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
-        //익명 여부에 따라
-        if(isAnonymous) {
-            newQuestion.setQuestioner(null);
-
-        } else {
-            newQuestion.setQuestioner(user);
-        }
-        if (!image.isEmpty()) { //이미지
-            try {
-                String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
-                File dest = new File(filePath);
-                image.transferTo(dest);
-                newQuestion.setQuestionImageUrl(fileName); // 웹에서 접근할 경로
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        User questionPageUser= userService.findByUserId(userId);
-        newQuestion.setAnswerer(questionPageUser);
-        newQuestion.setQuestionDeleteYN(false);
-        newQuestion.setQuestionStatus(false);
-        newQuestion.setQuestionPinStatus(false);
-        newQuestion.setQuestionRejected(false);
-        questionService.saveQuestion(newQuestion);
+        questionService.saveQuestion(user, userId, question, isAnonymous, image, request);
         return "redirect:/questions/create/"+userId;
     }
     //질문 답변
     @PostMapping("/questions/answer/{questionId}")
     public String answerQuestion(@RequestParam("answer") String answer, @PathVariable("questionId") Long questionId) {
         Question question = questionService.getQuestionById(questionId);
-        question.setAnswer(answer);
-        question.setQuestionStatus(true);
-        question.setAnswerDate(LocalDateTime.now());
-        questionService.saveQuestion(question);
+        questionService.saveQuestion(question, answer);
         return "redirect:/questions/create";
     }
     //거절 질문 등록
     @PostMapping("/questions/enroll/rejected")
     public String enrollRejected(@RequestParam("questionId") Long questionId) {
         Question question = questionService.getQuestionById(questionId);
-        question.setQuestionRejected(true);
-        questionService.saveQuestion(question);
-
-        return "redirect:/questions/create"; //자기 질문 창으로 넘어가게!
+        questionService.rejectedQuestion(question);
+        return "redirect:/questions/rejected"; //거절 질문 창으로 넘어가게
     }
 }

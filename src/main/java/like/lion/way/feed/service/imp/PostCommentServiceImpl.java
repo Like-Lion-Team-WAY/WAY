@@ -31,6 +31,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
+    @Transactional
     public PostComment updateComment(Long commentId, String content) {
         PostComment postComment = postCommentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
         postComment.setPostCommentContent(content);
@@ -40,5 +41,18 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Override
     public void deleteComment(Long commentId) {
         postCommentRepository.deleteById(commentId);
+    }
+
+    @Override
+    @Transactional
+    public PostComment savePreComment(Long postId, Long userId, String postCommentContent,
+                                      Long parentCommentPreCommentId) {
+        PostComment postComment = new PostComment();
+        postComment.setPostCommentContent(postCommentContent);
+        postComment.setPostCommentCreatedAt(LocalDateTime.now());
+        postComment.setPost(postService.getPostById(postId));
+        postComment.setUser(userService.findByUserId(userId));
+        postComment.setPostCommentPreCommentId(parentCommentPreCommentId);
+        return postCommentRepository.save(postComment);
     }
 }
