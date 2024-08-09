@@ -58,4 +58,20 @@ public class QuestionServiceImpl implements QuestionService {
         }
         return questionRepository.save(question);
     }
+
+    @Override
+    public Question rejectedQuestion(Question question) {
+        if(question.getQuestionRejected() == true) {
+            question.setQuestionRejected(false);
+        }else{
+            question.setQuestionRejected(true);
+        }
+        return questionRepository.save(question);
+    }
+
+    @Override
+    public void deleteQuestion(Long questionId) {
+        Question question = questionRepository.getByQuestionId(questionId);
+        questionRepository.delete(question);
+    }
 }

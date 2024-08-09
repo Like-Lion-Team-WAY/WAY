@@ -125,9 +125,7 @@ public class QuestionController {
     @PostMapping("/questions/enroll/rejected")
     public String enrollRejected(@RequestParam("questionId") Long questionId) {
         Question question = questionService.getQuestionById(questionId);
-        question.setQuestionRejected(true);
-        questionService.saveQuestion(question);
-
-        return "redirect:/questions/create"; //자기 질문 창으로 넘어가게!
+        questionService.rejectedQuestion(question);
+        return "redirect:/questions/rejected"; //거절 질문 창으로 넘어가게
     }
 }

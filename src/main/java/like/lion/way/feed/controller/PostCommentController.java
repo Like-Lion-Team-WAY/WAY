@@ -19,4 +19,10 @@ public class PostCommentController {
         postCommentService.saveComment(postId, postCommentDto, userId);
         return "redirect:/posts/detail/" + postId;
     }
+    @PostMapping("/posts/comments/pre/{postId}")
+    public String savePreComments(@PathVariable Long postId, @RequestParam Long userId, @RequestParam String postCommentContent, @RequestParam(required = false) Long parentCommentPreCommentId){
+        postCommentService.savePreComment(postId, userId, postCommentContent, parentCommentPreCommentId);
+        return "redirect:/posts/detail/" + postId;
+    }
+
 }

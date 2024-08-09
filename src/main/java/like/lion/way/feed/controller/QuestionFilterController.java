@@ -52,7 +52,7 @@ public class QuestionFilterController {
         User loginUser = getLoginUser(request);
         setCommonModelAttributes(model, loginUser, request);
         setFilteredQuestions(model, loginUser, Question::getQuestionRejected);
-        return "pages/feed/filterQuestionPage";
+        return "pages/feed/rejectedQuestionPage";
     }
 
     // 새 질문 리스트 내림차순 정렬

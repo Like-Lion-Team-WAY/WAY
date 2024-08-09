@@ -20,4 +20,8 @@ public interface QuestionService {
     List<Question> getQuestionByQuestioner(User user);
 
     Question pinQuestion(Long questionId);
+
+    Question rejectedQuestion(Question question);
+
+    void deleteQuestion(Long questionId);
 }

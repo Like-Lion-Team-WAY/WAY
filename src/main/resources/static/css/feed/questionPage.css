@@ -189,16 +189,17 @@ body {
 .cancel-button:hover {
     background-color: #FF8E75;
 }
-.rejectedBtn, .archieveBtn {
+.rejectedBtn, .archieveBtn, .deleteBtn {
     display: flex;
     justify-content: end;
     align-items: end;
     background: none;
-    border: none;
     cursor: pointer;
     font-size: 12px;
     color: #f9916e;
     margin-right: 10px;
+    border: 1px solid #f9916e;
+    border-radius: 20px;
 }
 .likeBtn{
     margin-top: 20px;
