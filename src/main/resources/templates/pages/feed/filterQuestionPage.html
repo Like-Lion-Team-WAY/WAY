@@ -17,6 +17,22 @@
         <span class="user-icon">Q</span>
         <span th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
       </div>
+      <div class="form-group">
+        <div th:if="${user.getUserId()} == ${loginUser.getUserId()}">
+          <form action="/questions/enroll/rejected" method="post">
+            <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+            <button type="submit" class="rejectedBtn">질문 거절</button>
+          </form>
+        </div>
+        <!--        의문스러운 점: p 태그로 할 땐 적용 안된게 div 로 하니까 됨-->
+        <div>
+          <form action="/questions/archieve" method="post">
+            <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+            <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
+            <button type="submit" class="archieveBtn">질문 보관</button>
+          </form>
+        </div>
+      </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>
       <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
       <div class="form-group" th:if="${user.getUserId() != loginUser.getUserId()}">

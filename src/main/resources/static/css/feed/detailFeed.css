@@ -124,7 +124,7 @@ body {
     font-size: 14px;
 }
 
-.edit-comment-btn, .delete-comment-btn {
+.edit-comment-btn, .delete-comment-btn , .reply-comment-btn{
     background: none;
     border: none;
     cursor: pointer;
@@ -161,7 +161,7 @@ body {
     align-items: end;
 }
 
-#editPostForm button, .edit-comment-form button {
+#editPostForm button, .edit-comment-form button, .save-comment-btn, .cancel-edit-btn {
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
@@ -177,3 +177,78 @@ body {
     color: #FF6746;
     margin-right: 10px;
 }
+/* 댓글 컨테이너 스타일 */
+.comments-section {
+    margin-top: 20px;
+}
+
+.list-group-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* 댓글 텍스트 스타일 */
+.comment-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* 답글 컨테이너 스타일 */
+.reply-item {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0 10px 30px; /* 답글 들여쓰기 */
+    border-radius: 5px;
+}
+
+/* 버튼 스타일 */
+.edit-comment-btn, .delete-comment-btn, .reply-comment-btn {
+    background-color: #FF6746;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-comment-btn:hover, .delete-comment-btn:hover, .reply-comment-btn:hover {
+    background-color: #FFD6B0;
+}
+
+.submit-reply-btn, .cancel-reply-btn, .save-comment-btn, .cancel-reply-edit-btn{
+    background-color: #FF6746;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.submit-reply-btn:hover, .cancel-reply-btn:hover , .save-comment-btn:hover , cancel-reply-edit-btn:hover{
+    background-color: #FFD6B0;
+}
+
+/* 댓글 폼 스타일 */
+.reply-comment-form {
+    margin-top: 10px;
+}
+
+.reply-comment-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    resize: none;
+}
+
+.reply-comment-form button {
+    padding: 5px 15px;
+}
+

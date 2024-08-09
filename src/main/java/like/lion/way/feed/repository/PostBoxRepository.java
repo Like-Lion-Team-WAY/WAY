@@ -13,4 +13,6 @@ public interface PostBoxRepository extends JpaRepository<PostBox, Long> {
     Optional<PostBox> findByUserAndPost(User user, Post post);
 
     List<PostBox> findByPost(Post post);
+
+    List<PostBox> findByUser(User user);
 }

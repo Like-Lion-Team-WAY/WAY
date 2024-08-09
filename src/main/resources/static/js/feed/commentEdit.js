@@ -1,33 +1,75 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Edit button click handler
+    // 답글 작성 폼 표시 및 숨기기
+    $('.reply-comment-btn').click(function() {
+        var commentId = $(this).data('comment-id');
+        $('#replyCommentForm-' + commentId).show();
+    });
+
+    $('.cancel-reply-btn').click(function() {
+        var commentId = $(this).data('comment-id');
+        $('#replyCommentForm-' + commentId).hide();
+    });
+
+    $('.submit-reply-btn').click(function(event) {
+        event.preventDefault();
+        var commentId = $(this).data('comment-id');
+        var replyContent = $('#replyCommentContent-' + commentId).val();
+        var postId = $('input[name="postId"]').val();
+        var userId = $('input[name="userId"]').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/posts/comments/pre/' + postId,
+            data: {
+                postCommentContent: replyContent,
+                postId: postId,
+                userId: userId,
+                parentCommentPreCommentId: commentId
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(error) {
+                console.log('Error:', error);
+            }
+        });
+    });
+
+    // Edit button click handler for both comments and replies
     document.querySelectorAll('.edit-comment-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
-            const editForm = document.getElementById(`editCommentForm-${commentId}`);
+            const editFormComment = document.getElementById(`editCommentForm-${commentId}`);
+            const editFormReply = document.getElementById(`editReplyForm-${commentId}`);
 
-            if (editForm) {
-                editForm.style.display = 'block';
+            if (editFormComment) {
+                editFormComment.style.display = 'block';
+            } else if (editFormReply) {
+                editFormReply.style.display = 'block';
             } else {
                 console.error(`Edit form not found for comment ID: ${commentId}`);
             }
         });
     });
 
-    // Cancel button click handler
-    document.querySelectorAll('.cancel-edit-btn').forEach(function (button) {
+    // Cancel button click handler for both comments and replies
+    document.querySelectorAll('.cancel-edit-btn, .cancel-reply-edit-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
-            const editForm = document.getElementById(`editCommentForm-${commentId}`);
+            const editFormComment = document.getElementById(`editCommentForm-${commentId}`);
+            const editFormReply = document.getElementById(`editReplyForm-${commentId}`);
 
-            if (editForm) {
-                editForm.style.display = 'none';
+            if (editFormComment) {
+                editFormComment.style.display = 'none';
+            } else if (editFormReply) {
+                editFormReply.style.display = 'none';
             } else {
                 console.error(`Edit form not found for comment ID: ${commentId}`);
             }
         });
     });
 
-    // Save button click handler
+    // Save button click handler for both comments and replies
     document.querySelectorAll('.save-comment-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
@@ -48,16 +90,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            const editForm = document.getElementById(`editCommentForm-${commentId}`);
-            if (editForm) {
-                editForm.style.display = 'none';
+            const editFormComment = document.getElementById(`editCommentForm-${commentId}`);
+            const editFormReply = document.getElementById(`editReplyForm-${commentId}`);
+
+            if (editFormComment) {
+                editFormComment.style.display = 'none';
+            } else if (editFormReply) {
+                editFormReply.style.display = 'none';
             } else {
                 console.error(`Edit form not found for comment ID: ${commentId}`);
             }
         });
     });
 
-    // Delete button click handler
+    // Delete button click handler for both comments and replies
     document.querySelectorAll('.delete-comment-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
