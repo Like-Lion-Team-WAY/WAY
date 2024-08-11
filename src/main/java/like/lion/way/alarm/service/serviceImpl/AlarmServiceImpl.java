@@ -38,15 +38,18 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public Alarm createAlarm(AlarmEvent alarmEvent) {
         AlarmType type = alarmEvent.getType();
-        String message = type.getMessage(alarmEvent.getFromUser().getNickname());
+        String message =
+                alarmEvent.getFromUser() == null ? type.getMessage("익명")
+                        : type.getMessage(alarmEvent.getFromUser().getNickname());
         String url = type.getUrl(alarmEvent.getPathVariable());
-        log.info("[AlarmService] user: {}", alarmEvent.getToUser().getNickname());
+        log.info("[AlarmService] create alarm to : {}", alarmEvent.getToUser().getNickname());
         return new Alarm(alarmEvent.getToUser(), message, url);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveAlarm(Alarm alarm) {
+        log.debug("[AlarmService] save alarm");
         alarmRepository.save(alarm);
     }
 
