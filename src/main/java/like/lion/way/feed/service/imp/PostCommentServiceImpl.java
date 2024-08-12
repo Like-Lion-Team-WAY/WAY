@@ -24,6 +24,11 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final UserService userService;
     private final ApplicationEventPublisher publisher;
 
+    public PostComment getCommentById(Long commentId) {
+        return postCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
+    }
+
     @Override
     @Transactional
     public PostComment saveComment(Long postId, PostCommentDto postCommentDto, Long userId) {
