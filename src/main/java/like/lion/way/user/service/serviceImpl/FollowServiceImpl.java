@@ -8,6 +8,7 @@ import like.lion.way.user.domain.Follow;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.FollowDto;
 import like.lion.way.user.repository.FollowRepository;
+import like.lion.way.user.repository.UserRepository;
 import like.lion.way.user.service.FollowService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class FollowServiceImpl implements FollowService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final FollowRepository followRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<FollowDto> getFollowerList(User user) {
@@ -54,9 +56,7 @@ public class FollowServiceImpl implements FollowService {
     @Transactional
     @Override
     public ResponseEntity<?> deleteFollower(HttpServletRequest request, String username) {
-        String token  = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User deleteUser = userService.findByUserId(userId);
+        User deleteUser = userService.getUserByToken(request);
         User deletedUser = userService.findByUsername(username);
 
         followRepository.deleteByFollowerAndFollowing(deleteUser,deletedUser);
@@ -66,9 +66,7 @@ public class FollowServiceImpl implements FollowService {
     @Transactional
     @Override
     public ResponseEntity<?> unFollowing(HttpServletRequest request, String username) {
-        String token  = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User user = userService.findByUserId(userId);
+        User user = userService.getUserByToken(request);
         User unfollowingUser = userService.findByUsername(username);
         followRepository.deleteByFollowerAndFollowing(unfollowingUser,user);
         return ResponseEntity.ok("success");
@@ -76,9 +74,8 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public ResponseEntity<?> following(HttpServletRequest request, String username) {
-        String token  = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User following = userService.findByUserId(userId);
+
+        User following = userService.getUserByToken(request);
         User followed = userService.findByUsername(username);
         Follow follow = new Follow();
         follow.setFollower(followed);
@@ -89,5 +86,17 @@ public class FollowServiceImpl implements FollowService {
         }else{
             return ResponseEntity.ofNullable("null");
         }
+    }
+
+    @Override
+    public ResponseEntity<?> followCheck(HttpServletRequest request, String username) {
+        User nowUser = userService.getUserByToken(request);
+        User feedUser = userService.findByUsername(username);
+        if(followRepository.findByFollowerAndFollowing(feedUser, nowUser)!=null){
+            return ResponseEntity.ok("following");
+        }else{
+            return ResponseEntity.ok("notFollowing");
+        }
+
     }
 }
