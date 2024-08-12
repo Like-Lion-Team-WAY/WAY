@@ -42,9 +42,21 @@ button {
     cursor: pointer;
 }
 
+h1 {
+    text-align: center;
+    margin: 20px;
+    font-size: 28px;
+    color: #ff6746;
+}
+#no-alarms {
+    text-align: center;
+    margin-top: 20px;
+    color: gray;
+}
+
 #alarm-container {
     display: flex;
     flex-direction: column;
+    margin-top: 40px;
     gap: 20px; /* 각 알람 div 사이 간격 */
-    margin-top: 100px;
 }
