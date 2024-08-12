@@ -137,20 +137,6 @@ function formatDateTime(dateTimeStr) {
 document.addEventListener('DOMContentLoaded', function () {
     loadChatList();
     connect();
-
-    // 나중에 질문페이지로 옳길 예정
-    $('button').click(function () {
-        const questionId = $(this).val();
-        $.ajax({
-            url: '/api/chats', // 서버의 엔드포인트 URL
-            type: 'POST',
-            data: {
-                'questionId': questionId
-            },
-            success: function (response) {
-            }
-        });
-    });
 });
 
 function openChat(url, id) {
