@@ -100,13 +100,14 @@ public class QuestionServiceImpl implements QuestionService {
         Question newQuestion = new Question();
         newQuestion.setQuestion(question);  //질문 저장
         newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
+        newQuestion.setQuestioner(user);
         //익명 여부에 따라
         if(isAnonymous) {
-            newQuestion.setQuestioner(null);
+            newQuestion.setIsAnonymous(true);
             newQuestion.setUserIp(getRemoteIP(request));
 
         } else {
-            newQuestion.setQuestioner(user);
+            newQuestion.setIsAnonymous(false);
         }
         if (!image.isEmpty()) { //이미지
             try {
