@@ -23,7 +23,7 @@
             <div class="profile-header">
                 <div class="profile-info">
                     <h1 th:text="${user.getUsername()}"></h1>
-                    <a th:if="${loginUser != null}" th:href="@{/user/setting}">
+                    <a th:if="${loginUser != null}" th:href="@{/user/followSetting}">
                         <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                     </a>
                     <a th:if="${loginUser == null}" th:href="@{/user/login}">
@@ -77,7 +77,9 @@
                         <h2 th:text="${p.getPostTitle()}"></h2>
                         <p th:text="${p.getPostContent()}"></p>
                         <img th:src="'/display?filename='+${p.getPostImageUrl()}" alt="Post Image">
-                        <a th:text="${#temporals.format(p.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        <div class="update-date">
+                            <a th:text="'작성일: '+${#temporals.format(p.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        </div>
                         <div class="feed-actions">
                             <a th:href="@{'/posts/detail/' + ${p.postId}}"><button>피드 상세 보기</button></a>
                         </div>
@@ -103,9 +105,31 @@
                         <h2 th:text="${post.getPostTitle()}"></h2>
                         <p th:text="${post.getPostContent()}"></p>
                         <img th:if="${post.getPostImageUrl() != null}" th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">
-                        <a th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        <div class="update-date">
+                            <a th:text="'작성일: '+${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        </div>
                         <div class="feed-actions">
                             <a th:href="@{'/posts/detail/' + ${post.postId}}"><button>피드 상세 보기</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feed">
+                <h2 th:if="${questions.size()} > 0">질문</h2>
+                <div class="feed-item" th:each="question: ${questions}">
+                    <div class="question">
+                        <h2 th:if="${question.getQuestioner()} != null" th:text="${question.getQuestioner().getUsername()}"></h2>
+                        <h2 th:if="${question.getQuestioner()} == null" th:text="익명"></h2>
+                        <p th:text=" ${question.getQuestion()}"></p>
+                        <div class="update-date">
+                            <a th:text="'작성일: '+${#temporals.format(question.getQuestionDate(), 'yyyy년 MM월 dd일')}"></a>
+                        </div>
+                        <div class="question-actions">
+                            <a th:href="@{'/questions/create/' + ${user.userId}}"><button>질문보기</button></a>
+                            <!--                            여기서!! 채팅 연결을 하시면 됩니다!!-->
+                            <div th:if="${loginUser != null}">
+                                <button th:if="${user.userId == loginUser.userId}">채팅</button>
+                            </div>
                         </div>
                     </div>
                 </div>
