@@ -16,4 +16,6 @@ public interface FollowService {
     ResponseEntity<?> unFollowing(HttpServletRequest request, String username);
 
     ResponseEntity<?> following(HttpServletRequest request, String username);
+
+    ResponseEntity<?> followCheck(HttpServletRequest request, String username);
 }
