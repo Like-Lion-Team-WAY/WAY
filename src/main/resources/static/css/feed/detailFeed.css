@@ -124,7 +124,7 @@ body {
     font-size: 14px;
 }
 
-.edit-comment-btn, .delete-comment-btn , .reply-comment-btn{
+.edit-comment-btn, .delete-comment-btn , .reply-comment-btn, .report-comment-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -206,7 +206,7 @@ body {
 }
 
 /* 버튼 스타일 */
-.edit-comment-btn, .delete-comment-btn, .reply-comment-btn {
+.edit-comment-btn, .delete-comment-btn, .reply-comment-btn, .report-comment-btn {
     background-color: #FF6746;
     color: white;
     border: none;
@@ -216,11 +216,11 @@ body {
     cursor: pointer;
 }
 
-.edit-comment-btn:hover, .delete-comment-btn:hover, .reply-comment-btn:hover {
+.edit-comment-btn:hover, .delete-comment-btn:hover, .reply-comment-btn:hover, .report-comment-btn:hover {
     background-color: #FFD6B0;
 }
 
-.submit-reply-btn, .cancel-reply-btn, .save-comment-btn, .cancel-reply-edit-btn{
+.submit-reply-btn, .cancel-reply-btn, .save-comment-btn, .cancel-reply-edit-btn, .report-comment-btn{
     background-color: #FF6746;
     color: white;
     border: none;
@@ -230,7 +230,7 @@ body {
     cursor: pointer;
 }
 
-.submit-reply-btn:hover, .cancel-reply-btn:hover , .save-comment-btn:hover , cancel-reply-edit-btn:hover{
+.submit-reply-btn:hover, .cancel-reply-btn:hover , .save-comment-btn:hover , cancel-reply-edit-btn:hover, .report-comment-btn:hover{
     background-color: #FFD6B0;
 }
 

@@ -41,26 +41,23 @@
                 </div>
             </div>
             <div class="profile-stats">
-                <div th:if="${loginUser != null}" class="stat">
-                    <p><a th:if="${loginUser.userId == user.userId}" th:href="@{'/questions/reply/'+${user.userId}}"> 답변 완료</a></p>
-                    <p th:if="${loginUser.userId != user.userId}">답변 완료</p>
+                <div class="stat">
+                    <p><a th:href="@{'/questions/reply/'+${user.userId}}"> 답변 완료</a></p>
                     <p th:text="${replyQuestions}"></p>
                 </div>
-                <div class="stat" th:if="${loginUser != null}">
-                    <div th:if="${user.userId}==${loginUser.userId}">
-                        <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
-                        <p th:text="${rejectedQuestions}"></p>
-                    </div>
+                <div class="stat" th:if="${loginUser != null && user.userId == loginUser.userId}">
+                    <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
+                    <p th:text="${rejectedQuestions}"></p>
                 </div>
-                <div th:if="${loginUser != null}" class="stat">
-                    <p><a th:if="${loginUser.userId == user.userId}" th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
-                    <p th:if="${loginUser.userId != user.userId}">새 질문</p>
+                <div class="stat">
+                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}" th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
+                    <p th:if="${loginUser == null || user.getUserId() != loginUser.userId}">새 질문</p>
                     <p th:text="${newQuestions}"></p>
                 </div>
-                <div th:if="${loginUser != null}" class="stat">
-                    <p th:if="${loginUser.userId != user.userId}" >보낸 질문</p>
-                    <p><a th:if="${loginUser.userId == user.userId}" th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
-                    <p th:text="${sendQuestions}"></p>
+                <div class="stat">
+                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}" th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
+                    <p th:if="${loginUser == null || user.getUserId() != loginUser.userId}">보낸 질문</p>
+                    <p th:text="${sendQuestions}">20</p>
                 </div>
             </div>
         <div class="button-container">

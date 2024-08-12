@@ -53,10 +53,12 @@ body {
 .stat {
     text-align: center;
 }
+
 .stat a {
     text-decoration: none;
     color: inherit;
 }
+
 .button-container {
     text-align: right;
 }

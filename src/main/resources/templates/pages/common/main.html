@@ -18,6 +18,7 @@
         <p th:text="${#temporals.format(post.postCreatedAt,'yyyy년 MM월 dd일')}"></p>
         <div class="profile-info">
             <img th:if="${post.getUser().getUserImage() != null}" class="profile-picture" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
+            <img th:if="${post.getUser().getUserImage() == null}" class="profile-picture" th:src="@{/image/image.jpg}" alt="Profile Picture" />
             <p class="profile-name">
                 <a th:href="@{/posts/{username}(username=${post.getUser().username})}" th:text="${post.getUser().username}"></a>
             </p>
