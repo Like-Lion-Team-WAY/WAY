@@ -30,8 +30,8 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         SseEmitter emitter = new SseEmitter(10 * 60 * 1000L); // 10분
         userEmitters.put(windowId, emitter);
 
-        log.debug("[SseEmitters][add] userId={}, windowId={}", userId, windowId);
-        log.debug("[SseEmitters][add] number of emitters: {}", userEmitters.size());
+//        log.debug("[SseEmitters][add] userId={}, windowId={}", userId, windowId);
+//        log.debug("[SseEmitters][add] number of emitters: {}", userEmitters.size());
 
         // 첫 데이터 전송
         sendCount(userId);

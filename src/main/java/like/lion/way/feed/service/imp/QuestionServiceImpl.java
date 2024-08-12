@@ -51,7 +51,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         // 트랜잭션 종료 후 이벤트 발생
         AlarmEvent event = new AlarmEvent(this, AlarmType.ANSWER, value.getAnswerer(), value.getQuestioner(),
-                value.getAnswerer().getUsername());
+                value.getAnswerer().getUserId().toString());
         publisher.publishEvent(event);
 
         return value;
@@ -145,7 +145,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         // 트랜잭션 종료 후 이벤트 발생
         AlarmEvent event = new AlarmEvent(this, AlarmType.ANSWER, value.getAnswerer(), value.getQuestioner(),
-                value.getAnswerer().getUsername());
+                value.getAnswerer().getUserId().toString());
         publisher.publishEvent(event);
 
         return value;
