@@ -56,7 +56,7 @@
       </div>
       <div class="answered-header">
         <span class="user-icon">Q</span>
-        <span class="user-name" th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
+        <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().username} : '익명'"></span>
       </div>
       <div class="form-group">
         <div th:if="${loginUser != null}">
@@ -145,7 +145,7 @@
         </div>
         <div class="answered-header">
           <span class="user-icon">Q</span>
-          <span class="user-name" th:text="${q.getQuestioner() != null} ? ${q.getQuestioner().username} : '익명'"></span>
+          <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().username} : '익명'"></span>
         </div>
         <div class="form-group">
           <div th:if="${loginUser != null}">
