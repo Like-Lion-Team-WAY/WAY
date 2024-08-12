@@ -116,6 +116,21 @@ body {
     font-weight: bold;
     font-size: 11px;
 }
+.question-actions{
+    margin-top: 10px;
+    display: flex;
+    justify-content: end;
+}
+.question-actions button {
+    background-color: #FF8E75;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+    margin-left: 5px;
+}
 .pinIcon{
     display: flex;
     justify-content: end;
@@ -146,4 +161,8 @@ body {
 }
 .icon-button2:focus {
     outline: none; /* 포커스 시 외곽선 제거 */
+}
+.update-date{
+    display: flex;
+    justify-content: end;
 }

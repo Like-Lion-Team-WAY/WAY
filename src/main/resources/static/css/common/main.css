@@ -53,3 +53,33 @@ body {
     padding: 0; /* Remove any padding */
     margin: 0; /* Remove any margin */
 }
+.feed-item:nth-child(odd){
+    background-color: #FFD6B0;
+}
+.feed-item:nth-child(even){
+    background-color: #f1f1f1;
+}
+.profile-info {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트를 세로로 가운데 정렬 */
+}
+
+.profile-info p {
+    margin: 0; /* 기본 margin 제거 */
+}
+
+.profile-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 15px; /* 이미지와 이름 사이의 간격 */
+}
+.profile-name {
+    font-size: 13px;
+    color: #ff6746;
+    font-weight: bold;
+}
+.profile-name a {
+    color: inherit;
+    text-decoration: none;
+}

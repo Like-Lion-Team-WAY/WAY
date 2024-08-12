@@ -3,6 +3,7 @@ package like.lion.way.feed.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import like.lion.way.feed.domain.Post;
+import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
@@ -59,12 +60,18 @@ public class PostController {
             log.info("user::::" + user.getUsername());
 
             List<Post> posts = postService.getPostByUser(user);
+            List<Question> questions= questionService.getQuestionByAnswerer(user);
             if (posts != null) {
                 model.addAttribute("posts", posts.stream().filter(p -> !p.isPostPinStatus()).toList());
                 model.addAttribute("pinPosts", posts.stream().filter(Post::isPostPinStatus).toList());
             } else {
                 model.addAttribute("posts", null);
                 model.addAttribute("pinPosts", null);
+            }
+            if (questions != null){
+                model.addAttribute("questions", questions.stream().filter(q -> Boolean.FALSE.equals(q.getQuestionRejected())).toList());
+            }else{
+                model.addAttribute("questions", null);
             }
 
             model.addAttribute("rejectedQuestions",

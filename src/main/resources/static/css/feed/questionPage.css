@@ -99,6 +99,7 @@ body {
 }
 
 .question-image {
+    margin-top: 10px;
     width: 300px;
     border-radius: 20px;
 }
