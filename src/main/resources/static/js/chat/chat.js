@@ -47,10 +47,21 @@ function subscribeToChat(chatId) {
 }
 
 function updateChatRoomInfo(messageOutput, subscription) {
+    if (messageOutput.type === 'close') {
+        return;
+    }
+
     const chatId = messageOutput.chatId;
 
     const chatRoomElement = document.getElementById(`chat-${chatId}`).closest('a');
     const userId = Number(document.getElementById('user-id').value);
+
+    if (messageOutput.type === 'open') {
+        if (messageOutput.senderId === userId) {
+            chatRoomElement.querySelector(`.new-message`).style.display = 'none';
+        }
+        return;
+    }
 
     if ((messageOutput.type === 'leave' && messageOutput.senderId === userId) || messageOutput.type === 'delete') {
         chatRoomElement.remove();

@@ -1,6 +1,7 @@
 package like.lion.way.chat.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.repository.MessageRepository;
@@ -50,5 +51,16 @@ public class MessageServiceImpl implements MessageService {
 
         message.setChatId(0L);
         producer.sendMessage(message);
+    }
+
+    @Override
+    public void readMessage(Long userId, Long chatId) {
+        List<Message> messages;
+        if ((messages = messageRepository.findByChatIdAndReceiverIdAndIsReadFalse(chatId, userId)) != null) {
+            for (Message message : messages) {
+                message.setIsRead(true);
+            }
+            messageRepository.saveAll(messages);
+        }
     }
 }

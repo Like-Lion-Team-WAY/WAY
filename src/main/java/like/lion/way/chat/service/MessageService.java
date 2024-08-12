@@ -10,4 +10,5 @@ public interface MessageService {
     Page<Message> findAllByChatId(Long chatId, Pageable pageable);
     Page<Message> findAllByChatIdAndIdLessThan(Long chatId, String lastLoadMessageId, Pageable pageable);
     void createStartMessage(Chat newChat);
+    void readMessage(Long userId, Long id);
 }

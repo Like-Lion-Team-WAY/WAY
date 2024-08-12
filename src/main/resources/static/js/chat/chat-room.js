@@ -92,11 +92,21 @@ function sendMessage(text, type) {
 
 ////////// 메세지 수신
 function showMessageOutput(messageOutput) {
+    if (messageOutput.type === 'close') {
+        return;
+    }
+
     const chatBody = document.getElementById('chat-container');
 
     const isScrolledToBottom = chatBody.scrollHeight - chatBody.clientHeight <= chatBody.scrollTop + 1;
-
     const userId = Number(document.getElementById('user-id').value);
+
+    if (messageOutput.type === 'open') {
+        const unreadElements = document.querySelectorAll('.unread');
+        unreadElements.forEach(element => element.remove());
+        return;
+    }
+
     const messageDiv = document.createElement('div');
     if (messageOutput.type !== "message") {
         messageDiv.classList.add('system-message');
@@ -119,8 +129,11 @@ function showMessageOutput(messageOutput) {
     } else if (messageOutput.senderId === userId) {
         messageDiv.classList.add('user-message');
         messageDiv.innerHTML = `
-            <div class="text">${messageOutput.text}</div>
-            <div class="message-time">${messageOutput.sendTime}</div>                    
+            <div class="text-group">
+                ${!messageOutput.isRead ? '<div class="unread">안읽음</div>' : ''}
+                <div class="text">${messageOutput.text}</div>
+            </div>
+            <div class="message-time">${messageOutput.sendTime}</div>        
        `;
     } else {
         messageDiv.classList.add('partner-message');
@@ -160,7 +173,10 @@ function loadMessages(firstCall) {
                 } else if (message.senderId === userId) {
                     messageDiv.classList.add('user-message');
                     messageDiv.innerHTML = `
-                        <div class="text">${message.text}</div>
+                        <div class="text-group">
+                            ${!message.isRead ? '<div class="unread">안읽음</div>' : ''}
+                            <div class="text">${message.text}</div>
+                        </div>
                         <div class="message-time">${message.sendTime}</div>                    
                     `;
                 } else {

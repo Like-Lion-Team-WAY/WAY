@@ -33,31 +33,30 @@ public class ConsumerImpl implements Consumer {
         try {
             // JSON 문자열을 Message 객체로 변환
             ReceiveMessageDTO receiveMessageDTO = objectMapper.readValue(message, ReceiveMessageDTO.class);
+            String type = receiveMessageDTO.getType();
+            Set<Long> chatIds = enterUser.get(receiveMessageDTO.getChatId());
 
-            if (receiveMessageDTO.getType().equals("open")) {
-                if (!enterUser.containsKey(receiveMessageDTO.getChatId())) {
+            if (type.equals("open")) {
+                if (chatIds == null) {
                     enterUser.put(receiveMessageDTO.getChatId(), new HashSet<>());
                 }
                 enterUser.get(receiveMessageDTO.getChatId()).add(receiveMessageDTO.getSenderId());
 
-            } else if (receiveMessageDTO.getType().equals("close")) {
-                enterUser.get(receiveMessageDTO.getChatId()).remove(receiveMessageDTO.getSenderId());
-                if (enterUser.get(receiveMessageDTO.getChatId()).isEmpty()) {
+            } else if (type.equals("close")) {
+                chatIds.remove(receiveMessageDTO.getSenderId());
+                if (chatIds.isEmpty()) {
                     enterUser.remove(receiveMessageDTO.getChatId());
                 }
 
-            } else {
-                if (!receiveMessageDTO.getType().equals("delete") && enterUser.get(receiveMessageDTO.getChatId())
-                        .contains(receiveMessageDTO.getReceiverId())) {
-                    Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
-                    messageFromDB.setIsRead(true);
-                    messageRepository.save(messageFromDB);
+            } else if (!type.startsWith("create") && !type.equals("delete")
+                    && chatIds.contains(receiveMessageDTO.getReceiverId())) {
+                Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
+                messageFromDB.setIsRead(true);
+                messageRepository.save(messageFromDB);
 
-                    receiveMessageDTO.setIsRead(true);
-                }
-
-                messagingTemplate.convertAndSend("/topic/messages/" + receiveMessageDTO.getChatId(), receiveMessageDTO);
+                receiveMessageDTO.setIsRead(true);
             }
+            messagingTemplate.convertAndSend("/topic/messages/" + receiveMessageDTO.getChatId(), receiveMessageDTO);
 
         } catch (Exception e) {
             e.printStackTrace(); // JSON 역직렬화 오류 처리

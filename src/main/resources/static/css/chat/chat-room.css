@@ -99,6 +99,18 @@ body, html {
     text-align: left;
 }
 
+.user-message .text-group {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 10px; /* 요소들 사이에 간격 추가 */
+    justify-content: flex-end; /* 오른쪽 정렬 (user-message만) */
+}
+
+.unread {
+    color: red; /* "안읽음" 텍스트의 색상 (필요 시 조정) */
+    font-size: 0.8em; /* 텍스트 크기 (필요 시 조정) */
+}
+
 .user-message .text,
 .partner-message .text {
     display: inline-block;
