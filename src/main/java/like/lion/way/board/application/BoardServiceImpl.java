@@ -13,10 +13,10 @@ import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
 import like.lion.way.board.application.response.BoardPostScrapCountResponse;
+import like.lion.way.board.application.response.BoardPostScrapsResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.Board;
 import like.lion.way.board.domain.BoardPost;
-import like.lion.way.board.domain.BoardPostComment;
 import like.lion.way.board.domain.BoardPostLike;
 import like.lion.way.board.domain.BoardPostScrap;
 import like.lion.way.board.repository.BoardPostCommentRepository;
@@ -233,7 +233,6 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-
     @Override
     @Transactional
     public void commentPost(Long postId, BoardPostCommentServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -244,6 +243,24 @@ public class BoardServiceImpl implements BoardService {
         User user = getUserByHttpServletRequest(httpServletRequest);
 
         boardPostCommentRepository.save(request.toEntity(post, user));
+
+    }
+
+    @Override
+    public Page<BoardPostScrapsResponse> getPostScraps(HttpServletRequest httpServletRequest, Pageable pageable) {
+
+        Page<BoardPostScrap> scrapsPage = boardPostScrapRepository.findAllBoardPostScrapByUser(getUserByHttpServletRequest(httpServletRequest), pageable);
+        List<BoardPostScrapsResponse> scrapsResponses = scrapsPage.stream()
+                .map(scrap -> BoardPostScrapsResponse.builder()
+                        .title(scrap.getBoardPost().getTitle())
+                        .author(scrap.getBoardPost().getUser().getNickname(scrap.getBoardPost().isAnonymousPermission()))
+                        .createdAt(scrap.getBoardPost().getCreatedAt())
+                        .boardId(scrap.getBoardPost().getBoard().getId())
+                        .boardPostId(scrap.getBoardPost().getId())
+                        .build())
+                .toList();
+
+        return new PageImpl<>(scrapsResponses, pageable, scrapsPage.getTotalElements());
 
     }
 

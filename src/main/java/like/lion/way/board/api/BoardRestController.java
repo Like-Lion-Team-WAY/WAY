@@ -13,6 +13,7 @@ import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostResponse;
 import like.lion.way.board.application.response.BoardPostScrapCountResponse;
+import like.lion.way.board.application.response.BoardPostScrapsResponse;
 import like.lion.way.board.application.response.BoardTitleResponse;
 import like.lion.way.board.domain.BoardPostScrap;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class BoardRestController {
 
     private final BoardService boardService;
 
+    // 게시판 목록 요청
     @GetMapping
     public ApiResponse<List<BoardTitleResponse>> getBoardList() {
 
@@ -46,6 +48,7 @@ public class BoardRestController {
 
     }
 
+    // 게시판 정보(제목, id) 요청
     @GetMapping("/{boardId}")
     public ApiResponse<BoardTitleResponse> getBoardTitle(@PathVariable("boardId") Long boardId) {
 
@@ -53,6 +56,7 @@ public class BoardRestController {
 
     }
 
+    // 게시판 생성
     @PostMapping("/create")
     public ApiResponse<Void> createBoard(@RequestBody @Valid BoardCreateRequest request,
                                          HttpServletRequest httpRequest) {
@@ -62,6 +66,7 @@ public class BoardRestController {
 
     }
 
+    // 게시판 수정
     @PatchMapping("/update/{boardId}")
     public ApiResponse<Void> updateBoard(
             @RequestBody @Valid BoardEditRequest request,
@@ -73,6 +78,7 @@ public class BoardRestController {
 
     }
 
+    // 게시판 삭제
     @DeleteMapping("/delete/{boardId}")
     public ApiResponse<Void> deleteBoard(@PathVariable("boardId") Long boardId) {
 
@@ -82,6 +88,7 @@ public class BoardRestController {
 
     }
 
+    // 게시글 목록 요청
     @GetMapping("/posts/{boardId}")
     public ApiResponse<Page<BoardPostResponse>> getPosts(
             @PathVariable("boardId") Long boardId,
@@ -95,6 +102,7 @@ public class BoardRestController {
     }
 
 
+    // 게시글 생성
     @PostMapping("/posts/{boardId}")
     public ApiResponse<Void> createPost(
             @PathVariable("boardId") Long boardId,
@@ -107,6 +115,7 @@ public class BoardRestController {
 
     }
 
+    // 게시글 상세보기 정보 요청
     @GetMapping("/posts/details/{postId}")
     public ApiResponse<BoardPostDetailResponse> getPostDetails(
             @PathVariable("postId") Long postId) {
@@ -115,14 +124,8 @@ public class BoardRestController {
 
     }
 
-    //get 요청 필요 없이 postDetail 로드할 때 getPostLikeCount 해서 postDetailResponse에 likes 담으면 될 것 같음
-//    @GetMapping("/{postTitle}")
-//    public ApiResponse<BoardPostLikeCountResponse> getBoardPostLikeCount(@PathVariable("postTitle") String postTitle) {
-//
-//        return ApiResponse.ok(boardService.getPostLikeCount(postTitle));
-//
-//    }
 
+    // 게시글 좋아요
     @PostMapping("/posts/likes/{postId}")
     public ApiResponse<BoardPostLikeCountResponse> likePost(
             @PathVariable("postId") Long postId,
@@ -133,6 +136,7 @@ public class BoardRestController {
 
     }
 
+    // 게시글 스크랩
     @PostMapping("/posts/scraps/{postId}")
     public ApiResponse<BoardPostScrapCountResponse> scrapPost(
             @PathVariable("postId") Long postId,
@@ -143,6 +147,7 @@ public class BoardRestController {
 
     }
 
+    // 댓글 작성
     @PostMapping("/posts/comments/{postId}")
     public ApiResponse<BoardPostCommentCountResponse> commentPost(
             @PathVariable("postId") Long postId,
@@ -151,6 +156,20 @@ public class BoardRestController {
 
         boardService.commentPost(postId, request.toServiceRequest(), httpServletRequest);
         return ApiResponse.ok(boardService.getPostCommentCount(postId));
+
+    }
+
+    // 스크랩 게시글 요청
+    @GetMapping("/scraps")
+    public ApiResponse<Page<BoardPostScrapsResponse>> scrapBoardPosts(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            HttpServletRequest httpServletRequest){
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<BoardPostScrapsResponse> scrapPosts = boardService.getPostScraps(httpServletRequest, pageable);
+
+        return ApiResponse.ok(scrapPosts);
 
     }
 
