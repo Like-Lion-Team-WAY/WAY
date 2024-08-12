@@ -1,6 +1,7 @@
 package like.lion.way.chat.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.repository.MessageRepository;
@@ -36,12 +37,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void createStartMessage(Chat chat) {
-        User chatMaker = chat.getUser1();
+        User chatMaker = chat.getAnswerer();
 
         Message message = new Message();
         message.setChatId(chat.getId());
         message.setSenderId(chatMaker.getUserId());
-        message.setReceiverId(chat.getUser2().getUserId());
+        message.setReceiverId(chat.getQuestioner().getUserId());
         message.setText("[" + chatMaker.getNickname() + "] 님이 채팅을 시작했습니다");
         message.setType("create" + chat.getId());
         message.setCreatedAt(LocalDateTime.now());
@@ -50,5 +51,16 @@ public class MessageServiceImpl implements MessageService {
 
         message.setChatId(0L);
         producer.sendMessage(message);
+    }
+
+    @Override
+    public void readMessage(Long userId, Long chatId) {
+        List<Message> messages;
+        if ((messages = messageRepository.findByChatIdAndReceiverIdAndIsReadFalse(chatId, userId)) != null) {
+            for (Message message : messages) {
+                message.setIsRead(true);
+            }
+            messageRepository.saveAll(messages);
+        }
     }
 }

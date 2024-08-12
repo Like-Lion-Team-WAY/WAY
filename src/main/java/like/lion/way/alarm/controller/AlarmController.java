@@ -9,4 +9,9 @@ public class AlarmController {
     public String showAlarmList() {
         return "/pages/alarm/alarm";
     }
+
+    @GetMapping("/alarm/setting")
+    public String showAlarmSetting() {
+        return "/pages/alarm/alarmSetting";
+    }
 }

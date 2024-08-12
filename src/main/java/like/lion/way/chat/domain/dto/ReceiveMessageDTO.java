@@ -19,6 +19,7 @@ public class ReceiveMessageDTO {
     private Long senderId;
     private Long receiverId;
     private String userNickname;
+    private Boolean isRead;
 
     public ReceiveMessageDTO(Message message, String chatName, String userNickname) {
         this.id = message.getId();
@@ -29,8 +30,9 @@ public class ReceiveMessageDTO {
         this.senderId = message.getSenderId();
         this.receiverId = message.getReceiverId();
         this.userNickname = userNickname;
+        this.isRead = message.getIsRead();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
         this.sendTime = message.getCreatedAt().format(formatter);
     }
 }
