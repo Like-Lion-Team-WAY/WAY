@@ -67,7 +67,7 @@
                                     </button>
                                 </form>
                             </div>
-                            <button th:if="${loginUser == null || loginUser.userId} != ${user.userId}" type="submit" class="icon-button">
+                            <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit" class="icon-button2">
                                 <i class="bi bi-pin-fill"></i>
                             </button>
                         </div>
@@ -93,7 +93,7 @@
                                     </button>
                                 </form>
                             </div>
-                            <button th:if="${loginUser == null || loginUser.userId} != ${user.userId}" type="submit" class="icon-button">
+                            <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit" class="icon-button">
                                 <i class="bi bi-pin-fill"></i>
                             </button>
                         </div>
