@@ -16,9 +16,6 @@
 <body>
 <div layout:fragment="content" class="center">
     <input type=hidden id="user-id" th:value="${userId}">
-    <button value="4">4번 질문 채팅방 생성</button>
-    <button value="5">5번 질문 채팅방 생성</button>
-    <button value="6">6번 질문 채팅방 생성</button>
     <h1 id="nickname" th:text="${nickname} + '님의 채팅방 리스트'" th:value="${nickname}"></h1>
     <div class="chat-room-list"></div>
     <div id="elementToObserve"></div>
