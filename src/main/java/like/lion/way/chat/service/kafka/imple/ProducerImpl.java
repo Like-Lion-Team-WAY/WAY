@@ -32,30 +32,32 @@ public class ProducerImpl implements Producer {
             message.setCreatedAt(LocalDateTime.now());
 
             ReceiveMessageDTO receiveMessageDTO = null;
-            if (message.getType().equals("delete")) {
+            String messageType = message.getType();
+
+            if (messageType.equals("delete") || messageType.equals("open") || messageType.equals("close")) {
                 message.setReceiverId(0L);
                 receiveMessageDTO = new ReceiveMessageDTO(message, null, null);
 
-            } else if (message.getType().startsWith("create")) {
+            } else if (messageType.startsWith("create")) {
                 Long newChatId = Long.valueOf(message.getType().substring(6));
                 Chat chat = chatRepository.findById(newChatId).orElse(null);
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), null);
 
             } else {
                 Chat chat = chatRepository.findById(message.getChatId()).orElse(null);
-                if (chat.isUser1(message.getSenderId())) {
-                    message.setReceiverId(chat.getUser2().getUserId());
+                if (chat.isAnswerer(message.getSenderId())) {
+                    message.setReceiverId(chat.getQuestioner().getUserId());
                 } else {
-                    message.setReceiverId(chat.getUser1().getUserId());
+                    message.setReceiverId(chat.getAnswerer().getUserId());
                 }
 
                 messageRepository.save(message);
 
                 String nickname;
-                if (chat.isUser1(message.getSenderId())) {
-                    nickname = chat.getUser1().getNickname();
+                if (chat.isAnswerer(message.getSenderId())) {
+                    nickname = chat.getAnswerer().getNickname();
                 } else {
-                    nickname = chat.getUser2().getNickname(!chat.isNicknameOpen2());
+                    nickname = chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
                 }
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), nickname);
             }

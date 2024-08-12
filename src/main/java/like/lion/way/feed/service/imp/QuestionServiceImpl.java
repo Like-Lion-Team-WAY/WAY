@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import like.lion.way.alarm.domain.AlarmType;
+import like.lion.way.alarm.event.AlarmEvent;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.repository.QuestionRepository;
 import like.lion.way.feed.service.QuestionService;
@@ -14,6 +16,7 @@ import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserService userService;
+    private final ApplicationEventPublisher publisher;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
@@ -43,7 +47,14 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = questionRepository.getByQuestionId(questionId);
         question.setAnswer(answer);
         question.setAnswerDate(LocalDateTime.now());
-        return questionRepository.save(question);
+        var value = questionRepository.save(question);
+
+        // 트랜잭션 종료 후 이벤트 발생
+        AlarmEvent event = new AlarmEvent(this, AlarmType.ANSWER, value.getAnswerer(), value.getQuestioner(),
+                value.getAnswerer().getUserId().toString());
+        publisher.publishEvent(event);
+
+        return value;
     }
 
     @Override
@@ -114,7 +125,14 @@ public class QuestionServiceImpl implements QuestionService {
         newQuestion.setQuestionStatus(false);
         newQuestion.setQuestionPinStatus(false);
         newQuestion.setQuestionRejected(false);
-        return questionRepository.save(newQuestion);
+        var value = questionRepository.save(newQuestion);
+
+        // 트랜잭션 종료 후 이벤트 발생
+        AlarmEvent event = new AlarmEvent(this, AlarmType.NEW_QUESTION, value.getQuestioner(), value.getAnswerer(),
+                value.getAnswerer().getUserId().toString());
+        publisher.publishEvent(event);
+
+        return value;
     }
 
     @Override
@@ -123,7 +141,14 @@ public class QuestionServiceImpl implements QuestionService {
         question.setAnswer(answer);
         question.setQuestionStatus(true);
         question.setAnswerDate(LocalDateTime.now());
-        return questionRepository.save(question);
+        var value = questionRepository.save(question);
+
+        // 트랜잭션 종료 후 이벤트 발생
+        AlarmEvent event = new AlarmEvent(this, AlarmType.ANSWER, value.getAnswerer(), value.getQuestioner(),
+                value.getAnswerer().getUserId().toString());
+        publisher.publishEvent(event);
+
+        return value;
     }
 
     @Override

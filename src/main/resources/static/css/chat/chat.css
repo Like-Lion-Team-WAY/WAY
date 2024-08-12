@@ -30,4 +30,22 @@
     padding-top: 10px; /* 내부 여백 */
     margin: 50px 0; /* 위아래 여백 */
     width: 100%; /* 가로로 꽉 차게 설정 */
+    display: flex; /* 플렉스박스를 사용하여 수평 배치 */
+    flex-direction: column;
+    justify-content: space-between; /* 요소 사이의 공간을 균등하게 배분 */
+}
+
+.top {
+    display: flex; /* 플렉스박스를 사용하여 수평 배치 */
+    justify-content: space-between; /* 요소 사이의 공간을 균등하게 배분 */
+    align-items: center; /* 수직 정렬 */
+}
+
+.new-message {
+    background-color: white; /* 빨간색 배경 */
+    color: #e55a34; /* 흰색 글자 */
+    padding: 5px 10px; /* 내부 여백 */
+    border-radius: 5px; /* 둥근 모서리 */
+    font-size: 15px;
+    font-weight: bold;
 }

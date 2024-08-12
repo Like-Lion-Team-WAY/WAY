@@ -25,28 +25,25 @@ public class Chat {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user1;
+    @JoinColumn(name = "answerer_id", nullable = false)
+    private User answerer;
 
     @ManyToOne
-    @JoinColumn(name = "user_id2", nullable = false)
-    private User user2;
+    @JoinColumn(name = "questioner_id", nullable = false)
+    private User questioner;
 
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     @Column(name = "chat_nickname_open", nullable = false)
-    private boolean nicknameOpen1 = true;
+    private Integer nicknameOpen = 0;
 
-    @Column(name = "chat_nickname_open2", nullable = false)
-    private boolean nicknameOpen2 = false;
+    @Column(name = "chat_answerer_active", nullable = false)
+    private boolean answererActive = true;
 
-    @Column(name = "chat_user_active", nullable = false)
-    private boolean userActive1 = true;
-
-    @Column(name = "chat_user_active2", nullable = false)
-    private boolean userActive2 = true;
+    @Column(name = "chat_questioner_active", nullable = false)
+    private boolean questionerActive = true;
 
     @Column(name = "chat_name", nullable = false)
     private String name;
@@ -55,23 +52,23 @@ public class Chat {
     private LocalDateTime createdAt;
 
     public boolean isAccessibleUser(Long userId) {
-        return (userId.equals(getUser1().getUserId()) && isUserActive1()) ||
-                (userId.equals(getUser2().getUserId()) && isUserActive2());
+        return (userId.equals(answerer.getUserId()) && answererActive) ||
+                (userId.equals(questioner.getUserId()) && questionerActive);
     }
 
-    public boolean isUser1(Long userId) {
-        return userId.equals(getUser1().getUserId());
+    public boolean isAnswerer(Long userId) {
+        return userId.equals(answerer.getUserId());
     }
 
-    public boolean isUser2(Long userId) {
-        return userId.equals(getUser2().getUserId());
+    public boolean isQuestioner(Long userId) {
+        return userId.equals(questioner.getUserId());
     }
 
     public boolean isActive() {
-        return isUserActive1() && isUserActive2();
+        return answererActive && questionerActive;
     }
 
     public boolean userExist() {
-        return userActive1 || userActive2;
+        return answererActive || questionerActive;
     }
 }

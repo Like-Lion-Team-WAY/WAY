@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AlarmSettingRepository extends JpaRepository<AlarmSetting, Long> {
     Optional<AlarmSetting> findByUser(User user);
+
+    Optional<AlarmSetting> findByUser_UserId(Long userId);
 }
