@@ -67,13 +67,18 @@ body {
 }
 
 .answered-title {
-    font-size: 18px;
+    font-size: 20px;
     margin-bottom: 10px;
+}
+.answered-category {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: #ff6746;
 }
 
 .answered-question {
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     background-color: #f1f1f1;
     border-radius: 8px;
     padding: 10px;
@@ -84,7 +89,19 @@ body {
 .answered-header {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+.question-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 수직 가운데 정렬 추가 */
+}
+
+.question-image {
+    margin-top: 10px;
+    width: 300px;
+    border-radius: 20px;
 }
 
 .user-icon {
@@ -92,7 +109,7 @@ body {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: #FF8E75;
+    background-color:#ff6746;
     color: white;
     font-weight: bolder;
     font-size: 13px;
@@ -109,7 +126,7 @@ body {
 
 .question-text {
     margin: 0;
-    margin-left: 10px;
+    margin-left: 20px;
     font-size: 20px;
     font-weight: bold;
     color: #000000;
@@ -117,14 +134,16 @@ body {
 
 .answer-text {
     margin-top: 10px;
-    margin-left: 10px;
-    font-size: 15px;
+    margin-left: 40px;
+    font-size: 17px;
+    font-weight: bold;
     color: #ff6746;
 }
-.question-date{
+.question-date , .answer-date {
     display: flex;
     justify-content: end;
     align-items: end;
+    font-size: 13px;
 }
 .answer-input{
     width: 700px;
@@ -227,7 +246,7 @@ body {
 .icon-button {
     display: flex;
     justify-items: center;
-    background: #f1f1f1; /* 배경 제거 */
+    background: none; /* 배경 제거 */
     margin-right: 15px;
     margin-top: 10px;
     border: none; /* 테두리 제거 */
@@ -243,7 +262,7 @@ body {
 .icon-button2{
     display: flex;
     justify-items: center;
-    background: #f1f1f1; /* 배경 제거 */
+    background: none; /* 배경 제거 */
     margin-right: 15px;
     margin-top: 10px;
     border: none; /* 테두리 제거 */
@@ -254,4 +273,11 @@ body {
 }
 .icon-button2:focus {
     outline: none; /* 포커스 시 외곽선 제거 */
+}
+.answered-question:nth-child(odd) {
+    background-color: #f1f1f1; /* 회색 */
+}
+
+.answered-question:nth-child(even) {
+    background-color: #FFD6B0;
 }

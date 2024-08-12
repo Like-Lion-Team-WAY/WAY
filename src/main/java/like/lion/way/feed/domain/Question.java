@@ -56,6 +56,9 @@ public class Question {
     @Column(name= "user_ip")
     private String userIp;
 
+    @Column(name = "is_anonymous", columnDefinition = "TINYINT DEFAULT 0")
+    private Boolean isAnonymous;
+
     @ManyToOne
     @JoinColumn(name = "questioner_id", referencedColumnName = "user_id")
     private User questioner;

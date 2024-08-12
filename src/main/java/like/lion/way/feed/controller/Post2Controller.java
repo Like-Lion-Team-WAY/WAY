@@ -31,11 +31,18 @@ public class Post2Controller {
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         if (token == null || token.isEmpty()) {
-            return null; // 토큰이 없으면 null 반환
+            System.out.println("Token is null or empty");
+            return null;
         }
         Long loginId = jwtUtil.getUserIdFromToken(token);
+        if (loginId == null) {
+            System.out.println("Login ID is null");
+            return null;
+        }
+        System.out.println(loginId);
         return userService.findByUserId(loginId);
     }
+
     //고정 핀 설정
     @PostMapping("/posts/pin/{postId}")
     public String pinPost(@PathVariable("postId") Long postId) {

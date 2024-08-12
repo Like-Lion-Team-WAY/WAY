@@ -52,4 +52,11 @@ public class BoardController {
 
     }
 
+    @GetMapping("/scraps")
+    public String showScrapForm() {
+
+        return "pages/boards/scrapForm";
+
+    }
+
 }

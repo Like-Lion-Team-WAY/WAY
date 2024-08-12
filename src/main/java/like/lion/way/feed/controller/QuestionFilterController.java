@@ -28,7 +28,16 @@ public class QuestionFilterController {
     // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
+        if (token == null || token.isEmpty()) {
+            System.out.println("Token is null or empty");
+            return null;
+        }
         Long loginId = jwtUtil.getUserIdFromToken(token);
+        if (loginId == null) {
+            System.out.println("Login ID is null");
+            return null;
+        }
+        System.out.println(loginId);
         return userService.findByUserId(loginId);
     }
 
