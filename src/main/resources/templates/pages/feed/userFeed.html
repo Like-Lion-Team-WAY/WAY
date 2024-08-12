@@ -24,7 +24,10 @@
                 <div class="profile-info">
                     <h1 th:text="${user.getUsername()}"></h1>
                     <a th:if="${loginUser != null}" th:href="@{/user/setting}">
-                    <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
+                        <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
+                    </a>
+                    <a th:if="${loginUser == null}" th:href="@{/user/login}">
+                        <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                     </a>
                 </div>
             </div>

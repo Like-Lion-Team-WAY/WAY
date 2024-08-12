@@ -90,8 +90,8 @@ public class PostController {
     @GetMapping("/posts")
     public String getPosts(Model model, HttpServletRequest request){
         User user = getLoginUser(request);
-        model.addAttribute("followers", followService.getFollowerList(request).size());
-        model.addAttribute("followings", followService.getFollowingList(request).size());
+        model.addAttribute("followers", followService.getFollowerList(user).size());
+        model.addAttribute("followings", followService.getFollowingList(user).size());
         setCommonModelFilterAttributes(model, user);
         model.addAttribute("loginUser", user);
         return "/pages/feed/userFeed";
@@ -108,9 +108,9 @@ public class PostController {
             return "redirect:/posts"; // 유저가 없으면 게시판 목록 페이지로 리다이렉트
         }
 
-        // 팔로워, 팔로잉 정보 추가
-//        model.addAttribute("followers", followService.getFollowerList(user).size());
-//        model.addAttribute("followings", followService.getFollowingList(user).size());
+//         팔로워, 팔로잉 정보 추가
+        model.addAttribute("followers", followService.getFollowerList(user).size());
+        model.addAttribute("followings", followService.getFollowingList(user).size());
 //        request 로 가져와야 되는데 비로그인 같은 경우는 못 가져옴
         //임시로
         model.addAttribute("followers", 0);

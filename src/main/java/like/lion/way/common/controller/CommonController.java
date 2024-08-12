@@ -54,7 +54,7 @@ public class CommonController {
             model.addAttribute("questions", questionService.getAllQuestions());
         } else {
             //로그인 (팔로우 한 사람들 게시글, 질문)
-            List<FollowDto> follows = followService.getFollowingList(request);
+            List<FollowDto> follows = followService.getFollowingList(loginUser);
             List<Post> posts= new ArrayList<>();
             for (FollowDto follow : follows) {
                 User user = userService.findByUsername(follow.getUsername());
