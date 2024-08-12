@@ -26,19 +26,33 @@ public class QuestionController {
     private final UserService userService;
 
 
-    //로그인한 사용자
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
+        if (token == null || token.isEmpty()) {
+            System.out.println("Token is null or empty");
+            return null;
+        }
         Long loginId = jwtUtil.getUserIdFromToken(token);
+        if (loginId == null) {
+            System.out.println("Login ID is null");
+            return null;
+        }
+        System.out.println(loginId);
         return userService.findByUserId(loginId);
     }
+
 
     //내 질문 창으로만
     @GetMapping("/questions/create")
     public String createMyQuestion(Model model, HttpServletRequest request) {
         //얘는 로그인 유저 (==질문 페이지 소유자)
         User loginUser= getLoginUser(request);
-        model.addAttribute("loginUser", loginUser);
+        if(loginUser == null){
+            model.addAttribute("loginUser", null);
+        }else{
+            model.addAttribute("loginUser", loginUser);
+        }
+
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(loginUser.getUserId());
         model.addAttribute("user", user);
@@ -54,7 +68,11 @@ public class QuestionController {
         //질문은 로그인하지 않은 사용자도 할 수 있잖아? 그걸 고려해서 다시 로직 짜보기.
         //얘는 로그인 유저
         User loginUser= getLoginUser(request);
-        model.addAttribute("loginUser", loginUser);
+        if(loginUser == null){
+            model.addAttribute("loginUser", null);
+        }else{
+            model.addAttribute("loginUser", loginUser);
+        }
 
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
@@ -73,9 +91,16 @@ public class QuestionController {
             @RequestParam(value = "image", required = false) MultipartFile image,
             HttpServletRequest request) {
 
-        // 로그인한 사용자
+        // 로그인 사용자
         User user = getLoginUser(request);
-        questionService.saveQuestion(user, userId, question, isAnonymous, image, request);
+        //로그인한 사용자 여부 확인
+        if(user == null) {
+            //익명 - 비로그인 처리
+            questionService.saveQuestion(userId, question, image, request);
+        }else{
+            //로그인 사용자 처리
+            questionService.saveQuestion(user, userId, question, isAnonymous, image, request);
+        }
         return "redirect:/questions/create/"+userId;
     }
     //질문 답변
