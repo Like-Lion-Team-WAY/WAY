@@ -7,6 +7,7 @@ import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
 import like.lion.way.board.application.response.BoardPostScrapCountResponse;
 
+import like.lion.way.board.application.response.BoardPostScrapsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -46,5 +47,7 @@ public interface BoardService {
     BoardPostCommentCountResponse getPostCommentCount(Long postId);
 
     void commentPost(Long postId, BoardPostCommentServiceRequest request, HttpServletRequest httpServletRequest);
+
+    Page<BoardPostScrapsResponse> getPostScraps(HttpServletRequest httpServletRequest, Pageable pageable);
 
 }
