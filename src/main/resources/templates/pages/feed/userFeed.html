@@ -23,7 +23,12 @@
             <div class="profile-header">
                 <div class="profile-info">
                     <h1 th:text="${user.getUsername()}"></h1>
-                    <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
+                    <a th:if="${loginUser != null}" th:href="@{/user/setting}">
+                        <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
+                    </a>
+                    <a th:if="${loginUser == null}" th:href="@{/user/login}">
+                        <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
+                    </a>
                 </div>
             </div>
             <div class="profile-stats">
@@ -31,9 +36,11 @@
                     <p><a th:href="@{'/questions/reply/'+${user.userId}}"> 답변 완료</a></p>
                     <p th:text="${replyQuestions}"></p>
                 </div>
-                <div class="stat" th:if="${user.userId}==${loginUser.userId}">
-                    <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
-                    <p th:text="${rejectedQuestions}"></p>
+                <div th:if="${loginUser != null}">
+                    <div class="stat" th:if="${user.userId}==${loginUser.userId}">
+                        <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
+                        <p th:text="${rejectedQuestions}"></p>
+                    </div>
                 </div>
                 <div class="stat">
                     <p><a th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
@@ -45,21 +52,25 @@
                 </div>
             </div>
             <div class="button-container">
-                <a th:if="${user.userId} != ${loginUser.userId}" th:href="@{'/questions/create/'+${user.userId}}"><button class="write-post-button">질문 작성</button></a>
-                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{'/all/archieve/'+${user.userId}}"><button class="write-post-button">보관함</button></a>
-                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
+                <a th:if="${loginUser == null || user.userId != loginUser.userId}" th:href="@{'/questions/create/'+${user.userId}}"><button class="write-post-button">질문 작성</button></a>
+                <div th:if="${loginUser != null}">
+                    <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{'/all/archieve/'+${user.userId}}"><button class="write-post-button">보관함</button></a>
+                    <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}"><button class="write-post-button">피드 작성</button></a>
+                </div>
             </div>
             <div class="feed">
                 <h2 th:if="${pinPosts.size()}>0">고정된 피드</h2>
                 <div class="feed-item" th:each="p : ${pinPosts}">
                     <div class="post">
                         <div class="pinIcon">
-                            <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${p.postId}" method="post">
-                                <button type="submit" class="icon-button2">
-                                    <i class="bi bi-pin-fill"></i>
-                                </button>
-                            </form>
-                            <button th:if="${loginUser.userId} != ${user.userId}" type="submit" class="icon-button">
+                            <div th:if="${loginUser != null}">
+                                <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${p.postId}" method="post">
+                                    <button type="submit" class="icon-button2">
+                                        <i class="bi bi-pin-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit" class="icon-button2">
                                 <i class="bi bi-pin-fill"></i>
                             </button>
                         </div>
@@ -78,12 +89,14 @@
                 <div class="feed-item" th:each="post : ${posts}">
                     <div class="post">
                         <div class="pinIcon">
-                            <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${post.postId}" method="post">
-                                <button type="submit" class="icon-button">
-                                    <i class="bi bi-pin-fill"></i>
-                                </button>
-                            </form>
-                            <button th:if="${loginUser.userId} != ${user.userId}" type="submit" class="icon-button">
+                            <div th:if="${loginUser != null}">
+                                <form th:if="${loginUser.getUserId()} == ${user.userId}" th:action="'/posts/pin/'+${post.postId}" method="post">
+                                    <button type="submit" class="icon-button">
+                                        <i class="bi bi-pin-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit" class="icon-button">
                                 <i class="bi bi-pin-fill"></i>
                             </button>
                         </div>
