@@ -48,8 +48,8 @@ public class ConsumerImpl implements Consumer {
                     enterUser.remove(receiveMessageDTO.getChatId());
                 }
 
-            } else if (!type.startsWith("create") && !type.equals("delete")
-                    && chatIds.contains(receiveMessageDTO.getReceiverId())) {
+            } else if (!type.startsWith("create") && !type.equals("delete") &&
+                    chatIds != null && chatIds.contains(receiveMessageDTO.getReceiverId())) {
                 Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
                 messageFromDB.setIsRead(true);
                 messageRepository.save(messageFromDB);
