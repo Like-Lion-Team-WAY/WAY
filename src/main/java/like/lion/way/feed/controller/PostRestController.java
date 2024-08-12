@@ -17,7 +17,7 @@ public class PostRestController {
     private final PostService postService;
     //게시글 (피드) 수정
     @PatchMapping("/posts/{postId}")
-    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId, @RequestParam String title, @RequestParam String content) {
+    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId, @RequestParam("title") String title, @RequestParam("content") String content) {
         try {
             postService.updatePost(postId, title, content);
             return ResponseEntity.ok("Post updated successfully.");
@@ -27,7 +27,7 @@ public class PostRestController {
     }
     //게시글 삭제
     @DeleteMapping("/posts")
-    public ResponseEntity<String> deletePost(@RequestParam Long id) {
+    public ResponseEntity<String> deletePost(@RequestParam("id") Long id) {
         try {
             postService.deletePost(id);
             return ResponseEntity.ok("Post deleted successfully.");

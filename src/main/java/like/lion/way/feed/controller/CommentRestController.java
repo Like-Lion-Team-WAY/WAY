@@ -19,7 +19,7 @@ public class CommentRestController {
     private final PostCommentService postCommentService;
     //댓글 수정
     @PatchMapping("/posts/comments/{commentId}")
-    public ResponseEntity<String> updateComment(@PathVariable Long commentId, @RequestBody Map<String, String> payload) {
+    public ResponseEntity<String> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, String> payload) {
         try {
             String updatedContent = payload.get("updatedContent");
             postCommentService.updateComment(commentId, updatedContent);
@@ -30,7 +30,7 @@ public class CommentRestController {
     }
     //댓글 삭제
     @DeleteMapping("/posts/comments/{commentId}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
         try {
             postCommentService.deleteComment(commentId);
             return ResponseEntity.ok("comment deleted successfully.");

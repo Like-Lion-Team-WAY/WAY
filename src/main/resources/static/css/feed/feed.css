@@ -53,10 +53,12 @@ body {
 .stat {
     text-align: center;
 }
+
 .stat a {
     text-decoration: none;
     color: inherit;
 }
+
 .button-container {
     text-align: right;
 }
@@ -165,4 +167,14 @@ body {
 .update-date{
     display: flex;
     justify-content: end;
+}
+#followButton{
+    background-color: #FF8E75;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bolder;
+    margin-top: 10px;
 }

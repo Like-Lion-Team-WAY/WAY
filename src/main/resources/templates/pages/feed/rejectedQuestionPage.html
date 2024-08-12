@@ -24,14 +24,15 @@
                         <button type="submit" class="rejectedBtn">거절 취소</button>
                     </form>
                 </div>
-                <!--        의문스러운 점: p 태그로 할 땐 적용 안된게 div 로 하니까 됨-->
-                <div>
-                    <form action="/questions/archieve" method="post">
-                        <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
-                        <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
-                        <button type="submit" class="archieveBtn">질문 보관</button>
-                    </form>
-                </div>
+
+<!--                혜빈님 여기서 신고 부탁드립니다-->
+<!--                <div>-->
+<!--                    <form action="/questions/reported" method="post">-->
+<!--                        <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">-->
+<!--                        <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">-->
+<!--                        <button type="submit" class="archieveBtn">질문 신고</button>-->
+<!--                    </form>-->
+<!--                </div>-->
                 <div>
                     <form action="/questions/delete" method="post">
                         <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">

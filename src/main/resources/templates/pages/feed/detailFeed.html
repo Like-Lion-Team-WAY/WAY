@@ -18,7 +18,8 @@
 <div layout:fragment="content">
     <div class="post-container">
         <div class="post-header">
-            <img class="profile-icon" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
+            <img  th:if="${post.getUser().getUserImage() != null}" class="profile-icon" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
+            <img th:if="${post.getUser().getUserImage() == null}" class="profile-icon" th:src="@{/image/image.jpg}" alt="Profile Picture" />
             <div class="post-info">
                 <span class="username" th:text="${post.getUser().username}">username</span>
                 <span class="timestamp" th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}">작성일</span>
@@ -27,7 +28,8 @@
         <div th:if="${loginUser != null}" class="post-actions">
             <button th:if="${post.getUser().getUserId() == loginUser.getUserId()}" id="editPostBtn">수정</button>
             <button th:if="${post.getUser().getUserId() == loginUser.getUserId()}" id="deletePostBtn">삭제</button>
-            <button id="reportPostBtn">신고</button>
+<!--            혜빈님 여기요~!!-->
+            <button th:if="${post.getUser().userId != loginUser.getUserId()}" id="reportPostBtn">신고</button>
         </div>
 
         <div class="post-content">
@@ -89,8 +91,10 @@
                     <p class="comment-text" th:text="${comment.getPostCommentContent()}"></p>
                     <div th:if="${loginUser != null}">
                         <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
-                        <button class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>
-                        <button class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제</button>
+                        <button th:if="${loginUser.getUserId() == comment.getUser().getUserId()}" class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>
+                        <button th:if="${loginUser.getUserId()== comment.getUser().getUserId()}" class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제</button>
+<!--                        혜빈님 여기 신고 있습니다!!-->
+                        <button th:if="${loginUser.getUserId() != comment.getUser().getUserId()}" class="report-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">신고</button>
                         <button class="reply-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">답글</button>
                     </div>
                     <div th:id="'editCommentForm-' + ${comment.getPostCommentId()}" class="edit-comment-form" style="display:none;">
@@ -115,8 +119,10 @@
                         <p class="comment-text" th:text="${reply.getPostCommentContent()}"></p>
                         <div th:if="${loginUser != null}">
                             <input type="hidden" id="replyId" th:value="${reply.getPostCommentId()}">
-                            <button class="edit-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">수정</button>
-                            <button class="delete-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">삭제</button>
+                            <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}" class="edit-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">수정</button>
+                            <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}" class="delete-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">삭제</button>
+<!--                            헤빈님 여기입니다-->
+                            <button th:if="${loginUser.getUserId() != reply.getUser().getUserId()}" class="report-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">신고</button>
                         </div>
                         <div th:id="'editReplyForm-' + ${reply.getPostCommentId()}" class="edit-reply-form" style="display:none;">
                             <textarea th:id="'editCommentContent-' + ${reply.getPostCommentId()}"></textarea>
