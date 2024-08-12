@@ -17,8 +17,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
         eventSource.addEventListener('count', function (event) {
             console.log("[SSE] count 데이터 수신");
-            const count = event.data;
-            updateBellBadge(count);
+            const data = JSON.parse(event.data);
+            updateBellBadge(data.count);
+        });
+
+        eventSource.addEventListener('alarm', function (event) {
+            console.log("[SSE] alarm 데이터 수신");
+            const data = JSON.parse(event.data);  // 데이터 파싱
+
+            if (window.location.pathname === "/alarm") {
+                addAlarmBox(data.alarm);
+            }
+            updateBellBadge(data.count);
         });
 
         eventSource.addEventListener('ping', function (event) {
@@ -28,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // 이벤트 리스너 설정
         eventSource.onmessage = function (event) {
             const data = JSON.parse(event.data);
-            updateBellBadge(data);
+            updateBellBadge(data.count);
         };
 
         eventSource.onerror = function (event) {
@@ -48,11 +58,29 @@ document.addEventListener("DOMContentLoaded", function() {
         if (count > 0) {
             bellBadge.style.display = "block";
             bellBadge.textContent = count;
-            console.log("[SSE] alarm badge count : " +  bellBadge.textContent);
         } else {
             bellBadge.style.display = "none";
-            console.log("[SSE] alarm badge has no count");
         }
+    }
+
+    // alarm.js
+    function addAlarmBox(alarm) {
+        const alarmContainer = document.getElementById('alarm-container');
+
+        const container = document.createElement('div');
+        container.className = 'alarm';
+
+        container.innerHTML = `
+            <p>${alarm.message}</p>
+            <button class="btn-copy">보러 가기</button>
+        `;
+
+        const button = container.querySelector('.btn-copy');
+        button.addEventListener('click', function() {
+            window.location.href = alarm.url;  // 알림 삭제 및 이동 처리
+        });
+
+        alarmContainer.prepend(container);
     }
 
     connectSSE();

@@ -13,5 +13,6 @@ public interface AlarmSseEmitters {
     /**
      * 알림 전송
      */
-    void send(Long userId);
+    void sendCount(Long userId);
+    void sendAlarm(Long userId, Alarm alarm);
 }

@@ -12,12 +12,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import like.lion.way.user.domain.User;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "alarm_settings")
 @NoArgsConstructor // for JPA
 @Getter
+@Setter
 public class AlarmSetting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
