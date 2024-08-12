@@ -56,15 +56,15 @@ public class MessageRestController {
             messages = messageService.findAllByChatId(chatId, pageable);
         }
 
-        String userNickname1 = chat.getUser1().getNickname();
-        String userNickname2 = chat.getUser2().getNickname(!chat.isNicknameOpen2());
+        String answererNickname = chat.getAnswerer().getNickname();
+        String questionerNickname = chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
 
         List<ReceiveMessageDTO> receiveMessageDTOs = new ArrayList<>();
         for (Message message : messages) {
-            if (chat.isUser1(message.getSenderId())) {
-                receiveMessageDTOs.add(new ReceiveMessageDTO(message, chat.getName(), userNickname1));
+            if (chat.isAnswerer(message.getSenderId())) {
+                receiveMessageDTOs.add(new ReceiveMessageDTO(message, chat.getName(), answererNickname));
             } else {
-                receiveMessageDTOs.add(new ReceiveMessageDTO(message, chat.getName(), userNickname2));
+                receiveMessageDTOs.add(new ReceiveMessageDTO(message, chat.getName(), questionerNickname));
             }
         }
 

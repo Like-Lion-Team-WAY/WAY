@@ -13,5 +13,6 @@ public class ChatRoomViewDTO {
     private Long userId;
     private String chatName;
     private boolean isActive;
-    private boolean isUser2;
+    private boolean isQuestioner;
+    private int isNicknameOpen;
 }

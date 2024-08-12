@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    List<Chat> findByUser1AndUserActive1TrueOrUser2AndUserActive2True(User user1, User user2);
+    List<Chat> findByAnswererAndAnswererActiveTrueOrQuestionerAndQuestionerActiveTrue(User answerer, User questioner);
     Chat findFirstByQuestionOrderByCreatedAtDesc(Question question);
 }

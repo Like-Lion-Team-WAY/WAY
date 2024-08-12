@@ -26,8 +26,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public Chat createChat(Question question) {
         Chat chat = new Chat();
-        chat.setUser1(question.getAnswerer());
-        chat.setUser2(question.getQuestioner());
+        chat.setAnswerer(question.getAnswerer());
+        chat.setQuestioner(question.getQuestioner());
         chat.setQuestion(question);
         chat.setName(question.getQuestion());
         chat.setCreatedAt(LocalDateTime.now());
@@ -38,10 +38,10 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public String userLeave(Chat chat, Long userId) {
 
-        if (chat.isUser1(userId)) {
-            chat.setUserActive1(false);
+        if (chat.isAnswerer(userId)) {
+            chat.setAnswererActive(false);
         } else {
-            chat.setUserActive2(false);
+            chat.setQuestionerActive(false);
         }
 
         if (!chat.userExist()) {
@@ -62,8 +62,14 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    public void changeNicknameOpen(Chat chat, int nicknameOpenType) {
+        chat.setNicknameOpen(nicknameOpenType);
+        chatRepository.save(chat);
+    }
+
+    @Override
     public List<Chat> findUserChatList(User user) {
-        return chatRepository.findByUser1AndUserActive1TrueOrUser2AndUserActive2True(user, user);
+        return chatRepository.findByAnswererAndAnswererActiveTrueOrQuestionerAndQuestionerActiveTrue(user, user);
     }
 
     @Override

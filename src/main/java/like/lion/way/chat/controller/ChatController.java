@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.dto.ChatRoomViewDTO;
 import like.lion.way.chat.service.ChatService;
+import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -21,6 +22,7 @@ public class ChatController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final ChatService chatService;
+    private final MessageService messageService;
 
     @GetMapping
     public String chatList(Model model, HttpServletRequest request) {
@@ -49,8 +51,10 @@ public class ChatController {
             return "error";
         }
 
+        messageService.readMessage(userId, chat.getId());
+
         ChatRoomViewDTO chatRoomViewDTO
-                = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(), chat.isUser2(userId));
+                = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(), chat.isQuestioner(userId), chat.getNicknameOpen());
 
         model.addAttribute("chatRoomViewDTO", chatRoomViewDTO);
 

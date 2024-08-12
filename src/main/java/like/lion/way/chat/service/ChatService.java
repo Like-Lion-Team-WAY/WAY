@@ -14,4 +14,5 @@ public interface ChatService {
     Chat createChat(Question question);
     String userLeave(Chat chat, Long userId);
     void changeName(Chat chat, String name);
+    void changeNicknameOpen(Chat chat, int nicknameOpenType);
 }

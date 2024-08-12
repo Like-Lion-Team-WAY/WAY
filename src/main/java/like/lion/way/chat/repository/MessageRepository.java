@@ -1,5 +1,6 @@
 package like.lion.way.chat.repository;
 
+import java.util.List;
 import like.lion.way.chat.domain.Message;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,5 @@ public interface MessageRepository extends MongoRepository<Message, String> {
     Message findFirstByChatIdOrderByCreatedAtDesc(Long id);
     Page<Message> findAllByChatIdAndIdLessThan(Long chatId, String lastLoadMessageId, Pageable pageable);
     void deleteByChatId(Long chatId);
+    List<Message> findByChatIdAndReceiverIdAndIsReadFalse(Long chatId, Long userId);
 }
