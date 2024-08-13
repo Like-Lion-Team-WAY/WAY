@@ -116,6 +116,7 @@ function showMessageOutput(messageOutput) {
 
         if (messageOutput.type === 'change') {
             updateNameField(messageOutput.chatName);
+            updateTitle(messageOutput.chatName);
         } else if (messageOutput.type === 'leave') {
             noActiveSetting();
         } else if (messageOutput.type === 'request') {
@@ -320,6 +321,10 @@ function updateNameField(name) {
     $("#change-name-btn").show();
     $("#edit-chat-name").remove();
     $("#change-name-cancel-btn").remove();
+}
+
+function updateTitle(name) {
+    $('title').text('채팅방 [' + name + ']');
 }
 
 ////// 닉네임 요청

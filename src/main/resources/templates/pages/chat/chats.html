@@ -6,12 +6,12 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Chat List</title>
     <script src="https://cdn.jsdelivr.net/sockjs/1.0.2/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/chat/chat.css">
     <script src="/js/chat/chat.js"></script>
+    <title th:text="${nickname} + '님의 채팅방 리스트'"></title>
 </head>
 <body>
 <div layout:fragment="content" class="center">
