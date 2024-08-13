@@ -59,7 +59,7 @@ $(document).ready(function() {
             },
             error: function(err) {
                 console.log(err);
-                alert("Failed to update post. Please try again.");
+                alert("게시글 수정에 실패하였습니다.");
             }
         });
     });
@@ -72,12 +72,12 @@ $(document).ready(function() {
                 method: "DELETE",
                 data: { id: postId },
                 success: function(result) {
-                    alert("Post deleted successfully.");
+                    alert("게시글 삭제가 완료되었습니다.");
                     window.location.href = "/posts"; // Redirect to a success page or refresh
                 },
                 error: function(err) {
                     console.log(err);
-                    alert("Failed to delete post. Please try again.");
+                    alert("게시글 삭제에 실패하였습니다.");
                 }
             });
         }
