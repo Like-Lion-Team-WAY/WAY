@@ -28,7 +28,7 @@
         <div th:if="${loginUser != null}" class="post-actions">
             <button th:if="${post.getUser().getUserId() == loginUser.getUserId()}" id="editPostBtn">수정</button>
             <button th:if="${post.getUser().getUserId() == loginUser.getUserId()}" id="deletePostBtn">삭제</button>
-<!--            혜빈님 여기요~!!-->
+            <!-- 게시글(POST) 신고 -->
             <button th:if="${post.getUser().userId != loginUser.getUserId()}" id="reportPostBtn">신고</button>
         </div>
 
@@ -93,7 +93,7 @@
                         <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
                         <button th:if="${loginUser.getUserId() == comment.getUser().getUserId()}" class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>
                         <button th:if="${loginUser.getUserId()== comment.getUser().getUserId()}" class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제</button>
-<!--                        혜빈님 여기 신고 있습니다!!-->
+                        <!-- 댓글 (COMMENT) 신고 -->
                         <button th:if="${loginUser.getUserId() != comment.getUser().getUserId()}" class="report-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">신고</button>
                         <button class="reply-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">답글</button>
                     </div>
@@ -121,7 +121,7 @@
                             <input type="hidden" id="replyId" th:value="${reply.getPostCommentId()}">
                             <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}" class="edit-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">수정</button>
                             <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}" class="delete-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">삭제</button>
-<!--                            헤빈님 여기입니다-->
+                            <!-- 댓글 (COMMENT) 신고 -->
                             <button th:if="${loginUser.getUserId() != reply.getUser().getUserId()}" class="report-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">신고</button>
                         </div>
                         <div th:id="'editReplyForm-' + ${reply.getPostCommentId()}" class="edit-reply-form" style="display:none;">
