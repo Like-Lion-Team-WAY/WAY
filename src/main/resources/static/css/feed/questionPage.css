@@ -208,7 +208,7 @@ body {
 .cancel-button:hover {
     background-color: #FF8E75;
 }
-.rejectedBtn, .archieveBtn, .deleteBtn {
+.rejectedBtn, .archieveBtn, .deleteBtn, .reportBtn {
     display: flex;
     justify-content: end;
     align-items: end;

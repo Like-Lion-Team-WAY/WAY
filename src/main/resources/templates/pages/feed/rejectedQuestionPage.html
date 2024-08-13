@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>rejectedfilterQuestionPage</title>
     <link rel="stylesheet" th:href="@{/css/feed/questionPage.css}">
+    <script src="/js/feed/report_question.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
@@ -24,15 +25,11 @@
                         <button type="submit" class="rejectedBtn">거절 취소</button>
                     </form>
                 </div>
-
-<!--                혜빈님 여기서 신고 부탁드립니다-->
-<!--                <div>-->
-<!--                    <form action="/questions/reported" method="post">-->
-<!--                        <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">-->
-<!--                        <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">-->
-<!--                        <button type="submit" class="archieveBtn">질문 신고</button>-->
-<!--                    </form>-->
-<!--                </div>-->
+                <!-- 신고 -->
+                <div>
+                    <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+                    <button class="reportBtn">질문 신고</button>
+                </div>
                 <div>
                     <form action="/questions/delete" method="post">
                         <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
