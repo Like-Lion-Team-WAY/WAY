@@ -39,4 +39,8 @@ $(document).ready(function() {
         $('#alarm').hide();
         $('#chatIcon').hide();
     }
+    $('#logout').click(function(){
+        localStorage.removeItem('activeTab');
+        window.location.href="/user/logout";
+    })
 });
