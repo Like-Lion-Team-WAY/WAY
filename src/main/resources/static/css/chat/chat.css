@@ -35,6 +35,11 @@
     justify-content: space-between; /* 요소 사이의 공간을 균등하게 배분 */
 }
 
+.chat-room-info:hover {
+    background-color: #058593;
+    color: white;
+}
+
 .top {
     display: flex; /* 플렉스박스를 사용하여 수평 배치 */
     justify-content: space-between; /* 요소 사이의 공간을 균등하게 배분 */

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Chat Application</title>
     <script src="https://cdn.jsdelivr.net/sockjs/1.0.2/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/chat/chat-room.css">
     <script src="/js/chat/chat-room.js"></script>
+    <title th:text="'채팅방 [' + ${chatRoomViewDTO.chatName} + ']'"></title>
 </head>
 <body>
 <input type="hidden" id="user-id" th:value="${chatRoomViewDTO.userId}">

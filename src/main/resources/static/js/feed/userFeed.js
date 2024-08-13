@@ -13,6 +13,8 @@ function btnClick() {
                 success: function (response) {
                     const chatId = response.chatId;
                     openChatRoom('/chats/' + chatId, chatId);
+                }, error: function (){
+                    confirm("비회원의 질문에서 채팅은 불가합니다");
                 }
             });
         }
