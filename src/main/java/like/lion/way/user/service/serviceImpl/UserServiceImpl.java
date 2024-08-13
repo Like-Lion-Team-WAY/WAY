@@ -222,4 +222,20 @@ public class UserServiceImpl implements UserService {
         Long userId = jwtUtil.getUserIdFromToken(token);
         return findByUserId(userId);
     }
+
+    @Override
+    public void logout(HttpServletResponse response) {
+
+
+        Cookie accessToken = new Cookie("accessToken" , null);
+        accessToken.setMaxAge(0);
+        accessToken.setPath("/");
+
+        Cookie refreshToken = new Cookie("refreshToken",null);
+        refreshToken.setMaxAge(0);
+        refreshToken.setPath("/");
+
+        response.addCookie(refreshToken);
+        response.addCookie(accessToken);
+    }
 }
