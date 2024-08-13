@@ -64,7 +64,7 @@ header {
 .sidebar-header h1 a{
   text-decoration: none;
   color: inherit;
-  cursor: default;
+  cursor: pointer;
 }
 .sidebar {
   width: 250px;

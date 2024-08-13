@@ -63,7 +63,7 @@
           <div th:if="${user.getUserId()} == ${loginUser.getUserId()}">
             <form action="/questions/enroll/rejected" method="post">
               <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
-              <button type="submit" class="rejectedBtn">거절</button>
+              <button type="submit" class="rejectedBtn">질문 거절</button>
             </form>
           </div>
         </div>

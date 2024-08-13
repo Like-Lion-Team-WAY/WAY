@@ -42,6 +42,9 @@ public class PostCommentServiceImpl implements PostCommentService {
         // 트랜잭션 종료 후 이벤트 발생
         User fromUser = value.getUser();
         User toUser = value.getPost().getUser();
+        if (fromUser.equals(toUser)) {
+            return value;
+        }
         String urlParam = value.getPost().getPostId().toString();
 
         AlarmEvent event = new AlarmEvent(this, AlarmType.COMMENT, fromUser, toUser,
