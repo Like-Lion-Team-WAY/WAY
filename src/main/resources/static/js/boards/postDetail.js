@@ -123,7 +123,7 @@ function updateComments(comments) {
     comments.forEach(comment => {
         if (comment.preCommentId === 0) {
             // 원댓글인 경우
-            commentMap.set(comment.commentId, { comment: comment, replies: [] });
+            commentMap.set(comment.commentId, {comment: comment, replies: []});
         } else {
             // 대댓글인 경우
             if (commentMap.has(comment.preCommentId)) {
@@ -154,12 +154,10 @@ function createCommentHtml(comment) {
                 <span class="comment-date">${new Date(comment.commentCreatedAt).toLocaleDateString()}</span>
             </div>
             <button class="reply-button" onclick="showReplyInput(${comment.commentId})">대댓글</button>
-            <div class="reply-input" id="reply-input-${comment.commentId}" style="display: none;">
+            <div class="reply-input" id="reply-input-${comment.commentId}" hidden>
                 <input type="text" placeholder="대댓글을 입력하세요..." class="reply-box">
-                <label>
                     <input type="checkbox" id="anonymousPermission-${comment.commentId}" class="anonymous-checkbox">
                     익명으로 작성
-                </label>
                 <button class="send-button" onclick="submitComment(${comment.commentId})">➤</button>
             </div>
         </div>
@@ -168,7 +166,7 @@ function createCommentHtml(comment) {
 
 function createReplyHtml(reply) {
     return `
-        <div class="reply comment" id="comment-${reply.commentId}" style="margin-left: 20px;">
+        <div class="reply comment" id="comment-${reply.commentId}">
             <div class="comment-content">${reply.commentContent}</div>
             <div class="comment-meta">
                 <span class="comment-username">${reply.commentUsername}</span>
@@ -180,5 +178,5 @@ function createReplyHtml(reply) {
 
 function showReplyInput(commentId) {
     const replyInput = document.getElementById(`reply-input-${commentId}`);
-    replyInput.style.display = 'block';
+    replyInput.hidden = false;
 }
