@@ -92,6 +92,6 @@ public class QuestionFilterController {
         User user = userService.findByUserId(userId);
         setCommonModelAttributes(model, user, request);
         model.addAttribute("question", questionService.getQuestionByQuestioner(user));
-        return "pages/feed/filterQuestionPage";
+        return "pages/feed/sendQuestion";
     }
 }
