@@ -21,7 +21,7 @@ $(document).ready(function() {
             data: JSON.stringify({ type: "POST", id: postId }),
             success: function(result) {
                 alert("신고가 접수되었습니다.");
-                window.location.href = "/posts";  //신고 페이지로 가게? 아니면 그냥 posts 로 가게
+                window.location.reload();
             },
             error: function(err) {
                 console.log(err);
