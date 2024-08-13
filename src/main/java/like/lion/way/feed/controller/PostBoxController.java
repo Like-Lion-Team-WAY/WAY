@@ -15,7 +15,7 @@ public class PostBoxController {
     private final PostBoxService postBoxService;
     //게시글 보관
     @PostMapping("/posts/archieve/{postId}")
-    public String archievePost(@PathVariable("postId") Long postId,@RequestParam Long userId){
+    public String archievePost(@PathVariable("postId") Long postId,@RequestParam("userId") Long userId){
         log.info("postId: {}", postId);
         postBoxService.archievePost(postId, userId);
         return "redirect:/posts/detail/"+postId;

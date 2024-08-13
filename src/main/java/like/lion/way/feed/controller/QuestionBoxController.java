@@ -19,8 +19,6 @@ public class QuestionBoxController {
     @PostMapping("/questions/archieve")
     public String archieveQuestion(@RequestParam("questionId") Long questionId, @RequestParam("userId") Long userId) {
         questionBoxService.archieveQuestion(questionId, userId);
-        User user= userService.findByUserId(userId);
-        String username= user.getUsername();
         return "redirect:/posts";
     }
 }

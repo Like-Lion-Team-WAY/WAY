@@ -15,16 +15,24 @@ $(document).ready(function() {
     //신고
     $("#reportPostBtn").click(function (){
         $.ajax({
-            url: "/report",
+            url: "/api/report",
             method: "POST",
-            data: { id: postId },
+            contentType: "application/json",
+            data: JSON.stringify({ type: "POST", id: postId }),
             success: function(result) {
-                alert("Post reposted successfully.");
+                alert("신고가 접수되었습니다.");
                 window.location.href = "/posts";  //신고 페이지로 가게? 아니면 그냥 posts 로 가게
             },
             error: function(err) {
                 console.log(err);
-                alert("Failed to repost post. Please try again.");
+                if (err.status === 401) {
+                    alert('로그인이 필요합니다.');
+                    window.location.href = '/user/login';
+                } else if (err.status === 500) {
+                    alert('서버 오류가 발생했습니다.');
+                } else {
+                    alert("신고 접수에 실패했습니다. 잠시후 다시 시도해주세요.");
+                }
             }
         });
     })

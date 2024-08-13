@@ -17,10 +17,12 @@
 <body>
 <div layout:fragment="content">
     <div class="profile-container">
-        <div class="profile-header">
-            <div>
-                <img class="profile-picture" th:src="'/display?filename='+${user.getUserImage()}"
-                     alt="Profile Picture"/>
+        <div class="profile-container">
+            <div class="profile-header">
+                <div>
+                    <img th:if="${user.getUserImage() != null}" class="profile-picture" th:src="'/display?filename='+${user.getUserImage()}" alt="Profile Picture" />
+                    <img th:if="${user.getUserImage() == null}" class="profile-picture" th:src="@{/image/image.jpg}" alt="Profile Picture" />
+                </div>
             </div>
             <div class="profile-header">
                 <div class="profile-info">
@@ -31,13 +33,11 @@
                     <a th:if="${loginUser == null}" th:href="@{/user/login}">
                         <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                     </a>
-<!--                    <button th:if="${loginUser != null || loginUser.userId != user.userId}"-->
-<!--                            class="follow-button"-->
-<!--                            th:data-following="${isFollowing ? 'true' : 'false'}"-->
-<!--                            th:data-username="${user.getUsername()}">-->
-<!--                        <i class="bi" th:classappend="${isFollowing ? 'bi-person-dash-fill' : 'bi-person-plus-fill'}"></i>-->
-<!--                        <span th:text="${isFollowing ? '언팔로우' : '팔로우'}"></span>-->
-<!--                    </button>-->
+                    <div>
+                        <div th:if="${loginUser != null && user.userId != loginUser.userId}">
+                            <button id="followButton" th:data-username="${user.username}" onclick="toggleFollow()"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="profile-stats">
@@ -45,22 +45,21 @@
                     <p><a th:href="@{'/questions/reply/'+${user.userId}}"> 답변 완료</a></p>
                     <p th:text="${replyQuestions}"></p>
                 </div>
-                <div th:if="${loginUser != null}">
-                    <div class="stat" th:if="${user.userId}==${loginUser.userId}">
-                        <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
-                        <p th:text="${rejectedQuestions}"></p>
-                    </div>
+                <div class="stat" th:if="${loginUser != null && user.userId == loginUser.userId}">
+                    <p><a th:href="@{/questions/rejected}">거절 질문</a></p>
+                    <p th:text="${rejectedQuestions}"></p>
                 </div>
                 <div class="stat">
-                    <p><a th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
+                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}" th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
+                    <p th:if="${loginUser == null || user.getUserId() != loginUser.userId}">새 질문</p>
                     <p th:text="${newQuestions}"></p>
                 </div>
                 <div class="stat">
-                    <p><a th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
-                    <p th:text="${sendQuestions}"></p>
+                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}" th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
+                    <p th:if="${loginUser == null || user.getUserId() != loginUser.userId}">보낸 질문</p>
+                    <p th:text="${sendQuestions}">20</p>
                 </div>
             </div>
-        </div>
         <div class="button-container">
             <a th:if="${loginUser == null || user.userId != loginUser.userId}"
                th:href="@{'/questions/create/'+${user.userId}}">
@@ -161,6 +160,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

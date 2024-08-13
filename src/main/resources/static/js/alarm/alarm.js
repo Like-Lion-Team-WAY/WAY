@@ -33,6 +33,16 @@ async function loadAlarmList() {
         const alarmMessagePages = await response.json();
         const alarms = alarmMessagePages.content;
 
+        if (alarms.length === 0 && page === 0) {
+            // 알림이 없고 첫 페이지인 경우, "알림이 없습니다" 메시지 표시
+            document.getElementById('no-alarms').style.display = 'block';
+            console.log('알림이 없습니다 표시');
+        } else {
+            // "알림이 없습니다" 메시지 숨기기
+            document.getElementById('no-alarms').style.display = 'none';
+            console.log('알림이 없습니다 숨김');
+        }
+
         alarms.forEach(alarm => {
             console.log(alarm);
             const container = document.createElement('div');
@@ -58,7 +68,6 @@ async function loadAlarmList() {
     } catch (error) {
         console.error(error);
         isLoading = false;
-        // alert('Failed to load alarm list : ' + error.message);
     }
 }
 

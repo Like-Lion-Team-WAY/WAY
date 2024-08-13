@@ -120,8 +120,6 @@ public class PostController {
         model.addAttribute("followings", followService.getFollowingList(user).size());
 //        request 로 가져와야 되는데 비로그인 같은 경우는 못 가져옴
         //임시로
-        model.addAttribute("followers", 0);
-        model.addAttribute("followings", 0);
         // 로그인 사용자 정보 조회
         User loginUser = getLoginUser(request);
         if(loginUser == null){

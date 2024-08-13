@@ -17,7 +17,7 @@ public class QuestionRestcontroller {
     private final QuestionService questionService;
     //답변 수정
     @PatchMapping("/questions/answer/edit/{questionId}")
-    public ResponseEntity<String> editAnswer(@PathVariable Long questionId, @RequestParam(name = "answer") String response) {
+    public ResponseEntity<String> editAnswer(@PathVariable("questionId") Long questionId, @RequestParam(name = "answer") String response) {
         try {
             log.info("questionId: {}", questionId);
             log.info("content: {}", response);

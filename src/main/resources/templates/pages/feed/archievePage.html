@@ -24,7 +24,7 @@
       <p>
         <a th:href="@{/posts/{username}(username=${post.getPost().getUser().username})}" th:text="${post.getPost().getUser().username}"></a>
       </p>
-      <a th:href="@{'/posts/detail/' + ${post.getPost().postId}}"><button> 상세 보기</button></a>
+      <a th:href="@{'/posts/detail/' + ${post.getPost().postId}}"><button class="detailBtn"> 상세 보기</button></a>
     </div>
     <h3>질문</h3>
     <div th:if="${questions.size() == 0}">

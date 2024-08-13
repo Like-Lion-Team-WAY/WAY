@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // alarm.js
     function addAlarmBox(alarm) {
         const alarmContainer = document.getElementById('alarm-container');
+        const noAlarms = document.getElementById('no-alarms');
 
         const container = document.createElement('div');
         container.className = 'alarm';
@@ -77,10 +78,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const button = container.querySelector('.btn-copy');
         button.addEventListener('click', function() {
-            window.location.href = alarm.url;  // 알림 삭제 및 이동 처리
+            handleButtonClick(alarm);
         });
 
         alarmContainer.prepend(container);
+        if (noAlarms.style.display === 'block') {
+            noAlarms.style.display = 'none';
+        }
     }
 
     connectSSE();

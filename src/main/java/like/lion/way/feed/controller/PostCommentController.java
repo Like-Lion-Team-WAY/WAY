@@ -21,7 +21,7 @@ public class PostCommentController {
     }
     //피드의 대댓글 저장
     @PostMapping("/posts/comments/pre/{postId}")
-    public String savePreComments(@PathVariable Long postId, @RequestParam Long userId, @RequestParam String postCommentContent, @RequestParam(required = false) Long parentCommentPreCommentId){
+    public String savePreComments(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId, @RequestParam("postCommentContent") String postCommentContent, @RequestParam("parentCommentPreCommentId") Long parentCommentPreCommentId){
         postCommentService.savePreComment(postId, userId, postCommentContent, parentCommentPreCommentId);
         return "redirect:/posts/detail/" + postId;
     }
