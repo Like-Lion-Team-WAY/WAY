@@ -26,7 +26,7 @@ body {
     margin-top: auto; /* Push the button to the bottom */
 }
 
-.detailBtn {
+.detailBtn, .archieveBtn {
     background-color: #ff6746;
     border: none;
     color: white;
@@ -38,6 +38,8 @@ body {
     font-size: 12px;
     border-radius: 5px;
     cursor: pointer;
+    margin-bottom: 5px;
+    margin-left: 5px;
 }
 
 .detailBtn a {

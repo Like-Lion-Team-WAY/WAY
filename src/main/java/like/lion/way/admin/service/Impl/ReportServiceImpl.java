@@ -48,7 +48,7 @@ public class ReportServiceImpl implements ReportService {
         } else if (type == ReportType.POST) {
             var value = postService.getPostById(reportRequestDto.getId());
             reported = value.getUser();
-            content = value.getPostContent();
+            content = "[" + value.getPostTitle() + "]" + value.getPostContent();
         } else if (type == ReportType.COMMENT) {
             var value = postCommentService.getCommentById(reportRequestDto.getId());
             reported = value.getUser();

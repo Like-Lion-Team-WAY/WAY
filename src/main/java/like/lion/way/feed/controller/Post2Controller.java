@@ -27,7 +27,6 @@ public class Post2Controller {
     private final UserService userService;
     private final PostBoxService postBoxService;
 
-    // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         if (token == null || token.isEmpty()) {
@@ -42,7 +41,6 @@ public class Post2Controller {
         System.out.println(loginId);
         return userService.findByUserId(loginId);
     }
-
     //고정 핀 설정
     @PostMapping("/posts/pin/{postId}")
     public String pinPost(@PathVariable("postId") Long postId) {

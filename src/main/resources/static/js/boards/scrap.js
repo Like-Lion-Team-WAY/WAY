@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     scraps.forEach((scrap, index) => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <th scope="row">${index + 1 + (currentPage - 1) * postsPerPage}</th>
+                            <td>${index + 1 + (currentPage - 1) * postsPerPage}</td>
                             <td>${scrap.title}</td>
                             <td>${scrap.author}</td>
                             <td>${new Date(scrap.createdAt).toLocaleDateString()}</td>

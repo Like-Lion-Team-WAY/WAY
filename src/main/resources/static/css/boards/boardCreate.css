@@ -11,7 +11,7 @@
 }
 
 #returnPage:hover {
-    color: #e55d39;
+    color: #058593;
 }
 
 #returnPage::before {
@@ -21,7 +21,7 @@
 
 .main-container {
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
     max-width: 600px;
@@ -44,14 +44,16 @@
 
 .input-element-container label {
     flex: 0.5;
-    font-size: 1.1em;
+    font-size: 25px;
+    font-weight: bold;
     /*padding-left: 50px;*/
 }
 
 .input-element-container input[type="text"] {
     flex: 3;
     padding: 8px;
-    font-size: 1em;
+    font-size: 25px;
+    font-weight: bold;
     border: none; /* 테두리 제거 */
     border-radius: 0;
     outline: none;
@@ -62,6 +64,8 @@
     display: flex;
     align-items: center;
     width: 100%;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .toggleContainer span {
@@ -79,7 +83,7 @@
     display: block;
     position: relative;
     border-radius: 15px;
-    background-color: #ccc;
+    background-color: #058593;
     cursor: pointer;
     transition: background-color 0.2s;
 }
@@ -118,5 +122,5 @@ button {
 }
 
 button:hover {
-    background-color: #e55d39;
+    background-color: #058593;
 }

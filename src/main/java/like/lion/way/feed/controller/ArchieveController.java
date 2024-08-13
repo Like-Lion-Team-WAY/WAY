@@ -27,6 +27,7 @@ public class ArchieveController {
         model.addAttribute("posts", posts);
         List<QuestionBox> questions= questionBoxService.getQuestionBoxByUserId(user);
         model.addAttribute("questions", questions);
+        model.addAttribute("user", user);
         return "pages/feed/archievePage";
     }
 

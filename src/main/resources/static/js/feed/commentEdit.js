@@ -123,4 +123,32 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // 신고 버튼 이벤트
+    document.querySelectorAll('.report-comment-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const commentId = button.getAttribute('data-comment-id');
+            $.ajax({
+                url: '/api/report',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ type: 'COMMENT', id: commentId }),
+                success: function (result) {
+                    alert('신고가 접수되었습니다.');
+                    window.location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                    if (err.status === 401) {
+                        alert('로그인이 필요합니다.');
+                        window.location.href = '/user/login';
+                    } else if (err.status === 500) {
+                        alert('서버 오류가 발생했습니다.');
+                    } else {
+                        alert('신고 접수에 실패했습니다. 잠시후 다시 시도해주세요.');
+                    }
+                }
+            });
+        });
+    });
 });

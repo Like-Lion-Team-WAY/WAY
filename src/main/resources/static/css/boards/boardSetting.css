@@ -2,10 +2,24 @@
     max-width: 600px;
     margin: auto;
     padding: 20px;
+    font-weight: bold;
 }
 
+/* "← 전체 게시판" 링크 부분 스타일링 */
 .returnPage {
     margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.returnPage a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff6746;
+}
+
+.returnPage a:hover {
+    color: #058593;
 }
 
 .text-center {
@@ -35,4 +49,19 @@
 
 .btn {
     width: 100px;
+}
+
+.btn:hover {
+    background-color: #058593;
+    border-color: #058593;
+}
+
+.btn-secondary {
+    background-color: #ff6746;
+    border-color: #ff6746;
+    width: 120px;
+}
+
+.form-group label, .mt-3 label {
+    font-size: 22px;
 }

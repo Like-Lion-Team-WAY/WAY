@@ -16,13 +16,13 @@
                 <li><a th:href="@{/user/followSetting}">친구 관리</a></li>
                 <li><a th:href="@{/alarm/setting}">알림 설정</a></li>
                 <li><a th:href="@{/admin/customerService}">고객센터</a></li>
-                <li><a href="#interests">로그아웃</a></li>
+                <li><a href="#" id="logout">로그아웃</a></li>
             </ul>
         </nav>
         <nav style="display: none" id="communityTab">
             <ul>
                 <!--                url 다시 설정하기-->
-                <li><a href="#">전체 게시판</a></li>
+                <li><a th:href="@{/boards}">전체 게시판</a></li>
                 <li><a href="#">베스트 게시판</a></li>
                 <li><a href="#">내 게시글</a></li>
                 <li><a href="#education">내 댓글</a></li>

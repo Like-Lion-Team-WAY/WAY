@@ -85,6 +85,10 @@ public class ChatRestController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("채팅방 생성 권한이 없습니다");
         }
 
+        if (question.getQuestioner() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비회원의 질문에 대해서 채팅은 불가합니다.");
+        }
+
         Chat chat = chatService.findByQuestion(question);
 
         Map<String, Object> response = new HashMap<>();

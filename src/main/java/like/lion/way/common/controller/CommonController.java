@@ -70,4 +70,8 @@ public class CommonController {
         }
         return "pages/common/main";
     }
+    @GetMapping("/")
+    public String mainPage(){
+        return "redirect:/main";
+    }
 }

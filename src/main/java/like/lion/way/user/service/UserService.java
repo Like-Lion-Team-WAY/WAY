@@ -33,4 +33,6 @@ public interface UserService {
 
     ResponseEntity<String> updateOrSaveImg(MultipartFile file ,String deleteFileName , HttpServletRequest request);
     User getUserByToken(HttpServletRequest request);
+
+    void logout(HttpServletResponse response);
 }

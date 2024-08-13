@@ -135,11 +135,11 @@ body, html {
 .system-message {
     display: flex;
     flex-direction: column;
-    background-color: lightgray;
+    background-color: #058593;
     border-radius: 20px;
     padding: 3px;
     margin-bottom: 10px;
-    color: black;
+    color: white;
     text-align: center;
 }
 
@@ -181,7 +181,7 @@ body, html {
 }
 
 .footer button:hover {
-    background-color: #e55a34;
+    background-color: #035259;
 }
 
 .open-btn {
@@ -190,6 +190,11 @@ body, html {
     border-radius: 5px;
     border: 0;
     cursor: pointer;
+}
+
+.open-btn:hover {
+    background-color: #058593;
+    color: white;
 }
 
 .side-menu {
@@ -226,6 +231,10 @@ body, html {
     margin: 10px; /* 마진 추가 */
 }
 
+.side-menu .close-btn:hover {
+    color: #058593;
+}
+
 .side-menu div {
     text-align: center;
     color: black;
@@ -248,7 +257,7 @@ body, html {
 
 .chat-name button:hover,
 .chat-func button:hover {
-    background-color: #e55a34;
+    background-color: #058593;
     color: white;
 }
 
