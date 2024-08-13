@@ -30,10 +30,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     public static final List<String> PERMIT_ALL_PATHS = List.of(
-            "/", "/user/login", "/user/logininfo", "/user/duplicate", "/user/sign-up",
-            "/user/like", "/questions/create", "/questions/answer", "/boards","/boards/posts",
-            "/css/**", "/js/**","/posts/detail/**","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao",
-            "https://kauth.kakao.com/oauth/authorize","https://kauth.kakao.com/oauth/token","https://kapi.kakao.com/v2/user/me"
+            "/","/main" ,"/css/**", "/js/**","/user/login","/like","/duplicate","/addInterests","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao","/admin/**","/image/**", "/interest/**",
+            "https://kauth.kakao.com/oauth/authorize","https://kauth.kakao.com/oauth/token","https://kapi.kakao.com/v2/user/me","/posts/**","/posts/detail/**","/questions/send/**","/questions/reply/**","/questions/new/**"
+            ,"/questions/create/**","/questions/create/**"
         );
 
 
@@ -68,7 +67,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/","/main" ,"/css/**", "/js/**","/user/login","/like","/duplicate","/addInterests","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao",
+                        .requestMatchers("/","/main" ,"/css/**", "/js/**","/user/login","/like","/duplicate","/addInterests","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao","/admin/**","/image/**","/interest/**",
                                 "https://kauth.kakao.com/oauth/authorize","https://kauth.kakao.com/oauth/token","https://kapi.kakao.com/v2/user/me","/posts/**","/posts/detail/**","/questions/send/**","/questions/reply/**","/questions/new/**"
                         ,"/questions/create/**","/questions/create/**").permitAll()
                         .anyRequest().authenticated()

@@ -42,6 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     viewRulesButton.addEventListener('click', () => {
-        window.location.href = '/community/rules';
+        window.location.href = '/admin/customerService';
     });
 });
