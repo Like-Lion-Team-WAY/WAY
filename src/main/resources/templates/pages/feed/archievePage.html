@@ -24,7 +24,14 @@
       <p>
         <a th:href="@{/posts/{username}(username=${post.getPost().getUser().username})}" th:text="${post.getPost().getUser().username}"></a>
       </p>
-      <a th:href="@{'/posts/detail/' + ${post.getPost().postId}}"><button class="detailBtn"> 상세 보기</button></a>
+      <div class="btnContainer">
+        <form th:action="@{/posts/archieve/{postId}(postId=${post.getPost().postId})}" method="post">
+          <input type="hidden" name="userId" th:value="${user.getUserId()}" />
+          <input type="hidden" name="postId" th:value="${post.getPost().postId}" />
+          <button type="submit" class="archieveBtn">보관 취소</button>
+        </form>
+        <a th:href="@{'/posts/detail/' + ${post.getPost().postId}}"><button class="detailBtn"> 상세 보기</button></a>
+      </div>
     </div>
     <h3>질문</h3>
     <div th:if="${questions.size() == 0}">
@@ -39,6 +46,13 @@
       </a>
       <h2 th:text="${question.getQuestion().getQuestion()}"></h2>
       <p th:text="${question.getQuestion().getQuestionDate()}"></p>
+      <div class="btnContainer">
+        <form action="/questions/archieve" method="post">
+          <input type="hidden" name="questionId" th:value="${question.getQuestion().getQuestionId()}">
+          <input type="hidden" name="userId" th:value="${user.getUserId()}">
+          <button type="submit" class="archieveBtn">보관 취소</button>
+        </form>
+      </div>
     </div>
   </div>
 </body>

@@ -72,9 +72,10 @@
           <form action="/questions/archieve" method="post">
             <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
             <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
-            <button type="submit" class="archieveBtn">보관</button>
+            <button type="submit" class="archieveBtn">질문 보관</button>
           </form>
         </div>
+
       </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>
       <div class="question-image-container">
