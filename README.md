@@ -1,7 +1,7 @@
 # 🗯️ WAY : 익명 질문 커뮤니티 사이트
-## Period
+## 📅 개발 기간
 <mark>2024.07.23 ~ 2024.09.06</mark>
-## Description
+## 🖥️ 프로젝트 개요
 ### ❔기획 배경❔
 현대 사회에서 익명성을 활용한 커뮤니티 사이트를 통해, 고백이나 친해지기 등의 용기 부족으로 표현하지 못한 감정을 솔직하게 전하고, 새로운 인간관계를 형성할 수 있는 안전한 소통 공간을 제공하고자 WAY 라는 익명 질문 커뮤니티 서비스를 만들게 되었습니다.
 
@@ -10,9 +10,7 @@
 질문을 받은 사람은 1:1 채팅 요청을 통해 실명으로 전환할 기회를 가질 수 있으며, 이를 통해 커뮤니케이션 능력과 자신감을 회복할 수 있습니다. 
 또한, 익명 질문과 답변이 게시글로 공개되어 사용자의 영향력을 자연스럽게 드러낼 수 있는 기회를 제공합니다.
 
-## 개발 환경
-
-## Feature
+## 🍄 개발 환경
 <div align=center><h1>📚 STACKS</h1></div>
 
 <div align=center> 
@@ -41,16 +39,32 @@
   <br>
 </div>
 
-## Developers
+## 🔠 컨벤션
+- 커밋 메시지 : `type: commit title (#이슈번호)`
+- 브랜치 이름 : `type/이슈번호-branch-name `
+- 이슈 제목 : `[Category] issue title`
+- PR  
+  - 제목 : `이슈 타이틀` (이슈 번호 제외)  
+  - 본문 : `close #이슈번호`
 
+## 🗃️ ERD
+![erd](https://github.com/user-attachments/assets/3a3b0484-b659-46ee-b894-f5a09358de11)
+
+## 🛠️ 기능
+- 질문하기
+- 마이페이지
+- 커뮤니티
+- 채팅
+
+## 👩‍💻 개발자
 - [이나연](https://github.com/leenayeonnn)
 - [변혜빈](https://github.com/hye2021)
 - [이유준](https://github.com/L-U-Ready)
 - [정호현](https://github.com/Firemanhyeon)
 - [최혜진](https://github.com/chhyejin)
 
-## 프로젝트 구조
-
+## 🌳 프로젝트 구조
+```
     way
     ├───admin
     │   ├───controller
@@ -111,3 +125,4 @@
         │   ├───restcontroller
         │   └───security
         ├───domain
+```
