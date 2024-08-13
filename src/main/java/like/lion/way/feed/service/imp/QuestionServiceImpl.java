@@ -153,6 +153,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional
     public Question saveQuestion(Long userId, String question,  MultipartFile image, HttpServletRequest request) {
         Question newQuestion = new Question();
         newQuestion.setQuestion(question);  //질문 저장
@@ -176,6 +177,13 @@ public class QuestionServiceImpl implements QuestionService {
         newQuestion.setQuestionStatus(false);
         newQuestion.setQuestionPinStatus(false);
         newQuestion.setQuestionRejected(false);
-        return questionRepository.save(newQuestion);
+        var value =  questionRepository.save(newQuestion);
+
+        // 트랜잭션 종료 후 이벤트 발생
+        AlarmEvent event = new AlarmEvent(this, AlarmType.NEW_QUESTION, value.getQuestioner(), value.getAnswerer(),
+                value.getAnswerer().getUserId().toString());
+        publisher.publishEvent(event);
+
+        return value;
     }
 }
