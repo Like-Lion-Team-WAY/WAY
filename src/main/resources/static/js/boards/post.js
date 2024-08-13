@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <th scope="row">${index + 1 + (currentPage - 1) * postsPerPage}</th>
+                            <td>${index + 1 + (currentPage - 1) * postsPerPage}</td>
                             <td>${post.postTitle}</td>
                             <td>${post.author}</td>
                             <td>${new Date(post.created_at).toLocaleDateString()}</td>

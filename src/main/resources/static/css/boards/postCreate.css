@@ -4,13 +4,28 @@
     padding: 20px;
 }
 
+/* "← 전체 게시판" 링크 부분 스타일링 */
 .returnPage {
     margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.returnPage a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff6746;
+}
+
+.returnPage a:hover {
+    color: #058593;
 }
 
 #boardTitle {
     font-size: 24px;
     margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .form-group {
@@ -25,8 +40,10 @@
     width: 100px;
 }
 
+
 .mt-3 {
     margin-top: 1rem !important;
+
 }
 
 .mt-4 {
@@ -36,4 +53,33 @@
 p {
     font-size: 14px;
     color: gray;
+}
+.form-group label {
+    font-weight: bold;
+    font-size: 1.5rem !important;
+    margin-left: 0.5rem;
+}
+#postTitle, #postContent {
+    font-size: 1.1rem !important;
+}
+
+.btn-primary {
+    background-color: #ff6746;
+    border-color: #ff6746;
+}
+.btn-secondary {
+    width: 300px;
+    background-color: #058593;
+    border-color: #058593;
+}
+
+.btn-primary:hover{
+    background-color: #faa292;
+    border-color: #faa292;
+}
+
+.btn-secondary:hover {
+    width: 300px;
+    background-color: #66d6e5;
+    border-color: #66d6e5;
 }
