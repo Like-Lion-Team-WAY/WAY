@@ -55,8 +55,9 @@
 - 브랜치 이름 : `type/이슈번호-branch-name `
 - 이슈 제목 : `[Category] issue title`
 - PR  
-  - 제목 : `이슈 타이틀` (이슈 번호 제외)  
+  - 제목 : `[Category] issue title` (이슈 번호 제외)  
   - 본문 : `close #이슈번호`
+  - 머지 스타일 : squash and merge
 
 ## 🗃️ ERD
 ![erd](https://github.com/user-attachments/assets/3a3b0484-b659-46ee-b894-f5a09358de11)
@@ -145,3 +146,9 @@
       └───service
           └───serviceImpl
 ```
+
+## 🔗 라이센스
+이 프로젝트에서 아래 라이브러리를 사용했습니다:
+- [Font Awesome](https://fontawesome.com) - Licensed under [CC BY 4.0](https://fontawesome.com/license/free)
+- [Bootstrap](https://getbootstrap.com) - Licensed under [MIT License](https://github.com/twbs/bootstrap/blob/main/LICENSE)
+
