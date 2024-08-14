@@ -152,3 +152,6 @@
 - [Font Awesome](https://fontawesome.com) - Licensed under [CC BY 4.0](https://fontawesome.com/license/free)
 - [Bootstrap](https://getbootstrap.com) - Licensed under [MIT License](https://github.com/twbs/bootstrap/blob/main/LICENSE)
 
+## 😎 발표 자료
+[1차 기획 발표](https://www.canva.com/design/DAGL6Azijjk/XFunBHtoLC4nzzufzPrcsw/edit?utm_content=DAGL6Azijjk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) <br>
+[1차 중간 발표](https://www.canva.com/design/DAGNtVmtYeI/-sWADMXqv5v0ajQSte3aBg/view?utm_content=DAGNtVmtYeI&utm_campaign=designshare&utm_medium=link&utm_source=editor)
