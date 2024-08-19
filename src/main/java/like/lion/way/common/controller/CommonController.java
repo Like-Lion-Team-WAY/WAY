@@ -1,6 +1,5 @@
 package like.lion.way.common.controller;
 
-import co.elastic.clients.elasticsearch.nodes.Http;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,6 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
-import like.lion.way.user.domain.Follow;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.FollowDto;
 import like.lion.way.user.service.FollowService;

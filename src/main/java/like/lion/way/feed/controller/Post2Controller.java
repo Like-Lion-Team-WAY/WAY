@@ -54,10 +54,12 @@ public class Post2Controller {
     @PostMapping("/posts/create")
     public String savePost(PostDto postDto, @RequestPart(value = "image") MultipartFile file, HttpServletRequest request){
         User user = getLoginUser(request);
-
-        String key= s3Service.uploadFile(file);
-        postService.savePost(postDto, key, user);
-
+        if(file.isEmpty()){
+            postService.savePost(postDto, null, user);
+        }else{
+            String key= s3Service.uploadFile(file);
+            postService.savePost(postDto, key, user);
+        }
         return "redirect:/posts";
     }
     // 게시판 생성 페이지로 넘어감

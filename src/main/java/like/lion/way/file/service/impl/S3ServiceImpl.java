@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -50,5 +51,17 @@ public class S3ServiceImpl implements S3Service {
                 .bucket(bucketName)
                 .key(key)
                 .build());
+    }
+
+    @Override
+    public void deleteFile(String file) {
+        try {
+            s3Client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(bucketName)  // 버킷 이름을 지정합니다.
+                    .key(file)
+                    .build());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete file from S3", e);
+        }
     }
 }
