@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
+import like.lion.way.file.service.S3Service;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,8 @@ public class UserRestController {
 
 
     private final UserService userService;
+    private final S3Service s3Service;
+
     @GetMapping("/duplicate")
     public ResponseEntity<Boolean> duplicateCheck(@RequestParam("username") String username){
         User user =userService.findByUsername(username);
@@ -50,8 +53,9 @@ public class UserRestController {
     public ResponseEntity<String> updateOrSaveImg(@RequestParam("image") MultipartFile file
                                                 ,@RequestParam("existingImageName") String deleteFileName
                                                 , HttpServletRequest request){
+        String key = s3Service.uploadFile(file);
 
-        return  userService.updateOrSaveImg(file ,deleteFileName, request);
+        return  userService.updateOrSaveImg(deleteFileName, request , key);
     }
     @DeleteMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(HttpServletRequest request){

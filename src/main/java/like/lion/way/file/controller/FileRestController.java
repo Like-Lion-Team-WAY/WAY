@@ -24,7 +24,7 @@ public class FileRestController {
             String datePath = LocalDate.now().toString().replace("-", "/");//년월일 생성
             String key = datePath + "/" + uuid;//년월일+/uuid
 
-            s3Service.uploadFile(file, key);//버킷에저장하는 서비스호출
+            s3Service.uploadFile(file);//버킷에저장하는 서비스호출
 
             return ResponseEntity.ok("File uploaded successfully: " + file.getOriginalFilename());
         } catch (Exception e) {

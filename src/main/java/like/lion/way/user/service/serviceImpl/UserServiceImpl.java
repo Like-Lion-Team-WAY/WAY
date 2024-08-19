@@ -185,35 +185,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> updateOrSaveImg(MultipartFile file, String deleteFileName , HttpServletRequest request) {
+    public ResponseEntity<String> updateOrSaveImg( String deleteFileName , HttpServletRequest request , String key) {
+        System.out.println(key);
         User user = getUserByToken(request);
-        if(!deleteFileName.isEmpty()){
-            String deleteFilePath = uploadDir + File.separator + deleteFileName;
-            File fileToDelete = new File(deleteFilePath);
-
-            if (fileToDelete.exists() && fileToDelete.isFile()) {
-                if (fileToDelete.delete()) {
-                    System.out.println("File deleted successfully: " + deleteFilePath);
-                } else {
-                    System.out.println("Failed to delete the file: " + deleteFilePath);
-                }
-            }
-        }
-
-        if(!file.isEmpty()){
-            try{
-                String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
-                String filePath =uploadDir+ File.separator+fileName;
-                File dest = new File(filePath);
-                file.transferTo(dest);
-                user.setUserImage(fileName);
-                saveOrUpdateUser(user);
-                return ResponseEntity.ok(fileName);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-        return ResponseEntity.ok("fail");
+        user.setUserImage(key);
+        saveOrUpdateUser(user);
+        return ResponseEntity.ok(key);
     }
 
     @Override
@@ -237,5 +214,13 @@ public class UserServiceImpl implements UserService {
 
         response.addCookie(refreshToken);
         response.addCookie(accessToken);
+    }
+
+    @Override
+    public String getUserImagePath(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User user = userRepository.findById(userId).orElse(null);
+        return user.getUserImage();
     }
 }
