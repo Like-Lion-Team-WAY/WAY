@@ -30,6 +30,7 @@ public class S3ServiceImpl implements S3Service {
             String uuid = UUID.randomUUID().toString(); //uuid자동으로발급
             String datePath = LocalDate.now().toString().replace("-", "/");//년월일 생성
             String key = datePath + "/" + uuid;//년월일+/uuid
+
             s3Client.putObject(
                     PutObjectRequest.builder()
                             .bucket(bucketName)

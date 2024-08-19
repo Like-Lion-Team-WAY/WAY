@@ -26,6 +26,7 @@ public class FileRestController {
 
             s3Service.uploadFile(file);//버킷에저장하는 서비스호출
 
+
             return ResponseEntity.ok("File uploaded successfully: " + file.getOriginalFilename());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to upload file: " + e.getMessage());
