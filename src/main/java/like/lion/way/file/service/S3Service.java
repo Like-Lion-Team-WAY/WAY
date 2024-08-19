@@ -8,4 +8,5 @@ public interface S3Service {
     String uploadFile(MultipartFile file);
 
     InputStream downloadFile(String key);
+    void deleteFile(String file);
 }

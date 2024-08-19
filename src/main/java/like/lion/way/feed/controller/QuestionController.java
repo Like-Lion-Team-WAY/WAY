@@ -95,14 +95,19 @@ public class QuestionController {
 
         // 로그인 사용자
         User user = getLoginUser(request);
-        String key= s3Service.uploadFile(image);
-        //로그인한 사용자 여부 확인
-        if(user == null) {
-            //익명 - 비로그인 처리
-            questionService.saveQuestion(userId, question, key, request);
-        }else{
-            //로그인 사용자 처리
-            questionService.saveQuestion(user, userId, question, isAnonymous, key, request);
+        if(image.isEmpty()){
+            questionService.saveQuestion(userId, question, null, request);
+        }
+        else {
+            String key = s3Service.uploadFile(image);
+            //로그인한 사용자 여부 확인
+            if(user == null) {
+                //익명 - 비로그인 처리
+                questionService.saveQuestion(userId, question, key, request);
+            }else{
+                //로그인 사용자 처리
+                questionService.saveQuestion(user, userId, question, isAnonymous, key, request);
+            }
         }
         return "redirect:/questions/create/"+userId;
     }
