@@ -1,11 +1,17 @@
 package like.lion.way.feed.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.InputStream;
+import like.lion.way.file.service.S3Service;
+import like.lion.way.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,35 +22,34 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
+@RequiredArgsConstructor
 public class FileController {
 
-    @Value("${image.upload.dir}")
-    private String uploadDir;
+    private final S3Service s3Service;
 
     //로컬 이미지 보여주기
     @GetMapping("/display")
-    public ResponseEntity<Resource> display(@RequestParam("filename") String filename) {
+    public ResponseEntity<StreamingResponseBody> display(@RequestParam("filename") String filename) {
         if (!StringUtils.hasText(filename)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        String filePath = uploadDir + File.separator + filename;
-        Resource resource = new FileSystemResource(filePath);
-        if (!resource.exists()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        InputStream inputStream = s3Service.downloadFile(filename);
 
-        HttpHeaders header = new HttpHeaders();
-        Path path = Paths.get(filePath);
-        try {
-            header.add("Content-Type", Files.probeContentType(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        StreamingResponseBody responseBody = outputStream -> {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            inputStream.close();
+        };
 
-        return new ResponseEntity<>(resource, header, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .body(responseBody);
     }
 }
 

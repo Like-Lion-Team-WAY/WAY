@@ -31,8 +31,9 @@ public interface UserService {
 
     User updateUserInfo(SettingLoginInfoDto updateUserDto, HttpServletRequest request);
 
-    ResponseEntity<String> updateOrSaveImg(MultipartFile file ,String deleteFileName , HttpServletRequest request);
+    ResponseEntity<String> updateOrSaveImg(String deleteFileName , HttpServletRequest request , String key);
     User getUserByToken(HttpServletRequest request);
 
     void logout(HttpServletResponse response);
+    String getUserImagePath(HttpServletRequest request);
 }
