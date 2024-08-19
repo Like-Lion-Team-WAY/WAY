@@ -5,6 +5,7 @@ import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.domain.dto.PostDto;
 import like.lion.way.feed.service.PostBoxService;
 import like.lion.way.feed.service.PostService;
+import like.lion.way.file.service.S3Service;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -26,6 +27,7 @@ public class Post2Controller {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final PostBoxService postBoxService;
+    private final S3Service s3Service;
 
     private User getLoginUser(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
@@ -52,7 +54,10 @@ public class Post2Controller {
     @PostMapping("/posts/create")
     public String savePost(PostDto postDto, @RequestPart(value = "image") MultipartFile file, HttpServletRequest request){
         User user = getLoginUser(request);
-        postService.savePost(postDto, file, user);
+
+        String key= s3Service.uploadFile(file);
+        postService.savePost(postDto, key, user);
+
         return "redirect:/posts";
     }
     // 게시판 생성 페이지로 넘어감

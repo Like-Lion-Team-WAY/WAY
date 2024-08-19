@@ -8,6 +8,7 @@ import like.lion.way.feed.service.QuestionBoxService;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,8 @@ public class ArchieveController {
     private final PostBoxService postBoxService;
     private final QuestionBoxService questionBoxService;
     private final UserService userService;
+
+
     //전체 보관함 (스크랩한 질문과 피드)
     @GetMapping("/all/archieve/{userId}")
     public String archieveAll(@PathVariable("userId") Long userId, Model model) {

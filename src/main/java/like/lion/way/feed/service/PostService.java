@@ -21,5 +21,5 @@ public interface PostService {
 
     Post pinPost(Long postId);
 
-    Post savePost(PostDto postDto, MultipartFile file, User user);
+    Post savePost(PostDto postDto, String key, User user);
 }
