@@ -61,12 +61,13 @@ public class CommonController {
                 posts.addAll(postService.getPostByUser(user));
             }
             model.addAttribute("posts", posts);
+
             List<Question> questions = new ArrayList<>();
             for (FollowDto follow : follows) {
                 User user = userService.findByUsername(follow.getUsername());
                 questions.addAll(questionService.getQuestionByAnswerer(user));
             }
-            model.addAttribute("questions", questions);
+            model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).toList());
         }
         return "pages/common/main";
     }

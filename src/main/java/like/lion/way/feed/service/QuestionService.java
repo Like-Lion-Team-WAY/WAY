@@ -26,9 +26,9 @@ public interface QuestionService {
 
     void deleteQuestion(Long questionId);
 
-    Question saveQuestion(User user, Long userId, String question, boolean isAnonymous, MultipartFile image, HttpServletRequest request);
+    Question saveQuestion(User user, Long userId, String question, boolean isAnonymous, String key, HttpServletRequest request);
 
     Question saveQuestion(Question question, String answer);
 
-    Question saveQuestion(Long userId, String question, MultipartFile image, HttpServletRequest request);
+    Question saveQuestion(Long userId, String question, String key, HttpServletRequest request);
 }

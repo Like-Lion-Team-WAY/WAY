@@ -66,28 +66,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post savePost(PostDto postDto, MultipartFile file, User user) {
+    public Post savePost(PostDto postDto, String key, User user) {
         Post post = new Post();
         post.setPostTitle(postDto.getTitle()); // 제목
         post.setPostContent(postDto.getContent()); // 내용
-
-        // 이미지 파일 저장
-        if (!file.isEmpty()) {
-            try {
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
-                File dest = new File(filePath);
-                file.transferTo(dest);
-                post.setPostImageUrl(fileName); // 웹에서 접근할 경로
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        post.setPostImageUrl(key);  //이미지
         post.setUser(user); // 작성자 설정
         post.setPostCreatedAt(LocalDateTime.now()); // 작성일
         post.setPostLike(0); // 좋아요 수
-
         return postRepository.save(post);
     }
 }
