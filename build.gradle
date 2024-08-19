@@ -63,6 +63,10 @@ dependencies {
 	//kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.1.1")
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store:3.1.1'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1'
 }
 
 tasks.named('test') {
