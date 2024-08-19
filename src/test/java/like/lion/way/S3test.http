@@ -1,0 +1,12 @@
+###
+
+### Upload logo.png to S3
+POST http://localhost:8080/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="logo.png"
+Content-Type: image/png
+
+< /Users/jeonghohyeon/Desktop/fileexam/logo.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

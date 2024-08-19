@@ -38,7 +38,7 @@ public class Post2Controller {
             System.out.println("Login ID is null");
             return null;
         }
-        System.out.println(loginId);
+
         return userService.findByUserId(loginId);
     }
     //고정 핀 설정
