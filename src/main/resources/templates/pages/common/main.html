@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="feed-item" th:each="question: ${questions}">
-        <a th:href="@{'/questions/create/' + ${question.getQuestionId()}}"><p th:text="${question.getAnswerer().getNickname() + '가 받은 질문!!'}"></p></a>
+        <a th:href="@{'/questions/create/' + ${question.getAnswerer().userId}}"><p th:text="${question.getAnswerer().getNickname() + '가 받은 질문!!'}"></p></a>
         <h2 th:if="${question.isAnonymous == false}" th:text="${question.getQuestioner().getUsername()}"></h2>
         <h2 th:if="${question.isAnonymous != false}" th:text="익명"></h2>
         <p th:text=" ${question.getQuestion()}"></p>

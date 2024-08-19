@@ -41,7 +41,7 @@ public class CommonController {
             System.out.println("Login ID is null");
             return null;
         }
-        System.out.println(loginId);
+//        System.out.println(loginId);
         return userService.findByUserId(loginId);
     }
 
