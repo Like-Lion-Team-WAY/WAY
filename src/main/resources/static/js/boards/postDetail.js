@@ -1,10 +1,14 @@
 const pathSegments = window.location.pathname.split('/');
 const postId = pathSegments[pathSegments.length - 1];
+const boardId = pathSegments[pathSegments.length - 2];
 
 document.addEventListener('DOMContentLoaded', () => {
     const returnPage = document.getElementById('returnPage');
     const likeAction = document.getElementById('likeAction');
     const scrapAction = document.getElementById('scrapAction');
+
+    const editPost = document.getElementById('editPostBtn');
+    const deletePost = document.getElementById('deletePostBtn');
 
     returnPage.addEventListener('click', () => {
         window.location.href = '/boards';
@@ -13,6 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
     likeAction.addEventListener('click', likePost);
     scrapAction.addEventListener('click', scrapPost);
 
+    editPost.addEventListener('click', () => {
+        window.location.href = `/boards/posts/edit/${boardId}/${postId}`;
+    });
+
+    deletePost.addEventListener('click', () => {
+        if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+            fetch(`/api/v1/boards/posts/delete/${postId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(apiResponse => {
+                    if (apiResponse.success) {
+                        alert(apiResponse.message);
+                        window.location.href = `/boards/${boardId}`;
+                    } else {
+                        alert(apiResponse.message || '게시글 삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
     fetchPostDetails();
 });
 
@@ -34,6 +62,15 @@ function fetchPostDetails() {
             document.querySelector('.scraps').textContent = `⭐ ${data.postScraps}`;
             // 댓글 목록을 업데이트합니다.
             updateComments(data.boardPostCommentsList);
+
+            // userOwnerMatch가 true일 때만 '게시판 수정'과 '게시글 생성' 버튼을 표시
+            if (apiResponse.data.userOwnerMatch) {
+                document.getElementById('editPostBtn').style.display = 'block';
+                document.getElementById('deletePostBtn').style.display = 'block';
+            } else {
+                document.getElementById('editPostBtn').style.display = 'none';
+                document.getElementById('deletePostBtn').style.display = 'none';
+            }
         })
         .catch(error => console.error('Error fetching post details:', error));
 }
@@ -51,6 +88,7 @@ function likePost() {
                 throw new Error(apiResponse.message || 'Error liking post');
             }
             fetchPostDetails();
+
         })
         .catch(error => console.error('Error liking post:', error));
 }

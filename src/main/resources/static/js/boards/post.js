@@ -31,9 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!apiResponse.success) {
                 throw new Error(apiResponse.message || 'Error fetching board title');
             }
+
+            // 게시판 제목 설정
             boardTitle.textContent = `${apiResponse.data.name} 게시판`;
+
+            // userOwnerMatch가 true일 때만 '게시판 수정'과 '게시글 생성' 버튼을 표시
+            if (apiResponse.data.userOwnerMatch) {
+                document.getElementById('editBoardButton').style.display = 'block';
+            } else {
+                document.getElementById('editBoardButton').style.display = 'none';
+            }
         })
         .catch(error => console.error('Error fetching board title:', error));
+
 
     function fetchBoardPosts(page) {
         fetch(`/api/v1/boards/posts/${boardId}?page=${page}&size=${postsPerPage}`)

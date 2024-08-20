@@ -2,6 +2,7 @@ package like.lion.way.board.application;
 
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
+import like.lion.way.board.application.request.BoardPostEditServiceRequest;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
@@ -22,7 +23,7 @@ public interface BoardService {
 
     List<BoardTitleResponse> getBoardFindAll();
 
-    BoardTitleResponse getBoardTitle(Long boardId);
+    BoardTitleResponse getBoardTitle(Long boardId, HttpServletRequest httpServletRequest);
 
     void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
@@ -34,7 +35,11 @@ public interface BoardService {
 
     void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest);
 
-    BoardPostDetailResponse getPostDetails(Long postId);
+    BoardPostDetailResponse getPostDetails(Long postId, HttpServletRequest httpServletRequest);
+
+    void editBoardPost(Long boardId, BoardPostEditServiceRequest request);
+
+    void deleteBoardPost(Long postId);
 
     BoardPostLikeCountResponse getPostLikeCount(Long postId);
 

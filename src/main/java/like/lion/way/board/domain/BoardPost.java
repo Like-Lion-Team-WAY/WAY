@@ -60,4 +60,11 @@ public class BoardPost {
 
     }
 
+    public void editBoardPost(String title, String content) {
+
+        this.title = title;
+        this.content = content;
+
+    }
+
 }
