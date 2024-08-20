@@ -140,9 +140,13 @@ function showMessageOutput(messageOutput) {
         messageDiv.classList.add('partner-message');
         messageDiv.innerHTML = `
             <div class="user-nickname">${messageOutput.userNickname}</div>
-            <div class="text">${messageOutput.text}</div>
+                <div class="text-group">
+                    <div class="text">${messageOutput.text}</div>
+                    <div class="report-chat-btn">신고</div>                        
+                </div>
             <div class="message-time">${messageOutput.sendTime}</div>
         `;
+        messageDiv.querySelector('.report-chat-btn').setAttribute('value', messageOutput.id);
     }
 
     chatBody.appendChild(messageDiv);
@@ -154,6 +158,7 @@ function showMessageOutput(messageOutput) {
 
 ////////// 이전 메세지 로드
 function loadMessages(firstCall) {
+    console.log("hi");
     if (isLoading) return;
     isLoading = true; // 데이터 로드 시작
 
@@ -164,6 +169,11 @@ function loadMessages(firstCall) {
         type: 'GET',
         success: function (response) {
             response.messages.forEach(function (message) {
+                console.log(message.isRead + ' ' + message.id);
+
+                if (message.isRead) {
+                    console.log("안녕");
+                }
                 const userId = Number(document.getElementById('user-id').value);
                 const messageDiv = document.createElement('div');
                 if (message.type !== "message") {
@@ -178,15 +188,19 @@ function loadMessages(firstCall) {
                             ${!message.isRead ? '<div class="unread">안읽음</div>' : ''}
                             <div class="text">${message.text}</div>
                         </div>
-                        <div class="message-time">${message.sendTime}</div>                    
+                        <div class="message-time">${message.sendTime}</div>           
                     `;
                 } else {
                     messageDiv.classList.add('partner-message');
                     messageDiv.innerHTML = `
                         <div class="user-nickname">${message.userNickname}</div>
-                        <div class="text">${message.text}</div>
+                        <div class="text-group">
+                            <div class="text">${message.text}</div>
+                            <div class="report-chat-btn">신고</div>                        
+                        </div>
                         <div class="message-time">${message.sendTime}</div>
                     `;
+                    messageDiv.querySelector('.report-chat-btn').setAttribute('value', message.id);
                 }
 
                 observerElement.after(messageDiv);
@@ -431,6 +445,41 @@ function updateAcceptNickname(nickname) {
     }
 }
 
+/////// 신고하기
+function reportChat() {
+    document.body.addEventListener('click', function (event) {
+        const target = event.target;
+        if (target.classList.contains('report-chat-btn')) {
+            if (confirm('해당 메세지를 신고하시겠습니까?')) {
+                callReportApi(target.getAttribute('value'));
+            }
+        }
+    });
+}
+
+function callReportApi(messageId){
+    $.ajax({
+        url: "/api/report",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ type: "CHATTING", id: messageId }),
+        success: function(result) {
+            alert("신고가 접수되었습니다.");
+        },
+        error: function(err) {
+            console.log(err);
+            if (err.status === 401) {
+                alert('로그인이 필요합니다.');
+                window.location.href = '/user/login';
+            } else if (err.status === 500) {
+                alert('서버 오류가 발생했습니다.');
+            } else {
+                alert("신고 접수에 실패했습니다. 잠시후 다시 시도해주세요.");
+            }
+        }
+    });
+}
+
 /////////////////
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -463,6 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
     submitBtn();
     leaveBtn();
     changNameBtn();
+    reportChat();
 });
 
 window.onbeforeunload = function (event) {
