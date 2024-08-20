@@ -63,4 +63,9 @@ public class MessageServiceImpl implements MessageService {
             messageRepository.saveAll(messages);
         }
     }
+
+    @Override
+    public Message findById(String id) {
+        return messageRepository.findById(id).orElse(null);
+    }
 }
