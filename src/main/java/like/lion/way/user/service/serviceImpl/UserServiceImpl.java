@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import like.lion.way.els.domain.ElsUser;
+import like.lion.way.els.service.ElsUserService;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.Interest;
 import like.lion.way.user.domain.Role;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final RoleService roleService;
     private final InterestService interestService;
+    private final ElsUserService elsUserService;
 
 
     @Value("${image.upload.dir}")
@@ -110,6 +113,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
+        //elasticSearch 에서도 지워지게
+        elsUserService.deleteByUserId(userId.toString());
         userRepository.deleteById(userId);
 
     }
@@ -139,6 +144,13 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(loginInfoDto.getUsername());
         user.setNickname(loginInfoDto.getNickname());
+
+        ElsUser elsUser= elsUserService.findByUserId(user.getUserId());
+        if(elsUser != null) {
+            elsUser.setUsername(user.getUsername());
+            elsUser.setImageUrl(user.getUserImage());
+            elsUserService.saveOrUpdate(elsUser);
+        }
         addCookies(response, user); //추가된 코드
         return saveOrUpdateUser(user);
     }
@@ -159,6 +171,14 @@ public class UserServiceImpl implements UserService {
             set.add(interest);
         }
         user.setInterests(set);
+
+        ElsUser elsUser = new ElsUser();
+        elsUser.setId(user.getUserId().toString());
+        elsUser.setUsername(user.getUsername());
+        elsUser.setImageUrl(user.getUserImage());
+
+        elsUserService.saveOrUpdate(elsUser);
+
         return userRepository.save(user);
     }
 
@@ -181,6 +201,7 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(updateUserDto.getUsername());
         user.setNickname(updateUserDto.getNickname());
+
         return saveOrUpdateUser(user);
     }
 

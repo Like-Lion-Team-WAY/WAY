@@ -95,17 +95,20 @@ public class QuestionController {
 
         // 로그인 사용자
         User user = getLoginUser(request);
-        if(image.isEmpty()){
-            questionService.saveQuestion(userId, question, null, request);
-        }
-        else {
-            String key = s3Service.uploadFile(image);
-            //로그인한 사용자 여부 확인
-            if(user == null) {
-                //익명 - 비로그인 처리
+        if(user == null){
+            if(image.isEmpty()){
+                questionService.saveQuestion(userId, question, null, request);
+            }
+            else {
+                String key = s3Service.uploadFile(image);
                 questionService.saveQuestion(userId, question, key, request);
-            }else{
-                //로그인 사용자 처리
+            }
+        }else {
+            if(image.isEmpty()){
+                questionService.saveQuestion(user, userId, question, isAnonymous, null, request);
+            }
+            else {
+                String key = s3Service.uploadFile(image);
                 questionService.saveQuestion(user, userId, question, isAnonymous, key, request);
             }
         }
