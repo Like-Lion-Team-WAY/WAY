@@ -4,14 +4,43 @@ body {
 
 .container {
     background-color: white;
-    padding-top: 10px
+    padding-top: 10px;
 }
 
 .header {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#returnPage {
+.header #returnPage {
+    margin-right: auto; /* 왼쪽에 배치 */
+}
+
+.actions {
+    display: flex;
+    gap: 10px; /* 버튼 간의 간격 */
+}
+
+.actions button {
+    /* 추가적인 버튼 스타일링이 필요하면 여기에 추가 */
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #ff6746;
+    border: none;
+    padding: 7px;
+    margin-bottom: 20px;
+}
+
+.actions button:hover {
+    background-color: #035259;
+}
+
+
+    #returnPage {
     text-decoration: none;
     color: white;
     font-size: 16px;
@@ -222,4 +251,8 @@ body {
 
 .reply .comment-content {
     color: black;
+}
+
+#editPostBtn {
+    display: none;
 }

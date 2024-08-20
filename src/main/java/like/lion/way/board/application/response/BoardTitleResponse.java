@@ -10,12 +10,14 @@ public class BoardTitleResponse {
 
     private Long boardId;
     private String name;
+    private boolean userOwnerMatch;
 
     @Builder
-    public BoardTitleResponse(Long boardId, String name) {
+    public BoardTitleResponse(Long boardId, String name, boolean userOwnerMatch) {
 
         this.boardId = boardId;
         this.name = name;
+        this.userOwnerMatch = userOwnerMatch;
 
     }
 

@@ -18,11 +18,13 @@ public class BoardPostDetailResponse {
     private Long postComments;
     private Long postScraps;
     private List<BoardPostCommentResponse> boardPostCommentsList;
+    private boolean userOwnerMatch;
 
     @Builder
     public BoardPostDetailResponse(LocalDateTime postCreatedAt, String postTitle, String postContent, String author,
                                    Long postLikes, Long postComments, Long postScraps,
-                                   List<BoardPostCommentResponse> boardPostCommentsList) {
+                                   List<BoardPostCommentResponse> boardPostCommentsList,
+                                   boolean userOwnerMatch) {
 
         this.postCreatedAt = postCreatedAt;
         this.postTitle = postTitle;
@@ -32,6 +34,7 @@ public class BoardPostDetailResponse {
         this.postComments = postComments;
         this.postScraps = postScraps;
         this.boardPostCommentsList = boardPostCommentsList;
+        this.userOwnerMatch = userOwnerMatch;
 
     }
 
