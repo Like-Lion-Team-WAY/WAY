@@ -1,4 +1,4 @@
-package like.lion.way.board.api;
+package like.lion.way;
 
 import lombok.Builder;
 import lombok.Getter;
