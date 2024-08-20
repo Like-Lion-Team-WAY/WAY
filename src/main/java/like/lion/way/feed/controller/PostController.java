@@ -45,7 +45,7 @@ public class PostController {
     }
 
     // 공통된 Model 설정 메서드(새 질문, 답변 완료, 보낸 질문, 거절한 질문)
-    private void setCommonModelFilterAttributes(Model model, User user) {
+    private void setCommonModelFilterAttributes(Model model, User user,HttpServletRequest request) {
         if (user == null) {
             log.error("User object is null");
             model.addAttribute("posts", null);
@@ -59,7 +59,7 @@ public class PostController {
             log.info("user::::" + user.getUsername());
 
             List<Post> posts = postService.getPostByUser(user);
-            List<Question> questions= questionService.getQuestionByAnswerer(user);
+            List<Question> questions= questionService.getQuestionByAnswerer(user,request);
             if (posts != null) {
                 model.addAttribute("posts", posts.stream().filter(p -> !p.isPostPinStatus()).toList());
                 model.addAttribute("pinPosts", posts.stream().filter(Post::isPostPinStatus).toList());
@@ -74,16 +74,16 @@ public class PostController {
             }
 
             model.addAttribute("rejectedQuestions",
-                    questionService.getQuestionByAnswerer(user).stream()
+                    questionService.getQuestionByAnswerer(user,request).stream()
                             .filter(q -> Boolean.TRUE.equals(q.getQuestionRejected())).toList().size());
 
             model.addAttribute("newQuestions",
-                    questionService.getQuestionByAnswerer(user).stream()
+                    questionService.getQuestionByAnswerer(user,request).stream()
                             .filter(q -> Boolean.FALSE.equals(q.getQuestionRejected()) && q.getAnswer() == null)
                             .toList().size());
 
             model.addAttribute("replyQuestions",
-                    questionService.getQuestionByAnswerer(user).stream()
+                    questionService.getQuestionByAnswerer(user,request).stream()
                             .filter(q -> Boolean.FALSE.equals(q.getQuestionRejected()) && q.getAnswer() != null)
                             .toList().size());
 
@@ -98,7 +98,7 @@ public class PostController {
         User user = getLoginUser(request);
         model.addAttribute("followers", followService.getFollowerList(user).size());
         model.addAttribute("followings", followService.getFollowingList(user).size());
-        setCommonModelFilterAttributes(model, user);
+        setCommonModelFilterAttributes(model, user,request);
         model.addAttribute("loginUser", user);
         return "/pages/feed/userFeed";
     }
@@ -127,7 +127,7 @@ public class PostController {
         model.addAttribute("loginUser", loginUser);
 
         // 공통 모델 속성 설정
-        setCommonModelFilterAttributes(model, user);
+        setCommonModelFilterAttributes(model, user,request);
 
         return "/pages/feed/userFeed";
     }

@@ -63,7 +63,7 @@ public class CommonController {
             List<Question> questions = new ArrayList<>();
             for (FollowDto follow : follows) {
                 User user = userService.findByUsername(follow.getUsername());
-                questions.addAll(questionService.getQuestionByAnswerer(user));
+                questions.addAll(questionService.getQuestionByAnswerer(user,request));
             }
             model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).toList());
         }
