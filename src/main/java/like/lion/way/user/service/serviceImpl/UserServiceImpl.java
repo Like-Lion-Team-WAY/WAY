@@ -186,7 +186,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> updateOrSaveImg( String deleteFileName , HttpServletRequest request , String key) {
-        System.out.println(key);
         User user = getUserByToken(request);
         user.setUserImage(key);
         saveOrUpdateUser(user);

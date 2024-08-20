@@ -45,4 +45,6 @@ public class BlockServiceImpl implements BlockService {
         blockRepository.deleteByBlockerUserIdAndBlockedUserId(blockedUser,unblockedUser);
         return ResponseEntity.ok("success");
     }
+
+
 }
