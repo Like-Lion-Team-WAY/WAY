@@ -1,6 +1,7 @@
 package like.lion.way.els.controller;
 
 import java.util.List;
+import like.lion.way.ApiResponse;
 import like.lion.way.els.domain.ElsUser;
 import like.lion.way.els.service.ElsUserService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,15 @@ public class ElsUserRestController {
     private final ElsUserService elsUserService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ElsUser>> getAllUsers() {
-        List<ElsUser> users= elsUserService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ApiResponse<List<ElsUser>> getAllUsers() {
+        List<ElsUser> users = elsUserService.getAllUsers();
+        return ApiResponse.ok(users);
     }
+
     @GetMapping("/search")
-    public ResponseEntity<List<ElsUser>> searchUsers(@RequestParam String username) {
+    public ApiResponse<List<ElsUser>> searchUsers(@RequestParam String username) {
         List<ElsUser> users = elsUserService.searchUsersByUsername(username);
-        return ResponseEntity.ok(users);
+        return ApiResponse.ok(users);
     }
 //    @DeleteMapping("/delete/{userId}")
 //    public ResponseEntity<String> deleteUserById(@PathVariable String userId) {

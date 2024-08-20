@@ -4,7 +4,8 @@ async function fetchUsers() {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const users = await response.json();
+        const result = await response.json(); // 응답을 JSON으로 파싱
+        const users = result.data; // 응답 객체의 data 필드에서 사용자 목록 추출
         const userList = document.getElementById('user-list');
         userList.innerHTML = ''; // 기존 내용을 비우기
 
@@ -13,9 +14,9 @@ async function fetchUsers() {
             a.href = `/posts/${user.username}`; // 사용자 상세 페이지로 링크
             a.className = 'user-item';
             a.innerHTML = `
-                        <img src="${user.imageUrl ? `/display?filename=${user.imageUrl}` : '/image/image.jpg'}" alt="${user.username} profile picture">
-                        <span class="username"> ${user.username}</span>
-                    `;
+                <img src="${user.imageUrl ? `/display?filename=${user.imageUrl}` : '/image/image.jpg'}" alt="${user.username} profile picture">
+                <span class="username">${user.username}</span>
+            `;
             userList.appendChild(a);
         });
     } catch (error) {
@@ -30,7 +31,8 @@ async function searchUsers() {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const users = await response.json();
+        const result = await response.json(); // 응답을 JSON으로 파싱
+        const users = result.data; // 응답 객체의 data 필드에서 사용자 목록 추출
         const userList = document.getElementById('user-list');
         userList.innerHTML = ''; // 기존 내용을 비우기
 
@@ -39,9 +41,9 @@ async function searchUsers() {
             a.href = `/posts/${user.username}`; // 사용자 상세 페이지로 링크
             a.className = 'user-item';
             a.innerHTML = `
-                        <img src="${user.imageUrl ? `/display?filename=${user.imageUrl}` : '/image/image.jpg'}" alt="${user.username} profile picture">
-                        <span class="username"> ${user.username}</span>
-                    `;
+                <img src="${user.imageUrl ? `/display?filename=${user.imageUrl}` : '/image/image.jpg'}" alt="${user.username} profile picture">
+                <span class="username">${user.username}</span>
+            `;
             userList.appendChild(a);
         });
     } catch (error) {
