@@ -2,9 +2,7 @@ package like.lion.way.user.controller.restcontroller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 import java.util.Set;
-import java.util.UUID;
 import like.lion.way.file.service.S3Service;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -54,8 +52,10 @@ public class UserRestController {
     public ResponseEntity<String> updateOrSaveImg(@RequestParam("image") MultipartFile file
                                                 ,@RequestParam("existingImageName") String deleteFileName
                                                 , HttpServletRequest request){
+        if(deleteFileName!=null){
+            s3Service.deleteFile(deleteFileName);
+        }
         String key = s3Service.uploadFile(file);
-
         return  userService.updateOrSaveImg(deleteFileName, request , key);
     }
     @DeleteMapping("/deleteUser")
