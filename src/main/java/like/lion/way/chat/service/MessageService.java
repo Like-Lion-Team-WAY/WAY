@@ -7,8 +7,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface MessageService {
     Message findLastByChatId(Long id);
+
     Page<Message> findAllByChatId(Long chatId, Pageable pageable);
+
     Page<Message> findAllByChatIdAndIdLessThan(Long chatId, String lastLoadMessageId, Pageable pageable);
+
     void createStartMessage(Chat newChat);
-    void readMessage(Long userId, Long id);
+
+    void readMessage(Long userId, Long chatId);
+
+    Message findById(String id);
 }

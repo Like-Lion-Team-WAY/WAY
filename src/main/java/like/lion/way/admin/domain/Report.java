@@ -10,8 +10,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import like.lion.way.user.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +35,7 @@ public class Report {
     private String type; // 중간 테이블 만들까?
 
     @Column(name = "report_content_id")
-    private Long contentId;
+    private String contentId;
 
     @Column(name = "report_content")
     private String content;
@@ -48,7 +46,7 @@ public class Report {
     @Column(name = "report_status")
     private Boolean status;
 
-    public Report(User reporter, User reported, String type, Long contentId, String content) {
+    public Report(User reporter, User reported, String type, String contentId, String content) {
         this.reporter = reporter;
         this.reported = reported;
         this.type = type;

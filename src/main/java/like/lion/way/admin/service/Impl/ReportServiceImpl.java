@@ -5,6 +5,7 @@ import like.lion.way.admin.domain.ReportRequestDto;
 import like.lion.way.admin.domain.ReportType;
 import like.lion.way.admin.repository.ReportRepository;
 import like.lion.way.admin.service.ReportService;
+import like.lion.way.chat.service.MessageService;
 import like.lion.way.feed.service.PostCommentService;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
@@ -23,6 +24,7 @@ public class ReportServiceImpl implements ReportService {
     private final QuestionService questionService;
     private final PostService postService;
     private final PostCommentService postCommentService;
+    private final MessageService messageService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -42,20 +44,21 @@ public class ReportServiceImpl implements ReportService {
         String content;
 
         if (type == ReportType.QUESTION) {
-            var value = questionService.getQuestionById(reportRequestDto.getId());
+            var value = questionService.getQuestionById(Long.valueOf(reportRequestDto.getId()));
             reported = value.getQuestioner();
             content = value.getQuestion();
         } else if (type == ReportType.POST) {
-            var value = postService.getPostById(reportRequestDto.getId());
+            var value = postService.getPostById(Long.valueOf(reportRequestDto.getId()));
             reported = value.getUser();
             content = "[" + value.getPostTitle() + "]" + value.getPostContent();
         } else if (type == ReportType.COMMENT) {
-            var value = postCommentService.getCommentById(reportRequestDto.getId());
+            var value = postCommentService.getCommentById(Long.valueOf(reportRequestDto.getId()));
             reported = value.getUser();
             content = value.getPostCommentContent();
         } else if (type == ReportType.CHATTING) {
-            reported = null;
-            content = null;
+            var value = messageService.findById(reportRequestDto.getId());
+            reported = userService.findByUserId(value.getSenderId());
+            content = value.getText();
         } else {
             throw new IllegalArgumentException("Invalid report type");
         }

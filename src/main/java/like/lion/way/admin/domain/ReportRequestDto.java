@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class ReportRequestDto {
     private ReportType type;
-    private Long id;
+    private String id;
 }
