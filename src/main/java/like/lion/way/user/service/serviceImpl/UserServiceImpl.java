@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(loginInfoDto.getUsername());
         user.setNickname(loginInfoDto.getNickname());
-        addCookies(response, user); //추가된 코드
+        addCookies(response, user);
         return saveOrUpdateUser(user);
     }
     @Override

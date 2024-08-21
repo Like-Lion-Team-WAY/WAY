@@ -58,8 +58,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(loginUser.getUserId());
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
-        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -79,8 +79,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
-        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -88,24 +88,27 @@ public class QuestionController {
     //userId 질문 페이지의 소유자 아이디
     @PostMapping("/questions/create/{userId}")
     public String createQuestion(@PathVariable("userId") Long userId,
-            @RequestParam("question") String question,
-            @RequestParam("isAnonymous") boolean isAnonymous,
-            @RequestParam(value = "image", required = false) MultipartFile image,
-            HttpServletRequest request) {
+                                 @RequestParam("question") String question,
+                                 @RequestParam("isAnonymous") boolean isAnonymous,
+                                 @RequestParam(value = "image", required = false) MultipartFile image,
+                                 HttpServletRequest request) {
 
         // 로그인 사용자
         User user = getLoginUser(request);
-        if(image.isEmpty()){
-            questionService.saveQuestion(userId, question, null, request);
-        }
-        else {
-            String key = s3Service.uploadFile(image);
-            //로그인한 사용자 여부 확인
-            if(user == null) {
-                //익명 - 비로그인 처리
+        if(user == null){
+            if(image.isEmpty()){
+                questionService.saveQuestion(userId, question, null, request);
+            }
+            else {
+                String key = s3Service.uploadFile(image);
                 questionService.saveQuestion(userId, question, key, request);
-            }else{
-                //로그인 사용자 처리
+            }
+        }else {
+            if(image.isEmpty()){
+                questionService.saveQuestion(user, userId, question, isAnonymous, null, request);
+            }
+            else {
+                String key = s3Service.uploadFile(image);
                 questionService.saveQuestion(user, userId, question, isAnonymous, key, request);
             }
         }
