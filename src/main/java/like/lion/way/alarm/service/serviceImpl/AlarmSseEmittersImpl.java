@@ -9,6 +9,8 @@ import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.dto.AlarmMessageDto;
 import like.lion.way.alarm.service.AlarmService;
 import like.lion.way.alarm.service.AlarmSseEmitters;
+import like.lion.way.alarm.service.ChatAlarmService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,14 +18,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     private final AlarmService alarmService;
+    private final ChatAlarmService chatAlarmService;
     private final Map<Long, Map<String, SseEmitter>> emitters = new ConcurrentHashMap<>(); // thread-safe
-
-    @Autowired
-    public AlarmSseEmittersImpl(AlarmService alarmService) {
-        this.alarmService = alarmService;
-    }
 
     public SseEmitter add(Long userId, String windowId) {
         var userEmitters = this.emitters.computeIfAbsent(userId, k -> new ConcurrentHashMap<>());
@@ -34,7 +33,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
 //        log.debug("[SseEmitters][add] number of emitters: {}", userEmitters.size());
 
         // 첫 데이터 전송
-        sendAlarmCount(userId);
+        sendSubscriptions(userId);
 
         // set callbacks
         emitter.onCompletion(() -> {
@@ -54,6 +53,22 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     @Override
+    public void sendSubscriptions(Long userId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("count", alarmService.countAlarm(userId));
+        data.put("chat", chatAlarmService.getCount(userId));
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
+
+            send(userId, "count", jsonData);
+        } catch (Exception e) {
+            log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
+        }
+    }
+
+    @Override
     public void sendAlarmCount(Long userId) {
         Map<String, Object> data = new HashMap<>();
         data.put("count", alarmService.countAlarm(userId));
@@ -69,9 +84,9 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     @Override
-    public void sendChatCount(Long userId, Long count) {
+    public void sendChatCount(Long userId) {
         Map<String, Object> data = new HashMap<>();
-        data.put("chat", count);
+        data.put("chat", chatAlarmService.getCount(userId));
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
