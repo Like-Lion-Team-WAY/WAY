@@ -45,20 +45,11 @@ public class ProducerImpl implements Producer {
 
             } else {
                 Chat chat = chatRepository.findById(message.getChatId()).orElse(null);
-                if (chat.isAnswerer(message.getSenderId())) {
-                    message.setReceiverId(chat.getQuestioner().getUserId());
-                } else {
-                    message.setReceiverId(chat.getAnswerer().getUserId());
-                }
+                settingMessageReceiverId(chat, message);
 
                 messageRepository.save(message);
 
-                String nickname;
-                if (chat.isAnswerer(message.getSenderId())) {
-                    nickname = chat.getAnswerer().getNickname();
-                } else {
-                    nickname = chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
-                }
+                String nickname = getSenderNickname(chat, message);
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), nickname);
             }
 
@@ -68,6 +59,22 @@ public class ProducerImpl implements Producer {
 
         } catch (JsonProcessingException e) {
             e.printStackTrace(); // JSON 변환 오류 처리
+        }
+    }
+
+    private void settingMessageReceiverId(Chat chat, Message message) {
+        if (chat.isAnswerer(message.getSenderId())) {
+            message.setReceiverId(chat.getQuestionerId());
+        } else {
+            message.setReceiverId(chat.getAnswererId());
+        }
+    }
+
+    private String getSenderNickname(Chat chat, Message message) {
+        if (chat.isAnswerer(message.getSenderId())) {
+            return chat.getAnswererNickname();
+        } else {
+            return chat.getQuestionerNickname(chat.getNicknameOpen() != 2);
         }
     }
 }
