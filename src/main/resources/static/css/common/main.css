@@ -6,9 +6,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff; /* 배경색 추가 */
+    background-color: #ffffff;
 }
-.feed-item {
+.feed-item, .question-item {
     background-color: #FFD6B0;
     padding: 15px;
     border-radius: 10px;
@@ -18,15 +18,43 @@ body {
     width: 900px;
     flex-direction: column;
 }
+.question-item h2 {
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff6746;
+}
+.feed-item h2{
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+}
+.feed-item p, .question-item p{
+    font-size: 15px;
+    margin-left: 15px;
+}
 
-.btnContainer {
+h1{
+    color: #ff6746;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.btnContainer, .containerBox {
     display: flex;
     justify-content: flex-end; /* Align items to the right */
     align-items: center; /* Center items vertically */
     margin-top: auto; /* Push the button to the bottom */
 }
+.containerBox a{
+    color: #ff6746;
+    font-weight: bold;
 
-.detailBtn, .archieveBtn {
+}
+
+.detailBtn {
     background-color: #ff6746;
     border: none;
     color: white;
@@ -55,11 +83,17 @@ body {
     padding: 0; /* Remove any padding */
     margin: 0; /* Remove any margin */
 }
-.feed-item:nth-child(odd){
+.detailBtn:hover{
+    background-color: #969696;
+}
+.feed-item:nth-child(odd), .question-item:nth-child(odd){
     background-color: #FFD6B0;
 }
-.feed-item:nth-child(even){
+.feed-item:nth-child(even), .question-item:nth-child(even){
     background-color: #f1f1f1;
+}
+.feed-item:hover, .question-item:hover{
+    background-color: #f9916e;
 }
 .profile-info {
     display: flex;
@@ -69,7 +103,10 @@ body {
 .profile-info p {
     margin: 0; /* 기본 margin 제거 */
 }
-
+.profile-info a {
+    text-decoration: none;
+    color: #ff6746;
+}
 .profile-picture {
     width: 30px;
     height: 30px;

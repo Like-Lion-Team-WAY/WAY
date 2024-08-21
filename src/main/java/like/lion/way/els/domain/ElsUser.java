@@ -1,5 +1,6 @@
 package like.lion.way.els.domain;
 import jakarta.persistence.Id;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,5 @@ public class ElsUser {
     private String id;
     private String username;
     private String imageUrl;
+    private List<String> interests;
 }

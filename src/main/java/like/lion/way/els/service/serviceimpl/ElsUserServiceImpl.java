@@ -2,6 +2,7 @@ package like.lion.way.els.service.serviceimpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import like.lion.way.els.domain.ElsUser;
 import like.lion.way.els.repository.ElsUserRepository;
 import like.lion.way.els.service.ElsUserService;
@@ -32,10 +33,10 @@ public class ElsUserServiceImpl implements ElsUserService {
         return elsUsers;
     }
 
-    @Override
-    public List<ElsUser> searchUsersByUsername(String username) {
-        return elsUserRepository.findByUsernameContaining(username);
-    }
+//    @Override
+//    public List<ElsUser> searchUsersByUsername(String username) {
+//        return elsUserRepository.findByUsernameContaining(username);
+//    }
 
     @Override
     public boolean deleteByUserId(String userId) {
@@ -46,5 +47,9 @@ public class ElsUserServiceImpl implements ElsUserService {
         return false;
     }
 
+    public List<ElsUser> searchUsersByInterest(String interest) {
+        List<ElsUser> users = elsUserRepository.findByInterestsContaining(interest);
+        return users;
+    }
 
 }

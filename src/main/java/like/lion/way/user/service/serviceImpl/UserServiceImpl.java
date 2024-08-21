@@ -177,6 +177,18 @@ public class UserServiceImpl implements UserService {
         elsUser.setUsername(user.getUsername());
         elsUser.setImageUrl(user.getUserImage());
 
+        List<String> interestNames = set.stream()
+                .map(Interest::getInterestName)
+                .collect(Collectors.toList()); //관심사 태그들
+
+        interestNames.add(user.getUsername()); //유저 이름도 넣어줌
+
+        elsUser.setInterests(interestNames);
+
+        for (String interestName : interestNames) {
+            System.out.println(interestName);
+        }
+
         elsUserService.saveOrUpdate(elsUser);
 
         return userRepository.save(user);

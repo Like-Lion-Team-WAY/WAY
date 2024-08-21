@@ -68,7 +68,7 @@ public class PostController {
                 model.addAttribute("pinPosts", null);
             }
             if (questions != null){
-                model.addAttribute("questions", questions.stream().filter(q -> Boolean.FALSE.equals(q.getQuestionRejected() && q.getAnswer()!=null)).toList());
+                model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).toList());
             }else{
                 model.addAttribute("questions", null);
             }

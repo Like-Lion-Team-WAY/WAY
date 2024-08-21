@@ -28,7 +28,8 @@ public class ElsUserRestController {
 
     @GetMapping("/search")
     public ApiResponse<List<ElsUser>> searchUsers(@RequestParam String username) {
-        List<ElsUser> users = elsUserService.searchUsersByUsername(username);
+//        List<ElsUser> users = elsUserService.searchUsersByUsername(username);
+        List<ElsUser> users= elsUserService.searchUsersByInterest(username);
         return ApiResponse.ok(users);
     }
 //    @DeleteMapping("/delete/{userId}")

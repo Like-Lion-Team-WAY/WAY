@@ -12,7 +12,9 @@ public interface ElsUserService {
 
     List<ElsUser> getAllUsers();
 
-    List<ElsUser> searchUsersByUsername(String username);
+//    List<ElsUser> searchUsersByUsername(String username);
 
     boolean deleteByUserId(String userId);
+
+    List<ElsUser> searchUsersByInterest(String interest);
 }
