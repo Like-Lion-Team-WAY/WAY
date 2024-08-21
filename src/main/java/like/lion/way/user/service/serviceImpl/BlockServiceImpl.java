@@ -56,7 +56,6 @@ public class BlockServiceImpl implements BlockService {
         Long userId = jwtUtil.getUserIdFromToken(token);
         User user = userService.findByUserId(userId);
         List<Block> blocks = blockRepository.findAllByBlockerUserId(user);
-        log.info("차단당한계정 수:{}",blocks.size());
         List<Object> list = new ArrayList<>();
         for (Object content : checkContents) {
             //질문관련 차단
@@ -88,8 +87,33 @@ public class BlockServiceImpl implements BlockService {
                     log.error("Error while filtering content: {}", e.getMessage(), e);
                 }
             }
+            //post관련 차단
+            else if(content instanceof Post){
+                try{
+                    Long postUserId = ((Post) content).getUser().getUserId();
+                    boolean isBlocked = false;
+                    for (Block block : blocks) {
+                        if (block.getBlockedUserId().getUserId().equals(postUserId)) {
+                            isBlocked = true;
+                            break;
+                        }
+                    }
+                    if (!isBlocked) {
+                        list.add(content);
+                    }
+                }catch(Exception e){
+                    log.error("Error while filtering content: {}" , e.getMessage());
+                }
+            }
         }
-        log.info("총 수:{}",list.size());
         return list;
+    }
+
+    @Override
+    public Block findByUser(User feedUser, HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        User nowUser = userService.findByUserId(userId);
+        return blockRepository.findByBlockerUserIdAndBlockedUserId(nowUser,feedUser);
     }
 }

@@ -7,7 +7,9 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.domain.Block;
 import like.lion.way.user.domain.User;
+import like.lion.way.user.service.BlockService;
 import like.lion.way.user.service.FollowService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class PostController {
     private final QuestionService questionService;
     private final FollowService followService;
     private final JwtUtil jwtUtil;
+    private final BlockService blockService;
 
     // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
@@ -58,7 +61,7 @@ public class PostController {
             model.addAttribute("user", user);
             log.info("user::::" + user.getUsername());
 
-            List<Post> posts = postService.getPostByUser(user);
+            List<Post> posts = postService.getPostByUser(user,request);
             List<Question> questions= questionService.getQuestionByAnswerer(user,request);
             if (posts != null) {
                 model.addAttribute("posts", posts.stream().filter(p -> !p.isPostPinStatus()).toList());
@@ -112,6 +115,10 @@ public class PostController {
         if (user == null) {
             log.error("User with username {} not found", username);
             return "redirect:/posts"; // 유저가 없으면 게시판 목록 페이지로 리다이렉트
+        }
+        Block block = blockService.findByUser(user,request);
+        if(block!=null){
+            return "redirect:/main";
         }
 
 //         팔로워, 팔로잉 정보 추가

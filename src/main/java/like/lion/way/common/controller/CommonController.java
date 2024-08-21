@@ -56,7 +56,7 @@ public class CommonController {
             List<Post> posts= new ArrayList<>();
             for (FollowDto follow : follows) {
                 User user = userService.findByUsername(follow.getUsername());
-                posts.addAll(postService.getPostByUser(user));
+                posts.addAll(postService.getPostByUser(user,request));
             }
             model.addAttribute("posts", posts);
 
