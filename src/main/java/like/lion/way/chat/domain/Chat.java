@@ -13,11 +13,13 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "chats")
 @Getter
 @Setter
+@ToString
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

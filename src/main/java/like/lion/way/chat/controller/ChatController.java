@@ -6,7 +6,6 @@ import like.lion.way.chat.domain.dto.ChatRoomViewDTO;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;
-import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

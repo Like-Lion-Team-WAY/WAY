@@ -1,5 +1,6 @@
 package like.lion.way.chat.service.kafka.imple;
 
+import static like.lion.way.chat.constant.ChatMessageType.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,11 +35,11 @@ public class ProducerImpl implements Producer {
             ReceiveMessageDTO receiveMessageDTO = null;
             String messageType = message.getType();
 
-            if (messageType.equals("delete") || messageType.equals("open") || messageType.equals("close")) {
+            if (messageType.equals(DELETE.get()) || messageType.equals(OPEN.get()) || messageType.equals(CLOSE.get())) {
                 message.setReceiverId(0L);
                 receiveMessageDTO = new ReceiveMessageDTO(message, null, null);
 
-            } else if (messageType.startsWith("create")) {
+            } else if (messageType.startsWith(CREATE.get())) {
                 Long newChatId = Long.valueOf(message.getType().substring(6));
                 Chat chat = chatRepository.findById(newChatId).orElse(null);
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), null);

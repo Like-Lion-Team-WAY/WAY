@@ -1,5 +1,7 @@
 package like.lion.way.chat.service.impl;
 
+import static like.lion.way.chat.constant.ChatMessageType.DELETE;
+import static like.lion.way.chat.constant.ChatMessageType.LEAVE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,10 +50,10 @@ public class ChatServiceImpl implements ChatService {
             messageRepository.deleteByChatId(chat.getId());
             chatRepository.delete(chat);
 
-            return "delete";
+            return DELETE.get();
         } else {
             chatRepository.save(chat);
-            return "leave";
+            return LEAVE.get();
         }
     }
 

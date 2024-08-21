@@ -1,6 +1,7 @@
 package like.lion.way.chat.controller.rest;
 
 import static like.lion.way.chat.constant.ApiMessage.*;
+import static like.lion.way.chat.constant.ChatMessageType.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class ChatRestController {
         chatInfoDTOs.sort(
                 Comparator.comparing(ChatInfoDTO::getLastMessageTime, Comparator.nullsLast(Comparator.reverseOrder())));
 
+        System.out.println(chatInfoDTOs);
+
         Map<String, Object> response = new HashMap<>();
         response.put("chats", chatInfoDTOs);
 
@@ -91,14 +94,14 @@ public class ChatRestController {
 
         Map<String, Object> response = new HashMap<>();
         if (chat != null && chat.isAnswererActive()) {
-            response.put("message", "exist");
+            response.put("result", EXIST.get());
             response.put("chatId", chat.getId());
             return ResponseEntity.ok(response);
         }
 
         Chat newChat = chatService.createChat(question);
         messageService.createStartMessage(newChat);
-        response.put("message", "create");
+        response.put("result", CREATE.get());
         response.put("chatId", newChat.getId());
         return ResponseEntity.ok(response);
     }
@@ -146,13 +149,13 @@ public class ChatRestController {
 
         String oldName = chat.getName();
         if (oldName.equals(newName)) {
-            response.put("result", "noChange");
+            response.put("result", NO_CHANGE.get());
             return ResponseEntity.ok(response);
         }
 
         chatService.changeName(chat, newName);
 
-        response.put("result", "change");
+        response.put("result", CHANGE.get());
 
         String nickname = getNickname(chat, userId);
         String text = "[" + nickname + "] 님이 채팅방 이름을 변경하였습니다<br>"
@@ -182,9 +185,9 @@ public class ChatRestController {
     private ResponseEntity<?> nicknameRequestProcessing(String type, Chat chat, Long userId) {
         Map<String, Object> response = new HashMap<>();
 
-        if (type.equals("request")) {
+        if (type.equals(REQUEST.get())) {
             return requestTypeProcessing(type, chat, userId, response);
-        } else if (type.equals("cancel")) {
+        } else if (type.equals(CANCEL.get())) {
             return cancelTypeProcessing(type, chat, userId, response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_RIGHT_TYPE.get());
@@ -236,9 +239,9 @@ public class ChatRestController {
 
     private ResponseEntity<?> nicknameResponseProcessing(String type, Chat chat, Long userId) {
         Map<String, Object> response = new HashMap<>();
-        if (type.equals("accept")) {
+        if (type.equals(ACCEPT.get())) {
             return acceptTypeProcessing(type, chat, userId, response);
-        } else if (type.equals("reject")) {
+        } else if (type.equals(REJECT.get())) {
             return rejectTypeProcessing(type, chat, userId, response);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_RIGHT_TYPE.get());

@@ -14,9 +14,10 @@ public enum ApiMessage {
     CANNOT_CHAT_WITH_NON_MEMBER("비회원의 질문에 대해서 채팅은 불가합니다."),
     ALREADY_PROCESSED("이미 처리된 요청입니다."),
     NOT_RIGHT_TYPE("적절한 타입이 아닙니다."),
+
     NO_HAVE_MESSAGE_PERMISSION("해당 메세지에 대한 접근 권한이 없습니다.");
 
-    private String message;
+    private final String message;
 
     ApiMessage(String message) {
         this.message = message;

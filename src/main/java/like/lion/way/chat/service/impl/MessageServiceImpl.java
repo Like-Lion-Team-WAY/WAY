@@ -1,5 +1,7 @@
 package like.lion.way.chat.service.impl;
 
+import static like.lion.way.chat.constant.ChatMessageType.CREATE;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import like.lion.way.chat.domain.Chat;
@@ -44,7 +46,7 @@ public class MessageServiceImpl implements MessageService {
         message.setSenderId(chatMaker.getUserId());
         message.setReceiverId(chat.getQuestioner().getUserId());
         message.setText("[" + chatMaker.getNickname() + "] 님이 채팅을 시작했습니다");
-        message.setType("create" + chat.getId());
+        message.setType(CREATE.get() + chat.getId());
         message.setCreatedAt(LocalDateTime.now());
 
         messageRepository.save(message);

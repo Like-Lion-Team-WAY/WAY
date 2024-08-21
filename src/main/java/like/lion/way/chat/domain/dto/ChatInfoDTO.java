@@ -5,9 +5,11 @@ import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
+@ToString
 public class ChatInfoDTO {
     private Long id;
     private String name;
@@ -17,15 +19,16 @@ public class ChatInfoDTO {
     private Boolean isRead;
 
     public ChatInfoDTO(Chat chat, Message message) {
+
         if (message != null) {
-            new ChatInfoDTO(chat.getId(), chat.getName(), message.getText(), message.getSenderId(),
+            setDTO(chat.getId(), chat.getName(), message.getText(), message.getSenderId(),
                     message.getCreatedAt(), message.getIsRead());
         } else {
-            new ChatInfoDTO(chat.getId(), chat.getName(), "메세지가 없습니다", null, null, true);
+            setDTO(chat.getId(), chat.getName(), "메세지가 없습니다", null, null, true);
         }
     }
 
-    public ChatInfoDTO(Long id, String name, String lastMessage, Long senderId, LocalDateTime lastMessageTime,
+    private void setDTO(Long id, String name, String lastMessage, Long senderId, LocalDateTime lastMessageTime,
                        Boolean isRead) {
         this.id = id;
         this.name = name;

@@ -1,5 +1,7 @@
 package like.lion.way.chat.service.kafka.imple;
 
+import static like.lion.way.chat.constant.ChatMessageType.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,13 +40,13 @@ public class ConsumerImpl implements Consumer {
             Long senderId = receiveMessageDTO.getSenderId();
             Set<Long> chatIds = enterUser.get(chatId);
 
-            if (type.equals("open")) {
+            if (type.equals(OPEN.get())) {
                 enterProcessing(chatIds, chatId, senderId);
 
-            } else if (type.equals("close")) {
+            } else if (type.equals(CLOSE.get())) {
                 leaveProcessing(chatIds, chatId, senderId);
 
-            } else if (!type.startsWith("create") && !type.equals("delete") &&
+            } else if (!type.startsWith(CREATE.get()) && !type.equals(DELETE.get()) &&
                     chatIds != null && chatIds.contains(receiveMessageDTO.getReceiverId())) {
                 readProcessing(receiveMessageDTO);
             }
