@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(set);
 
         user.initializeAlarmSetting();
+        user.initializeChattingAlarm();
 
         return userRepository.save(user);
     }
