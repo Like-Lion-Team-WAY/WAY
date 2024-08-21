@@ -1,5 +1,7 @@
 package like.lion.way.chat.controller.rest;
 
+import static like.lion.way.chat.constant.ApiMessage.NO_HAVE_MESSAGE_PERMISSION;
+
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class MessageRestController {
         Chat chat = chatService.findById(chatId);
 
         if (!chat.isAccessibleUser(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 메세지에 대한 접근 권한이 없습니다");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_MESSAGE_PERMISSION.get());
         }
 
         Page<Message> messages = findMessages(page, size, chatId, lastLoadMessageId);

@@ -1,5 +1,7 @@
 package like.lion.way.chat.controller.rest;
 
+import static like.lion.way.chat.constant.ApiMessage.*;
+
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -185,7 +187,7 @@ public class ChatRestController {
         } else if (type.equals("cancel")) {
             return cancelTypeProcessing(type, chat, userId, response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("적절한 타입이 아닙니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_RIGHT_TYPE.get());
         }
     }
 
@@ -198,7 +200,7 @@ public class ChatRestController {
             response.put("result", type);
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 처리된 요청입니다.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ALREADY_PROCESSED.get());
         }
     }
 
@@ -211,7 +213,7 @@ public class ChatRestController {
             response.put("result", type);
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("취소할 요청이 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_NICKNAME_REQUEST_TO_REJECT.get());
         }
     }
 
@@ -239,7 +241,7 @@ public class ChatRestController {
         } else if (type.equals("reject")) {
             return rejectTypeProcessing(type, chat, userId, response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("적절한 타입이 아닙니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_RIGHT_TYPE.get());
         }
     }
 
@@ -270,9 +272,9 @@ public class ChatRestController {
 
     private String getNickname(Chat chat, Long userId) {
         if (chat.isAnswerer(userId)) {
-            return chat.getAnswerer().getNickname();
+            return chat.getAnswererNickname();
         } else {
-            return chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
+            return chat.getQuestionerNickname(chat.getNicknameOpen() != 2);
         }
     }
 
@@ -280,61 +282,61 @@ public class ChatRestController {
 
     private ResponseEntity<?> validateQuestionAndUser(Question question, Long userId) {
         if (question == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 질문을 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CANNOT_FIND_QUESTION.get());
         }
 
         if (!question.getAnswerer().getUserId().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("채팅방 생성 권한이 없습니다");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_CREATE_CHAT_PERMISSION.get());
         }
 
         if (question.getQuestioner() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비회원의 질문에 대해서 채팅은 불가합니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CANNOT_CHAT_WITH_NON_MEMBER.get());
         }
 
-        return ResponseEntity.ok("이용 가능");
+        return ResponseEntity.ok(OK.get());
     }
 
     private ResponseEntity<?> validateChatAndUser(Chat chat, Long userId) {
         if (chat == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CANNOT_FIND_CHAT);
         }
 
         if (!chat.isAccessibleUser(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당 채팅방에 대한 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_CHAT_PERMISSION.get());
         }
 
-        return ResponseEntity.ok("이용 가능");
+        return ResponseEntity.ok(OK.get());
     }
 
     private ResponseEntity<?> validateChatAndNicknameRequest(Chat chat, Long userId) {
         if (chat == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CANNOT_FIND_CHAT.get());
         }
 
         if (!chat.isAnswerer(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("닉네임 요청에 대한 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_REQUEST_NICKNAME_PERMISSION.get());
         }
 
-        return ResponseEntity.ok("이용 가능");
+        return ResponseEntity.ok(OK.get());
     }
 
     private ResponseEntity<?> validateChatAndNicknameResponse(Chat chat, Long userId) {
         if (chat == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("채팅방을 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CANNOT_FIND_CHAT.get());
         }
 
         if (!chat.isQuestioner(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("닉네임 수락에 대한 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_ACCEPT_NICKNAME_PERMISSION.get());
         }
 
         if (chat.getNicknameOpen() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임에 대한 요청이 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_NICKNAME_REQUEST.get());
         }
 
         if (chat.getNicknameOpen() == 2) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 처리된 요청입니다.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ALREADY_PROCESSED.get());
         }
 
-        return ResponseEntity.ok("이용 가능");
+        return ResponseEntity.ok(OK.get());
     }
 }
