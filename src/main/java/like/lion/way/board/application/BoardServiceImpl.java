@@ -165,6 +165,7 @@ public class BoardServiceImpl implements BoardService {
 
         return BoardPostDetailResponse.builder()
                 .author(post.getUser().getNickname(post.isAnonymousPermission()))
+                .authorProfileImgUrl(post.getUser().getUserImage())
                 .postCreatedAt(post.getCreatedAt())
                 .postTitle(post.getTitle())
                 .postContent(post.getContent())

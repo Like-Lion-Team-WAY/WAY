@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class BoardPostDetailResponse {
 
     private String author;
+    private String authorProfileImgUrl;
     private LocalDateTime postCreatedAt;
     private String postTitle;
     private String postContent;
@@ -22,7 +23,7 @@ public class BoardPostDetailResponse {
 
     @Builder
     public BoardPostDetailResponse(LocalDateTime postCreatedAt, String postTitle, String postContent, String author,
-                                   Long postLikes, Long postComments, Long postScraps,
+                                   String authorProfileImgUrl, Long postLikes, Long postComments, Long postScraps,
                                    List<BoardPostCommentResponse> boardPostCommentsList,
                                    boolean userOwnerMatch) {
 
@@ -30,6 +31,7 @@ public class BoardPostDetailResponse {
         this.postTitle = postTitle;
         this.postContent = postContent;
         this.author = author;
+        this.authorProfileImgUrl = authorProfileImgUrl;
         this.postLikes = postLikes;
         this.postComments = postComments;
         this.postScraps = postScraps;

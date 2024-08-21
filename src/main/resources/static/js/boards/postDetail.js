@@ -53,6 +53,15 @@ function fetchPostDetails() {
             }
 
             const data = apiResponse.data;
+            const profileImageElement = document.getElementById('profileImage');
+            const imageUrl = data.authorProfileImgUrl;
+            if (imageUrl) {
+                profileImageElement.src = `/display?filename=${imageUrl}`;
+            } else {
+                profileImageElement.src = '/image/image.jpg'; // 기본 이미지
+            }
+
+            document.querySelector('.post-author').textContent = data.author;
 
             document.querySelector('.post-date').textContent = new Date(data.postCreatedAt).toLocaleDateString();
             document.querySelector('.post-title').textContent = data.postTitle;

@@ -81,6 +81,14 @@ body {
     margin-right: 10px;
 }
 
+#profileImage {
+    width: 50px; /* 원하는 크기 */
+    height: 50px; /* 원하는 크기 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    object-fit: cover; /* 이미지 크기에 맞게 잘라서 맞추기 */
+}
+
+
 .post-info {
     flex-grow: 1;
 }
