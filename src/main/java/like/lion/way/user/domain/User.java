@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
 import like.lion.way.alarm.domain.AlarmSetting;
-import like.lion.way.chat.domain.ChatAlarm;
+import like.lion.way.alarm.domain.ChatAlarm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

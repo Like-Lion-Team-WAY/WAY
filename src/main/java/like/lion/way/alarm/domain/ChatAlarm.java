@@ -1,4 +1,4 @@
-package like.lion.way.chat.domain;
+package like.lion.way.alarm.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
