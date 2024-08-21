@@ -1,5 +1,7 @@
 package like.lion.way.chat.service.kafka.imple;
 
+import static like.lion.way.chat.constant.ChatMessageType.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,32 +36,46 @@ public class ConsumerImpl implements Consumer {
             // JSON 문자열을 Message 객체로 변환
             ReceiveMessageDTO receiveMessageDTO = objectMapper.readValue(message, ReceiveMessageDTO.class);
             String type = receiveMessageDTO.getType();
-            Set<Long> chatIds = enterUser.get(receiveMessageDTO.getChatId());
+            Long chatId = receiveMessageDTO.getChatId();
+            Long senderId = receiveMessageDTO.getSenderId();
+            Set<Long> chatIds = enterUser.get(chatId);
 
-            if (type.equals("open")) {
-                if (chatIds == null) {
-                    enterUser.put(receiveMessageDTO.getChatId(), new HashSet<>());
-                }
-                enterUser.get(receiveMessageDTO.getChatId()).add(receiveMessageDTO.getSenderId());
+            if (type.equals(OPEN.get())) {
+                enterProcessing(chatIds, chatId, senderId);
 
-            } else if (type.equals("close")) {
-                chatIds.remove(receiveMessageDTO.getSenderId());
-                if (chatIds.isEmpty()) {
-                    enterUser.remove(receiveMessageDTO.getChatId());
-                }
+            } else if (type.equals(CLOSE.get())) {
+                leaveProcessing(chatIds, chatId, senderId);
 
-            } else if (!type.startsWith("create") && !type.equals("delete") &&
+            } else if (!type.startsWith(CREATE.get()) && !type.equals(DELETE.get()) &&
                     chatIds != null && chatIds.contains(receiveMessageDTO.getReceiverId())) {
-                Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
-                messageFromDB.setIsRead(true);
-                messageRepository.save(messageFromDB);
-
-                receiveMessageDTO.setIsRead(true);
+                readProcessing(receiveMessageDTO);
             }
             messagingTemplate.convertAndSend("/topic/messages/" + receiveMessageDTO.getChatId(), receiveMessageDTO);
 
         } catch (Exception e) {
             e.printStackTrace(); // JSON 역직렬화 오류 처리
         }
+    }
+
+    private void enterProcessing(Set<Long> chatIds, Long chatId, Long senderId) {
+        if (chatIds == null) {
+            enterUser.put(chatId, new HashSet<>());
+        }
+        enterUser.get(chatId).add(senderId);
+    }
+
+    private void leaveProcessing(Set<Long> chatIds, Long chatId, Long senderId) {
+        chatIds.remove(senderId);
+        if (chatIds.isEmpty()) {
+            enterUser.remove(chatId);
+        }
+    }
+
+    private void readProcessing(ReceiveMessageDTO receiveMessageDTO) {
+        Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
+        messageFromDB.setIsRead(true);
+        messageRepository.save(messageFromDB);
+
+        receiveMessageDTO.setIsRead(true);
     }
 }

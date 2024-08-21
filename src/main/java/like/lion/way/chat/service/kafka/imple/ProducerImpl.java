@@ -1,5 +1,7 @@
 package like.lion.way.chat.service.kafka.imple;
 
+import static like.lion.way.chat.constant.ChatMessageType.*;
+import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,31 +36,22 @@ public class ProducerImpl implements Producer {
             ReceiveMessageDTO receiveMessageDTO = null;
             String messageType = message.getType();
 
-            if (messageType.equals("delete") || messageType.equals("open") || messageType.equals("close")) {
+            if (messageType.equals(DELETE.get()) || messageType.equals(OPEN.get()) || messageType.equals(CLOSE.get())) {
                 message.setReceiverId(0L);
                 receiveMessageDTO = new ReceiveMessageDTO(message, null, null);
 
-            } else if (messageType.startsWith("create")) {
+            } else if (messageType.startsWith(CREATE.get())) {
                 Long newChatId = Long.valueOf(message.getType().substring(6));
                 Chat chat = chatRepository.findById(newChatId).orElse(null);
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), null);
 
             } else {
                 Chat chat = chatRepository.findById(message.getChatId()).orElse(null);
-                if (chat.isAnswerer(message.getSenderId())) {
-                    message.setReceiverId(chat.getQuestioner().getUserId());
-                } else {
-                    message.setReceiverId(chat.getAnswerer().getUserId());
-                }
+                settingMessageReceiverId(chat, message);
 
                 messageRepository.save(message);
 
-                String nickname;
-                if (chat.isAnswerer(message.getSenderId())) {
-                    nickname = chat.getAnswerer().getNickname();
-                } else {
-                    nickname = chat.getQuestioner().getNickname(chat.getNicknameOpen() != 2);
-                }
+                String nickname = getSenderNickname(chat, message);
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), nickname);
             }
 
@@ -68,6 +61,22 @@ public class ProducerImpl implements Producer {
 
         } catch (JsonProcessingException e) {
             e.printStackTrace(); // JSON 변환 오류 처리
+        }
+    }
+
+    private void settingMessageReceiverId(Chat chat, Message message) {
+        if (chat.isAnswerer(message.getSenderId())) {
+            message.setReceiverId(chat.getQuestionerId());
+        } else {
+            message.setReceiverId(chat.getAnswererId());
+        }
+    }
+
+    private String getSenderNickname(Chat chat, Message message) {
+        if (chat.isAnswerer(message.getSenderId())) {
+            return chat.getAnswererNickname();
+        } else {
+            return chat.getQuestionerNickname(chat.getNicknameOpen() != NICKNAME_OPEN_STATE.get());
         }
     }
 }

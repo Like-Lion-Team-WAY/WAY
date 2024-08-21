@@ -6,7 +6,6 @@ import like.lion.way.chat.domain.dto.ChatRoomViewDTO;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;
-import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,11 +25,10 @@ public class ChatController {
 
     @GetMapping
     public String chatList(Model model, HttpServletRequest request) {
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User user = userService.findByUserId(userId);
+        Long userId = getUserId(request);
+        String nickname = getUserNickname(userId);
 
-        model.addAttribute("nickname", user.getNickname());
+        model.addAttribute("nickname", nickname);
         model.addAttribute("userId", userId);
 
         return "pages/chat/chats";
@@ -39,25 +37,31 @@ public class ChatController {
     @GetMapping("/{chatId}")
     public String chatRoom(@PathVariable("chatId") Long chatId, Model model, HttpServletRequest request) {
         Chat chat = chatService.findById(chatId);
-
         if (chat == null) {
             return "error";
         }
 
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
+        Long userId = getUserId(request);
         if (!chat.isAccessibleUser(userId)) {
             return "error";
         }
 
         messageService.readMessage(userId, chat.getId());
 
-        ChatRoomViewDTO chatRoomViewDTO
-                = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(), chat.isQuestioner(userId), chat.getNicknameOpen());
+        ChatRoomViewDTO chatRoomViewDTO = new ChatRoomViewDTO(userId, chat.getName(), chat.isActive(),
+                chat.isQuestioner(userId), chat.getNicknameOpen());
 
         model.addAttribute("chatRoomViewDTO", chatRoomViewDTO);
 
         return "pages/chat/chat-room";
+    }
+
+    private Long getUserId(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        return jwtUtil.getUserIdFromToken(token);
+    }
+
+    private String getUserNickname(Long userId) {
+        return userService.findByUserId(userId).getNickname();
     }
 }
