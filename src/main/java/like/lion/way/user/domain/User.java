@@ -3,7 +3,6 @@ package like.lion.way.user.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +14,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
 import like.lion.way.alarm.domain.AlarmSetting;
+import like.lion.way.alarm.domain.ChatAlarm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -74,6 +74,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private AlarmSetting alarmSetting;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ChatAlarm chatAlarm;
+
     public String getNickname(boolean check) {
         if(check){
             return "익명";
@@ -91,6 +94,12 @@ public class User {
     public void initializeAlarmSetting() {
         if (this.alarmSetting == null) {
             this.alarmSetting = new AlarmSetting(this);
+        }
+    }
+
+    public void initializeChattingAlarm() {
+        if (this.chatAlarm == null) {
+            this.chatAlarm = new ChatAlarm(this);
         }
     }
 }

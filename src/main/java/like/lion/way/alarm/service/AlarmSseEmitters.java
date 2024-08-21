@@ -5,14 +5,14 @@ import like.lion.way.user.domain.User;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface AlarmSseEmitters {
-    /**
-     * SseEmitter 추가 (SSE 구독)
-     */
+    // 구독 신청
     SseEmitter add(Long userId, String windowId);
-
-    /**
-     * 알림 전송
-     */
-    void sendCount(Long userId);
+    // 구독 후 첫 데이터 (알람 개수, 채팅 개수) 전송
+    void sendSubscriptions(Long userId);
+    // 알람 개수 전송 (헤더)
+    void sendAlarmCount(Long userId);
+    // 채팅 개수 전송 (헤더)
+    void sendChatCount(Long userId);
+    // 새로운 알람 전송
     void sendAlarm(Long userId, Alarm alarm);
 }

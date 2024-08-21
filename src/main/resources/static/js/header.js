@@ -5,15 +5,30 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!sessionStorage.getItem('windowID')) {
         sessionStorage.setItem('windowID', 'window-' + Date.now() + '-' + Math.random());
     }
-    const windowID = sessionStorage.getItem('windowID');
 
     const bellBadge = document.getElementById("bellBadge");
+    const chatBadge = document.getElementById("chatBadge");
+
+    const windowID = sessionStorage.getItem('windowID');
     const sseUrl = `/sse/subscribe?windowId=${windowID}`; // sse 연결 주소
 
     function connectSSE() {
         // SSE 연결 설정
         const eventSource = new EventSource(sseUrl);
         console.log("[SSE] 이벤트 연결 시도");
+
+        eventSource.addEventListener('subscription', function (event) {
+            console.log("[SSE] chat 데이터 수신");
+            const data = JSON.parse(event.data);
+            updateBellBadge(data.count);
+            updateChatBadge(data.chat);
+        });
+
+        eventSource.addEventListener('chat', function (event) {
+            console.log("[SSE] chat 데이터 수신");
+            const data = JSON.parse(event.data);
+            updateChatBadge(data.chat);
+        });
 
         eventSource.addEventListener('count', function (event) {
             console.log("[SSE] count 데이터 수신");
@@ -60,6 +75,17 @@ document.addEventListener("DOMContentLoaded", function() {
             bellBadge.textContent = count;
         } else {
             bellBadge.style.display = "none";
+        }
+    }
+
+    function updateChatBadge(count) {
+        console.log("[SSE] update chat badge : " + count);
+
+        if (count > 0) {
+            chatBadge.style.display = "block";
+            chatBadge.textContent = count;
+        } else {
+            chatBadge.style.display = "none";
         }
     }
 
