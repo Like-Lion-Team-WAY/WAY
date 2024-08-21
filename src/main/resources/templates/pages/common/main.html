@@ -10,12 +10,13 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>메인페이지</h1>
-    <!-- 해당 유저의 피드로 가서 질문 창으로 갈 수 있게끔 -->
+    <h1>피드</h1>
     <div class="feed-item" th:each="post : ${posts}">
         <h2 th:text="${post.postTitle}"></h2>
         <p th:text="${post.postContent}"></p>
-        <p th:text="${#temporals.format(post.postCreatedAt,'yyyy년 MM월 dd일')}"></p>
+        <div class="containerBox">
+            <p th:text="${#temporals.format(post.postCreatedAt,'yyyy년 MM월 dd일')}"></p>
+        </div>
         <div class="profile-info">
             <img th:if="${post.getUser().getUserImage() != null}" class="profile-picture" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
             <img th:if="${post.getUser().getUserImage() == null}" class="profile-picture" th:src="@{/image/image.jpg}" alt="Profile Picture" />
@@ -27,13 +28,29 @@
             <button class="detailBtn"><a th:href="@{'/posts/detail/' + ${post.postId}}"> 상세 보기</a></button>
         </div>
     </div>
-    <div class="feed-item" th:each="question: ${questions}">
-        <a th:href="@{'/questions/create/' + ${question.getAnswerer().userId}}"><p th:text="${question.getAnswerer().getNickname() + '가 받은 질문!!'}"></p></a>
-        <h2 th:if="${question.isAnonymous == false}" th:text="${question.getQuestioner().getUsername()}"></h2>
-        <h2 th:if="${question.isAnonymous != false}" th:text="익명"></h2>
+    <h1>질문</h1>
+    <div class="question-item" th:each="question: ${questions}">
+        <div th:if="${question.isAnonymous == false}" class="profile-info">
+            <img th:if="${question.getQuestioner().getUserImage() != null}" class="profile-picture" th:src="'/display?filename='+${question.getQuestioner().getUserImage()}" alt="Profile Picture" />
+            <img th:if="${question.getQuestioner().getUserImage() == null}" class="profile-picture" th:src="@{/image/image.jpg}" alt="Profile Picture" />
+            <p class="profile-name">
+                <a th:href="@{/posts/{username}(username=${question.getQuestioner().getUsername()})}"> <h2 th:text="${question.getQuestioner().getUsername()}"></h2></a>
+            </p>
+        </div>
+        <div th:if="${question.isAnonymous != false}" class="profile-info">
+            <img class="profile-picture" th:src="@{/image/image.jpg}" alt="Profile Picture" />
+            <p class="profile-name">
+                <h2 th:text="익명"></h2>
+            </p>
+        </div>
         <p th:text=" ${question.getQuestion()}"></p>
         <p th:text=" ${question.getAnswer()}"></p>
-        <p th:text="${#temporals.format(question.getQuestionDate(),'yyyy년 MM월 dd일')}"></p>
+        <div class="containerBox">
+            <p th:text="${#temporals.format(question.getQuestionDate(),'yyyy년 MM월 dd일')}"></p><br>
+        </div>
+        <div class="containerBox">
+            <a th:href="@{'/questions/create/' + ${question.getAnswerer().userId}}" style="text-decoration: none;"><p th:text="${question.getAnswerer().getNickname() + '님 질문 보러가기'}"></p></a>
+        </div>
     </div>
 </div>
 </body>

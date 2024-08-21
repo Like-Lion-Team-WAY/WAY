@@ -42,16 +42,6 @@ header {
   margin-left: auto;
 }
 
-.header-icons a {
-  margin: 0 10px;
-  margin-left: 10px;
-}
-
-.header-icons img {
-  width: 20px;
-  height: 20px;
-}
-
 .download-button {
   background-color: #e74c3c;
   color: white;

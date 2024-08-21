@@ -1,0 +1,62 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff; /* 배경색 추가 */
+}
+.container {
+    width: 860px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+}
+#search-input {
+    width: calc(100% - 22px); /* Input field width calculation */
+    padding: 10px;
+    margin-top: 60px;
+    border-radius: 5px;
+    border: 3px solid #ddd;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+#user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.user-item {
+    display: flex;
+    align-items: center;
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-decoration: none; /* 링크의 기본 밑줄 제거 */
+    color: inherit; /* 링크의 기본 색상 제거 */
+}
+.user-item:hover {
+    color: #FF6347 ;
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.user-item img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+.user-item .username {
+    font-weight: bold;
+}
+.user-item:nth-child(odd){
+    background-color: #FFD6B0;
+}
+.user-item:nth-child(even){
+    background-color: #f1f1f1;
+}

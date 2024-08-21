@@ -110,6 +110,7 @@ public class QuestionServiceImpl implements QuestionService {
         newQuestion.setQuestion(question);  //질문 저장
         newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
         newQuestion.setQuestioner(user);
+        System.out.println("user:::::::::::::"+user);
         //익명 여부에 따라
         if(isAnonymous) {
             newQuestion.setIsAnonymous(true);
