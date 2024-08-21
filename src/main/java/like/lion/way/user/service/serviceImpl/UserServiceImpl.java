@@ -222,4 +222,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElse(null);
         return user.getUserImage();
     }
+
+    @Override
+    public UserProfileDto getUserProfileFromNickname(String nickname) {
+
+        User user = userRepository.findByNickname(nickname);
+
+        UserProfileDto userProfileDto = new UserProfileDto();
+        userProfileDto.setUsername(user.getUsername());
+
+        return userProfileDto;
+
+    }
+
 }
