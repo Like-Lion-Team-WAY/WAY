@@ -1,6 +1,7 @@
 package like.lion.way.chat.service.kafka.imple;
 
 import static like.lion.way.chat.constant.ChatMessageType.*;
+import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,7 +76,7 @@ public class ProducerImpl implements Producer {
         if (chat.isAnswerer(message.getSenderId())) {
             return chat.getAnswererNickname();
         } else {
-            return chat.getQuestionerNickname(chat.getNicknameOpen() != 2);
+            return chat.getQuestionerNickname(chat.getNicknameOpen() != NICKNAME_OPEN_STATE.get());
         }
     }
 }

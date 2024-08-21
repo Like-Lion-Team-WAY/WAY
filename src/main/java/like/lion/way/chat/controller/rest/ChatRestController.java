@@ -2,6 +2,7 @@ package like.lion.way.chat.controller.rest;
 
 import static like.lion.way.chat.constant.ApiMessage.*;
 import static like.lion.way.chat.constant.ChatMessageType.*;
+import static like.lion.way.chat.constant.OpenNicknameState.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -195,8 +196,8 @@ public class ChatRestController {
     }
 
     private ResponseEntity<?> requestTypeProcessing(String type, Chat chat, Long userId, Map<String, Object> response) {
-        if (chat.getNicknameOpen() == 0) {
-            chatService.changeNicknameOpen(chat, 1);
+        if (chat.getNicknameOpen() == NICKNAME_NO_OPEN_STATE.get()) {
+            chatService.changeNicknameOpen(chat, NICKNAME_REQUEST_STATE.get());
             String nickname = getNickname(chat, userId);
             String text = "[" + nickname + "] 님이 닉네임을 요청하였습니다.";
             response.put("text", text);
@@ -208,15 +209,15 @@ public class ChatRestController {
     }
 
     private ResponseEntity<?> cancelTypeProcessing(String type, Chat chat, Long userId, Map<String, Object> response) {
-        if (chat.getNicknameOpen() == 1) {
-            chatService.changeNicknameOpen(chat, 0);
+        if (chat.getNicknameOpen() == NICKNAME_REQUEST_STATE.get()) {
+            chatService.changeNicknameOpen(chat, NICKNAME_NO_OPEN_STATE.get());
             String nickname = getNickname(chat, userId);
             String text = "[" + nickname + "] 님이 닉네임을 요청을 취소하였습니다.";
             response.put("text", text);
             response.put("result", type);
             return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_NICKNAME_REQUEST_TO_REJECT.get());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_NICKNAME_REQUEST_TO_CANCEL.get());
         }
     }
 
@@ -249,7 +250,7 @@ public class ChatRestController {
     }
 
     private ResponseEntity<?> acceptTypeProcessing(String type, Chat chat, Long userId, Map<String, Object> response) {
-        chatService.changeNicknameOpen(chat, 2);
+        chatService.changeNicknameOpen(chat, NICKNAME_OPEN_STATE.get());
         String nickname = getNickname(chat, userId);
         String text = "[" + nickname + "] 님이 닉네임 요청을 수락하셨습니다.";
         response.put("text", text);
@@ -258,7 +259,7 @@ public class ChatRestController {
     }
 
     private ResponseEntity<?> rejectTypeProcessing(String type, Chat chat, Long userId, Map<String, Object> response) {
-        chatService.changeNicknameOpen(chat, 0);
+        chatService.changeNicknameOpen(chat, NICKNAME_NO_OPEN_STATE.get());
         String nickname = getNickname(chat, userId);
         String text = "[" + nickname + "] 님이 닉네임 요청을 거절하셨습니다.";
         response.put("text", text);
@@ -277,7 +278,7 @@ public class ChatRestController {
         if (chat.isAnswerer(userId)) {
             return chat.getAnswererNickname();
         } else {
-            return chat.getQuestionerNickname(chat.getNicknameOpen() != 2);
+            return chat.getQuestionerNickname(chat.getNicknameOpen() != NICKNAME_OPEN_STATE.get());
         }
     }
 
@@ -332,11 +333,11 @@ public class ChatRestController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_ACCEPT_NICKNAME_PERMISSION.get());
         }
 
-        if (chat.getNicknameOpen() == 0) {
+        if (chat.getNicknameOpen() == NICKNAME_NO_OPEN_STATE.get()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NO_NICKNAME_REQUEST.get());
         }
 
-        if (chat.getNicknameOpen() == 2) {
+        if (chat.getNicknameOpen() == NICKNAME_OPEN_STATE.get()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ALREADY_PROCESSED.get());
         }
 

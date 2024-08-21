@@ -1,6 +1,7 @@
 package like.lion.way.chat.controller.rest;
 
 import static like.lion.way.chat.constant.ApiMessage.NO_HAVE_MESSAGE_PERMISSION;
+import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class MessageRestController {
 
     private List<ReceiveMessageDTO> MessagePageToDTOList(Page<Message> messages, Chat chat) {
         String answererNickname = chat.getAnswererNickname();
-        String questionerNickname = chat.getQuestionerNickname(chat.getNicknameOpen() != 2);
+        String questionerNickname = chat.getQuestionerNickname(chat.getNicknameOpen() != NICKNAME_OPEN_STATE.get());
 
         List<ReceiveMessageDTO> receiveMessageDTOs = new ArrayList<>();
         for (Message message : messages) {
