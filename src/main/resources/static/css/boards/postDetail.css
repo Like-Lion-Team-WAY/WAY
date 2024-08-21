@@ -265,22 +265,22 @@ body {
     display: none;
 }
 
-.comment-username {
+.comment-username, .post-author {
     color: inherit; /* 부모 요소의 색상을 상속받습니다 */
     text-decoration: none; /* 밑줄을 제거합니다 */
     cursor: pointer; /* 클릭 가능한 상태로 보이도록 커서를 변경합니다 */
 }
 
-.comment-username:hover {
+.comment-username:hover, .post-author:hover {
     text-decoration: underline; /* 호버할 때 밑줄 표시 (선택사항) */
 }
 
-.comment-username.anonymous {
+.comment-username.anonymous, .post-author.anonymous {
     cursor: default; /* 익명일 때 커서를 기본 상태로 */
     text-decoration: none; /* 익명일 때 밑줄 제거 */
     color: inherit; /* 익명일 때 부모 요소의 색상을 상속받습니다 */
 }
 
-.comment-username.anonymous:hover {
+.comment-username.anonymous:hover, .post-author.anonymous:hover {
     text-decoration: none; /* 익명일 때는 호버 시에도 밑줄 표시 안함 */
 }

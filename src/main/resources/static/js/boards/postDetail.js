@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('click', function(event) {
-        if (event.target.matches('.comment-username')) {
+        if (event.target.matches('.comment-username, .post-author')) {
             const username = event.target.dataset.username;
             if (username.trim() !== '익명') {
                 fetch(`/user/${username}`)
@@ -85,7 +85,17 @@ function fetchPostDetails() {
                 profileImageElement.src = '/image/image.jpg'; // 기본 이미지
             }
 
-            document.querySelector('.post-author').textContent = data.author;
+            const postAuthorElement = document.querySelector('.post-author');
+            postAuthorElement.textContent = data.author;
+            postAuthorElement.setAttribute('data-username', data.author);
+
+            // 익명일 경우 anonymous 클래스를 추가
+            if (data.author.trim() === '익명') {
+                postAuthorElement.classList.add('anonymous');
+            } else {
+                postAuthorElement.classList.remove('anonymous');
+            }
+
 
             document.querySelector('.post-date').textContent = new Date(data.postCreatedAt).toLocaleDateString();
             document.querySelector('.post-title').textContent = data.postTitle;
