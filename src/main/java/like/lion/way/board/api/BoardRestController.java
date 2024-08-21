@@ -7,6 +7,7 @@ import like.lion.way.ApiResponse;
 import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.api.request.BoardPostCommentRequest;
+import like.lion.way.board.api.request.BoardPostEditRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,20 +50,21 @@ public class BoardRestController {
 
     }
 
-    // 게시판 정보(제목, id) 요청
+    // 게시판 정보(제목, id) 요청 + 작성자 일치 여부
     @GetMapping("/{boardId}")
-    public ApiResponse<BoardTitleResponse> getBoardTitle(@PathVariable("boardId") Long boardId) {
+    public ApiResponse<BoardTitleResponse> getBoardTitle(@PathVariable("boardId") Long boardId,
+                                                         HttpServletRequest httpServletRequest) {
 
-        return ApiResponse.ok(boardService.getBoardTitle(boardId));
+        return ApiResponse.ok(boardService.getBoardTitle(boardId, httpServletRequest));
 
     }
 
     // 게시판 생성
     @PostMapping("/create")
     public ApiResponse<Void> createBoard(@RequestBody @Valid BoardCreateRequest request,
-                                         HttpServletRequest httpRequest) {
+                                         HttpServletRequest httpServletRequest) {
 
-        boardService.createBoard(request.toServiceRequest(), httpRequest);
+        boardService.createBoard(request.toServiceRequest(), httpServletRequest);
         return ApiResponse.ok();
 
     }
@@ -118,12 +121,30 @@ public class BoardRestController {
     // 게시글 상세보기 정보 요청
     @GetMapping("/posts/details/{postId}")
     public ApiResponse<BoardPostDetailResponse> getPostDetails(
-            @PathVariable("postId") Long postId) {
+            @PathVariable("postId") Long postId,
+            HttpServletRequest httpServletRequest) {
 
-        return ApiResponse.ok(boardService.getPostDetails(postId));
+        return ApiResponse.ok(boardService.getPostDetails(postId, httpServletRequest));
 
     }
 
+    // 게시글 수정
+    @PutMapping("/posts/edit/{postId}")
+    public ApiResponse<Void> editPost(
+            @PathVariable("postId") Long postId,
+            @RequestBody @Valid BoardPostEditRequest request) {
+
+        boardService.editBoardPost(postId, request.toServiceRequest());
+        return ApiResponse.ok();
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/posts/delete/{postId}")
+    public ApiResponse<Void> deletePost(
+            @PathVariable("postId") Long postId) {
+        boardService.deleteBoardPost(postId);
+        return ApiResponse.ok();
+    }
 
     // 게시글 좋아요
     @PostMapping("/posts/likes/{postId}")

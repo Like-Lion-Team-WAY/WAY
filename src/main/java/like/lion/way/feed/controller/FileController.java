@@ -30,7 +30,7 @@ public class FileController {
 
     private final S3Service s3Service;
 
-    //로컬 이미지 보여주기
+    //s3 이미지 보여주기
     @GetMapping("/display")
     public ResponseEntity<StreamingResponseBody> display(@RequestParam("filename") String filename) {
         if (!StringUtils.hasText(filename)) {

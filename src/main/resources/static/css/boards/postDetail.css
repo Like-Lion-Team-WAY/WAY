@@ -4,14 +4,43 @@ body {
 
 .container {
     background-color: white;
-    padding-top: 10px
+    padding-top: 10px;
 }
 
 .header {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#returnPage {
+.header #returnPage {
+    margin-right: auto; /* 왼쪽에 배치 */
+}
+
+.actions {
+    display: flex;
+    gap: 10px; /* 버튼 간의 간격 */
+}
+
+.actions button {
+    /* 추가적인 버튼 스타일링이 필요하면 여기에 추가 */
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #ff6746;
+    border: none;
+    padding: 7px;
+    margin-bottom: 20px;
+}
+
+.actions button:hover {
+    background-color: #035259;
+}
+
+
+    #returnPage {
     text-decoration: none;
     color: white;
     font-size: 16px;
@@ -51,6 +80,14 @@ body {
     color: white;
     margin-right: 10px;
 }
+
+#profileImage {
+    width: 50px; /* 원하는 크기 */
+    height: 50px; /* 원하는 크기 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    object-fit: cover; /* 이미지 크기에 맞게 잘라서 맞추기 */
+}
+
 
 .post-info {
     flex-grow: 1;
@@ -222,4 +259,28 @@ body {
 
 .reply .comment-content {
     color: black;
+}
+
+#editPostBtn {
+    display: none;
+}
+
+.comment-username, .post-author {
+    color: inherit; /* 부모 요소의 색상을 상속받습니다 */
+    text-decoration: none; /* 밑줄을 제거합니다 */
+    cursor: pointer; /* 클릭 가능한 상태로 보이도록 커서를 변경합니다 */
+}
+
+.comment-username:hover, .post-author:hover {
+    text-decoration: underline; /* 호버할 때 밑줄 표시 (선택사항) */
+}
+
+.comment-username.anonymous, .post-author.anonymous {
+    cursor: default; /* 익명일 때 커서를 기본 상태로 */
+    text-decoration: none; /* 익명일 때 밑줄 제거 */
+    color: inherit; /* 익명일 때 부모 요소의 색상을 상속받습니다 */
+}
+
+.comment-username.anonymous:hover, .post-author.anonymous:hover {
+    text-decoration: none; /* 익명일 때는 호버 시에도 밑줄 표시 안함 */
 }

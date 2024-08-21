@@ -78,6 +78,7 @@ table th {
 
 table tr {
     border-bottom: 1px solid black;
+    cursor: pointer;
 }
 
 /* Hover 효과 설정: th 요소 제외 */
@@ -155,4 +156,8 @@ table th:nth-child(4), table td:nth-child(4) {
 .pagination .active a:hover {
     background-color: #035259;
     border-color: #035259;
+}
+
+#editBoardButton {
+    display: none;
 }

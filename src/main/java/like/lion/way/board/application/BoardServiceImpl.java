@@ -7,6 +7,7 @@ import like.lion.way.board.application.request.BoardCreateServiceRequest;
 import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
+import like.lion.way.board.application.request.BoardPostEditServiceRequest;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostCommentResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
@@ -49,6 +50,7 @@ public class BoardServiceImpl implements BoardService {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    // 게시글 목록 find
     @Override
     public List<BoardTitleResponse> getBoardFindAll() {
 
@@ -62,19 +64,23 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시판 제목(소유자 일치) 요청
     @Override
-    public BoardTitleResponse getBoardTitle(Long boardId) {
+    public BoardTitleResponse getBoardTitle(Long boardId, HttpServletRequest httpServletRequest) {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
+        boolean userOwnerMatch = userOwnerMatch(httpServletRequest, board.getUser());
         return BoardTitleResponse.builder()
                 .boardId(board.getId())
                 .name(board.getName())
+                .userOwnerMatch(userOwnerMatch)
                 .build();
 
     }
 
+    // 게시판 생성
     @Override
     @Transactional
     public void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -85,6 +91,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시판 수정
     @Override
     @Transactional
     public void updateBoard(BoardEditServiceRequest request, Long boardId) {
@@ -95,6 +102,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시판 삭제
     @Override
     @Transactional
     public void deleteBoard(Long boardId) {
@@ -106,6 +114,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시글 목록 find
     @Override
     public Page<BoardPostResponse> getPostFindAll(Long boardId, Pageable pageable) {
         Board board = boardRepository.findById(boardId)
@@ -126,6 +135,7 @@ public class BoardServiceImpl implements BoardService {
         return new PageImpl<>(postResponses, pageable, postsPage.getTotalElements());
     }
 
+    // 게시글 생성
     @Override
     @Transactional
     public void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -138,10 +148,11 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시글 상세보기
     @Override
-    public BoardPostDetailResponse getPostDetails(Long postId) {
+    public BoardPostDetailResponse getPostDetails(Long postId, HttpServletRequest httpServletRequest) {
         BoardPost post = boardPostRepository.findByBoardPostId(postId);
-
+        boolean userOwnerMatch = userOwnerMatch(httpServletRequest, post.getUser());
         List<BoardPostCommentResponse> comments = boardPostCommentRepository.findByBoardPostId(postId).stream()
                 .map(comment -> BoardPostCommentResponse.builder()
                         .commentId(comment.getId())
@@ -154,6 +165,7 @@ public class BoardServiceImpl implements BoardService {
 
         return BoardPostDetailResponse.builder()
                 .author(post.getUser().getNickname(post.isAnonymousPermission()))
+                .authorProfileImgUrl(post.getUser().getUserImage())
                 .postCreatedAt(post.getCreatedAt())
                 .postTitle(post.getTitle())
                 .postContent(post.getContent())
@@ -161,10 +173,31 @@ public class BoardServiceImpl implements BoardService {
                 .postComments(boardPostCommentRepository.countCommentsByBoardPostId(postId))
                 .postScraps(boardPostScrapRepository.countScrapsByBoardPostId(postId))
                 .boardPostCommentsList(comments)
+                .userOwnerMatch(userOwnerMatch)
                 .build();
 
     }
 
+    // 게시글 수정
+    @Override
+    @Transactional
+    public void editBoardPost(Long postId, BoardPostEditServiceRequest request) {
+
+        BoardPost boardPost = boardPostRepository.findByBoardPostId(postId);
+
+        boardPost.editBoardPost(request.getTitle(), request.getContent());
+        log.info("게시글 수정 :::" + request.getTitle() + "///" + request.getContent());
+    }
+
+    // 게시글 삭제
+    @Override
+    @Transactional
+    public void deleteBoardPost(Long postId) {
+        BoardPost post = boardPostRepository.findByBoardPostId(postId);
+        boardPostRepository.delete(post);
+    }
+
+    // 게시글 좋아요 갯수 count
     @Override
     public BoardPostLikeCountResponse getPostLikeCount(Long postId) {
         Long likes = boardPostLikeRepository.countLikesByBoardPostId(postId);
@@ -173,6 +206,7 @@ public class BoardServiceImpl implements BoardService {
                 .build();
     }
 
+    // 게시글 좋아요
     @Override
     @Transactional
     public void likePost(Long postId, HttpServletRequest request) {
@@ -193,6 +227,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시글 스크랩 갯수 count
     @Override
     public BoardPostScrapCountResponse getPostScrapCount(Long postId) {
         Long scraps = boardPostScrapRepository.countScrapsByBoardPostId(postId);
@@ -201,6 +236,7 @@ public class BoardServiceImpl implements BoardService {
                 .build();
     }
 
+    // 게시글 스크랩
     @Override
     @Transactional
     public void scrapPost(Long postId, HttpServletRequest httpServletRequest) {
@@ -223,6 +259,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시글 댓글 갯수 count
     @Override
     public BoardPostCommentCountResponse getPostCommentCount(Long postId) {
 
@@ -233,6 +270,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 게시글 댓글 달기
     @Override
     @Transactional
     public void commentPost(Long postId, BoardPostCommentServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -246,6 +284,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // 내 스크랩 확인
     @Override
     public Page<BoardPostScrapsResponse> getPostScraps(HttpServletRequest httpServletRequest, Pageable pageable) {
 
@@ -264,6 +303,7 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    // HttpServletRequest로 User 찾기
     private User getUserByHttpServletRequest(HttpServletRequest httpRequest) {
 
         try {
@@ -275,6 +315,12 @@ public class BoardServiceImpl implements BoardService {
             return null;
         }
 
+    }
+
+    // 로그인 사용자와 소유자 일치 여부
+    private boolean userOwnerMatch(HttpServletRequest httpServletRequest, User owner) {
+        User user = getUserByHttpServletRequest(httpServletRequest);
+        return user != null && user.equals(owner);
     }
 
 }

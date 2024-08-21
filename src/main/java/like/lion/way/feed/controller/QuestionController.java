@@ -58,8 +58,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(loginUser.getUserId());
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
-        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -79,8 +79,8 @@ public class QuestionController {
         // 얘는 질문 페이지 소유자의 유저 정보
         User user = userService.findByUserId(userId);
         model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
-        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
+        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
 
         return "pages/feed/questionPage";
     }
@@ -88,10 +88,10 @@ public class QuestionController {
     //userId 질문 페이지의 소유자 아이디
     @PostMapping("/questions/create/{userId}")
     public String createQuestion(@PathVariable("userId") Long userId,
-            @RequestParam("question") String question,
-            @RequestParam("isAnonymous") boolean isAnonymous,
-            @RequestParam(value = "image", required = false) MultipartFile image,
-            HttpServletRequest request) {
+                                 @RequestParam("question") String question,
+                                 @RequestParam("isAnonymous") boolean isAnonymous,
+                                 @RequestParam(value = "image", required = false) MultipartFile image,
+                                 HttpServletRequest request) {
 
         // 로그인 사용자
         User user = getLoginUser(request);

@@ -49,8 +49,8 @@ public class QuestionFilterController {
     }
 
     // 필터된 질문 리스트를 설정하는 메서드
-    private void setFilteredQuestions(Model model, User user, Predicate<Question> filter) {
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user).stream()
+    private void setFilteredQuestions(Model model, User user, Predicate<Question> filter,HttpServletRequest request) {
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream()
                 .filter(filter)
                 .collect(Collectors.toList()));
     }
@@ -60,7 +60,7 @@ public class QuestionFilterController {
     public String rejectedQuestion(Model model, HttpServletRequest request) {
         User loginUser = getLoginUser(request);
         setCommonModelAttributes(model, loginUser, request);
-        setFilteredQuestions(model, loginUser, Question::getQuestionRejected);
+        setFilteredQuestions(model, loginUser, Question::getQuestionRejected,request);
         return "pages/feed/rejectedQuestionPage";
     }
 
@@ -69,7 +69,7 @@ public class QuestionFilterController {
     public String showNewQuestion(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
         User user = userService.findByUserId(userId);
         setCommonModelAttributes(model, user, request);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user)
+        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request)
                 .stream()
                 .filter(q -> !q.getQuestionRejected() && q.getAnswer() == null)
                 .sorted(Comparator.comparing(Question::getQuestionDate).reversed())
@@ -82,7 +82,7 @@ public class QuestionFilterController {
     public String showReplyQuestion(@PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
         User user = userService.findByUserId(userId);
         setCommonModelAttributes(model, user, request);
-        setFilteredQuestions(model, user, q -> !q.getQuestionRejected() && q.getAnswer() != null);
+        setFilteredQuestions(model, user, q -> !q.getQuestionRejected() && q.getAnswer() != null,request);
         return "pages/feed/filterQuestionPage";
     }
 

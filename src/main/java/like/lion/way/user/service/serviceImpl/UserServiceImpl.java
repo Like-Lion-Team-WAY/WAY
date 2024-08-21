@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(set);
 
         user.initializeAlarmSetting();
+        user.initializeChattingAlarm();
 
         return userRepository.save(user);
     }
@@ -145,6 +146,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(loginInfoDto.getUsername());
         user.setNickname(loginInfoDto.getNickname());
 
+
         ElsUser elsUser= elsUserService.findByUserId(user.getUserId());
         if(elsUser != null) {
             elsUser.setUsername(user.getUsername());
@@ -152,6 +154,7 @@ public class UserServiceImpl implements UserService {
             elsUserService.saveOrUpdate(elsUser);
         }
         addCookies(response, user); //추가된 코드
+      
         return saveOrUpdateUser(user);
     }
     @Override
@@ -255,4 +258,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElse(null);
         return user.getUserImage();
     }
+
+    @Override
+    public UserProfileDto getUserProfileFromNickname(String nickname) {
+
+        User user = userRepository.findByNickname(nickname);
+
+        UserProfileDto userProfileDto = new UserProfileDto();
+        userProfileDto.setUsername(user.getUsername());
+
+        return userProfileDto;
+
+    }
+
 }

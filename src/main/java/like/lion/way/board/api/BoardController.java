@@ -52,6 +52,13 @@ public class BoardController {
 
     }
 
+    @GetMapping("/posts/edit/{boardId}/{postId}")
+    public String showPostEditForm() {
+
+        return "pages/boards/postEditForm";
+
+    }
+
     @GetMapping("/scraps")
     public String showScrapForm() {
 
