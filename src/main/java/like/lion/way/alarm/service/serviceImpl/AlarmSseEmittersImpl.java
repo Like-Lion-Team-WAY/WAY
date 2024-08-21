@@ -62,7 +62,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
 
-            send(userId, "count", jsonData);
+            send(userId, "subscription", jsonData);
         } catch (Exception e) {
             log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
         }
