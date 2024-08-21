@@ -18,7 +18,7 @@
 <body>
 <div layout:fragment="content">
     <div class="profile-container">
-        <div class="sharebox">
+        <div th:if="${loginUser != null && user.userId == loginUser.userId}" class="sharebox">
             <input class="sharebtn" type="button" onClick="sendLinkCustom();" value="공유"/>
             <script type="text/javascript">
                 function sendLinkCustom() {
