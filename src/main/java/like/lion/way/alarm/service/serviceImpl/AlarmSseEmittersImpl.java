@@ -34,7 +34,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
 //        log.debug("[SseEmitters][add] number of emitters: {}", userEmitters.size());
 
         // 첫 데이터 전송
-        sendCount(userId);
+        sendAlarmCount(userId);
 
         // set callbacks
         emitter.onCompletion(() -> {
@@ -53,9 +53,8 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         return emitter;
     }
 
-    public void sendCount(Long userId) {
-        log.debug("[SseEmitters][send] try to send to no.{} user", userId);
-
+    @Override
+    public void sendAlarmCount(Long userId) {
         Map<String, Object> data = new HashMap<>();
         data.put("count", alarmService.countAlarm(userId));
 
@@ -69,9 +68,23 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         }
     }
 
-    public void sendAlarm(Long userId, Alarm alarm) {
-        log.debug("[SseEmitters][send] try to send to no.{} user", userId);
+    @Override
+    public void sendChatCount(Long userId, Long count) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("chat", count);
 
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
+
+            send(userId, "chat", jsonData);
+        } catch (Exception e) {
+            log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
+        }
+    }
+
+    @Override
+    public void sendAlarm(Long userId, Alarm alarm) {
         Map<String, Object> data = new HashMap<>();
         data.put("count", alarmService.countAlarm(userId));
         data.put("alarm", new AlarmMessageDto(alarm));
