@@ -9,6 +9,7 @@ import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.domain.dto.PostDto;
 import like.lion.way.feed.repository.PostRepository;
 import like.lion.way.feed.service.PostService;
+import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.BlockService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final BlockService blockService;
+    private final JwtUtil jwtUtil;
 
     @Value("${image.upload.dir}")
     private String uploadDir;

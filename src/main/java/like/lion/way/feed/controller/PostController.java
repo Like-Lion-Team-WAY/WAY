@@ -116,10 +116,7 @@ public class PostController {
             log.error("User with username {} not found", username);
             return "redirect:/posts"; // 유저가 없으면 게시판 목록 페이지로 리다이렉트
         }
-        Block block = blockService.findByUser(user,request);
-        if(block!=null){
-            return "redirect:/main";
-        }
+
 
 //         팔로워, 팔로잉 정보 추가
         model.addAttribute("followers", followService.getFollowerList(user).size());
@@ -130,6 +127,11 @@ public class PostController {
         User loginUser = getLoginUser(request);
         if(loginUser == null){
             System.out.println("loginUser is null");
+        }else{
+            Block block = blockService.findByUser(user,request);
+            if(block!=null){
+                return "redirect:/main";
+            }
         }
         model.addAttribute("loginUser", loginUser);
 

@@ -54,6 +54,9 @@ public class BlockServiceImpl implements BlockService {
     public List<?> blockFilter(List<?> checkContents, HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         Long userId = jwtUtil.getUserIdFromToken(token);
+        if(userId==null){
+            return checkContents;
+        }
         User user = userService.findByUserId(userId);
         List<Block> blocks = blockRepository.findAllByBlockerUserId(user);
         List<Object> list = new ArrayList<>();
