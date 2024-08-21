@@ -36,5 +36,8 @@ public class ChatAlarm {
 
     public void count(Long count) {
         this.count += count;
+        if (this.count < 0) {
+            this.count = 0L;
+        }
     }
 }
