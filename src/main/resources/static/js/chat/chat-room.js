@@ -7,7 +7,6 @@ let lastLoadMessageId = "";
 /////////
 function noActiveSetting() {
     document.getElementById("change-name-btn").remove();
-    document.getElementById("report-btn").remove();
     const requestBtn = document.getElementById("nickname-request-btn");
     if (requestBtn) {
         requestBtn.remove();
