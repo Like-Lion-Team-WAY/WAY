@@ -66,4 +66,11 @@ public class BoardController {
 
     }
 
+    @GetMapping("/best")
+    public String showBestPosts() {
+
+        return "pages/boards/bestPost";
+
+    }
+
 }

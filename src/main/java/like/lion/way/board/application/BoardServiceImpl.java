@@ -8,6 +8,7 @@ import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
 import like.lion.way.board.application.request.BoardPostEditServiceRequest;
+import like.lion.way.board.application.response.BoardBestPostResponse;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostCommentResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -300,6 +302,22 @@ public class BoardServiceImpl implements BoardService {
                 .toList();
 
         return new PageImpl<>(scrapsResponses, pageable, scrapsPage.getTotalElements());
+
+    }
+
+    @Override
+    public List<BoardBestPostResponse> getBestBoardPosts() {
+        Pageable pageable = PageRequest.of(0, 10); // 첫 페이지의 10개 항목
+        List<BoardPost> top10Posts = boardPostRepository.findTop10BoardPostsByLikes(pageable);
+
+        return top10Posts.stream()
+                .map(boardPost -> BoardBestPostResponse.builder()
+                        .boardTitle(boardPost.getTitle())
+                        .boardId(boardPost.getBoard().getId())
+                        .postId(boardPost.getId())
+                        .likes(boardPostLikeRepository.countLikesByBoardPostId(boardPost.getId()))
+                        .build())
+                .toList();
 
     }
 
