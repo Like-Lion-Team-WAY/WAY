@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatAlarmRepository extends JpaRepository<ChatAlarm, Long> {
     Optional<ChatAlarm> findByUser(User user);
-    ChatAlarm findByUser_UserId(Long userId);
+    Optional<ChatAlarm> findByUser_UserId(Long userId);
 }
