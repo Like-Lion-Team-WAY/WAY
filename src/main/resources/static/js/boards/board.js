@@ -26,7 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.forEach(board => {
                     const boardItem = document.createElement('div');
                     boardItem.className = 'board-item';
-                    boardItem.innerHTML = `<span>${board.name}</span><span>➔</span>`;
+
+                    // 최대 글자수 제한
+                    const maxLength = 20;
+                    let displayName = board.name;
+                    if (board.name.length > maxLength) {
+                        displayName = board.name.substring(0, maxLength) + '...';
+                    }
+
+                    boardItem.innerHTML = `<span>${displayName}</span><span>➔</span>`;
+
+
+                    // boardItem.innerHTML = `<span>${board.name}</span><span>➔</span>`;
+
                     boardList.appendChild(boardItem);
 
                     // 클릭 이벤트 리스너 추가

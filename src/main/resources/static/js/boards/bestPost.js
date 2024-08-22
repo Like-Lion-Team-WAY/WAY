@@ -18,9 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 boardList.appendChild(placeholder);
             } else {
                 data.forEach(bestPost => {
+                    const maxLength = 20;
+                    let displayName = bestPost.boardTitle;
+                    if (bestPost.boardTitle.length > maxLength) {
+                        displayName = bestPost.boardTitle.substring(0, maxLength) + '...';
+                    }
                     const boardItem = document.createElement('div');
                     boardItem.className = 'board-item';
-                    boardItem.innerHTML = `<span>${bestPost.boardTitle} 👍 ${bestPost.likes} 🔥🔥🔥</span><span>➔</span>`;
+                    boardItem.innerHTML = `<span>${displayName} 👍 ${bestPost.likes} 🔥🔥🔥</span><span>➔</span>`;
                     boardList.appendChild(boardItem);
 
                     // 클릭 이벤트 리스너 추가
