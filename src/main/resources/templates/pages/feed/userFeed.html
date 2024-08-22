@@ -18,8 +18,8 @@
 <body>
 <div layout:fragment="content">
     <div class="profile-container">
-        <div th:if="${loginUser != null && user.userId == loginUser.userId}" class="sharebox">
-            <input class="sharebtn" type="button" onClick="sendLinkCustom();" value="공유"/>
+        <div th:if="${loginUser != null}" class="sharebox">
+            <input th:if="${user.userId == loginUser.userId}" class="sharebtn" type="button" onClick="sendLinkCustom();" value="공유"/>
             <script type="text/javascript">
                 function sendLinkCustom() {
                     Kakao.init("3670027bfbc0268e35e4f4bfce517ca8");
