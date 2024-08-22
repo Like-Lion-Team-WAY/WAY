@@ -13,7 +13,7 @@
     <div class="tab-container">
         <button class="tab-link" onclick="showTab('followers')">팔로워</button>
         <button class="tab-link" onclick="showTab('following')">팔로잉</button>
-        <button class="tab-link" onclick="showTab('blocked')">차단</button>
+        <button class="tab-link" onclick="showTab('blocked')" th:if="${another}!='another'">차단</button>
     </div>
 
     <div id="followers" class="tab-content">
@@ -22,7 +22,8 @@
             <img th:unless="${followers.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
             <span class="user-name"  th:text="${followers.username}">사용자1</span>
-            <button class="delete-btn" th:data-username="${followers.username}">삭제</button>
+            <button class="delete-btn" th:data-username="${followers.username}" th:if="${another}!='another'">삭제</button>
+            <span th:if="${another}=='another'"></span>
         </div>
     </div>
     <div id="following" class="tab-content" style="display:none">
@@ -31,10 +32,11 @@
             <img th:unless="${followings.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
             <span class="user-name" th:text="${followings.username}">사용자1</span>
-            <button class="unFollowing-btn" th:data-username="${followings.username}">언팔로잉</button>
+            <button class="unFollowing-btn" th:data-username="${followings.username}" th:if="${another}!='another'">언팔로잉</button>
+            <span th:if="${another}=='another'"></span>
         </div>
     </div>
-    <div id="blocked" class="tab-content" style="display:none">
+    <div id="blocked" class="tab-content" style="display:none" th:if="${another}!='another'">
         <div class="user-item" th:each="blocked:${block}">
             <img src="/image/image.jpg" alt="사용자5" class="user-img">
             <span class="user-name" th:text="${blocked}">사용자5</span>
