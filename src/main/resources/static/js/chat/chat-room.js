@@ -169,11 +169,6 @@ function loadMessages(firstCall) {
         type: 'GET',
         success: function (response) {
             response.messages.forEach(function (message) {
-                console.log(message.isRead + ' ' + message.id);
-
-                if (message.isRead) {
-                    console.log("안녕");
-                }
                 const userId = Number(document.getElementById('user-id').value);
                 const messageDiv = document.createElement('div');
                 if (message.type !== "message") {
@@ -457,16 +452,16 @@ function reportChat() {
     });
 }
 
-function callReportApi(messageId){
+function callReportApi(messageId) {
     $.ajax({
         url: "/api/report",
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ type: "CHATTING", id: messageId }),
-        success: function(result) {
+        data: JSON.stringify({type: "CHATTING", id: messageId}),
+        success: function (result) {
             alert("신고가 접수되었습니다.");
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
             if (err.status === 401) {
                 alert('로그인이 필요합니다.');
