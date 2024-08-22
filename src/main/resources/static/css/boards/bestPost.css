@@ -1,0 +1,107 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    width: 900px;
+    margin: 0 auto;
+    /*background: #FFD6B0;*/
+    /*border-radius: 20px;*/
+    padding: 5px;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*gap: 20px;*/
+}
+
+.category {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.bookmark, .all-boards {
+    margin: 0 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.bookmark:hover, .all-boards:hover {
+    text-decoration: underline;
+}
+
+.search {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    margin-right: 0;
+}
+
+.search input {
+    width: 300px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+/*.board-list {*/
+/*    margin: 0 auto;*/
+/*    padding: 10px;*/
+/*    background-color: #FFD6B0;*/
+/*    border-radius: 20px;*/
+/*}*/
+
+.board-item {
+    background-color: #FFD6B0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition 효과 추가 */
+}
+
+.board-item:last-child {
+    border-bottom: none;
+}
+
+.board-item:hover {
+    background-color: #058593; /* Hover 시 배경색 변경 */
+    transform: translateX(5px); /* Hover 시 오른쪽으로 약간 이동 */
+    color: white;
+}
+
+.board-item-placeholder {
+    text-align: center;
+    color: #058593;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.create-board {
+    display: flex;
+    /*justify-content: flex-end; !* 버튼을 오른쪽으로 정렬 *!*/
+    margin-top: 60px; /* 버튼과 상단 요소 간의 여백 */
+    /*padding-right: 10%; !* 오른쪽에서 조금 떨어진 위치로 버튼을 조정 *!*/
+    justify-content: center;
+}
+
+.custom-btn {
+    background-color: #ff6746;
+    padding: 10px 15px; /* 버튼의 크기를 조정 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 1.2em; /* 글자 크기 조정 */
+}
+
+.custom-btn:hover {
+    background-color: #035259;
+    border-color: #035259;
+}
