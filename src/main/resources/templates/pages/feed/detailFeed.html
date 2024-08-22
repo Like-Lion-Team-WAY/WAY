@@ -21,7 +21,7 @@
             <img  th:if="${post.getUser().getUserImage() != null}" class="profile-icon" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
             <img th:if="${post.getUser().getUserImage() == null}" class="profile-icon" th:src="@{/image/image.jpg}" alt="Profile Picture" />
             <div class="post-info">
-                <span class="username" th:text="${post.getUser().username}">username</span>
+                <span class="username" th:text="${post.getUser().nickname+' ('+post.getUser().username+')'}">username</span>
                 <span class="timestamp" th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}">작성일</span>
             </div>
         </div>
@@ -87,7 +87,7 @@
         <div class="comments-section">
             <div th:each="comment : ${post.postComments}">
                 <div th:if="${comment.postCommentPreCommentId == null}" class="list-group-item">
-                    <h1 class="comment-text" th:text="${comment.getUser().getUsername()}"></h1>
+                    <h1 class="comment-text" th:text="${comment.getUser().nickname+' ('+comment.getUser().username+')'}"></h1>
                     <p class="comment-text" th:text="${comment.getPostCommentContent()}"></p>
                     <div th:if="${loginUser != null}">
                         <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
@@ -115,7 +115,7 @@
                     <div th:each="reply : ${post.postComments}"
                          th:if="${reply.postCommentPreCommentId == comment.postCommentId}"
                          class="reply-item">
-                        <h1 class="comment-text" th:text="${reply.getUser().getUsername()}"></h1>
+                        <h1 class="comment-text" th:text="${reply.getUser().nickname+' ('+reply.getUser().username+')'}"></h1>
                         <p class="comment-text" th:text="${reply.getPostCommentContent()}"></p>
                         <div th:if="${loginUser != null}">
                             <input type="hidden" id="replyId" th:value="${reply.getPostCommentId()}">

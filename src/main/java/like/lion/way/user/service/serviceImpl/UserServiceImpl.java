@@ -149,6 +149,7 @@ public class UserServiceImpl implements UserService {
 
         ElsUser elsUser= elsUserService.findByUserId(user.getUserId());
         if(elsUser != null) {
+            elsUser.setNickname(user.getNickname());
             elsUser.setUsername(user.getUsername());
             elsUser.setImageUrl(user.getUserImage());
             elsUserService.saveOrUpdate(elsUser);
@@ -177,13 +178,15 @@ public class UserServiceImpl implements UserService {
 
         ElsUser elsUser = new ElsUser();
         elsUser.setId(user.getUserId().toString());
-        elsUser.setUsername(user.getUsername());
+        elsUser.setNickname(user.getNickname());
         elsUser.setImageUrl(user.getUserImage());
+        elsUser.setUsername(user.getUsername());
 
         List<String> interestNames = set.stream()
                 .map(Interest::getInterestName)
                 .collect(Collectors.toList()); //관심사 태그들
 
+        interestNames.add(user.getNickname()); //유저 닉네임도 넣어줌
         interestNames.add(user.getUsername()); //유저 이름도 넣어줌
 
         elsUser.setInterests(interestNames);

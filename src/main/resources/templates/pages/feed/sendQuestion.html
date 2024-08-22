@@ -15,7 +15,7 @@
     <div class="answered-question" th:each="q, iterStat : ${question}">
       <div class="answered-header">
         <span class="user-icon">Q</span>
-        <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().username} : '익명'"></span>
+        <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().nickname+' ('+q.getQuestioner().username+')'} : '익명'"></span>
       </div>
       <p class="question-text" th:text="${q.getQuestion()}">질문</p>
       <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">

@@ -16,7 +16,7 @@
         <div class="answered-question" th:each="q : ${question}">
             <div class="answered-header">
                 <span class="user-icon">Q</span>
-                <span th:text="${q.isAnonymous == false} ? ${q.getQuestioner().username} : '익명'"></span>
+                <span th:text="${q.isAnonymous == false} ? ${q.getQuestioner().nickname+' ('+q.getQuestioner().username+')'} : '익명'"></span>
             </div>
             <div class="form-group">
                 <div th:if="${user.getUserId()} == ${loginUser.getUserId()}">

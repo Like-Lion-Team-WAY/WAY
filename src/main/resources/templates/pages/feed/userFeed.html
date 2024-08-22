@@ -38,7 +38,7 @@
             </div>
             <div class="profile-header">
                 <div class="profile-info">
-                    <h1 th:text="${user.getNickname()}"></h1>
+                    <h1 th:text="${user.getNickname()+' ('+user.getUsername()+')'}"></h1>
                     <a th:if="${loginUser != null}" th:href="@{/user/followSetting}">
                         <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                     </a>
@@ -154,7 +154,7 @@
                 <h2 th:if="${questions.size()} > 0">질문</h2>
                 <div class="feed-item" th:each="question: ${questions}">
                     <div class="question">
-                        <h2 th:if="${question.isAnonymous == false} " th:text="${question.getQuestioner().getUsername()}"></h2>
+                        <h2 th:if="${question.isAnonymous == false} " th:text="${question.getQuestioner().nickname+' ('+question.getQuestioner().username+')'}"></h2>
                         <h2 th:if="${question.isAnonymous == true}" th:text="익명"></h2>
                         <p th:text=" ${question.getQuestion()}"></p>
                         <div class="update-date">

@@ -18,7 +18,7 @@
 <body>
 <div layout:fragment="content">
   <a th:if="${loginUser == null || user.getUserId() != loginUser.getUserId()}" >
-      <p class="subtitle" th:text="${user.username} + '님에게 익명으로 질문을 보내세요!!'"></p>
+      <p class="subtitle" th:text="${user.nickname+' ('+user.username+')'} + '님에게 익명으로 질문을 보내세요!!'"></p>
       <div class="question-section">
         <form class="question-form" method="post" th:action="@{/questions/create/{userId}(userId=${user.userId})}" enctype="multipart/form-data">
           <input type="text" name="question" class="question-input" placeholder="질문 쓰기">
@@ -39,7 +39,7 @@
       </div>
   </a>
   <div class="answered-section">
-    <h1 class="answered-title" th:text="${user.username} + '님에게 온 질문들'"></h1>
+    <h1 class="answered-title" th:text="${user.nickname+' ('+user.username+')'} + '님에게 온 질문들'"></h1>
     <h2 class="answered-category" th:if="${pinQuestion.size()}>0"> 고정된 질문 </h2>
     <div class="answered-question" th:each="q : ${pinQuestion}">
       <div class="pinIcon">
@@ -56,7 +56,7 @@
       </div>
       <div class="answered-header">
         <span class="user-icon">Q</span>
-        <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().username} : '익명'"></span>
+        <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().nickname+' ('+q.getQuestioner().username+')'} : '익명'"></span>
       </div>
       <div class="form-group">
         <div th:if="${loginUser != null}">
@@ -146,7 +146,7 @@
         </div>
         <div class="answered-header">
           <span class="user-icon">Q</span>
-          <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().username} : '익명'"></span>
+          <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().nickname+' ('+q.getQuestioner().username+')'} : '익명'"></span>
         </div>
         <div class="form-group">
           <div th:if="${loginUser != null}">

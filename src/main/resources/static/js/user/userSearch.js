@@ -15,7 +15,7 @@ async function fetchUsers() {
             a.className = 'user-item';
             a.innerHTML = `
                 <img src="${user.imageUrl ? `/display?filename=${user.imageUrl}` : '/image/image.jpg'}" alt="${user.username} profile picture">
-                <span class="username">${user.username}</span>
+                <span class="username">${user.nickname +' ('+user.username+')'}</span>
             `;
             userList.appendChild(a);
         });
@@ -42,7 +42,7 @@ async function searchUsers() {
             a.className = 'user-item';
             a.innerHTML = `
                 <img src="${user.imageUrl ? `/display?filename=${user.imageUrl}` : '/image/image.jpg'}" alt="${user.username} profile picture">
-                <span class="username">${user.username}</span>
+                <span class="username">${user.nickname+' ('+user.username+')'}</span>
             `;
             userList.appendChild(a);
         });
