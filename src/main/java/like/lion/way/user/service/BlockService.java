@@ -7,7 +7,7 @@ import like.lion.way.user.domain.User;
 import org.springframework.http.ResponseEntity;
 
 public interface BlockService {
-    List<String> getBlcokList(HttpServletRequest request);
+    List<String> getBlcokList(User user);
 
     ResponseEntity<?> unblock(HttpServletRequest request, String username);
     List<?> blockFilter(List<?> checkContents,HttpServletRequest request);
