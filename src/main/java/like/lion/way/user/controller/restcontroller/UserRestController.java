@@ -3,16 +3,13 @@ package like.lion.way.user.controller.restcontroller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
-import like.lion.way.ApiResponse;
 import like.lion.way.file.service.S3Service;
 import like.lion.way.user.domain.User;
-import like.lion.way.user.dto.UserProfileDto;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,13 +68,6 @@ public class UserRestController {
         }else{
             return ResponseEntity.ok("fail");
         }
-    }
-
-    @GetMapping("/{nickname}")
-    public ApiResponse<UserProfileDto> getUserProfile(@PathVariable("nickname") String nickname) {
-
-        return ApiResponse.ok(userService.getUserProfileFromNickname(nickname));
-
     }
 
 }
