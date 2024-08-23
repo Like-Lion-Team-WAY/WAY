@@ -8,6 +8,7 @@ import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
 import like.lion.way.board.application.request.BoardPostEditServiceRequest;
+import like.lion.way.board.application.request.BoardSearchServiceRequest;
 import like.lion.way.board.application.response.BoardBestPostResponse;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostCommentResponse;
@@ -323,6 +324,23 @@ public class BoardServiceImpl implements BoardService {
                 .toList();
 
     }
+
+
+    // 게시판 검색
+    @Override
+    public List<BoardTitleResponse> getSearchBoards(BoardSearchServiceRequest request) {
+
+        List<Board> boards = boardRepository.findBySearchKeywords(request.getKeyword());
+
+        return boards.stream()
+                .map(board -> BoardTitleResponse.builder()
+                        .boardId(board.getId())
+                        .name(board.getName())
+                        .build())
+                .toList();
+
+    }
+
 
     // HttpServletRequest로 User 찾기
     private User getUserByHttpServletRequest(HttpServletRequest httpRequest) {

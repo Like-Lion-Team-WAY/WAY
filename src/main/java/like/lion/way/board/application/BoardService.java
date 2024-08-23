@@ -3,6 +3,7 @@ package like.lion.way.board.application;
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostEditServiceRequest;
+import like.lion.way.board.application.request.BoardSearchServiceRequest;
 import like.lion.way.board.application.response.BoardBestPostResponse;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
@@ -57,5 +58,7 @@ public interface BoardService {
     Page<BoardPostScrapsResponse> getPostScraps(HttpServletRequest httpServletRequest, Pageable pageable);
 
     List<BoardBestPostResponse> getBestBoardPosts();
+
+    List<BoardTitleResponse> getSearchBoards(BoardSearchServiceRequest request);
 
 }
