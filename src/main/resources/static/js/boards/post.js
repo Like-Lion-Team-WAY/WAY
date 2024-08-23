@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         row.innerHTML = `
                             <td>${index + 1 + (currentPage - 1) * postsPerPage}</td>
                             <td>${displayName}</td>
-                            <td>${post.author}</td>
+                            <td>${post.nickname}</td>
                             <td>${new Date(post.created_at).toLocaleDateString()}</td>
                         `;
                         boardPostList.appendChild(row);

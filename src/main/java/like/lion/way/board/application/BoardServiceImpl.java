@@ -129,7 +129,7 @@ public class BoardServiceImpl implements BoardService {
                         .boardName(board.getName())
                         .boardPostId(post.getId())
                         .postTitle(post.getTitle())
-                        .author(nullUserCheck(post.getUser(), post.isAnonymousPermission()))
+                        .nickname(nullUserNickCheck(post.getUser(), post.isAnonymousPermission()))
                         .created_at(post.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
@@ -158,16 +158,17 @@ public class BoardServiceImpl implements BoardService {
         List<BoardPostCommentResponse> comments = boardPostCommentRepository.findByBoardPostId(postId).stream()
                 .map(comment -> BoardPostCommentResponse.builder()
                         .commentId(comment.getId())
-                        .commentUsername(nullUserCheck(comment.getUser(), comment.isAnonymousPermission()))
+                        .commentUsername(nullUserCheck(comment.getUser()))
                         .commentContent(comment.getContent())
                         .commentCreatedAt(comment.getCreatedAt())
                         .preCommentId(comment.getPreCommentId())
+                        .commentNickname(nullUserNickCheck(comment.getUser(), comment.isAnonymousPermission()))
                         .build())
                 .collect(Collectors.toList());
 
         return BoardPostDetailResponse.builder()
-                .author(nullUserCheck(post.getUser(), post.isAnonymousPermission()))
-//                .authorProfileImgUrl(nullUserCheck(post.getUser(), post.isAnonymousPermission()))
+                .nickname(nullUserNickCheck(post.getUser(), post.isAnonymousPermission()))
+                .username(nullUserCheck(post.getUser()))
                 .authorProfileImgUrl(nullUserImgCheck(post.getUser()))
                 .postCreatedAt(post.getCreatedAt())
                 .postTitle(post.getTitle())
@@ -295,8 +296,8 @@ public class BoardServiceImpl implements BoardService {
         List<BoardPostScrapsResponse> scrapsResponses = scrapsPage.stream()
                 .map(scrap -> BoardPostScrapsResponse.builder()
                         .title(scrap.getBoardPost().getTitle())
-                        .author(scrap.getBoardPost().getUser().getNickname(scrap.getBoardPost().isAnonymousPermission()))
-                        .author(nullUserCheck(scrap.getBoardPost().getUser(), scrap.getBoardPost().isAnonymousPermission()))
+                        .nickname(nullUserNickCheck(scrap.getBoardPost().getUser(), scrap.getBoardPost().isAnonymousPermission()))
+                        .username(nullUserCheck(scrap.getBoardPost().getUser()))
                         .createdAt(scrap.getBoardPost().getCreatedAt())
                         .boardId(scrap.getBoardPost().getBoard().getId())
                         .boardPostId(scrap.getBoardPost().getId())
@@ -343,7 +344,13 @@ public class BoardServiceImpl implements BoardService {
         return user != null && user.equals(owner);
     }
 
-    private String nullUserCheck(User user, boolean permission) {
+    private String nullUserCheck(User user) {
+
+        return user == null ? "탈퇴한 회원입니다." : user.getUsername();
+
+    }
+
+    private String nullUserNickCheck(User user, boolean permission) {
 
         return user == null ? "탈퇴한 회원입니다." : user.getNickname(permission);
 

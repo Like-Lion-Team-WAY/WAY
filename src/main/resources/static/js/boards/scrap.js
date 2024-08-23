@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         row.innerHTML = `
                             <td>${index + 1 + (currentPage - 1) * postsPerPage}</td>
                             <td>${scrap.title}</td>
-                            <td>${scrap.author}</td>
+                            <td>${scrap.nickname}</td>
                             <td>${new Date(scrap.createdAt).toLocaleDateString()}</td>
                         `;
                         scrapList.appendChild(row);
