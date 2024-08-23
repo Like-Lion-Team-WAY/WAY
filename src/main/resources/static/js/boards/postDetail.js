@@ -44,20 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', function(event) {
         if (event.target.matches('.comment-username, .post-author')) {
-            const username = event.target.dataset.username;
-            if (username.trim() !== '익명') {
-                fetch(`/user/${username}`)
-                    .then(response => response.json())
-                    .then(apiResponse => {
-                        if (apiResponse.success) {
-                            const user = apiResponse.data.username; // 서버에서 반환된 사용자이름
-                            window.location.href = `/posts/${user}`;
-                        } else {
-                            console.error('Failed to fetch user ID:', apiResponse.message);
-                            alert('사용자 정보를 불러오지 못했습니다.');
-                        }
-                    })
-                    .catch(error => console.error('Error fetching username:', error));
+            const username = event.target.dataset.username || event.target.textContent.trim();
+            if (username !== '익명') {
+                window.location.href = `/posts/${username}`;
             } else {
                 // 익명을 클릭한 경우 아무 동작도 하지 않음
                 event.preventDefault();
@@ -86,16 +75,15 @@ function fetchPostDetails() {
             }
 
             const postAuthorElement = document.querySelector('.post-author');
-            postAuthorElement.textContent = data.author;
-            postAuthorElement.setAttribute('data-username', data.author);
+            postAuthorElement.textContent = data.nickname;
+            postAuthorElement.setAttribute('data-username', data.username);
 
             // 익명일 경우 anonymous 클래스를 추가
-            if (data.author.trim() === '익명') {
+            if (data.nickname.trim() === '익명') {
                 postAuthorElement.classList.add('anonymous');
             } else {
                 postAuthorElement.classList.remove('anonymous');
             }
-
 
             document.querySelector('.post-date').textContent = new Date(data.postCreatedAt).toLocaleDateString();
             document.querySelector('.post-title').textContent = data.postTitle;
@@ -226,41 +214,11 @@ function updateComments(comments) {
     });
 }
 
-// function createCommentHtml(comment) {
-//     return `
-//         <div class="comment" id="comment-${comment.commentId}">
-//             <div class="comment-content">${comment.commentContent}</div>
-//             <div class="comment-meta">
-//                 <span class="comment-username">${comment.commentUsername}</span>
-//                 <span class="comment-date">${new Date(comment.commentCreatedAt).toLocaleDateString()}</span>
-//             </div>
-//             <button class="reply-button" onclick="showReplyInput(${comment.commentId})">대댓글</button>
-//             <div class="reply-input" id="reply-input-${comment.commentId}" hidden>
-//                 <input type="text" placeholder="대댓글을 입력하세요..." class="reply-box">
-//                     <input type="checkbox" id="anonymousPermission-${comment.commentId}" class="anonymous-checkbox">
-//                     익명으로 작성
-//                 <button class="send-button" onclick="submitComment(${comment.commentId})">➤</button>
-//             </div>
-//         </div>
-//     `;
-// }
-//
-// function createReplyHtml(reply) {
-//     return `
-//         <div class="reply comment" id="comment-${reply.commentId}">
-//             <div class="comment-content">${reply.commentContent}</div>
-//             <div class="comment-meta">
-//                 <span class="comment-username">${reply.commentUsername}</span>
-//                 <span class="comment-date">${new Date(reply.commentCreatedAt).toLocaleDateString()}</span>
-//             </div>
-//         </div>
-//     `;
-// }
 function createCommentHtml(comment) {
-    const isAnonymous = comment.commentUsername === '익명';
+    const isAnonymous = comment.commentNickname === '익명';
     const userLink = isAnonymous ?
-        `<span class="comment-username anonymous" data-username="익명">${comment.commentUsername}</span>` :
-        `<a href="#" class="comment-username" data-username="${comment.commentUsername}">${comment.commentUsername}</a>`;
+        `<span class="comment-username anonymous" data-username="익명">${comment.commentNickname}</span>` :
+        `<a href="#" class="comment-username" data-username="${comment.commentUsername}">${comment.commentNickname}</a>`;
 
     return `
         <div class="comment" id="comment-${comment.commentId}">
@@ -281,10 +239,10 @@ function createCommentHtml(comment) {
 }
 
 function createReplyHtml(reply) {
-    const isAnonymous = reply.commentUsername === '익명';
+    const isAnonymous = reply.commentNickname === '익명';
     const userLink = isAnonymous ?
-        `<span class="comment-username">${reply.commentUsername}</span>` :
-        `<a href="#" class="comment-username" data-username="${reply.commentUsername}">${reply.commentUsername}</a>`;
+        `<span class="comment-username">${reply.commentNickname}</span>` :
+        `<a href="#" class="comment-username" data-username="${reply.commentUsername}">${reply.commentNickname}</a>`;
 
     return `
         <div class="reply comment" id="comment-${reply.commentId}">
