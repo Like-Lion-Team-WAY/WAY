@@ -64,7 +64,7 @@ body {
 
 }
 
-.detailBtn {
+.detailBtn , .archieveBtn{
     background-color: #ff6746;
     border: none;
     color: white;

@@ -18,28 +18,34 @@ public class PostRestController {
 
     private final PostService postService;
     private final S3Service s3Service;
-    //게시글 (피드) 수정
+
+    //게시글 수정
     @PatchMapping("/posts/{postId}")
-    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId, @RequestParam("title") String title, @RequestParam("content") String content) {
+    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId,
+                                             @RequestParam("title") String title,
+                                             @RequestParam("content") String content) {
+
         try {
             postService.updatePost(postId, title, content);
-            return ResponseEntity.ok("Post updated successfully.");
+            return ResponseEntity.ok("게시글 수정 완료");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update post.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 수정 실패");
         }
     }
+
     //게시글 삭제
     @DeleteMapping("/posts")
     public ResponseEntity<String> deletePost(@RequestParam("id") Long id) {
+
         try {
-            Post post= postService.getPostById(id);
-            if(post.getPostImageUrl()!=null){
+            Post post = postService.getPostById(id);
+            if (post.getPostImageUrl() != null) {
                 s3Service.deleteFile(post.getPostImageUrl());
             }
             postService.deletePost(id);
-            return ResponseEntity.ok("Post deleted successfully.");
+            return ResponseEntity.ok("게시글 삭제 완료");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete post.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 삭제 실패");
         }
     }
 }

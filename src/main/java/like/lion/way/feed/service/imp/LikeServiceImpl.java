@@ -48,18 +48,19 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public void likeQuestion(Long questionId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("invalid userId"));
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new IllegalArgumentException("invalid questionId"));
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("invalid questionId"));
 
         Like existingLike = likeRepository.findByUserAndQuestion(user, question);
 
-        if(existingLike == null){
-            Like like= new Like();
+        if (existingLike == null) {
+            Like like = new Like();
             like.setQuestion(question);
             like.setUser(user);
             question.setQuestionLike(question.getQuestionLike() + 1);
             questionRepository.save(question);
             likeRepository.save(like);
-        }else{
+        } else {
             question.setQuestionLike(question.getQuestionLike() - 1);
             questionRepository.save(question);
             likeRepository.delete(existingLike);

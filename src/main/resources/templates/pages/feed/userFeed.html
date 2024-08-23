@@ -19,7 +19,8 @@
 <div layout:fragment="content">
     <div class="profile-container">
         <div th:if="${loginUser != null}" class="sharebox">
-            <input th:if="${user.userId == loginUser.userId}" class="sharebtn" type="button" onClick="sendLinkCustom();" value="공유"/>
+            <input th:if="${user.userId == loginUser.userId}" class="sharebtn" type="button" onClick="sendLinkCustom();"
+                   value="공유"/>
             <script type="text/javascript">
                 function sendLinkCustom() {
                     Kakao.init("3670027bfbc0268e35e4f4bfce517ca8");
@@ -32,8 +33,10 @@
         <div class="profile-container">
             <div class="profile-header">
                 <div>
-                    <img th:if="${user.getUserImage() != null}" class="profile-picture" th:src="'/display?filename='+${user.getUserImage()}" alt="Profile Picture" />
-                    <img th:if="${user.getUserImage() == null}" class="profile-picture" th:src="@{/image/image.jpg}" alt="Profile Picture" />
+                    <img th:if="${user.getUserImage() != null}" class="profile-picture"
+                         th:src="'/display?filename='+${user.getUserImage()}" alt="Profile Picture"/>
+                    <img th:if="${user.getUserImage() == null}" class="profile-picture" th:src="@{/image/image.jpg}"
+                         alt="Profile Picture"/>
                 </div>
             </div>
             <div class="profile-header">
@@ -47,7 +50,8 @@
                     </a>
                     <div>
                         <div th:if="${loginUser != null && user.userId != loginUser.userId}">
-                            <button id="followButton" th:data-username="${user.username}" onclick="toggleFollow()"></button>
+                            <button id="followButton" th:data-username="${user.username}"
+                                    onclick="toggleFollow()"></button>
                         </div>
                     </div>
                 </div>
@@ -62,117 +66,125 @@
                     <p th:text="${rejectedQuestions}"></p>
                 </div>
                 <div class="stat">
-                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}" th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
+                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}"
+                          th:href="@{'/questions/new/'+${user.userId}}">새 질문</a></p>
                     <p th:if="${loginUser == null || user.getUserId() != loginUser.userId}">새 질문</p>
                     <p th:text="${newQuestions}"></p>
                 </div>
                 <div class="stat">
-                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}" th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
+                    <p><a th:if="${loginUser != null && loginUser.getUserId() == user.getUserId()}"
+                          th:href="@{'/questions/send/'+${user.userId}}">보낸 질문</a></p>
                     <p th:if="${loginUser == null || user.getUserId() != loginUser.userId}">보낸 질문</p>
                     <p th:text="${sendQuestions}"></p>
                 </div>
             </div>
-        <div class="button-container">
-            <a th:if="${loginUser == null || user.userId != loginUser.userId}"
-               th:href="@{'/questions/create/'+${user.userId}}">
-                <button class="write-post-button">질문 작성</button>
-            </a>
-            <div th:if="${loginUser != null}">
-                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{'/all/archieve/'+${user.userId}}">
-                    <button class="write-post-button">보관함</button>
+            <div class="button-container">
+                <a th:if="${loginUser == null || user.userId != loginUser.userId}"
+                   th:href="@{'/questions/create/'+${user.userId}}">
+                    <button class="write-post-button">질문 작성</button>
                 </a>
-                <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}">
-                    <button class="write-post-button">피드 작성</button>
-                </a>
+                <div th:if="${loginUser != null}">
+                    <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{'/all/archieve/'+${user.userId}}">
+                        <button class="write-post-button">보관함</button>
+                    </a>
+                    <a th:if="${user.userId} == ${loginUser.userId}" th:href="@{/posts/create}">
+                        <button class="write-post-button">피드 작성</button>
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="feed">
-            <h2 th:if="${pinPosts.size()}>0">고정된 피드</h2>
-            <div class="feed-item" th:each="p : ${pinPosts}">
-                <div class="post">
-                    <div class="pinIcon">
-                        <div th:if="${loginUser != null}">
-                            <form th:if="${loginUser.getUserId()} == ${user.userId}"
-                                  th:action="'/posts/pin/'+${p.postId}" method="post">
-                                <button type="submit" class="icon-button2">
-                                    <i class="bi bi-pin-fill"></i>
-                                </button>
-                            </form>
+            <div class="feed">
+                <h2 th:if="${pinPosts.size()}>0">고정된 피드</h2>
+                <div class="feed-item" th:each="p : ${pinPosts}">
+                    <div class="post">
+                        <div class="pinIcon">
+                            <div th:if="${loginUser != null}">
+                                <form th:if="${loginUser.getUserId()} == ${user.userId}"
+                                      th:action="'/posts/pin/'+${p.postId}" method="post">
+                                    <button type="submit" class="icon-button2">
+                                        <i class="bi bi-pin-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit"
+                                    class="icon-button2">
+                                <i class="bi bi-pin-fill"></i>
+                            </button>
                         </div>
-                        <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit"
-                                class="icon-button2">
-                            <i class="bi bi-pin-fill"></i>
-                        </button>
-                    </div>
-                    <h2 th:text="${p.getPostTitle()}"></h2>
-                    <p th:text="${p.getPostContent()}"></p>
-                    <img th:if="${p.getPostImageUrl() != null}" th:src="'/display?filename='+${p.getPostImageUrl()}" alt="Post Image">
-                    <div class="update-date">
-                        <a th:text="'작성일: '+${#temporals.format(p.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
-                    </div>
-                    <div class="feed-actions">
-                        <a th:href="@{'/posts/detail/' + ${p.postId}}">
-                            <button>피드 상세 보기</button>
-                        </a>
+                        <h2 th:text="${p.getPostTitle()}"></h2>
+                        <p th:text="${p.getPostContent()}"></p>
+                        <img th:if="${p.getPostImageUrl() != null}" th:src="'/display?filename='+${p.getPostImageUrl()}"
+                             alt="Post Image">
+                        <div class="update-date">
+                            <a th:text="'작성일: '+${#temporals.format(p.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        </div>
+                        <div class="feed-actions">
+                            <a th:href="@{'/posts/detail/' + ${p.postId}}">
+                                <button>피드 상세 보기</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="feed">
-            <h2 th:if="${posts.size()} > 0">피드</h2>
-            <div class="feed-item" th:each="post : ${posts}">
-                <div class="post">
-                    <div class="pinIcon">
-                        <div th:if="${loginUser != null}">
-                            <form th:if="${loginUser.getUserId()} == ${user.userId}"
-                                  th:action="'/posts/pin/'+${post.postId}" method="post">
-                                <button type="submit" class="icon-button">
-                                    <i class="bi bi-pin-fill"></i>
-                                </button>
-                            </form>
+            <div class="feed">
+                <h2 th:if="${posts.size()} > 0">피드</h2>
+                <div class="feed-item" th:each="post : ${posts}">
+                    <div class="post">
+                        <div class="pinIcon">
+                            <div th:if="${loginUser != null}">
+                                <form th:if="${loginUser.getUserId()} == ${user.userId}"
+                                      th:action="'/posts/pin/'+${post.postId}" method="post">
+                                    <button type="submit" class="icon-button">
+                                        <i class="bi bi-pin-fill"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit"
+                                    class="icon-button">
+                                <i class="bi bi-pin-fill"></i>
+                            </button>
                         </div>
-                        <button th:if="${loginUser == null || loginUser.userId != user.userId}" type="submit"
-                                class="icon-button">
-                            <i class="bi bi-pin-fill"></i>
-                        </button>
-                    </div>
-                    <h2 th:text="${post.getPostTitle()}"></h2>
-                    <p th:text="${post.getPostContent()}"></p>
-                    <img th:if="${post.getPostImageUrl() != null}"
-                         th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">
-                    <div class="update-date">
-                        <a th:text="'작성일: '+${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
-                    </div>
-                    <div class="feed-actions">
-                        <a th:href="@{'/posts/detail/' + ${post.postId}}">
-                            <button>피드 상세 보기</button>
-                        </a>
+                        <h2 th:text="${post.getPostTitle()}"></h2>
+                        <p th:text="${post.getPostContent()}"></p>
+                        <img th:if="${post.getPostImageUrl() != null}"
+                             th:src="'/display?filename='+${post.getPostImageUrl()}" alt="Post Image">
+                        <div class="update-date">
+                            <a th:text="'작성일: '+${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}"></a>
+                        </div>
+                        <div class="feed-actions">
+                            <a th:href="@{'/posts/detail/' + ${post.postId}}">
+                                <button>피드 상세 보기</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="feed">
-            <h2 th:if="${questions.size()} > 0">질문</h2>
-            <div class="feed-item" th:each="question: ${questions}">
-                <div class="question">
-                    <h2 th:if="${question.isAnonymous == false} " th:text="${question.getQuestioner().nickname+' ('+question.getQuestioner().username+')'}"></h2>
-                    <h2 th:if="${question.getQuestioner() == null ||question.isAnonymous == true}" th:text="익명"></h2>
-                    <p th:text=" ${question.getQuestion()}"></p>
-                    <div class="update-date">
-                        <a th:text="'작성일: '+${#temporals.format(question.getQuestionDate(), 'yyyy년 MM월 dd일')}"></a>
-                    </div>
-                    <div class="question-actions">
-                        <a th:href="@{'/questions/create/' + ${user.userId}}"><button>질문보기</button></a>
-                        <!--                            여기서!! 채팅 연결을 하시면 됩니다!!-->
-                        <div th:if="${loginUser != null}">
-                            <button th:if="${user.userId == loginUser.userId}" class="chat-btn" th:value="${question.questionId}">채팅</button>
+            <div class="feed">
+                <h2 th:if="${questions.size()} > 0">질문</h2>
+                <div class="feed-item" th:each="question: ${questions}">
+                    <div class="question">
+                        <h2 th:if="${question.isAnonymous == false} "
+                            th:text="${question.getQuestioner().nickname+' ('+question.getQuestioner().username+')'}"></h2>
+                        <h2 th:if="${question.getQuestioner() == null ||question.isAnonymous == true}"
+                            th:text="익명"></h2>
+                        <p th:text=" ${question.getQuestion()}"></p>
+                        <div class="update-date">
+                            <a th:text="'작성일: '+${#temporals.format(question.getQuestionDate(), 'yyyy년 MM월 dd일')}"></a>
+                        </div>
+                        <div class="question-actions">
+                            <a th:href="@{'/questions/create/' + ${user.userId}}">
+                                <button>질문보기</button>
+                            </a>
+                            <div th:if="${loginUser != null}">
+                                <button th:if="${user.userId == loginUser.userId}" class="chat-btn"
+                                        th:value="${question.questionId}">채팅
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

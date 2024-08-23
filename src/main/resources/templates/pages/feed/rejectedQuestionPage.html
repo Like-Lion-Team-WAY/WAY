@@ -38,7 +38,8 @@
                 </div>
             </div>
             <p class="question-text" th:text="${q.getQuestion()}">질문</p>
-            <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
+            <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}"
+                 alt="questionImgUrl" class="question-image" width="300px">
             <div class="form-group" th:if="${user.getUserId() != loginUser.getUserId()}">
                 <form th:action="@{/questions/like}" method="post">
                     <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
@@ -53,11 +54,13 @@
                     ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
                 </button>
             </div>
-            <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">질문 작성 날짜</p>
+            <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">
+                질문 작성 날짜</p>
             <a th:if="${q.getAnswer() != null} ">
                 <p class="answer-text" th:text="${q.getAnswer()}">답변</p>
                 <div class="form-group">
-                    <p class="answer-date" th:text="'답장 날짜: '+${#temporals.format(q.getAnswerDate(), 'yyyy년 MM월 dd일')}">답변 작성 날짜</p>
+                    <p class="answer-date" th:text="'답장 날짜: '+${#temporals.format(q.getAnswerDate(), 'yyyy년 MM월 dd일')}">
+                        답변 작성 날짜</p>
                 </div>
             </a>
         </div>

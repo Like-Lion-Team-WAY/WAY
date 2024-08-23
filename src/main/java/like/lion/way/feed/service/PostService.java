@@ -9,7 +9,9 @@ import like.lion.way.user.domain.User;
 
 public interface PostService {
     List<Post> getAllPosts();
+
     List<Post> getAllPosts(HttpServletRequest request);
+
     Post getPostById(Long id);
 
     Post updatePost(Long id, String title, String content);
@@ -17,7 +19,9 @@ public interface PostService {
     void deletePost(Long id);
 
     List<Post> getPostByUser(User user);
-    List<Post> getPostByUser(User user,HttpServletRequest request);
+
+    List<Post> getPostByUser(User user, HttpServletRequest request);
+
     Post pinPost(Long postId);
 
     Post savePost(PostDto postDto, String key, User user);

@@ -3,8 +3,8 @@ package like.lion.way.feed.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionService;
+import like.lion.way.feed.util.UserUtil;
 import like.lion.way.file.service.S3Service;
-import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,69 +24,29 @@ import org.springframework.web.multipart.MultipartFile;
 public class QuestionController {
 
     private final QuestionService questionService;
-    private final JwtUtil jwtUtil;
+    private final UserUtil userUtil;
     private final UserService userService;
     private final S3Service s3Service;
 
-
-    private User getLoginUser(HttpServletRequest request) {
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        if (token == null || token.isEmpty()) {
-            System.out.println("Token is null or empty");
-            return null;
-        }
-        Long loginId = jwtUtil.getUserIdFromToken(token);
-        if (loginId == null) {
-            System.out.println("Login ID is null");
-            return null;
-        }
-        System.out.println(loginId);
-        return userService.findByUserId(loginId);
-    }
-
-
-    //내 질문 창으로만
+    //내 질문 페이지
     @GetMapping("/questions/create")
-    public String createMyQuestion(Model model, HttpServletRequest request) {
-        //얘는 로그인 유저 (==질문 페이지 소유자)
-        User loginUser= getLoginUser(request);
-        if(loginUser == null){
-            model.addAttribute("loginUser", null);
-        }else{
-            model.addAttribute("loginUser", loginUser);
-        }
+    public String createMyQuestion(Model model,
+                                   HttpServletRequest request) {
 
-        // 얘는 질문 페이지 소유자의 유저 정보
-        User user = userService.findByUserId(loginUser.getUserId());
-        model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
-        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
-
-        return "pages/feed/questionPage";
+        User loginUser = userUtil.getLoginUser(request);
+        return loadQuestionPage(model, request, loginUser != null ? loginUser.getUserId() : null);
     }
-    //userId 는 질문 페이지의 소유자의 userId
-    //username 추가해줘야 됨
+
+    //다른 사람 질문 페이지
     @GetMapping("/questions/create/{userId}")
-    public String createQuestion(Model model, HttpServletRequest request, @PathVariable("userId") Long userId) {
-        //질문은 로그인하지 않은 사용자도 할 수 있잖아? 그걸 고려해서 다시 로직 짜보기.
-        //얘는 로그인 유저
-        User loginUser= getLoginUser(request);
-        if(loginUser == null){
-            model.addAttribute("loginUser", null);
-        }else{
-            model.addAttribute("loginUser", loginUser);
-        }
+    public String createQuestion(Model model,
+                                 HttpServletRequest request,
+                                 @PathVariable("userId") Long userId) {
 
-        // 얘는 질문 페이지 소유자의 유저 정보
-        User user = userService.findByUserId(userId);
-        model.addAttribute("user", user);
-        model.addAttribute("question", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == false).toList());
-        model.addAttribute("pinQuestion", questionService.getQuestionByAnswerer(user,request).stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus() == true).toList());
-
-        return "pages/feed/questionPage";
+        return loadQuestionPage(model, request, userId);
     }
-    //질문 등록
-    //userId 질문 페이지의 소유자 아이디
+
+    //질문 작성
     @PostMapping("/questions/create/{userId}")
     public String createQuestion(@PathVariable("userId") Long userId,
                                  @RequestParam("question") String question,
@@ -93,39 +54,84 @@ public class QuestionController {
                                  @RequestParam(value = "image", required = false) MultipartFile image,
                                  HttpServletRequest request) {
 
-        // 로그인 사용자
-        User user = getLoginUser(request);
-        if(user == null){
-            if(image.isEmpty()){
-                questionService.saveQuestion(userId, question, null, request);
-            }
-            else {
-                String key = s3Service.uploadFile(image);
-                questionService.saveQuestion(userId, question, key, request);
-            }
-        }else {
-            if(image.isEmpty()){
-                questionService.saveQuestion(user, userId, question, isAnonymous, null, request);
-            }
-            else {
-                String key = s3Service.uploadFile(image);
-                questionService.saveQuestion(user, userId, question, isAnonymous, key, request);
-            }
+        User loginUser = userUtil.getLoginUser(request);
+        String imageUrl = (image != null && !image.isEmpty()) ? s3Service.uploadFile(image) : null;
+
+        if (loginUser != null) {
+            questionService.saveQuestion(loginUser, userId, question, isAnonymous, imageUrl, request);
+        } else {
+            questionService.saveQuestion(userId, question, imageUrl, request);
         }
-        return "redirect:/questions/create/"+userId;
+
+        return "redirect:/questions/create/" + userId;
     }
+
     //질문 답변
     @PostMapping("/questions/answer/{questionId}")
-    public String answerQuestion(@RequestParam("answer") String answer, @PathVariable("questionId") Long questionId) {
+    public String answerQuestion(@RequestParam("answer") String answer,
+                                 @PathVariable("questionId") Long questionId) {
+
         Question question = questionService.getQuestionById(questionId);
         questionService.saveQuestion(question, answer);
         return "redirect:/questions/create";
     }
+
     //거절 질문 등록
     @PostMapping("/questions/enroll/rejected")
     public String enrollRejected(@RequestParam("questionId") Long questionId) {
+
         Question question = questionService.getQuestionById(questionId);
         questionService.rejectedQuestion(question);
-        return "redirect:/questions/rejected"; //거절 질문 창으로 넘어가게
+        return "redirect:/questions/rejected";
+    }
+
+    //질문 고정
+    @PostMapping("/questions/pin/{questionId}")
+    public String pinQuestion(@PathVariable("questionId") Long questionId) {
+
+        questionService.pinQuestion(questionId);
+        return "redirect:/questions/create";
+    }
+
+    //질문 삭제
+    @PostMapping("/questions/delete")
+    public String deleteQuestion(@RequestParam("questionId") Long questionId) {
+
+        Question question = questionService.getQuestionById(questionId);
+        if (question.getQuestionImageUrl() != null) {
+            s3Service.deleteFile(question.getQuestionImageUrl());
+        }
+        questionService.deleteQuestion(questionId);
+        return "redirect:/questions/create";
+    }
+
+    private String loadQuestionPage(Model model,
+                                    HttpServletRequest request,
+                                    Long userId) {
+
+        User loginUser = userUtil.getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
+
+        if (userId == null) {
+            log.error("userId is null");
+            return "redirect:/posts";
+        }
+
+        User user = userService.findByUserId(userId);
+        model.addAttribute("user", user);
+
+        List<Question> questions = questionService.getQuestionByAnswerer(user, request);
+        model.addAttribute("question", filterNonPinnedQuestions(questions));
+        model.addAttribute("pinQuestion", filterPinnedQuestions(questions));
+
+        return "pages/feed/questionPage";
+    }
+
+    private List<Question> filterNonPinnedQuestions(List<Question> questions) {
+        return questions.stream().filter(q -> !q.getQuestionRejected() && !q.getQuestionPinStatus()).toList();
+    }
+
+    private List<Question> filterPinnedQuestions(List<Question> questions) {
+        return questions.stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus()).toList();
     }
 }

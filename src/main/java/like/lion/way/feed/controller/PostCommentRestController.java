@@ -15,27 +15,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class CommentRestController {
+public class PostCommentRestController {
     private final PostCommentService postCommentService;
+
     //댓글 수정
     @PatchMapping("/posts/comments/{commentId}")
-    public ResponseEntity<String> updateComment(@PathVariable("commentId") Long commentId, @RequestBody Map<String, String> payload) {
+    public ResponseEntity<String> updateComment(@PathVariable("commentId") Long commentId,
+                                                @RequestBody Map<String, String> payload) {
         try {
             String updatedContent = payload.get("updatedContent");
             postCommentService.updateComment(commentId, updatedContent);
-            return ResponseEntity.ok("comment updated successfully.");
+            return ResponseEntity.ok("댓글 수정 성공");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update comment.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 수정 실패");
         }
     }
+
     //댓글 삭제
     @DeleteMapping("/posts/comments/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
         try {
             postCommentService.deleteComment(commentId);
-            return ResponseEntity.ok("comment deleted successfully.");
+            return ResponseEntity.ok("댓글 삭제 실패");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete comment.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 실패");
         }
     }
 

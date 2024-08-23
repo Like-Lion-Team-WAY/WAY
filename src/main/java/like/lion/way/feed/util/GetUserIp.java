@@ -1,9 +1,9 @@
-package like.lion.way.feed.controller;
+package like.lion.way.feed.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public class GetUserIp {
-    public static String getRemoteIP(HttpServletRequest request){
+    public static String getRemoteIP(HttpServletRequest request) {
         String ip = request.getHeader("X-FORWARDED-FOR");
 
         //proxy 환경일 경우
@@ -17,7 +17,7 @@ public class GetUserIp {
         }
 
         if (ip == null || ip.length() == 0) {
-            ip = request.getRemoteAddr() ;
+            ip = request.getRemoteAddr();
         }
 
         return ip;

@@ -4,44 +4,48 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 <head>
-  <meta charset="UTF-8">
-  <title>filterQuestionPage</title>
-  <link rel="stylesheet" th:href="@{/css/feed/questionPage.css}">
+    <meta charset="UTF-8">
+    <title>filterQuestionPage</title>
+    <link rel="stylesheet" th:href="@{/css/feed/questionPage.css}">
 </head>
 <body>
 <div layout:fragment="content">
-  <h1>보낸 질문 목록</h1>
-  <div class="answered-section">
-    <div class="answered-question" th:each="q, iterStat : ${question}">
-      <div class="answered-header">
-        <span class="user-icon">Q</span>
-        <span class="user-name" th:text="${q.isAnonymous == false} ? ${q.getQuestioner().nickname+' ('+q.getQuestioner().username+')'} : '익명'"></span>
-      </div>
-      <p class="question-text" th:text="${q.getQuestion()}">질문</p>
-      <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}" alt="questionImgUrl"  class="question-image" width="300px">
-      <div class="form-group" th:if="${loginUser != null && user.getUserId() != loginUser.getUserId()}">
-        <form th:action="@{/questions/like}" method="post">
-          <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
-          <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
-          <button type="submit" class="likeBtn">
-            ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
-          </button>
-        </form>
-      </div>
-      <div class="form-group" th:if="${loginUser == null || user.getUserId() == loginUser.getUserId()}">
-        <button type="submit" class="likeBtn">
-          ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
-        </button>
-      </div>
-      <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">질문 작성 날짜</p>
-      <a th:if="${q.getAnswer() != null} ">
-        <p class="answer-text" th:text="${q.getAnswer()}">답변</p>
-        <div class="form-group">
-          <p class="answer-date" th:text="'답장 날짜: '+${#temporals.format(q.getAnswerDate(), 'yyyy년 MM월 dd일')}">답변 작성 날짜</p>
+    <h1>보낸 질문 목록</h1>
+    <div class="answered-section">
+        <div class="answered-question" th:each="q, iterStat : ${question}">
+            <div class="answered-header">
+                <span class="user-icon">Q</span>
+                <span class="user-name"
+                      th:text="${q.isAnonymous == false} ? ${q.getQuestioner().nickname+' ('+q.getQuestioner().username+')'} : '익명'"></span>
+            </div>
+            <p class="question-text" th:text="${q.getQuestion()}">질문</p>
+            <img th:if="${q.getQuestionImageUrl() != null}" th:src="'/display?filename='+${q.getQuestionImageUrl()}"
+                 alt="questionImgUrl" class="question-image" width="300px">
+            <div class="form-group" th:if="${loginUser != null && user.getUserId() != loginUser.getUserId()}">
+                <form th:action="@{/questions/like}" method="post">
+                    <input type="hidden" name="userId" th:value="${loginUser.getUserId()}">
+                    <input type="hidden" name="questionId" th:value="${q.getQuestionId()}">
+                    <button type="submit" class="likeBtn">
+                        ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
+                    </button>
+                </form>
+            </div>
+            <div class="form-group" th:if="${loginUser == null || user.getUserId() == loginUser.getUserId()}">
+                <button type="submit" class="likeBtn">
+                    ❤<span class="likeCount" th:text="${q.getQuestionLike()}"></span>
+                </button>
+            </div>
+            <p class="question-date" th:text="'질문 작성 날짜: '+${#temporals.format(q.getQuestionDate(), 'yyyy년 MM월 dd일')}">
+                질문 작성 날짜</p>
+            <a th:if="${q.getAnswer() != null} ">
+                <p class="answer-text" th:text="${q.getAnswer()}">답변</p>
+                <div class="form-group">
+                    <p class="answer-date" th:text="'답장 날짜: '+${#temporals.format(q.getAnswerDate(), 'yyyy년 MM월 dd일')}">
+                        답변 작성 날짜</p>
+                </div>
+            </a>
         </div>
-      </a>
     </div>
-  </div>
 </div>
 </body>
 </html>
