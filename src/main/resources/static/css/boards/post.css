@@ -1,9 +1,3 @@
-/* 페이지 전체에 적용되는 폰트 및 배경색 설정 */
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa;
-}
-
 /* 페이지 중앙에 위치하는 컨테이너, 전체 레이아웃의 크기와 배경 설정 */
 .container {
     width: 900px;
@@ -28,7 +22,7 @@ body {
 }
 
 /* 페이지 중앙에 위치하는 제목("보드게임 게시판") 부분 스타일링 */
-h1 {
+#boardTitle {
     text-align: center;
     font-size: 28px;
     font-weight: bold;

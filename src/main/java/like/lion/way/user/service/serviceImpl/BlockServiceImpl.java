@@ -25,11 +25,7 @@ public class BlockServiceImpl implements BlockService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     @Override
-    public List<String> getBlcokList(HttpServletRequest request) {
-
-        String token  = jwtUtil.getCookieValue(request,"accessToken");
-        Long userId = jwtUtil.getUserIdFromToken(token);
-        User user = userService.findByUserId(userId);
+    public List<String> getBlcokList(User user) {
         List<Block> blocks = blockRepository.findAllByBlockerUserId(user);
         List<String> blockedNames = new ArrayList<>();
         for(Block block:blocks){

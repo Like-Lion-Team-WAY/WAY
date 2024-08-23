@@ -10,6 +10,7 @@ import like.lion.way.board.api.request.BoardPostCommentRequest;
 import like.lion.way.board.api.request.BoardPostEditRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
+import like.lion.way.board.application.response.BoardBestPostResponse;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
 import like.lion.way.board.application.response.BoardPostLikeCountResponse;
@@ -191,6 +192,15 @@ public class BoardRestController {
         Page<BoardPostScrapsResponse> scrapPosts = boardService.getPostScraps(httpServletRequest, pageable);
 
         return ApiResponse.ok(scrapPosts);
+
+    }
+
+    @GetMapping("/best")
+    public ApiResponse<List<BoardBestPostResponse>> getBestBoardPosts() {
+
+        log.info("베스트 게시판" + boardService.getBestBoardPosts());
+
+        return ApiResponse.ok(boardService.getBestBoardPosts());
 
     }
 

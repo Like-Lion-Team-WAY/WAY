@@ -42,7 +42,7 @@ button {
     cursor: pointer;
 }
 
-h1 {
+.title {
     text-align: center;
     margin: 20px;
     font-size: 28px;

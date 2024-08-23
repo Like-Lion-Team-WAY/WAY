@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>커뮤니티 게시판</title>
+    <link rel="stylesheet" href="/css/boards/bestPost.css">
+    <script th:src="@{/js/boards/bestPost.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="container"> <!-- 여기 .container 클래스 추가 -->
+        <h1>베스트 게시판</h1>
+        <div class="board-list" id="boardList">
+            <!-- Board List will be populated here by JavaScript -->
+            <div class="board-item-placeholder">게시판 목록이 없습니다.</div>
+        </div>
+    </div> <!-- .container 닫기 -->
+</div>
+
+</body>
+</html>

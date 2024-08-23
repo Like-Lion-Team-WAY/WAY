@@ -19,5 +19,10 @@ public interface BoardPostRepository extends JpaRepository<BoardPost, Long> {
     @Query("SELECT bp FROM BoardPost bp WHERE bp.id = :boardPostId")
     BoardPost findByBoardPostId(@Param("boardPostId") Long boardPostId);
 
+    @Query("SELECT bp FROM BoardPost bp " +
+            "WHERE (SELECT COUNT(BPL) FROM BoardPostLike BPL WHERE BPL.boardPost.id = bp.id) >= 10 " +
+            "ORDER BY (SELECT COUNT(BPL) FROM BoardPostLike BPL WHERE BPL.boardPost.id = bp.id) DESC")
+    List<BoardPost> findTop10BoardPostsByLikes(Pageable pageable);
+
 
 }

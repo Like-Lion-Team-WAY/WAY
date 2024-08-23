@@ -8,6 +8,7 @@ body {
     align-items: center;
     background-color: #ffffff;
 }
+
 .feed-item, .question-item {
     background-color: #FFD6B0;
     padding: 15px;
@@ -18,24 +19,32 @@ body {
     width: 900px;
     flex-direction: column;
 }
+
 .question-item h2 {
     margin-left: 10px;
     font-size: 20px;
     font-weight: bold;
     color: #ff6746;
 }
-.feed-item h2{
+
+.feed-item h2 {
     margin-left: 10px;
     font-size: 20px;
     font-weight: bold;
     color: black;
 }
-.feed-item p, .question-item p{
+
+.feed-item p, .question-item p {
     font-size: 15px;
     margin-left: 15px;
 }
 
-h1{
+#feed-container{
+    margin-bottom: 100px;
+}
+
+#feed-container h1,
+#question-container h1 {
     color: #ff6746;
     font-size: 25px;
     font-weight: bold;
@@ -48,7 +57,8 @@ h1{
     align-items: center; /* Center items vertically */
     margin-top: auto; /* Push the button to the bottom */
 }
-.containerBox a{
+
+.containerBox a {
     color: #ff6746;
     font-weight: bold;
 
@@ -83,18 +93,23 @@ h1{
     padding: 0; /* Remove any padding */
     margin: 0; /* Remove any margin */
 }
-.detailBtn:hover{
+
+.detailBtn:hover {
     background-color: #969696;
 }
-.feed-item:nth-child(odd), .question-item:nth-child(odd){
+
+.feed-item:nth-child(odd), .question-item:nth-child(odd) {
     background-color: #FFD6B0;
 }
-.feed-item:nth-child(even), .question-item:nth-child(even){
+
+.feed-item:nth-child(even), .question-item:nth-child(even) {
     background-color: #f1f1f1;
 }
-.feed-item:hover, .question-item:hover{
+
+.feed-item:hover, .question-item:hover {
     background-color: #f9916e;
 }
+
 .profile-info {
     display: flex;
     align-items: center; /* 이미지와 텍스트를 세로로 가운데 정렬 */
@@ -103,21 +118,25 @@ h1{
 .profile-info p {
     margin: 0; /* 기본 margin 제거 */
 }
+
 .profile-info a {
     text-decoration: none;
     color: #ff6746;
 }
+
 .profile-picture {
     width: 30px;
     height: 30px;
     border-radius: 50%;
     margin-right: 15px; /* 이미지와 이름 사이의 간격 */
 }
+
 .profile-name {
     font-size: 13px;
     color: #ff6746;
     font-weight: bold;
 }
+
 .profile-name a {
     color: inherit;
     text-decoration: none;

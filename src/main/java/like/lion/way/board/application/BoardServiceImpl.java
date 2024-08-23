@@ -8,6 +8,7 @@ import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
 import like.lion.way.board.application.request.BoardPostEditServiceRequest;
+import like.lion.way.board.application.response.BoardBestPostResponse;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostCommentResponse;
 import like.lion.way.board.application.response.BoardPostDetailResponse;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,7 +129,7 @@ public class BoardServiceImpl implements BoardService {
                         .boardName(board.getName())
                         .boardPostId(post.getId())
                         .postTitle(post.getTitle())
-                        .author(post.getUser().getNickname(post.isAnonymousPermission()))
+                        .nickname(nullUserNickCheck(post.getUser(), post.isAnonymousPermission()))
                         .created_at(post.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
@@ -156,16 +158,18 @@ public class BoardServiceImpl implements BoardService {
         List<BoardPostCommentResponse> comments = boardPostCommentRepository.findByBoardPostId(postId).stream()
                 .map(comment -> BoardPostCommentResponse.builder()
                         .commentId(comment.getId())
-                        .commentUsername(comment.getUser().getNickname(comment.isAnonymousPermission()))
+                        .commentUsername(nullUserCheck(comment.getUser()))
                         .commentContent(comment.getContent())
                         .commentCreatedAt(comment.getCreatedAt())
                         .preCommentId(comment.getPreCommentId())
+                        .commentNickname(nullUserNickCheck(comment.getUser(), comment.isAnonymousPermission()))
                         .build())
                 .collect(Collectors.toList());
 
         return BoardPostDetailResponse.builder()
-                .author(post.getUser().getNickname(post.isAnonymousPermission()))
-                .authorProfileImgUrl(post.getUser().getUserImage())
+                .nickname(nullUserNickCheck(post.getUser(), post.isAnonymousPermission()))
+                .username(nullUserCheck(post.getUser()))
+                .authorProfileImgUrl(nullUserImgCheck(post.getUser()))
                 .postCreatedAt(post.getCreatedAt())
                 .postTitle(post.getTitle())
                 .postContent(post.getContent())
@@ -292,7 +296,8 @@ public class BoardServiceImpl implements BoardService {
         List<BoardPostScrapsResponse> scrapsResponses = scrapsPage.stream()
                 .map(scrap -> BoardPostScrapsResponse.builder()
                         .title(scrap.getBoardPost().getTitle())
-                        .author(scrap.getBoardPost().getUser().getNickname(scrap.getBoardPost().isAnonymousPermission()))
+                        .nickname(nullUserNickCheck(scrap.getBoardPost().getUser(), scrap.getBoardPost().isAnonymousPermission()))
+                        .username(nullUserCheck(scrap.getBoardPost().getUser()))
                         .createdAt(scrap.getBoardPost().getCreatedAt())
                         .boardId(scrap.getBoardPost().getBoard().getId())
                         .boardPostId(scrap.getBoardPost().getId())
@@ -300,6 +305,22 @@ public class BoardServiceImpl implements BoardService {
                 .toList();
 
         return new PageImpl<>(scrapsResponses, pageable, scrapsPage.getTotalElements());
+
+    }
+
+    @Override
+    public List<BoardBestPostResponse> getBestBoardPosts() {
+        Pageable pageable = PageRequest.of(0, 10); // 첫 페이지의 10개 항목
+        List<BoardPost> top10Posts = boardPostRepository.findTop10BoardPostsByLikes(pageable);
+
+        return top10Posts.stream()
+                .map(boardPost -> BoardBestPostResponse.builder()
+                        .boardTitle(boardPost.getTitle())
+                        .boardId(boardPost.getBoard().getId())
+                        .postId(boardPost.getId())
+                        .likes(boardPostLikeRepository.countLikesByBoardPostId(boardPost.getId()))
+                        .build())
+                .toList();
 
     }
 
@@ -321,6 +342,24 @@ public class BoardServiceImpl implements BoardService {
     private boolean userOwnerMatch(HttpServletRequest httpServletRequest, User owner) {
         User user = getUserByHttpServletRequest(httpServletRequest);
         return user != null && user.equals(owner);
+    }
+
+    private String nullUserCheck(User user) {
+
+        return user == null ? "탈퇴한 회원입니다." : user.getUsername();
+
+    }
+
+    private String nullUserNickCheck(User user, boolean permission) {
+
+        return user == null ? "탈퇴한 회원입니다." : user.getNickname(permission);
+
+    }
+
+    private String nullUserImgCheck(User user) {
+
+        return user == null ? "null" : user.getUserImage();
+
     }
 
 }

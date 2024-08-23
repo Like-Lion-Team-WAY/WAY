@@ -1,18 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const createBoardButton = document.getElementById('createBoardButton');
-
-    createBoardButton.addEventListener('click', () => {
-        window.location.href = '/boards/create'; // GET 요청을 통해 페이지 이동
-    });
 
     // Fetch board list from API
-    fetch('/api/v1/boards')
+    fetch('/api/v1/boards/best')
         .then(response => response.json())
         .then(apiResponse => {
             if (!apiResponse.success) {
                 throw new Error(apiResponse.message || 'Error fetching board list');
             }
-
             const data = apiResponse.data;
             const boardList = document.getElementById('boardList');
             boardList.innerHTML = ''; // Clear the placeholder
@@ -23,28 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 placeholder.textContent = '게시판 목록이 없습니다.';
                 boardList.appendChild(placeholder);
             } else {
-                data.forEach(board => {
+                data.forEach(bestPost => {
+                    const maxLength = 20;
+                    let displayName = bestPost.boardTitle;
+                    if (bestPost.boardTitle.length > maxLength) {
+                        displayName = bestPost.boardTitle.substring(0, maxLength) + '...';
+                    }
                     const boardItem = document.createElement('div');
                     boardItem.className = 'board-item';
-
-                    // 최대 글자수 제한
-                    const maxLength = 20;
-                    let displayName = board.name;
-                    if (board.name.length > maxLength) {
-                        displayName = board.name.substring(0, maxLength) + '...';
-                    }
-
-                    boardItem.innerHTML = `<span>${displayName}</span><span>➔</span>`;
-
-
-                    // boardItem.innerHTML = `<span>${board.name}</span><span>➔</span>`;
-
+                    boardItem.innerHTML = `<span>${displayName} 👍 ${bestPost.likes} 🔥🔥🔥</span><span>➔</span>`;
                     boardList.appendChild(boardItem);
 
                     // 클릭 이벤트 리스너 추가
                     boardItem.addEventListener('click', () => {
                         // 클릭 시 /boards/posts로 이동하며 boardId를 쿼리 파라미터로 포함
-                        window.location.href = `/boards/${board.boardId}`;
+                        window.location.href = `/boards/posts/${bestPost.boardId}/${bestPost.postId}`;
                     });
                 });
             }

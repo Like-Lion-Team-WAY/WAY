@@ -71,11 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     posts.forEach((post, index) => {
 
+                        const maxLength = 10;
+                        let displayName = post.postTitle;
+                        if (post.postTitle.length > maxLength) {
+                            displayName = post.postTitle.substring(0, maxLength) + '...';
+                        }
+
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${index + 1 + (currentPage - 1) * postsPerPage}</td>
-                            <td>${post.postTitle}</td>
-                            <td>${post.author}</td>
+                            <td>${displayName}</td>
+                            <td>${post.nickname}</td>
                             <td>${new Date(post.created_at).toLocaleDateString()}</td>
                         `;
                         boardPostList.appendChild(row);

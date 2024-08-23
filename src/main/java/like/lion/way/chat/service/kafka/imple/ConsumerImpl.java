@@ -7,11 +7,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import like.lion.way.alarm.event.ChatAlarmEvent;
 import like.lion.way.chat.domain.Message;
 import like.lion.way.chat.domain.dto.ReceiveMessageDTO;
 import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.kafka.Consumer;
+import like.lion.way.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class ConsumerImpl implements Consumer {
     private final ObjectMapper objectMapper;
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageRepository messageRepository;
+    private final UserRepository userRepository;
+    private final ApplicationEventPublisher publisher;
 
 //    @Value("${server.port}")
 //    private String serverPort;
@@ -46,9 +51,14 @@ public class ConsumerImpl implements Consumer {
             } else if (type.equals(CLOSE.get())) {
                 leaveProcessing(chatIds, chatId, senderId);
 
-            } else if (!type.startsWith(CREATE.get()) && !type.equals(DELETE.get()) &&
-                    chatIds != null && chatIds.contains(receiveMessageDTO.getReceiverId())) {
-                readProcessing(receiveMessageDTO);
+            } else if (!type.startsWith(CREATE.get()) && !type.equals(DELETE.get()) && chatIds != null) {
+                if (chatIds.contains(receiveMessageDTO.getReceiverId())) {
+                    readProcessing(receiveMessageDTO);
+                } else {
+                    ChatAlarmEvent event = new ChatAlarmEvent(
+                            this, userRepository.findById(receiveMessageDTO.getReceiverId()).orElse(null), 1L);
+                    publisher.publishEvent(event);
+                }
             }
             messagingTemplate.convertAndSend("/topic/messages/" + receiveMessageDTO.getChatId(), receiveMessageDTO);
 

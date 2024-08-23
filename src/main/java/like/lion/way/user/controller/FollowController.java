@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
@@ -26,10 +27,26 @@ public class FollowController {
         User user = userService.getUserByToken(request);
         List<FollowDto> followerList =  followService.getFollowerList(user);
         List<FollowDto> followingList = followService.getFollowingList(user);
-        List<String> blockList = blockService.getBlcokList(request);
+        List<String> blockList = blockService.getBlcokList(user);
         model.addAttribute("follower", followerList);
         model.addAttribute("following",followingList);
         model.addAttribute("block",blockList);
+        model.addAttribute("another","itsme");
+        return "pages/user/followSetting";
+    }
+    @GetMapping("/followList")
+    public String followList(@RequestParam("userId")Long userId , Model model , HttpServletRequest request){
+        User nowUser = userService.getUserByToken(request);
+        User user = userService.findByUserId(userId);
+        if(nowUser.getUserId()==user.getUserId()){
+            return "redirect:/user/followSetting";
+        }
+        List<FollowDto> followerList =  followService.getFollowerList(user);
+        List<FollowDto> followingList = followService.getFollowingList(user);
+        model.addAttribute("follower", followerList);
+        model.addAttribute("following",followingList);
+        model.addAttribute("block",null);
+        model.addAttribute("another", "another");
         return "pages/user/followSetting";
     }
 
