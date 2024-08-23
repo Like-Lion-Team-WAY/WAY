@@ -1,6 +1,5 @@
 package like.lion.way;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ public class ApiResponse<T> {
     private boolean success;
     private T data;
 
-    @Builder
     public ApiResponse(
             HttpStatus status,
             String message,
@@ -24,7 +22,7 @@ public class ApiResponse<T> {
         this.code = status.value();
         this.status = status;
         this.message = message;
-        this.success = true;
+        this.success = (status.is2xxSuccessful());
         this.data = data;
 
     }
@@ -39,6 +37,35 @@ public class ApiResponse<T> {
 
         return new ApiResponse<>(HttpStatus.OK, HttpStatus.OK.name(), null);
 
+    }
+
+    // Static factory method for initiating the builder
+    public static <T> ApiResponseBuilder<T> status(HttpStatus status) {
+        return new ApiResponseBuilder<>(status);
+    }
+
+    public static class ApiResponseBuilder<T> {
+        private HttpStatus status;
+        private String message;
+        private T data;
+
+        public ApiResponseBuilder(HttpStatus status) {
+            this.status = status;
+        }
+
+        public ApiResponseBuilder<T> message(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public ApiResponseBuilder<T> data(T data) {
+            this.data = data;
+            return this;
+        }
+
+        public ApiResponse<T> build() {
+            return new ApiResponse<>(status, message, data);
+        }
     }
 
 }
