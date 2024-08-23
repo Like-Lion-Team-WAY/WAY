@@ -14,8 +14,18 @@ body {
     align-items: center;
 }
 
-.header #returnPage {
+#returnPage {
     margin-right: auto; /* 왼쪽에 배치 */
+    margin-bottom: 20px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff6746;
+    cursor: pointer;
+}
+
+#returnPage:hover {
+    color: #058593;
 }
 
 .actions {
@@ -38,22 +48,6 @@ body {
 .actions button:hover {
     background-color: #035259;
 }
-
-
-    #returnPage {
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
-    background-color: #ff6746;
-    padding: 7px;
-    margin-bottom: 20px;
-}
-
-#returnPage:hover {
-    background-color: #035259;
-}
-
 
 .post {
     margin-bottom: 20px;
