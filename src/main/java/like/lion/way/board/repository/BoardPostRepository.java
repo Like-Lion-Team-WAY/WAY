@@ -24,5 +24,7 @@ public interface BoardPostRepository extends JpaRepository<BoardPost, Long> {
             "ORDER BY (SELECT COUNT(BPL) FROM BoardPostLike BPL WHERE BPL.boardPost.id = bp.id) DESC")
     List<BoardPost> findTop10BoardPostsByLikes(Pageable pageable);
 
+    @Query("SELECT bp FROM BoardPost bp WHERE bp.title LIKE %?1% OR bp.content LIKE %?1% ORDER BY bp.createdAt DESC")
+    Page<BoardPost> findBySearchKeywords(String keywords, Pageable pageable);
 
 }

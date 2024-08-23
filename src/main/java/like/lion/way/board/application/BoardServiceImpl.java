@@ -8,6 +8,7 @@ import like.lion.way.board.application.request.BoardEditServiceRequest;
 import like.lion.way.board.application.request.BoardPostCommentServiceRequest;
 import like.lion.way.board.application.request.BoardPostCreateServiceRequest;
 import like.lion.way.board.application.request.BoardPostEditServiceRequest;
+import like.lion.way.board.application.request.BoardSearchServiceRequest;
 import like.lion.way.board.application.response.BoardBestPostResponse;
 import like.lion.way.board.application.response.BoardPostCommentCountResponse;
 import like.lion.way.board.application.response.BoardPostCommentResponse;
@@ -323,6 +324,53 @@ public class BoardServiceImpl implements BoardService {
                 .toList();
 
     }
+
+
+    // 게시판 검색
+    @Override
+    public List<BoardTitleResponse> getSearchBoards(BoardSearchServiceRequest request) {
+
+        List<Board> boards = boardRepository.findBySearchKeywords(request.getKeyword());
+
+        return boards.stream()
+                .map(board -> BoardTitleResponse.builder()
+                        .boardId(board.getId())
+                        .name(board.getName())
+                        .build())
+                .toList();
+
+    }
+
+    // 게시글 검색
+    @Override
+    public Page<BoardPostResponse> getSearchBoardPosts(BoardSearchServiceRequest request, Pageable pageable) {
+
+//        Page<BoardPostScrap> scrapsPage = boardPostScrapRepository.findAllBoardPostScrapByUser(getUserByHttpServletRequest(httpServletRequest), pageable);
+//        List<BoardPostScrapsResponse> scrapsResponses = scrapsPage.stream()
+//                .map(scrap -> BoardPostScrapsResponse.builder()
+//                        .title(scrap.getBoardPost().getTitle())
+//                        .nickname(nullUserNickCheck(scrap.getBoardPost().getUser(), scrap.getBoardPost().isAnonymousPermission()))
+//                        .username(nullUserCheck(scrap.getBoardPost().getUser()))
+//                        .createdAt(scrap.getBoardPost().getCreatedAt())
+//                        .boardId(scrap.getBoardPost().getBoard().getId())
+//                        .boardPostId(scrap.getBoardPost().getId())
+//                        .build())
+//                .toList();
+//
+//        return new PageImpl<>(scrapsResponses, pageable, scrapsPage.getTotalElements());
+
+        Page<BoardPost> postsPage = boardPostRepository.findBySearchKeywords(request.getKeyword(), pageable);
+        List<BoardPostResponse> postResponses = postsPage.stream()
+                .map(post -> BoardPostResponse.builder()
+                        .boardPostId(post.getId())
+                        .postTitle(post.getTitle())
+                        .nickname(nullUserNickCheck(post.getUser(), post.isAnonymousPermission()))
+                        .created_at(post.getCreatedAt())
+                        .build())
+                .toList();
+        return new PageImpl<>(postResponses, pageable, postsPage.getTotalElements());
+    }
+
 
     // HttpServletRequest로 User 찾기
     private User getUserByHttpServletRequest(HttpServletRequest httpRequest) {

@@ -8,6 +8,7 @@ import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
 import like.lion.way.board.api.request.BoardPostCommentRequest;
 import like.lion.way.board.api.request.BoardPostEditRequest;
+import like.lion.way.board.api.request.BoardSearchRequest;
 import like.lion.way.board.application.BoardService;
 import like.lion.way.board.api.request.BoardPostCreateRequest;
 import like.lion.way.board.application.response.BoardBestPostResponse;
@@ -186,7 +187,7 @@ public class BoardRestController {
     public ApiResponse<Page<BoardPostScrapsResponse>> scrapBoardPosts(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
-            HttpServletRequest httpServletRequest){
+            HttpServletRequest httpServletRequest) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<BoardPostScrapsResponse> scrapPosts = boardService.getPostScraps(httpServletRequest, pageable);
@@ -195,12 +196,34 @@ public class BoardRestController {
 
     }
 
+    // 베스트 게시판 목록 요청
     @GetMapping("/best")
     public ApiResponse<List<BoardBestPostResponse>> getBestBoardPosts() {
 
-        log.info("베스트 게시판" + boardService.getBestBoardPosts());
-
         return ApiResponse.ok(boardService.getBestBoardPosts());
+
+    }
+
+    // 게시판 검색 기능
+    @PostMapping("/search")
+    public ApiResponse<List<BoardTitleResponse>> getSearchBoards(
+            @RequestBody @Valid BoardSearchRequest request) {
+
+        return ApiResponse.ok(boardService.getSearchBoards(request.toServiceRequest()));
+
+    }
+
+    // 게시글 검색 기능
+    @PostMapping("/posts/search")
+    public ApiResponse<Page<BoardPostResponse>> getSearchPosts(
+            @RequestBody @Valid BoardSearchRequest request,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<BoardPostResponse> searchPosts = boardService.getSearchBoardPosts(request.toServiceRequest(), pageable);
+
+        return ApiResponse.ok(searchPosts);
 
     }
 
