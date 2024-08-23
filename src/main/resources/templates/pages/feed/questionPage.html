@@ -102,7 +102,7 @@
       <div th:if="${loginUser != null}">
         <a th:if="${q.getAnswer() == null && user.getUserId() == loginUser.getUserId()}" >
           <form th:action="@{/questions/answer/{questionId}(questionId=${q.getQuestionId()})}" method="post">
-            <input type="text" name="answer" class="answer-input" placeholder="답장을 입력해주세요.">
+            <textarea type="text" name="answer" class="answer-input" placeholder="답장을 입력해주세요."></textarea>
             <div class="form-group">
               <button type="submit" class="send-button">답변하기</button>
             </div>
@@ -121,7 +121,7 @@
         </div>
         <!--                답변 수정-->
         <form class="editForm" style="display:none;" th:action="@{/questions/answer/edit/{questionId}(questionId=${q.getQuestionId()})}" method="post">
-          <input type="text" name="editedAnswer" class="answer-input" th:value="${q.getAnswer()}">
+          <textarea name="editedAnswer" class="answer-input" rows="4" cols="50" th:text="${q.getAnswer()}"></textarea>
           <div class="form-group">
             <button type="submit" class="save-button">저장</button>
             <button type="button" class="cancel-button">취소</button>
@@ -191,7 +191,7 @@
         <div th:if="${loginUser != null}">
           <a th:if="${q.getAnswer() == null && user.getUserId() == loginUser.getUserId()}" >
             <form th:action="@{/questions/answer/{questionId}(questionId=${q.getQuestionId()})}" method="post">
-              <input type="text" name="answer" class="answer-input" placeholder="답장을 입력해주세요.">
+              <textarea type="text" name="answer" class="answer-input" placeholder="답장을 입력해주세요."></textarea>
               <div class="form-group">
                 <button type="submit" class="send-button">답변하기</button>
               </div>
@@ -210,12 +210,13 @@
           </div>
           <!--                답변 수정-->
           <form class="editForm" style="display:none;" th:action="@{/questions/answer/edit/{questionId}(questionId=${q.getQuestionId()})}" method="post">
-            <input type="text" name="editedAnswer" class="answer-input" th:value="${q.getAnswer()}">
+            <textarea name="editedAnswer" class="answer-input" rows="4" cols="50" th:text="${q.getAnswer()}"></textarea>
             <div class="form-group">
               <button type="submit" class="save-button">저장</button>
               <button type="button" class="cancel-button">취소</button>
             </div>
           </form>
+
         </a>
       </div>
     </h2>

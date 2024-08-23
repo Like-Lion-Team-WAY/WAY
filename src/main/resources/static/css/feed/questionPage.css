@@ -135,6 +135,7 @@ body {
 .answer-text {
     margin-top: 10px;
     margin-left: 40px;
+    margin-right: 40px;
     font-size: 17px;
     font-weight: bold;
     color: #ff6746;

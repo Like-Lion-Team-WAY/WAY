@@ -150,22 +150,22 @@
                     </div>
                 </div>
             </div>
-            <div class="feed">
-                <h2 th:if="${questions.size()} > 0">질문</h2>
-                <div class="feed-item" th:each="question: ${questions}">
-                    <div class="question">
-                        <h2 th:if="${question.isAnonymous == false} " th:text="${question.getQuestioner().nickname+' ('+question.getQuestioner().username+')'}"></h2>
-                        <h2 th:if="${question.isAnonymous == true}" th:text="익명"></h2>
-                        <p th:text=" ${question.getQuestion()}"></p>
-                        <div class="update-date">
-                            <a th:text="'작성일: '+${#temporals.format(question.getQuestionDate(), 'yyyy년 MM월 dd일')}"></a>
-                        </div>
-                        <div class="question-actions">
-                            <a th:href="@{'/questions/create/' + ${user.userId}}"><button>질문보기</button></a>
-                            <!--                            여기서!! 채팅 연결을 하시면 됩니다!!-->
-                            <div th:if="${loginUser != null}">
-                                <button th:if="${user.userId == loginUser.userId}" class="chat-btn" th:value="${question.questionId}">채팅</button>
-                            </div>
+        </div>
+        <div class="feed">
+            <h2 th:if="${questions.size()} > 0">질문</h2>
+            <div class="feed-item" th:each="question: ${questions}">
+                <div class="question">
+                    <h2 th:if="${question.isAnonymous == false} " th:text="${question.getQuestioner().nickname+' ('+question.getQuestioner().username+')'}"></h2>
+                    <h2 th:if="${question.getQuestioner() == null ||question.isAnonymous == true}" th:text="익명"></h2>
+                    <p th:text=" ${question.getQuestion()}"></p>
+                    <div class="update-date">
+                        <a th:text="'작성일: '+${#temporals.format(question.getQuestionDate(), 'yyyy년 MM월 dd일')}"></a>
+                    </div>
+                    <div class="question-actions">
+                        <a th:href="@{'/questions/create/' + ${user.userId}}"><button>질문보기</button></a>
+                        <!--                            여기서!! 채팅 연결을 하시면 됩니다!!-->
+                        <div th:if="${loginUser != null}">
+                            <button th:if="${user.userId == loginUser.userId}" class="chat-btn" th:value="${question.questionId}">채팅</button>
                         </div>
                     </div>
                 </div>

@@ -18,7 +18,7 @@ $(document).ready(function() {
 
         const form = $(this);
         const url = form.attr('action');
-        const editedAnswer = form.find('input[name="editedAnswer"]').val();
+        const editedAnswer = form.find('textarea[name="editedAnswer"]').val();  // textarea에서 값 가져오기
 
         $.ajax({
             type: 'PATCH',
