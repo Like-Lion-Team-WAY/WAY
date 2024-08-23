@@ -61,4 +61,6 @@ public interface BoardService {
 
     List<BoardTitleResponse> getSearchBoards(BoardSearchServiceRequest request);
 
+    Page<BoardPostResponse> getSearchBoardPosts(BoardSearchServiceRequest request, Pageable pageable);
+
 }

@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayBoardList(apiResponse);
                 })
                 .catch(error => {
-                    // console.error('Error fetching search results:', error);
-                    // alert('게시판 검색에 실패했습니다.');
+                    console.error('Error fetching search results:', error);
+                    alert('게시판 검색에 실패했습니다.');
                 });
         } else {
             // 검색어가 없으면 전체 목록을 가져옴

@@ -204,12 +204,26 @@ public class BoardRestController {
 
     }
 
-    // 검색 기능
+    // 게시판 검색 기능
     @PostMapping("/search")
     public ApiResponse<List<BoardTitleResponse>> getSearchBoards(
             @RequestBody @Valid BoardSearchRequest request) {
 
         return ApiResponse.ok(boardService.getSearchBoards(request.toServiceRequest()));
+
+    }
+
+    // 게시글 검색 기능
+    @PostMapping("/posts/search")
+    public ApiResponse<Page<BoardPostResponse>> getSearchPosts(
+            @RequestBody @Valid BoardSearchRequest request,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<BoardPostResponse> searchPosts = boardService.getSearchBoardPosts(request.toServiceRequest(), pageable);
+
+        return ApiResponse.ok(searchPosts);
 
     }
 
