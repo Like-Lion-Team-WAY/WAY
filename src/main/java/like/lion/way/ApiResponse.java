@@ -1,5 +1,6 @@
 package like.lion.way;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class ApiResponse<T> {
 
     }
 
+
     public static <T> ApiResponse<T> ok(T data) {
 
         return new ApiResponse<>(HttpStatus.OK, HttpStatus.OK.name(), data);
@@ -39,33 +41,28 @@ public class ApiResponse<T> {
 
     }
 
-    // Static factory method for initiating the builder
-    public static <T> ApiResponseBuilder<T> status(HttpStatus status) {
-        return new ApiResponseBuilder<>(status);
+    public static ApiResponse<Void> status(HttpStatus status) {
+
+        return new ApiResponse<>(status, status.name(), null);
+
     }
 
-    public static class ApiResponseBuilder<T> {
-        private HttpStatus status;
-        private String message;
-        private T data;
+    public static <T> ApiResponse<T> statusAndData(HttpStatus status, T data) {
 
-        public ApiResponseBuilder(HttpStatus status) {
-            this.status = status;
-        }
+        return new ApiResponse<>(status, status.name(), data);
 
-        public ApiResponseBuilder<T> message(String message) {
-            this.message = message;
-            return this;
-        }
+    }
 
-        public ApiResponseBuilder<T> data(T data) {
-            this.data = data;
-            return this;
-        }
+    public static ApiResponse<Void> statusAndMessage(HttpStatus status, String message) {
 
-        public ApiResponse<T> build() {
-            return new ApiResponse<>(status, message, data);
-        }
+        return new ApiResponse<>(status, message, null);
+
+    }
+
+    public static <T> ApiResponse<T> statusAndAll(HttpStatus status, String message, T data) {
+
+        return new ApiResponse<>(status, message, data);
+
     }
 
 }
