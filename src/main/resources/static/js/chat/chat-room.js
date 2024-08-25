@@ -157,7 +157,6 @@ function showMessageOutput(messageOutput) {
 
 ////////// 이전 메세지 로드
 function loadMessages(firstCall) {
-    console.log("hi");
     if (isLoading) return;
     isLoading = true; // 데이터 로드 시작
 
@@ -262,7 +261,7 @@ function leaveChat() {
         url: '/api/chats/leave/' + chatId,
         type: 'PATCH',
         success: function (response) {
-            sendMessage(response.text, response.result);
+            sendMessage(response.data.text, response.data.result);
             window.open('', '_self').close();
         }
     });
@@ -307,10 +306,11 @@ function editName(newName, oldName) {
             'newName': newName
         },
         success: function (response) {
-            if (response.result === 'noChange') {
+            const data = response.data;
+            if (data.result === 'noChange') {
                 updateNameField(oldName);
             } else {
-                sendMessage(response.text, response.result);
+                sendMessage(data.text, data.result);
             }
         }
     });
@@ -383,7 +383,9 @@ function callNicknameApi(type) {
             'type': type
         },
         success: function (response) {
-            sendMessage(response.text, response.result);
+            if(response.success){
+                sendMessage(response.data.text, response.data.result);
+            }
         }
     });
 }

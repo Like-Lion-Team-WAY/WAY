@@ -94,14 +94,16 @@ function loadChatList() {
         url: '/api/chats',
         type: 'GET',
         success: function (response) {
-            response.chats.forEach(function (chat) {
-                const formattedLastMessageTime = formatDateTime(chat.lastMessageTime);
+            const data = response.data;
+            if (data.length > 0) {
+                data.forEach(function (chat) {
+                    const formattedLastMessageTime = formatDateTime(chat.lastMessageTime);
 
-                const newMessageElement = (chat.isRead === true || chat.senderId === userId)
-                    ? '<div class="new-message" style="display: none;">NEW</div>'
-                    : '<div class="new-message">NEW</div>';
+                    const newMessageElement = (chat.isRead === true || chat.senderId === userId)
+                        ? '<div class="new-message" style="display: none;">NEW</div>'
+                        : '<div class="new-message">NEW</div>';
 
-                const chatHtml = `
+                    const chatHtml = `
                     <a href="/chats/${chat.id}" onclick="return openChat('/chats/${chat.id}', ${chat.id})">
                         <div class="chat-room-info" id="chat-${chat.id}">
                             <div class="top">
@@ -114,10 +116,16 @@ function loadChatList() {
                     </a>
                 `;
 
-                chatListElement.append(chatHtml);
+                    chatListElement.append(chatHtml);
 
-                subscribeToChat(chat.id);
-            })
+                    subscribeToChat(chat.id);
+                })
+            } else {
+                const noChatHtml = `
+                <h3>채팅이 없습니다</h3>
+                `
+                chatListElement.append(noChatHtml);
+            }
         }
     });
 }
