@@ -7,7 +7,6 @@ let lastLoadMessageId = "";
 /////////
 function noActiveSetting() {
     document.getElementById("change-name-btn").remove();
-    document.getElementById("report-btn").remove();
     const requestBtn = document.getElementById("nickname-request-btn");
     if (requestBtn) {
         requestBtn.remove();
@@ -158,7 +157,6 @@ function showMessageOutput(messageOutput) {
 
 ////////// 이전 메세지 로드
 function loadMessages(firstCall) {
-    console.log("hi");
     if (isLoading) return;
     isLoading = true; // 데이터 로드 시작
 
@@ -168,12 +166,7 @@ function loadMessages(firstCall) {
         url: '/api/messages/' + chatId + '?lastLoadMessageId=' + lastLoadMessageId,
         type: 'GET',
         success: function (response) {
-            response.messages.forEach(function (message) {
-                console.log(message.isRead + ' ' + message.id);
-
-                if (message.isRead) {
-                    console.log("안녕");
-                }
+            response.data.messages.forEach(function (message) {
                 const userId = Number(document.getElementById('user-id').value);
                 const messageDiv = document.createElement('div');
                 if (message.type !== "message") {
@@ -211,7 +204,7 @@ function loadMessages(firstCall) {
                 }
             })
 
-            if (response.lastPage) {
+            if (response.data.lastPage) {
                 observer.unobserve(document.getElementById('elementToObserve'));
             }
 
@@ -268,7 +261,7 @@ function leaveChat() {
         url: '/api/chats/leave/' + chatId,
         type: 'PATCH',
         success: function (response) {
-            sendMessage(response.text, response.result);
+            sendMessage(response.data.text, response.data.result);
             window.open('', '_self').close();
         }
     });
@@ -313,10 +306,11 @@ function editName(newName, oldName) {
             'newName': newName
         },
         success: function (response) {
-            if (response.result === 'noChange') {
+            const data = response.data;
+            if (data.result === 'noChange') {
                 updateNameField(oldName);
             } else {
-                sendMessage(response.text, response.result);
+                sendMessage(data.text, data.result);
             }
         }
     });
@@ -389,7 +383,9 @@ function callNicknameApi(type) {
             'type': type
         },
         success: function (response) {
-            sendMessage(response.text, response.result);
+            if(response.success){
+                sendMessage(response.data.text, response.data.result);
+            }
         }
     });
 }
@@ -457,16 +453,16 @@ function reportChat() {
     });
 }
 
-function callReportApi(messageId){
+function callReportApi(messageId) {
     $.ajax({
         url: "/api/report",
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ type: "CHATTING", id: messageId }),
-        success: function(result) {
+        data: JSON.stringify({type: "CHATTING", id: messageId}),
+        success: function (result) {
             alert("신고가 접수되었습니다.");
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
             if (err.status === 401) {
                 alert('로그인이 필요합니다.');

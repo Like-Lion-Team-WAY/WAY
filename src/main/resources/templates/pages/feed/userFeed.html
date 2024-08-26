@@ -13,10 +13,22 @@
     <script src="/js/feed/userFeed.js"></script>
     <title>사용자 전체 피드 보기</title>
     <script src="/js/feed/follow.js"></script>
+    <script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="profile-container">
+        <div th:if="${loginUser != null && user.userId == loginUser.userId}" class="sharebox">
+            <input class="sharebtn" type="button" onClick="sendLinkCustom();" value="공유"/>
+            <script type="text/javascript">
+                function sendLinkCustom() {
+                    Kakao.init("3670027bfbc0268e35e4f4bfce517ca8");
+                    Kakao.Link.sendCustom({
+                        templateId: 111349
+                    });
+                }
+            </script>
+        </div>
         <div class="profile-container">
             <div class="profile-header">
                 <div>
@@ -27,7 +39,7 @@
             <div class="profile-header">
                 <div class="profile-info">
                     <h1 th:text="${user.getNickname()}"></h1>
-                    <a th:if="${loginUser != null}" th:href="@{/user/followSetting}">
+                    <a th:if="${loginUser != null}" th:href="@{/user/followList(userId=${user.userId})}">
                         <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                     </a>
                     <a th:if="${loginUser == null}" th:href="@{/user/login}">

@@ -1,118 +1,114 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}"
-      lang="en">
-
-<head>
-    <meta charset="UTF-8">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+  lang="en"
+>
+  <head>
+    <meta charset="UTF-8" />
     <title>Community</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<body>
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <!-- 파일 -->
+      <link rel="stylesheet" href="/css/admin/report.css" />
 
-<div layout:fragment="content">
-    <!-- 파일 -->
-    <link rel="stylesheet" href="/css/admin/report.css">
-
-    <h1 class="title">🚨 신고 관리</h1>
-    <div class="condition">
+      <h1 class="title">🚨 신고 관리</h1>
+      <div class="condition">
         <!-- 검색 조건 -->
         <div class="controls">
-            <div class="filter-sort">
-                <div class="dropdown">
-                    <label for="filter">필터</label>
-                    <select id="filter">
-                        <option value="전체 목록">전체 목록</option>
-                        <option value="질문 신고 목록">질문 신고 목록</option>
-                        <option value="게시글 신고 목록">게시글 신고 목록</option>
-                        <option value="댓글 신고 목록">댓글 신고 목록</option>
-                        <option value="채팅 신고 목록">채팅 신고 목록</option>
-                    </select>
-                </div>
-                <div class="dropdown">
-                    <label for="sort">정렬</label>
-                    <select id="sort">
-                        <option value="신고 일자 오름차순">신고 일자 오름차순</option>
-                        <option value="신고 일자 내림차순">신고 일자 내림차순</option>
-                    </select>
-                </div>
+          <div class="filter-sort">
+            <div class="dropdown">
+              <label for="filter">필터</label>
+              <select id="filter">
+                <option value="전체 목록">전체 목록</option>
+                <option value="질문 신고 목록">질문 신고 목록</option>
+                <option value="게시글 신고 목록">게시글 신고 목록</option>
+                <option value="댓글 신고 목록">댓글 신고 목록</option>
+                <option value="채팅 신고 목록">채팅 신고 목록</option>
+              </select>
             </div>
-            <div class="search">
-                <label for="search-id">검색</label>
-                <input type="text" id="search-id" placeholder="신고 대상자 아이디">
-                <button id="search-btn">확인</button>
+            <div class="dropdown">
+              <label for="sort">정렬</label>
+              <select id="sort">
+                <option value="신고 일자 오름차순">신고 일자 오름차순</option>
+                <option value="신고 일자 내림차순">신고 일자 내림차순</option>
+              </select>
             </div>
+          </div>
+          <div class="search">
+            <label for="search-id">검색</label>
+            <input
+              type="text"
+              id="search-id"
+              placeholder="신고 대상자 아이디"
+            />
+            <button id="search-btn">확인</button>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- 신고 목록 -->
-    <div class="report-container">
+      <!-- 신고 목록 -->
+      <div class="report-container">
         <!-- report box 예시 -->
         <div class="report-list">
-            <table class=" report-table">
-                <tr>
-                    <th class="header-column">신고 ID</th>
-                    <td class="wide-column">
-                        <span class="highlight-text">
-                            201
-                        </span>
-                    </td>
-                    <th class="header-column">신고 일자</th>
-                    <td class="wide-column">
-                        <span class="highlight-text">
-                            2024-10-10 15:30
-                        </span>
-                    </td>
-                    <th class="header-column">신고 타입</th>
-                    <td class="wide-column">
-                        <span class="highlight-text">
-                            POST
-                        </span>
-                    </td>
-                    <th class="header-column">신고자</th>
-                    <td class="wide-column">
-                    <span class="highlight-text">
-                            zelda
-                    </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="header-column">내용</th>
-                    <td colspan="7" class="full-width">
-                    <span class="highlight-text">
-                        dummy data dummy data dummy data dummy data dummy data dummy data
-                        dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data
-                        dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data
-                        dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data
-                        dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data dummy data
-                        dummy data dummy data dummy data dummy data dummy data dummy data
-                    </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="header-column">신고 대상자</th>
-                    <td colspan="5">
-                    <span class="highlight-text">
-                        link
-                    </span>
-                    </td>
-                    <td colspan="2" class="header-column">
-                        <button class="btn-account">계정 정지</button>
-                    </td>
-                </tr>
-            </table>
-            <div class="btn-group">
-                <button class="btn-delete">게시글 삭제</button>
-                <button class="btn-complete">처리 완료</button>
-            </div>
+          <table class="report-table">
+            <tr>
+              <th class="header-column">신고 ID</th>
+              <td class="wide-column">
+                <span class="highlight-text"> 201 </span>
+              </td>
+              <th class="header-column">신고 일자</th>
+              <td class="wide-column">
+                <span class="highlight-text"> 2024-10-10 15:30 </span>
+              </td>
+              <th class="header-column">신고 타입</th>
+              <td class="wide-column">
+                <span class="highlight-text"> POST </span>
+              </td>
+              <th class="header-column">신고자</th>
+              <td class="wide-column">
+                <span class="highlight-text"> zelda </span>
+              </td>
+            </tr>
+            <tr>
+              <th class="header-column">내용</th>
+              <td colspan="7" class="full-width">
+                <span class="highlight-text">
+                  dummy data dummy data dummy data dummy data dummy data dummy
+                  data dummy data dummy data dummy data dummy data dummy data
+                  dummy data dummy data dummy data dummy data dummy data dummy
+                  data dummy data dummy data dummy data dummy data dummy data
+                  dummy data dummy data dummy data dummy data dummy data dummy
+                  data dummy data dummy data dummy data dummy data dummy data
+                  dummy data dummy data dummy data dummy data dummy data dummy
+                  data dummy data dummy data dummy data dummy data dummy data
+                  dummy data dummy data dummy data dummy data
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th class="header-column">신고 대상자</th>
+              <td colspan="5">
+                <span class="highlight-text"> link </span>
+              </td>
+              <td colspan="2" class="header-column">
+                <button class="btn-account">계정 정지</button>
+              </td>
+            </tr>
+          </table>
+          <div class="btn-group">
+            <button class="btn-delete">게시글 삭제</button>
+            <button class="btn-complete">처리 완료</button>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- javascript 파일 추가 -->
-    <!--    <script src="/js/alarm/alarm.js"></script>-->
-</div>
-</body>
+      <!-- javascript 파일 추가 -->
+      <!--    <script src="/js/alarm/alarm.js"></script>-->
+    </div>
+  </body>
 </html>

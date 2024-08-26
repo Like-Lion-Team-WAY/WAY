@@ -1,5 +1,6 @@
 package like.lion.way.feed.service.imp;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -8,7 +9,9 @@ import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.domain.dto.PostDto;
 import like.lion.way.feed.repository.PostRepository;
 import like.lion.way.feed.service.PostService;
+import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
+import like.lion.way.user.service.BlockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final BlockService blockService;
+    private final JwtUtil jwtUtil;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
@@ -27,6 +32,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllPosts() {
         return postRepository.findAllByOrderByPostCreatedAtAsc();
+    }
+
+    @Override
+    public List<Post> getAllPosts(HttpServletRequest request) {
+        List<Post> post = postRepository.findAllByOrderByPostCreatedAtAsc();
+        return (List<Post>) blockService.blockFilter(post,request);
     }
 
     @Override
@@ -51,6 +62,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getPostByUser(User user) {
         return postRepository.findPostByUser(user);
+    }
+
+    @Override
+    public List<Post> getPostByUser(User user, HttpServletRequest request) {
+        List<Post> posts = postRepository.findPostByUser(user);
+        return (List<Post>) blockService.blockFilter(posts,request);
     }
 
     @Override

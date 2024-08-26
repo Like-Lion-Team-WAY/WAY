@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 public class BoardPostScrapsResponse {
 
     private String title;
-    private String author;
+    private String nickname;
+    private String username;
     private LocalDateTime createdAt;
     private Long boardId;
     private Long boardPostId;
@@ -18,13 +19,15 @@ public class BoardPostScrapsResponse {
     @Builder
     public BoardPostScrapsResponse(
             String title,
-            String author,
+            String nickname,
             LocalDateTime createdAt,
             Long boardId,
-            Long boardPostId) {
+            Long boardPostId,
+            String username) {
 
         this.title = title;
-        this.author = author;
+        this.nickname = nickname;
+        this.username = username;
         this.createdAt = createdAt;
         this.boardId = boardId;
         this.boardPostId = boardPostId;

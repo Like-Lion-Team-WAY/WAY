@@ -12,7 +12,7 @@ public class BoardPostResponse {
     private String boardName;
     private Long boardPostId;
     private String postTitle;
-    private String author;
+    private String nickname;
     private LocalDateTime created_at;
 
     @Builder
@@ -20,13 +20,13 @@ public class BoardPostResponse {
             String boardName,
             Long boardPostId,
             String postTitle,
-            String author,
+            String nickname,
             LocalDateTime created_at) {
 
         this.boardName = boardName;
         this.boardPostId = boardPostId;
         this.postTitle = postTitle;
-        this.author = author;
+        this.nickname = nickname;
         this.created_at = created_at;
 
     }

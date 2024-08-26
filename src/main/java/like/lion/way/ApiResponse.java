@@ -15,7 +15,6 @@ public class ApiResponse<T> {
     private boolean success;
     private T data;
 
-    @Builder
     public ApiResponse(
             HttpStatus status,
             String message,
@@ -24,10 +23,11 @@ public class ApiResponse<T> {
         this.code = status.value();
         this.status = status;
         this.message = message;
-        this.success = true;
+        this.success = (status.is2xxSuccessful());
         this.data = data;
 
     }
+
 
     public static <T> ApiResponse<T> ok(T data) {
 
@@ -38,6 +38,30 @@ public class ApiResponse<T> {
     public static ApiResponse<Void> ok() {
 
         return new ApiResponse<>(HttpStatus.OK, HttpStatus.OK.name(), null);
+
+    }
+
+    public static ApiResponse<Void> status(HttpStatus status) {
+
+        return new ApiResponse<>(status, status.name(), null);
+
+    }
+
+    public static <T> ApiResponse<T> statusAndData(HttpStatus status, T data) {
+
+        return new ApiResponse<>(status, status.name(), data);
+
+    }
+
+    public static ApiResponse<Void> statusAndMessage(HttpStatus status, String message) {
+
+        return new ApiResponse<>(status, message, null);
+
+    }
+
+    public static <T> ApiResponse<T> statusAndAll(HttpStatus status, String message, T data) {
+
+        return new ApiResponse<>(status, message, data);
 
     }
 

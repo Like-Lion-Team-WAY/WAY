@@ -7,7 +7,9 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.user.domain.Block;
 import like.lion.way.user.domain.User;
+import like.lion.way.user.service.BlockService;
 import like.lion.way.user.service.FollowService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class PostController {
     private final QuestionService questionService;
     private final FollowService followService;
     private final JwtUtil jwtUtil;
+    private final BlockService blockService;
 
     // 로그인한 사용자 정보 조회
     private User getLoginUser(HttpServletRequest request) {
@@ -45,7 +48,7 @@ public class PostController {
     }
 
     // 공통된 Model 설정 메서드(새 질문, 답변 완료, 보낸 질문, 거절한 질문)
-    private void setCommonModelFilterAttributes(Model model, User user) {
+    private void setCommonModelFilterAttributes(Model model, User user,HttpServletRequest request) {
         if (user == null) {
             log.error("User object is null");
             model.addAttribute("posts", null);
@@ -58,8 +61,8 @@ public class PostController {
             model.addAttribute("user", user);
             log.info("user::::" + user.getUsername());
 
-            List<Post> posts = postService.getPostByUser(user);
-            List<Question> questions= questionService.getQuestionByAnswerer(user);
+            List<Post> posts = postService.getPostByUser(user,request);
+            List<Question> questions= questionService.getQuestionByAnswerer(user,request);
             if (posts != null) {
                 model.addAttribute("posts", posts.stream().filter(p -> !p.isPostPinStatus()).toList());
                 model.addAttribute("pinPosts", posts.stream().filter(Post::isPostPinStatus).toList());
@@ -68,22 +71,22 @@ public class PostController {
                 model.addAttribute("pinPosts", null);
             }
             if (questions != null){
-                model.addAttribute("questions", questions.stream().filter(q -> Boolean.FALSE.equals(q.getQuestionRejected() && q.getAnswer()!=null)).toList());
+                model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).toList());
             }else{
                 model.addAttribute("questions", null);
             }
 
             model.addAttribute("rejectedQuestions",
-                    questionService.getQuestionByAnswerer(user).stream()
+                    questionService.getQuestionByAnswerer(user,request).stream()
                             .filter(q -> Boolean.TRUE.equals(q.getQuestionRejected())).toList().size());
 
             model.addAttribute("newQuestions",
-                    questionService.getQuestionByAnswerer(user).stream()
+                    questionService.getQuestionByAnswerer(user,request).stream()
                             .filter(q -> Boolean.FALSE.equals(q.getQuestionRejected()) && q.getAnswer() == null)
                             .toList().size());
 
             model.addAttribute("replyQuestions",
-                    questionService.getQuestionByAnswerer(user).stream()
+                    questionService.getQuestionByAnswerer(user,request).stream()
                             .filter(q -> Boolean.FALSE.equals(q.getQuestionRejected()) && q.getAnswer() != null)
                             .toList().size());
 
@@ -98,7 +101,7 @@ public class PostController {
         User user = getLoginUser(request);
         model.addAttribute("followers", followService.getFollowerList(user).size());
         model.addAttribute("followings", followService.getFollowingList(user).size());
-        setCommonModelFilterAttributes(model, user);
+        setCommonModelFilterAttributes(model, user,request);
         model.addAttribute("loginUser", user);
         return "/pages/feed/userFeed";
     }
@@ -114,6 +117,7 @@ public class PostController {
             return "redirect:/posts"; // 유저가 없으면 게시판 목록 페이지로 리다이렉트
         }
 
+
 //         팔로워, 팔로잉 정보 추가
         model.addAttribute("followers", followService.getFollowerList(user).size());
         model.addAttribute("followings", followService.getFollowingList(user).size());
@@ -123,11 +127,16 @@ public class PostController {
         User loginUser = getLoginUser(request);
         if(loginUser == null){
             System.out.println("loginUser is null");
+        }else{
+            Block block = blockService.findByUser(user,request);
+            if(block!=null){
+                return "redirect:/main";
+            }
         }
         model.addAttribute("loginUser", loginUser);
 
         // 공통 모델 속성 설정
-        setCommonModelFilterAttributes(model, user);
+        setCommonModelFilterAttributes(model, user,request);
 
         return "/pages/feed/userFeed";
     }

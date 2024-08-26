@@ -13,11 +13,13 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.user.domain.User;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "chats")
 @Getter
 @Setter
+@ToString
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,5 +72,21 @@ public class Chat {
 
     public boolean userExist() {
         return answererActive || questionerActive;
+    }
+
+    public Long getQuestionerId() {
+        return questioner.getUserId();
+    }
+
+    public Long getAnswererId() {
+        return answerer.getUserId();
+    }
+
+    public String getAnswererNickname() {
+        return answerer.getNickname();
+    }
+
+    public String getQuestionerNickname(boolean isOpen) {
+        return questioner.getNickname(isOpen);
     }
 }

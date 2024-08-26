@@ -37,6 +37,5 @@ public interface UserService {
     void logout(HttpServletResponse response);
     String getUserImagePath(HttpServletRequest request);
 
-    UserProfileDto getUserProfileFromNickname(String nickname);
 
 }

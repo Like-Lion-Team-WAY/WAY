@@ -178,3 +178,19 @@ body {
     font-weight: bolder;
     margin-top: 10px;
 }
+.sharebox {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+.sharebtn{
+    background-color: #FF8E75;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    border: white 1px solid;
+    font-size: 12px;
+    font-weight: bolder;
+}

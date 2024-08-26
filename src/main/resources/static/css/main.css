@@ -42,16 +42,6 @@ header {
   margin-left: auto;
 }
 
-.header-icons a {
-  margin: 0 10px;
-  margin-left: 10px;
-}
-
-.header-icons img {
-  width: 20px;
-  height: 20px;
-}
-
 .download-button {
   background-color: #e74c3c;
   color: white;
@@ -60,11 +50,6 @@ header {
   cursor: pointer;
   border-radius: 5px;
   font-weight: bold;
-}
-.sidebar-header h1 a {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
 }
 .sidebar {
   width: 250px;
@@ -84,6 +69,12 @@ header {
   margin: 10px 0;
   font-size: 16px;
   font-weight: bold;
+}
+
+.sidebar-header h1 a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 .profile {

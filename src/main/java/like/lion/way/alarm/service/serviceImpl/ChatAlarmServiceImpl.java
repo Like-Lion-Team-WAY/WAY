@@ -30,6 +30,6 @@ public class ChatAlarmServiceImpl implements ChatAlarmService {
 
     @Transactional(readOnly = true)
     public Long getCount(Long userId) {
-        return chatAlarmRepository.findByUser_UserId(userId).getCount();
+        return chatAlarmRepository.findByUser_UserId(userId).map(ChatAlarm::getCount).orElse(0L);
     }
 }

@@ -4,10 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.user.domain.User;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-@Service
+
+
 public interface QuestionService {
 
     List<Question> getAllQuestions();
@@ -17,6 +16,7 @@ public interface QuestionService {
     Question updateAnswer(Long questionId, String answer);
 
     List<Question> getQuestionByAnswerer(User user);
+    List<Question> getQuestionByAnswerer(User user,HttpServletRequest request);
 
     List<Question> getQuestionByQuestioner(User user);
 

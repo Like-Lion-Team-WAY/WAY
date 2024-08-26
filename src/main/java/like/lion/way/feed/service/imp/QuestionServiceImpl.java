@@ -13,6 +13,7 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.repository.QuestionRepository;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.user.domain.User;
+import like.lion.way.user.service.BlockService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
     private final UserService userService;
     private final ApplicationEventPublisher publisher;
+    private final BlockService blockService;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
@@ -61,6 +63,13 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> getQuestionByAnswerer(User user) {
         return questionRepository.findQuestionsByAnswerer(user);
     }
+    @Override
+    public List<Question> getQuestionByAnswerer(User user, HttpServletRequest request) {
+        List<Question> list = questionRepository.findQuestionsByAnswerer(user);
+        return (List<Question>) blockService.blockFilter(list,request);
+    }
+
+
 
     @Override
     public List<Question> getQuestionByQuestioner(User user) {
@@ -101,6 +110,7 @@ public class QuestionServiceImpl implements QuestionService {
         newQuestion.setQuestion(question);  //질문 저장
         newQuestion.setQuestionDate(LocalDateTime.now()); //질문 생성일
         newQuestion.setQuestioner(user);
+        System.out.println("user:::::::::::::"+user);
         //익명 여부에 따라
         if(isAnonymous) {
             newQuestion.setIsAnonymous(true);
