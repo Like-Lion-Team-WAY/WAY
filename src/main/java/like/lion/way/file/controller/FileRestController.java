@@ -2,6 +2,7 @@ package like.lion.way.file.controller;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import like.lion.way.ApiResponse;
 import like.lion.way.file.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,4 +33,13 @@ public class FileRestController {
             return ResponseEntity.status(500).body("Failed to upload file: " + e.getMessage());
         }
     }
+
+    @PostMapping("/img/upload")
+    public ApiResponse<Object> apiUploadFile(@RequestParam("file") MultipartFile file) {
+
+        return s3Service.apiUploadFile(file);
+
+    }
+
+
 }

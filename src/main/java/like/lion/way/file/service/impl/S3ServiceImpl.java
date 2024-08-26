@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.UUID;
+import like.lion.way.ApiResponse;
 import like.lion.way.file.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -46,11 +48,42 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
+    public ApiResponse<Object> apiUploadFile(MultipartFile file) {
+
+        try {
+
+            String uuid = UUID.randomUUID().toString();
+            String datePath = LocalDate.now().toString().replace("-", "/");
+            String key = datePath + "/" + uuid;
+
+            String url = uploadFileAndGetUrl(file, key);
+
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK)
+                    .message("파일 업로드 성공")
+                    .data(url)
+                    .build();
+
+        } catch (Exception e) {
+
+            return ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message("파일 업로드 실패")
+                    .data(null)
+                    .build();
+
+        }
+
+    }
+
+    @Override
     public InputStream downloadFile(String key) {
+
         return s3Client.getObject(GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build());
+
     }
 
     @Override
@@ -64,4 +97,28 @@ public class S3ServiceImpl implements S3Service {
             throw new RuntimeException("Failed to delete file from S3", e);
         }
     }
+
+    public String uploadFileAndGetUrl(MultipartFile file, String key) throws IOException {
+
+        // 파일 업로드
+        s3Client.putObject(
+                PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .build(),
+                RequestBody.fromBytes(file.getBytes())
+        );
+
+        // 업로드된 파일의 URL 생성 및 반환
+        return generateFileUrl(key);
+
+    }
+
+    private String generateFileUrl(String key) {
+
+        // S3 클라이언트를 사용해 URL 생성
+        return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(key)).toExternalForm();
+
+    }
+
 }

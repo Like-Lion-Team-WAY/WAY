@@ -3,6 +3,7 @@ package like.lion.way.board.api;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import like.lion.way.ApiResponse;
 import like.lion.way.board.api.request.BoardCreateRequest;
 import like.lion.way.board.api.request.BoardEditRequest;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -226,5 +228,6 @@ public class BoardRestController {
         return ApiResponse.ok(searchPosts);
 
     }
+
 
 }
