@@ -20,6 +20,14 @@ body {
 .tab-link.active {
     border-bottom: 2px solid #ff6746; /* 활성 탭 표시 */
 }
+.postname{
+    color: black;          /* 텍스트 색상을 검은색으로 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+#one-user:hover {
+    background-color: #ff6746;
+}
 
 .tab-content {
     margin-top: 20px;
@@ -29,6 +37,9 @@ body {
     margin: 10px;
     padding: 10px;
     border-bottom: 1px solid #ccc;
+}
+.user-item:hover {
+    background-color: #ff6746;
 }
 
 .user-item img {

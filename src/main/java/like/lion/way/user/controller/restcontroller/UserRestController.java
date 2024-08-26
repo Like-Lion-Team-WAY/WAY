@@ -59,12 +59,14 @@ public class UserRestController {
         return  userService.updateOrSaveImg(deleteFileName, request , key);
     }
     @DeleteMapping("/deleteUser")
-    public ResponseEntity<String> deleteUser(HttpServletRequest request){
+    public ResponseEntity<String> deleteUser(HttpServletRequest request , HttpServletResponse response){
         User user = userService.getUserByToken(request);
         userService.deleteUser(user.getUserId());
         User delUser = userService.findByUserId(user.getUserId());
         if(delUser==null){
+            userService.deleteCookie(response);
             return ResponseEntity.ok("success");
+
         }else{
             return ResponseEntity.ok("fail");
         }
