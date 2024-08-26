@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import like.lion.way.ApiResponse;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
+import like.lion.way.chat.domain.dto.OldMessageDTO;
 import like.lion.way.chat.domain.dto.ReceiveMessageDTO;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
@@ -20,7 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,28 +35,23 @@ public class MessageRestController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/api/messages/{chatId}")
-    public ResponseEntity<?> getMessages(@PathVariable("chatId") Long chatId,
-                                         @RequestParam(name = "page", defaultValue = "1") int page,
-                                         @RequestParam(name = "size", defaultValue = "50") int size,
-                                         @RequestParam(name = "lastLoadMessageId") String lastLoadMessageId,
-                                         HttpServletRequest request) {
+    public ApiResponse<?> getMessages(@PathVariable("chatId") Long chatId,
+                                      @RequestParam(name = "page", defaultValue = "1") int page,
+                                      @RequestParam(name = "size", defaultValue = "50") int size,
+                                      @RequestParam(name = "lastLoadMessageId") String lastLoadMessageId,
+                                      HttpServletRequest request) {
 
         Long userId = getUserId(request);
         Chat chat = chatService.findById(chatId);
 
         if (!chat.isAccessibleUser(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(NO_HAVE_MESSAGE_PERMISSION.get());
+            return ApiResponse.statusAndMessage(HttpStatus.FORBIDDEN, NO_HAVE_MESSAGE_PERMISSION.get());
         }
 
         Page<Message> messages = findMessages(page, size, chatId, lastLoadMessageId);
+        OldMessageDTO oldMessageDTO = new OldMessageDTO(MessagePageToDTOList(messages, chat), messages.isLast());
 
-        List<ReceiveMessageDTO> receiveMessageDTOs = MessagePageToDTOList(messages, chat);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("messages", receiveMessageDTOs);
-        response.put("lastPage", messages.isLast());
-
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(oldMessageDTO);
     }
 
     private Long getUserId(HttpServletRequest request) {

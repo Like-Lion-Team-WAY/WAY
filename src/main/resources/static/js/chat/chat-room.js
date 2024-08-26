@@ -166,7 +166,7 @@ function loadMessages(firstCall) {
         url: '/api/messages/' + chatId + '?lastLoadMessageId=' + lastLoadMessageId,
         type: 'GET',
         success: function (response) {
-            response.messages.forEach(function (message) {
+            response.data.messages.forEach(function (message) {
                 const userId = Number(document.getElementById('user-id').value);
                 const messageDiv = document.createElement('div');
                 if (message.type !== "message") {
@@ -204,7 +204,7 @@ function loadMessages(firstCall) {
                 }
             })
 
-            if (response.lastPage) {
+            if (response.data.lastPage) {
                 observer.unobserve(document.getElementById('elementToObserve'));
             }
 
