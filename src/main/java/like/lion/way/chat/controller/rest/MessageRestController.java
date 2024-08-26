@@ -35,7 +35,7 @@ public class MessageRestController {
     @GetMapping("/api/messages/{chatId}")
     public ApiResponse<?> getMessages(@PathVariable("chatId") Long chatId,
                                       @RequestParam(name = "page", defaultValue = "1") int page,
-                                      @RequestParam(name = "size", defaultValue = "50") int size,
+                                      @RequestParam(name = "size", defaultValue = "30") int size,
                                       @RequestParam(name = "lastLoadMessageId") String lastLoadMessageId,
                                       HttpServletRequest request) {
 

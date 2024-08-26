@@ -160,7 +160,10 @@ function loadMessages(firstCall) {
     if (isLoading) return;
     isLoading = true; // 데이터 로드 시작
 
-    const observerElement = $("#elementToObserve")
+    const observerElement = $("#elementToObserve");
+    const scrollArea = document.getElementById('chat-container');
+    const currentScrollHeight = scrollArea.scrollHeight; // 현재 스크롤 높이 저장
+    const currentScrollTop = scrollArea.scrollTop; // 현재 스크롤 위치 저장
 
     $.ajax({
         url: '/api/messages/' + chatId + '?lastLoadMessageId=' + lastLoadMessageId,
@@ -204,11 +207,16 @@ function loadMessages(firstCall) {
                 }
             })
 
+            const newScrollHeight = scrollArea.scrollHeight;
+            scrollArea.scrollTop = newScrollHeight - currentScrollHeight + currentScrollTop;
+
             if (response.data.lastPage) {
                 observer.unobserve(document.getElementById('elementToObserve'));
             }
 
             isLoading = false; // 데이터 로드 완료
+        }, error: function () {
+            isLoading = false; // 에러 발생 시에도 로딩 상태를 해제
         }
     });
 }
@@ -219,7 +227,7 @@ function setupIntersectionObserver() {
     observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                loadMessages();
+                loadMessages(false);
             }
         });
     }, {
@@ -383,7 +391,7 @@ function callNicknameApi(type) {
             'type': type
         },
         success: function (response) {
-            if(response.success){
+            if (response.success) {
                 sendMessage(response.data.text, response.data.result);
             }
         }
