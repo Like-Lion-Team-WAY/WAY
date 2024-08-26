@@ -94,7 +94,7 @@ body {
     margin: 0; /* Remove any margin */
 }
 
-.detailBtn:hover {
+.detailBtn:hover, .archieveBtn:hover {
     background-color: #969696;
 }
 

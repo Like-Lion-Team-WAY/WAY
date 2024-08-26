@@ -75,8 +75,7 @@
             </form>
         </div>
         <div th:if="${loginUser != null}">
-            <form class="comment-input" th:action="@{/posts/comments/{postId}(postId=${post.getPostId()})}"
-                  method="post">
+            <form class="comment-input">
                 <input type="text" name="postCommentContent" id="postCommentContent" placeholder="댓글을 입력하세요."/>
                 <input type="hidden" name="postId" th:value="${post.getPostId()}"/>
                 <input type="hidden" name="userId" th:value="${loginUser.userId}"/>
