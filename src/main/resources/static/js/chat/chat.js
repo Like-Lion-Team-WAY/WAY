@@ -120,11 +120,6 @@ function loadChatList() {
 
                     subscribeToChat(chat.id);
                 })
-            } else {
-                const noChatHtml = `
-                <h3>채팅이 없습니다</h3>
-                `
-                chatListElement.append(noChatHtml);
             }
         }
     });
