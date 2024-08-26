@@ -1,5 +1,6 @@
-package like.lion.way.admin.domain;
+package like.lion.way.admin.dto;
 
+import like.lion.way.admin.domain.ReportType;
 import lombok.Getter;
 import lombok.Setter;
 

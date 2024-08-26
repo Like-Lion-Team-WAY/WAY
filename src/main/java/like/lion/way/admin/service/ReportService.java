@@ -1,8 +1,11 @@
 package like.lion.way.admin.service;
 
-import like.lion.way.admin.domain.ReportRequestDto;
-import like.lion.way.user.domain.User;
+import java.util.List;
+import like.lion.way.admin.dto.ReportRequestDto;
+import like.lion.way.admin.dto.ReportResponseDto;
 
 public interface ReportService {
     void report(Long reporterId, ReportRequestDto reportRequestDto);
+
+    List<ReportResponseDto> getReports(String type, String reportedUsername, String sortDirection);
 }
