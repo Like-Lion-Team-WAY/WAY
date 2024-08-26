@@ -43,26 +43,29 @@ public class ReportServiceImpl implements ReportService {
         User reported;
         String content;
 
-        if (type == ReportType.QUESTION) {
-            var value = questionService.getQuestionById(Long.valueOf(reportRequestDto.getId()));
-            reported = value.getQuestioner();
-            content = value.getQuestion();
-        } else if (type == ReportType.POST) {
-            var value = postService.getPostById(Long.valueOf(reportRequestDto.getId()));
-            reported = value.getUser();
-            content = "[" + value.getPostTitle() + "]" + value.getPostContent();
-        } else if (type == ReportType.COMMENT) {
-            var value = postCommentService.getCommentById(Long.valueOf(reportRequestDto.getId()));
-            reported = value.getUser();
-            content = value.getPostCommentContent();
-        } else if (type == ReportType.CHATTING) {
-            var value = messageService.findById(reportRequestDto.getId());
-            reported = userService.findByUserId(value.getSenderId());
-            content = value.getText();
-        } else {
-            throw new IllegalArgumentException("Invalid report type");
+        switch (type) {
+            case QUESTION -> {
+                var value = questionService.getQuestionById(Long.valueOf(reportRequestDto.getId()));
+                reported = value.getQuestioner();
+                content = value.getQuestion();
+            }
+            case POST -> {
+                var value = postService.getPostById(Long.valueOf(reportRequestDto.getId()));
+                reported = value.getUser();
+                content = "[" + value.getPostTitle() + "]" + value.getPostContent();
+            }
+            case COMMENT -> {
+                var value = postCommentService.getCommentById(Long.valueOf(reportRequestDto.getId()));
+                reported = value.getUser();
+                content = value.getPostCommentContent();
+            }
+            case CHATTING -> {
+                var value = messageService.findById(reportRequestDto.getId());
+                reported = userService.findByUserId(value.getSenderId());
+                content = value.getText();
+            }
+            default -> throw new IllegalArgumentException("Invalid report type");
         }
-
         return new Report(reporter, reported, type.toString(), reportRequestDto.getId(), content);
     }
 }
