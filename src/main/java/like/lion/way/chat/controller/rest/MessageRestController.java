@@ -5,9 +5,7 @@ import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import like.lion.way.ApiResponse;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
