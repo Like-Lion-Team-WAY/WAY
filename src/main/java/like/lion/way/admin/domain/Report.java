@@ -56,4 +56,8 @@ public class Report {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.status = false;
     }
+
+    public void complete() {
+        this.status = true;
+    }
 }

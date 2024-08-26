@@ -9,6 +9,7 @@ public class ReportResponseDto {
     private String reporter;
     private String reported;
     private String type;
+    private String contentId;
     private String content;
     private String createdAt;
 
@@ -17,6 +18,7 @@ public class ReportResponseDto {
         this.reporter = report.getReporter().getUsername();
         this.reported = report.getReported().getUsername();
         this.type = report.getType();
+        this.contentId = report.getContentId();
         this.content = report.getContent();
         this.createdAt = report.getCreatedAt().toString();
     }

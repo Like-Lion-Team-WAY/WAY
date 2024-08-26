@@ -9,6 +9,7 @@ import like.lion.way.admin.service.ReportService;
 import like.lion.way.jwt.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,5 +48,11 @@ public class ReportRestController {
                                                            @RequestParam(required = false) String sortDirection) {
         List<ReportResponseDto> reports = reportService.getReports(type, reported, sortDirection);
         return ApiResponse.ok(reports);
+    }
+
+    @DeleteMapping("/api/report")
+    public ApiResponse<Void> deleteReport(@RequestParam Long id) {
+        reportService.deleteReport(id);
+        return ApiResponse.ok(null);
     }
 }

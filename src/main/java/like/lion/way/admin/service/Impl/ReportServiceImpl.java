@@ -74,6 +74,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReportResponseDto> getReports(String type, String reportedUsername, String sortDirection) {
         User reported = userService.findByUsername(reportedUsername);
         Specification<Report> spec = Specification.where(ReportSpecification.hasStatus(false))
@@ -81,5 +82,13 @@ public class ReportServiceImpl implements ReportService {
                 .and(ReportSpecification.hasReportedUser(reported))
                 .and(ReportSpecification.sortByCreatedAt(sortDirection));
         return reportRepository.findAll(spec).stream().map(ReportResponseDto::new).toList();
+    }
+
+    @Override
+    @Transactional
+    public void deleteReport(Long id) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid report id"));
+        report.complete();
     }
 }
