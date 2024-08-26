@@ -20,11 +20,11 @@ public class QuestionBoxServiceImpl implements QuestionBoxService {
 
     @Override
     public QuestionBox archieveQuestion(Long questionId, Long userId) {
-        Question question= questionService.getQuestionById(questionId);
+        Question question = questionService.getQuestionById(questionId);
         User user = userService.findByUserId(userId);
         QuestionBox existingQuestionBox = questionBoxRepository.findByUserAndQuestion(user, question);
 
-        if(existingQuestionBox != null) {
+        if (existingQuestionBox != null) {
             questionBoxRepository.delete(existingQuestionBox);
             return null;
         } else {

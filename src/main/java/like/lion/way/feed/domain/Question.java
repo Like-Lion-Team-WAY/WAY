@@ -48,12 +48,12 @@ public class Question {
     private Boolean questionStatus;
 
     @Column(name = "question_rejected", columnDefinition = "TINYINT DEFAULT 0")
-    private Boolean questionRejected= false;
+    private Boolean questionRejected = false;
 
     @Column(name = "question_like", columnDefinition = "INT DEFAULT 0")
     private Integer questionLike = 0;
 
-    @Column(name= "user_ip")
+    @Column(name = "user_ip")
     private String userIp;
 
     @Column(name = "is_anonymous", columnDefinition = "TINYINT DEFAULT 0")
@@ -70,7 +70,6 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "question_box_id", referencedColumnName = "questionBoxId")
     private QuestionBox questionBox;
-
 
 
 }

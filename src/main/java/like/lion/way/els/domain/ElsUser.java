@@ -15,6 +15,7 @@ public class ElsUser {
     @Id
     private String id;
     private String username;
+    private String nickname;
     private String imageUrl;
     private List<String> interests;
 }

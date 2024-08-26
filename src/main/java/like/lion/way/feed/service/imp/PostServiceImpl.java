@@ -1,8 +1,6 @@
 package like.lion.way.feed.service.imp;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import like.lion.way.feed.domain.Post;
@@ -16,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +34,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllPosts(HttpServletRequest request) {
         List<Post> post = postRepository.findAllByOrderByPostCreatedAtAsc();
-        return (List<Post>) blockService.blockFilter(post,request);
+        return (List<Post>) blockService.blockFilter(post, request);
     }
 
     @Override
@@ -67,15 +64,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getPostByUser(User user, HttpServletRequest request) {
         List<Post> posts = postRepository.findPostByUser(user);
-        return (List<Post>) blockService.blockFilter(posts,request);
+        return (List<Post>) blockService.blockFilter(posts, request);
     }
 
     @Override
     public Post pinPost(Long postId) {
-        Post post= postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
-        if(post.isPostPinStatus()==true) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+        if (post.isPostPinStatus() == true) {
             post.setPostPinStatus(false);
-        }else{
+        } else {
             post.setPostPinStatus(true);
         }
         return postRepository.save(post);

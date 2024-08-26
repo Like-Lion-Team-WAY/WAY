@@ -1,4 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
+    $('.comment-input').on('submit', function(event) {
+        event.preventDefault();
+
+        var postId = $(this).find('input[name="postId"]').val();
+        var userId = $(this).find('input[name="userId"]').val();
+        var postCommentContent = $(this).find('input[name="postCommentContent"]').val();
+
+        $.ajax({
+            url: `/posts/comments/${postId}`,
+            type: 'POST',
+            data: {
+                userId: userId,
+                postCommentContent: postCommentContent
+            },
+            success: function(response) {
+                alert('댓글이 성공적으로 저장되었습니다.');
+                location.reload(); // 페이지 새로고침
+            },
+            error: function(xhr, status, error) {
+                alert('댓글 저장에 실패했습니다.');
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
     // 답글 작성 폼 표시 및 숨기기
     $('.reply-comment-btn').click(function() {
         var commentId = $(this).data('comment-id');

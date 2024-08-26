@@ -106,7 +106,8 @@ body {
 .comments-section {
     margin-top: 30px;
 }
-.comments-section h1{
+
+.comments-section h1 {
     margin-bottom: 10px;
     font-size: 14px;
 }
@@ -124,7 +125,7 @@ body {
     font-size: 14px;
 }
 
-.edit-comment-btn, .delete-comment-btn , .reply-comment-btn, .report-comment-btn {
+.edit-comment-btn, .delete-comment-btn, .reply-comment-btn, .report-comment-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -147,6 +148,7 @@ body {
     font-size: 16px;
     font-weight: bolder;
 }
+
 #editPostForm textarea, .edit-comment-form {
     width: 700px;
     font-size: 16px;
@@ -155,7 +157,8 @@ body {
     border: 1px solid #ddd;
     border-radius: 10px;
 }
-.post-actions{
+
+.post-actions {
     display: flex;
     justify-content: end;
     align-items: end;
@@ -169,6 +172,7 @@ body {
     color: white;
     cursor: pointer;
 }
+
 #editPostBtn, #deletePostBtn, #reportPostBtn {
     background: none;
     border: none;
@@ -177,6 +181,7 @@ body {
     color: #FF6746;
     margin-right: 10px;
 }
+
 /* 댓글 컨테이너 스타일 */
 .comments-section {
     margin-top: 20px;
@@ -220,7 +225,7 @@ body {
     background-color: #FFD6B0;
 }
 
-.submit-reply-btn, .cancel-reply-btn, .save-comment-btn, .cancel-reply-edit-btn, .report-comment-btn{
+.submit-reply-btn, .cancel-reply-btn, .save-comment-btn, .cancel-reply-edit-btn, .report-comment-btn {
     background-color: #FF6746;
     color: white;
     border: none;
@@ -230,7 +235,7 @@ body {
     cursor: pointer;
 }
 
-.submit-reply-btn:hover, .cancel-reply-btn:hover , .save-comment-btn:hover , cancel-reply-edit-btn:hover, .report-comment-btn:hover{
+.submit-reply-btn:hover, .cancel-reply-btn:hover, .save-comment-btn:hover, cancel-reply-edit-btn:hover, .report-comment-btn:hover {
     background-color: #FFD6B0;
 }
 
