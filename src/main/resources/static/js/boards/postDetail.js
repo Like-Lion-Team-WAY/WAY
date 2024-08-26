@@ -87,7 +87,9 @@ function fetchPostDetails() {
 
             document.querySelector('.post-date').textContent = new Date(data.postCreatedAt).toLocaleDateString();
             document.querySelector('.post-title').textContent = data.postTitle;
-            document.querySelector('.post-content').textContent = data.postContent;
+            // document.querySelector('.post-content').textContent = data.postContent;
+            document.querySelector('.post-content').innerHTML = data.postContent;
+
             document.querySelector('.likes').textContent = `👍 ${data.postLikes}`;
             document.querySelector('.comments').textContent = `💬 ${data.postComments}`;
             document.querySelector('.scraps').textContent = `⭐ ${data.postScraps}`;
