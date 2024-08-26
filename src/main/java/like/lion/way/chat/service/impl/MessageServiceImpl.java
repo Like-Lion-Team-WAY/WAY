@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -64,6 +65,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Async
     public void readMessage(Long userId, Long chatId) {
         List<Message> messages;
         if ((messages = messageRepository.findByChatIdAndReceiverIdAndIsReadFalse(chatId, userId)) != null) {
