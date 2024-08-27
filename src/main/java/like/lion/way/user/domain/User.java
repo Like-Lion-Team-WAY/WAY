@@ -55,7 +55,7 @@ public class User {
     @Column(name = "user_image")
     private String userImage;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
