@@ -4,10 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,22 +54,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveOrUpdate(OAuthAttributes attributes) {
-        User user = userRepository.findByEmail(attributes.getEmail()).orElse(new User());
+        var optionalUser = userRepository.findByEmail(attributes.getEmail());
+        User user;
 
-//        user.setUsername(attributes.getName());
-        user.setProvider(attributes.getProvider());
-        user.setCreatedAt(LocalDate.now());
-        user.setEmail(attributes.getEmail());
-
-        Set<Role> set = new HashSet<>();
-        Role role ;
-        if (user.getUserId() != null && user.getUserId() == 24L) {
-            role = roleService.findByRoleName("ROLE_ADMIN");
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
         } else {
-            role = roleService.findByRoleName("ROLE_USER");
+            user = new User();
+            Set<Role> set = new HashSet<>();
+            set.add(roleService.findByRoleName("ROLE_USER"));
+            user.setRoles(set);
+            user.setCreatedAt(LocalDate.now());
         }
-        set.add(role);
-        user.setRoles(set);
+
+        user.setProvider(attributes.getProvider());
+        user.setEmail(attributes.getEmail());
 
         user.initializeAlarmSetting();
         user.initializeChattingAlarm();
@@ -267,4 +263,49 @@ public class UserServiceImpl implements UserService {
         return user.getUserImage();
     }
 
+    @Override
+    @Transactional
+    public boolean addRoleLimited(String username) {
+        return addRole(username, roleService.findByRoleName("ROLE_LIMITED"));
+    }
+
+    @Override
+    @Transactional
+    public boolean removeRoleLimited(String username) {
+        return removeRole(username, roleService.findByRoleName("ROLE_LIMITED"));
+    }
+
+    @Override
+    @Transactional
+    public boolean addRoleBlueCheck(String username) {
+        return addRole(username, roleService.findByRoleName("ROLE_BLUECHECK"));
+    }
+
+    @Override
+    @Transactional
+    public boolean removeRoleBlueCheck(String username) {
+        return removeRole(username, roleService.findByRoleName("ROLE_BLUECHECK"));
+    }
+
+    @Transactional
+    public boolean addRole(String username, Role role) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) return false;
+
+        Set<Role> set = user.getRoles();
+        boolean result = set.add(role);
+        if (result) userRepository.save(user);
+        return result;
+    }
+
+    @Transactional
+    public boolean removeRole(String username, Role role) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) return false;
+
+        Set<Role> set = user.getRoles();
+        boolean result = set.remove(role);
+        if (result) userRepository.save(user);
+        return result;
+    }
 }

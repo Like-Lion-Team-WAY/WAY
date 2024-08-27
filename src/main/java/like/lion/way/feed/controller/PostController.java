@@ -1,6 +1,7 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.List;
 import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.domain.Question;
@@ -156,15 +157,23 @@ public class PostController {
     }
 
     private List<Post> filterNonPinnedPosts(List<Post> posts) {
-        return posts.stream().filter(p -> !p.isPostPinStatus()).toList();
+        return posts.stream().filter(p -> !p.isPostPinStatus())
+                .sorted(Comparator.comparing(Post::getPostCreatedAt))
+                .toList();
     }
 
     private List<Post> filterPinnedPosts(List<Post> posts) {
-        return posts.stream().filter(Post::isPostPinStatus).toList();
+        return posts.stream()
+                .filter(Post::isPostPinStatus)
+                .sorted(Comparator.comparing(Post::getPostCreatedAt))
+                .toList();
     }
 
     private List<Question> filterAnsweredQuestions(List<Question> questions) {
-        return questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).toList();
+        return questions.stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() != null)
+                .sorted(Comparator.comparing(Question::getQuestionDate))
+                .toList();
     }
 
     private int countRejectedQuestions(List<Question> questions) {

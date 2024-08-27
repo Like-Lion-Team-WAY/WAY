@@ -6,12 +6,7 @@
 .container {
     width: 900px;
     margin: 0 auto;
-    /*background: #FFD6B0;*/
-    /*border-radius: 20px;*/
     padding: 5px;
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*gap: 20px;*/
 }
 
 .category {
@@ -44,12 +39,6 @@
     border: 1px solid #ccc;
 }
 
-/*.board-list {*/
-/*    margin: 0 auto;*/
-/*    padding: 10px;*/
-/*    background-color: #FFD6B0;*/
-/*    border-radius: 20px;*/
-/*}*/
 .board-item {
     background-color: #FFD6B0;
     display: flex;
@@ -60,9 +49,9 @@
     font-weight: 700;
     font-size: 20px;
     line-height: 20px;
-    padding: 15px 30px;
+    padding: 40px 30px 15px 30px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition 효과 추가 */
+    transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
     position: relative; /* 자식 요소를 절대 위치로 배치하기 위해 필요 */
 }
 
@@ -73,6 +62,11 @@
 .board-item:hover {
     background-color: #058593; /* Hover 시 배경색 변경 */
     transform: translateX(5px); /* Hover 시 오른쪽으로 약간 이동 */
+    color: white;
+}
+
+/* board-item이 hover될 때 underline의 색상도 변경되도록 설정 */
+.board-item:hover .underline {
     color: white;
 }
 
@@ -101,25 +95,18 @@
     color: inherit;
 }
 
-.board-item .underline:hover {
-    color: white;
-}
-
 .board-item .bookmark-icon {
+    position: absolute;
     left: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
     color: inherit;
 }
 
-
 .create-board {
     display: flex;
-    /*justify-content: flex-end; !* 버튼을 오른쪽으로 정렬 *!*/
     margin-top: 60px; /* 버튼과 상단 요소 간의 여백 */
-    /*padding-right: 10%; !* 오른쪽에서 조금 떨어진 위치로 버튼을 조정 *!*/
     justify-content: center;
 }
 
@@ -134,6 +121,49 @@
 }
 
 .custom-btn:hover {
+    background-color: #035259;
+    border-color: #035259;
+}
+
+/* 페이지 하단에 위치한 페이지네이션(페이지 번호) 스타일링 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #035259;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.pagination a:hover {
+    background-color: #035259;
+    color: #ffffff;
+}
+
+.pagination .active a {
+    background-color: #ff6746;
+    color: white;
+    border-color: #ff6746;
+}
+
+.pagination .active a:hover {
     background-color: #035259;
     border-color: #035259;
 }

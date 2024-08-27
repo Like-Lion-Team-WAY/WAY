@@ -41,6 +41,11 @@ public interface AlarmService {
     void deleteAlarm(Long alarmId);
 
     /**
+     * 모든 알림 삭제
+     */
+    void deleteAllAlarms(Long userId);
+
+    /**
      * 알림 세팅 변경
      */
     void updateAlarmSetting(Long userId, AlarmType type, boolean enabled);

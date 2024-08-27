@@ -23,7 +23,7 @@ import like.lion.way.board.application.response.BoardTitleResponse;
 
 public interface BoardService {
 
-    List<BoardTitleResponse> getBoardFindAll();
+    Page<BoardTitleResponse> getBoardFindAll(Pageable pageable);
 
     BoardTitleResponse getBoardTitle(Long boardId, HttpServletRequest httpServletRequest);
 

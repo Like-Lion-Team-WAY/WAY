@@ -37,5 +37,11 @@ public interface UserService {
     void logout(HttpServletResponse response);
     String getUserImagePath(HttpServletRequest request);
 
-
+    /*
+     * ROLE 관련 매서드
+     */
+    boolean addRoleLimited(String username);
+    boolean removeRoleLimited(String username);
+    boolean addRoleBlueCheck(String username);
+    boolean removeRoleBlueCheck(String username);
 }

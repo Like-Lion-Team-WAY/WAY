@@ -1,6 +1,7 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.feed.util.UserUtil;
@@ -128,10 +129,15 @@ public class QuestionController {
     }
 
     private List<Question> filterNonPinnedQuestions(List<Question> questions) {
-        return questions.stream().filter(q -> !q.getQuestionRejected() && !q.getQuestionPinStatus()).toList();
+        return questions.stream()
+                .filter(q -> !q.getQuestionRejected() && !q.getQuestionPinStatus())
+                .sorted(Comparator.comparing(Question::getQuestionDate))
+                .toList();
     }
 
     private List<Question> filterPinnedQuestions(List<Question> questions) {
-        return questions.stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus()).toList();
+        return questions.stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus())
+                .sorted(Comparator.comparing(Question::getQuestionDate))
+                .toList();
     }
 }

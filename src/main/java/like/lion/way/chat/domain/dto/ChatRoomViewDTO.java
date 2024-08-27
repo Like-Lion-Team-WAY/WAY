@@ -15,4 +15,5 @@ public class ChatRoomViewDTO {
     private boolean isActive;
     private boolean isQuestioner;
     private int isNicknameOpen;
+    private boolean withNonMember;
 }

@@ -92,6 +92,12 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     @Transactional
+    public void deleteAllAlarms(Long userId) {
+        alarmRepository.deleteByUser_UserId(userId);
+    }
+
+    @Override
+    @Transactional
     public void updateAlarmSetting(Long userId, AlarmType type, boolean enabled) {
         AlarmSetting alarmSetting = alarmSettingRepository.findByUser_UserId(userId).orElseThrow();
 
