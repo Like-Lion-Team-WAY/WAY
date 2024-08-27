@@ -57,22 +57,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveOrUpdate(OAuthAttributes attributes) {
-        User user = userRepository.findByEmail(attributes.getEmail()).orElse(new User());
+        var optionalUser = userRepository.findByEmail(attributes.getEmail());
+        User user;
 
-//        user.setUsername(attributes.getName());
-        user.setProvider(attributes.getProvider());
-        user.setCreatedAt(LocalDate.now());
-        user.setEmail(attributes.getEmail());
-
-        Set<Role> set = new HashSet<>();
-        Role role ;
-        if (user.getUserId() != null && user.getUserId() == 24L) {
-            role = roleService.findByRoleName("ROLE_ADMIN");
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
         } else {
-            role = roleService.findByRoleName("ROLE_USER");
+            user = new User();
+            Set<Role> set = new HashSet<>();
+            set.add(roleService.findByRoleName("ROLE_USER"));
+            user.setRoles(set);
+            user.setCreatedAt(LocalDate.now());
         }
-        set.add(role);
-        user.setRoles(set);
+
+        user.setProvider(attributes.getProvider());
+        user.setEmail(attributes.getEmail());
 
         user.initializeAlarmSetting();
         user.initializeChattingAlarm();
