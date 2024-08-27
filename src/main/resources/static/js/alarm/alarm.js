@@ -2,24 +2,26 @@ let page = 0;
 const size = 20;
 let isLoading = false;
 
-async function handleButtonClick(alarm) {
+// 새로운 전체 삭제 버튼 클릭 이벤트 함수
+async function deleteAllAlarms() {
     try {
-        // REST API 호출
-        const apiResponse = await fetch(`/api/alarm/${alarm.id}`, {
+        // REST API 호출 (DELETE)
+        const apiResponse = await fetch(`/api/alarm`, {
             method: 'DELETE'
         });
 
         if (!apiResponse.ok) {
-            throw new Error(`Failed to call API : ${apiResponse.status}`);
+            throw new Error(`Failed to delete all alarms: ${apiResponse.status}`);
         }
-
-        // 성공적으로 API 호출이 완료된 후 링크 이동
-        window.location.href = alarm.url;
+        document.getElementById('alarm-container').innerHTML = '';
+        document.getElementById('no-alarms').style.display = 'block'; // 알림 없음 메시지 표시
+        updateBellBadge(0);
     } catch (error) {
-        console.error('API 호출 실패:', error);
+        console.error('전체 알림 삭제 실패:', error);
     }
 }
 
+// 기존 loadAlarmList 함수
 async function loadAlarmList() {
     if (isLoading) return; // 이미 로딩 중이면 추가 요청 방지
     isLoading = true;
@@ -71,12 +73,20 @@ async function loadAlarmList() {
     }
 }
 
+// 스크롤 이벤트에 따른 알림 목록 로드
 window.addEventListener('scroll', function () {
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 100) {
         loadAlarmList();
     }
 });
 
+// DOM이 로드되었을 때 첫 번째 알림 목록 로드
 document.addEventListener('DOMContentLoaded', function () {
     loadAlarmList();
+
+    // '알림 전체 삭제' 버튼 클릭 이벤트 리스너 추가
+    const deleteAllButton = document.getElementById('delete-all-alarms-btn');
+    if (deleteAllButton) {
+        deleteAllButton.addEventListener('click', deleteAllAlarms);
+    }
 });

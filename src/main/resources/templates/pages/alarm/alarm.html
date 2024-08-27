@@ -18,6 +18,11 @@
     <h1 class="title">📮 알림 목록</h1>
 
     <div class="container">
+        <!-- 알림 전체 삭제 버튼 -->
+        <div class="row">
+            <button id="delete-all-alarms-btn" class="btn" onclick="deleteAllAlarms()">알림 전체 삭제</button>
+        </div>
+
         <div id="alarm-container" class="row">
             <!-- 게시글이 추가될 영역 -->
         </div>
@@ -26,7 +31,9 @@
         </div>
     </div>
 
+
     <!-- javascript 파일 추가 -->
+    <script src="/js/alarm/alarmCommon.js"></script>
     <script src="/js/alarm/alarm.js"></script>
 </div>
 </body>

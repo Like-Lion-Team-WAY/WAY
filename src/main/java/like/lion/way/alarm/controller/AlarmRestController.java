@@ -3,6 +3,7 @@ package like.lion.way.alarm.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import like.lion.way.ApiResponse;
 import like.lion.way.alarm.domain.AlarmType;
 import like.lion.way.alarm.dto.AlarmMessageDto;
 import like.lion.way.alarm.dto.AlarmRequestDto;
@@ -11,6 +12,7 @@ import like.lion.way.jwt.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +50,18 @@ public class AlarmRestController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(alarmDto);
+    }
+
+    @DeleteMapping
+    public ApiResponse<Void> deletAllAlarms(HttpServletRequest request) {
+        String token = jwtUtil.getCookieValue(request, "accessToken");
+        if (token == null) {
+            return ApiResponse.status(HttpStatus.UNAUTHORIZED);
+        }
+        Long loginId = jwtUtil.getUserIdFromToken(token);
+
+        alarmService.deleteAllAlarms(loginId);
+        return ApiResponse.ok();
     }
 
     @DeleteMapping("/{id}")
