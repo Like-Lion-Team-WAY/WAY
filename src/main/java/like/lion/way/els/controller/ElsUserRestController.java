@@ -32,13 +32,13 @@ public class ElsUserRestController {
         List<ElsUser> users= elsUserService.searchUsersByInterest(username);
         return ApiResponse.ok(users);
     }
-//    @DeleteMapping("/delete/{userId}")
-//    public ResponseEntity<String> deleteUserById(@PathVariable String userId) {
-//        boolean isDeleted = elsUserService.deleteByUserId(userId);
-//        if (isDeleted) {
-//            return ResponseEntity.ok("삭제 완료");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자 찾을 수 없음");
-//        }
-//    }
+    @GetMapping("/delete/{userId}")
+    public ResponseEntity<String> deleteUserById(@PathVariable String userId) {
+        boolean isDeleted = elsUserService.deleteByUserId(userId);
+        if (isDeleted) {
+            return ResponseEntity.ok("삭제 완료");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자 찾을 수 없음");
+        }
+    }
 }

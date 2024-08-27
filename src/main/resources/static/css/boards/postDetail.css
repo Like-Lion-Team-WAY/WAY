@@ -278,3 +278,19 @@ body {
 .comment-username.anonymous:hover, .post-author.anonymous:hover {
     text-decoration: none; /* 익명일 때는 호버 시에도 밑줄 표시 안함 */
 }
+
+.post-content img {
+    display: block;
+    margin: 0 auto; /* 이미지를 가운데 정렬 */
+    max-width: 100%; /* 이미지가 너무 커지지 않도록 제한 */
+    height: auto; /* 이미지 비율 유지 */
+}
+
+.post-content p {
+    text-align: left; /* 텍스트는 기본 왼쪽 정렬 */
+    clear: both; /* 이미지와 텍스트가 겹치지 않도록 설정 */
+}
+
+.post-content {
+    clear: both; /* 이미지와 텍스트가 겹치지 않도록 설정 */
+}

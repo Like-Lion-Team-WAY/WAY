@@ -62,6 +62,7 @@ public class BoardServiceImpl implements BoardService {
                 .map(board -> BoardTitleResponse.builder()
                         .boardId(board.getId())
                         .name(board.getName())
+                        .introduction(board.getIntroduction())
                         .build())
                 .collect(Collectors.toList());
 
@@ -78,6 +79,7 @@ public class BoardServiceImpl implements BoardService {
         return BoardTitleResponse.builder()
                 .boardId(board.getId())
                 .name(board.getName())
+                .introduction(board.getIntroduction())
                 .userOwnerMatch(userOwnerMatch)
                 .build();
 

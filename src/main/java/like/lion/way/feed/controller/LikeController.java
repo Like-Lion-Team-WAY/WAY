@@ -17,17 +17,22 @@ public class LikeController {
     private final QuestionService questionService;
 
     // 게시글에 대한 좋아요
-    @PostMapping ("/posts/like")
-    public String likePost(@RequestParam("postId") Long postId, @RequestParam("userId") Long userId) {
+    @PostMapping("/posts/like")
+    public String likePost(@RequestParam("postId") Long postId,
+                           @RequestParam("userId") Long userId) {
+        
         likeService.likePost(postId, userId);
-        return "redirect:/posts/detail/"+postId;
+        return "redirect:/posts/detail/" + postId;
     }
+
     //질문에 대한 좋아요
     @PostMapping("/questions/like")
-    public String likeQuestion(@RequestParam("questionId") Long questionId, @RequestParam("userId") Long userId) {
+    public String likeQuestion(@RequestParam("questionId") Long questionId,
+                               @RequestParam("userId") Long userId) {
+
         likeService.likeQuestion(questionId, userId);
-        Question question= questionService.getQuestionById(questionId);
-        Long answererId= question.getAnswerer().getUserId();
-        return "redirect:/questions/create/"+answererId;
+        Question question = questionService.getQuestionById(questionId);
+        Long answererId = question.getAnswerer().getUserId();
+        return "redirect:/questions/create/" + answererId;
     }
 }

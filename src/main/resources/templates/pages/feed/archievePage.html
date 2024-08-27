@@ -10,9 +10,6 @@
 </head>
 <body>
   <div layout:fragment="content">
-    <h1>보관 페이지</h1>
-    <!-- 자기가 팔로우 한 사람들의 게시글과 질문이 떠야 됨 -->
-    <!-- 해당 유저의 피드로 가서 질문 창으로 갈 수 있게끔 -->
     <h3>피드</h3>
     <div th:if="${posts.size() == 0}">
       <p>보관된 피드가 없습니다.</p>
@@ -22,7 +19,7 @@
       <p th:text="${post.getPost().postContent}"></p>
       <p th:text="${post.getPost().postCreatedAt}"></p>
       <p>
-        <a th:href="@{/posts/{username}(username=${post.getPost().getUser().username})}" th:text="${post.getPost().getUser().username}"></a>
+        <a th:href="@{/posts/{username}(username=${post.getPost().getUser().username})}" th:text="${post.getPost().getUser().nickname+' ('+post.getPost().getUser().username+')'}"></a>
       </p>
       <div class="btnContainer">
         <form th:action="@{/posts/archieve/{postId}(postId=${post.getPost().postId})}" method="post">
@@ -39,7 +36,7 @@
     </div>
     <div th:if="${questions.size() > 0}" class="feed-item" th:each="question : ${questions}">
       <a th:if="${question.getQuestion().getQuestioner()} != null">
-        <p th:text="${question.getQuestion().getQuestioner().getUsername()}"></p>
+        <p th:text="${question.getQuestion().getQuestioner().nickname+' ('+question.getQuestion().getQuestioner().username+')'}"></p>
       </a>
       <a th:if="${question.getQuestion().getQuestioner()}== null">
         <p th:text="익명"></p>

@@ -39,7 +39,7 @@ public class BoardPost {
     @Column(name = "board_post_title", nullable = false)
     private String title;
 
-    @Column(name = "board_post_content", nullable = false)
+    @Column(name = "board_post_content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @CreationTimestamp

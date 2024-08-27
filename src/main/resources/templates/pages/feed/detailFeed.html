@@ -18,11 +18,15 @@
 <div layout:fragment="content">
     <div class="post-container">
         <div class="post-header">
-            <img  th:if="${post.getUser().getUserImage() != null}" class="profile-icon" th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture" />
-            <img th:if="${post.getUser().getUserImage() == null}" class="profile-icon" th:src="@{/image/image.jpg}" alt="Profile Picture" />
+            <img th:if="${post.getUser().getUserImage() != null}" class="profile-icon"
+                 th:src="'/display?filename='+${post.getUser().getUserImage()}" alt="Profile Picture"/>
+            <img th:if="${post.getUser().getUserImage() == null}" class="profile-icon" th:src="@{/image/image.jpg}"
+                 alt="Profile Picture"/>
             <div class="post-info">
-                <span class="username" th:text="${post.getUser().username}">username</span>
-                <span class="timestamp" th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}">작성일</span>
+                <span class="username"
+                      th:text="${post.getUser().nickname+' ('+post.getUser().username+')'}">username</span>
+                <span class="timestamp"
+                      th:text="${#temporals.format(post.getPostCreatedAt(), 'yyyy년 MM월 dd일')}">작성일</span>
             </div>
         </div>
         <div th:if="${loginUser != null}" class="post-actions">
@@ -34,12 +38,13 @@
 
         <div class="post-content">
             <h1 id="postTitle" th:text="${post.getPostTitle()}"></h1>
-            <img th:if="${post.getPostImageUrl() != null}" th:src="'/display?filename='+${post.getPostImageUrl()}" alt="이미지 확인하기" width="500px" />
+            <img th:if="${post.getPostImageUrl() != null}" th:src="'/display?filename='+${post.getPostImageUrl()}"
+                 alt="이미지 확인하기" width="500px"/>
             <p id="postContent" th:text="${post.getPostContent()}"></p>
 
             <div id="editPostForm" style="display:none;">
-                <input type="text" id="editPostTitle" />
-                <input type="hidden" id="postId" th:value="${post.postId}" />
+                <input type="text" id="editPostTitle"/>
+                <input type="hidden" id="postId" th:value="${post.postId}"/>
                 <textarea id="editPostContent"></textarea>
                 <div>
                     <button id="savePostBtn">저장</button>
@@ -58,21 +63,22 @@
         </div>
         <div class="post-tags">
             <form th:if="${loginUser != null}" th:action="@{/posts/like}" method="post">
-                <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
-                <input type="hidden" name="postId" th:value="${post.getPostId()}" />
+                <input type="hidden" name="userId" th:value="${loginUser.getUserId()}"/>
+                <input type="hidden" name="postId" th:value="${post.getPostId()}"/>
                 <button type="submit" class="liketag">공감</button>
             </form>
-            <form th:if="${loginUser != null}" th:action="@{/posts/archieve/{postId}(postId=${post.getPostId()})}" method="post">
-                <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
-                <input type="hidden" name="postId" th:value="${post.getPostId()}" />
+            <form th:if="${loginUser != null}" th:action="@{/posts/archieve/{postId}(postId=${post.getPostId()})}"
+                  method="post">
+                <input type="hidden" name="userId" th:value="${loginUser.getUserId()}"/>
+                <input type="hidden" name="postId" th:value="${post.getPostId()}"/>
                 <button type="submit" class="tag">스크랩</button>
             </form>
         </div>
         <div th:if="${loginUser != null}">
-            <form class="comment-input" th:action="@{/posts/comments/{postId}(postId=${post.getPostId()})}" method="post">
-                <input type="text" name="postCommentContent" id="postCommentContent" placeholder="댓글을 입력하세요." />
-                <input type="hidden" name="postId" th:value="${post.getPostId()}" />
-                <input type="hidden" name="userId" th:value="${loginUser.userId}" />
+            <form class="comment-input">
+                <input type="text" name="postCommentContent" id="postCommentContent" placeholder="댓글을 입력하세요."/>
+                <input type="hidden" name="postId" th:value="${post.getPostId()}"/>
+                <input type="hidden" name="userId" th:value="${loginUser.userId}"/>
                 <input type="hidden" name="parentCommentPreCommentId" th:value="null">
                 <button type="submit">➤</button>
             </form>
@@ -80,55 +86,77 @@
         <div th:if="${loginUser == null}">
             <form class="comment-input">
                 <input type="text" name="postCommentContent" placeholder="로그인 후 댓글을 작성할 수 있습니다."/>
-                <input type="hidden" name="postId" th:value="${post.getPostId()}" />
+                <input type="hidden" name="postId" th:value="${post.getPostId()}"/>
                 <button type="submit" disabled>➤</button>
             </form>
         </div>
         <div class="comments-section">
             <div th:each="comment : ${post.postComments}">
                 <div th:if="${comment.postCommentPreCommentId == null}" class="list-group-item">
-                    <h1 class="comment-text" th:text="${comment.getUser().getUsername()}"></h1>
+                    <h1 class="comment-text"
+                        th:text="${comment.getUser().nickname+' ('+comment.getUser().username+')'}"></h1>
                     <p class="comment-text" th:text="${comment.getPostCommentContent()}"></p>
                     <div th:if="${loginUser != null}">
                         <input type="hidden" id="commentId" th:value="${comment.getPostCommentId()}">
-                        <button th:if="${loginUser.getUserId() == comment.getUser().getUserId()}" class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정</button>
-                        <button th:if="${loginUser.getUserId()== comment.getUser().getUserId()}" class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제</button>
+                        <button th:if="${loginUser.getUserId() == comment.getUser().getUserId()}"
+                                class="edit-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">수정
+                        </button>
+                        <button th:if="${loginUser.getUserId()== comment.getUser().getUserId()}"
+                                class="delete-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">삭제
+                        </button>
                         <!-- 댓글 (COMMENT) 신고 -->
-                        <button th:if="${loginUser.getUserId() != comment.getUser().getUserId()}" class="report-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">신고</button>
+                        <button th:if="${loginUser.getUserId() != comment.getUser().getUserId()}"
+                                class="report-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">신고
+                        </button>
                         <button class="reply-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">답글</button>
                     </div>
-                    <div th:id="'editCommentForm-' + ${comment.getPostCommentId()}" class="edit-comment-form" style="display:none;">
+                    <div th:id="'editCommentForm-' + ${comment.getPostCommentId()}" class="edit-comment-form"
+                         style="display:none;">
                         <textarea th:id="'editCommentContent-' + ${comment.getPostCommentId()}"></textarea>
-                        <input type="hidden" th:id="'commentId-' + ${comment.getPostCommentId()}" th:value="${comment.getPostCommentId()}" />
+                        <input type="hidden" th:id="'commentId-' + ${comment.getPostCommentId()}"
+                               th:value="${comment.getPostCommentId()}"/>
                         <button class="save-comment-btn" th:data-comment-id="${comment.getPostCommentId()}">저장</button>
                         <button class="cancel-edit-btn" th:data-comment-id="${comment.getPostCommentId()}">취소</button>
                     </div>
-                    <div th:if="${loginUser != null}" th:id="'replyCommentForm-' + ${comment.getPostCommentId()}" class="reply-comment-form" style="display:none;">
+                    <div th:if="${loginUser != null}" th:id="'replyCommentForm-' + ${comment.getPostCommentId()}"
+                         class="reply-comment-form" style="display:none;">
                         <textarea th:id="'replyCommentContent-' + ${comment.getPostCommentId()}"></textarea>
-                        <input type="hidden" name="postId" th:value="${post.getPostId()}" />
-                        <input type="hidden" name="userId" th:value="${loginUser.getUserId()}" />
-                        <input type="hidden" th:value="${comment.getPostCommentId()}" />
-                        <button class="submit-reply-btn" th:data-comment-id="${comment.getPostCommentId()}">답글 작성</button>
+                        <input type="hidden" name="postId" th:value="${post.getPostId()}"/>
+                        <input type="hidden" name="userId" th:value="${loginUser.getUserId()}"/>
+                        <input type="hidden" th:value="${comment.getPostCommentId()}"/>
+                        <button class="submit-reply-btn" th:data-comment-id="${comment.getPostCommentId()}">답글 작성
+                        </button>
                         <button class="cancel-reply-btn" th:data-comment-id="${comment.getPostCommentId()}">취소</button>
                     </div>
 
                     <div th:each="reply : ${post.postComments}"
                          th:if="${reply.postCommentPreCommentId == comment.postCommentId}"
                          class="reply-item">
-                        <h1 class="comment-text" th:text="${reply.getUser().getUsername()}"></h1>
+                        <h1 class="comment-text"
+                            th:text="${reply.getUser().nickname+' ('+reply.getUser().username+')'}"></h1>
                         <p class="comment-text" th:text="${reply.getPostCommentContent()}"></p>
                         <div th:if="${loginUser != null}">
                             <input type="hidden" id="replyId" th:value="${reply.getPostCommentId()}">
-                            <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}" class="edit-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">수정</button>
-                            <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}" class="delete-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">삭제</button>
+                            <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}"
+                                    class="edit-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">수정
+                            </button>
+                            <button th:if="${loginUser.getUserId() == reply.getUser().getUserId()}"
+                                    class="delete-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">삭제
+                            </button>
                             <!-- 댓글 (COMMENT) 신고 -->
-                            <button th:if="${loginUser.getUserId() != reply.getUser().getUserId()}" class="report-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">신고</button>
+                            <button th:if="${loginUser.getUserId() != reply.getUser().getUserId()}"
+                                    class="report-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">신고
+                            </button>
                         </div>
-                        <div th:id="'editReplyForm-' + ${reply.getPostCommentId()}" class="edit-reply-form" style="display:none;">
+                        <div th:id="'editReplyForm-' + ${reply.getPostCommentId()}" class="edit-reply-form"
+                             style="display:none;">
                             <textarea th:id="'editCommentContent-' + ${reply.getPostCommentId()}"></textarea>
-                            <input type="hidden" th:id="'commentId-' + ${reply.getPostCommentId()}" th:value="${reply.getPostCommentId()}" />
-                            <button class="save-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">저장</button>
-                            <button class="cancel-reply-edit-btn" th:data-comment-id="${reply.getPostCommentId()}">취소</button>
+                            <input type="hidden" th:id="'commentId-' + ${reply.getPostCommentId()}"
+                                   th:value="${reply.getPostCommentId()}"/>
+                            <button class="save-comment-btn" th:data-comment-id="${reply.getPostCommentId()}">저장
+                            </button>
+                            <button class="cancel-reply-edit-btn" th:data-comment-id="${reply.getPostCommentId()}">취소
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -17,21 +17,21 @@
     </div>
 
     <div id="followers" class="tab-content">
-        <div class="user-item" th:each="followers:${follower}">
+        <div class="user-item" th:each="followers:${follower}" >
             <img th:if="${followers.userImgPath}!=null" th:src="${followers.userImgPath}" alt="사용자1" class="user-img">
             <img th:unless="${followers.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
-            <span class="user-name"  th:text="${followers.username}">사용자1</span>
+            <a th:href="@{/posts/{username}(username=${followers.username})}" th:text="${followers.username}" class="postname">사용자1</a>
             <button class="delete-btn" th:data-username="${followers.username}" th:if="${another}!='another'">삭제</button>
             <span th:if="${another}=='another'"></span>
         </div>
     </div>
     <div id="following" class="tab-content" style="display:none">
-        <div class="user-item" th:each="followings:${following}">
+        <div class="user-item" th:each="followings:${following}" >
             <img th:if="${followings.userImgPath}!=null" th:src="${followings.userImgPath}" alt="사용자1" class="user-img">
             <img th:unless="${followings.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
-            <span class="user-name" th:text="${followings.username}">사용자1</span>
+            <a th:href="@{/posts/{username}(username=${followings.username})}" th:text="${followings.username}" class="postname">사용자1</a>
             <button class="unFollowing-btn" th:data-username="${followings.username}" th:if="${another}!='another'">언팔로잉</button>
             <span th:if="${another}=='another'"></span>
         </div>

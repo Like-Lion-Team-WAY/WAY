@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ keyword: keyword })
+                body: JSON.stringify({keyword: keyword})
             })
                 .then(response => response.json())
                 .then(apiResponse => {
@@ -66,28 +66,72 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 최대 글자수 제한
                 const maxLength = 20;
                 let displayName = board.name;
+                let displayDescription = board.introduction;
                 if (board.name.length > maxLength) {
                     displayName = board.name.substring(0, maxLength) + '...';
                 }
 
-                boardItem.innerHTML = `<span>${displayName}</span><span>➔</span>`;
+                // 북마크 상태에 따라 아이콘 설정
+                const bookmarkClass = board.bookmark ? 'fas fa-bookmark' : 'far fa-bookmark';
+
+                boardItem.innerHTML = `
+                <i class="bookmark-icon ${bookmarkClass}" data-board-id="${board.boardId}"></i>
+                <span>${displayName}</span>
+                <div class="underline">
+                    <p>${displayDescription}</p>
+                </div>
+                <span class="arrow-icon">➔</span>`;
+
                 boardList.appendChild(boardItem);
 
-                // 클릭 이벤트 리스너 추가
-                boardItem.addEventListener('click', () => {
+                // 게시판 클릭 이벤트 리스너 추가
+                boardItem.querySelector('span').addEventListener('click', () => {
                     // 클릭 시 /boards/posts로 이동하며 boardId를 포함
                     window.location.href = `/boards/${board.boardId}`;
+                });
+
+                // 북마크 아이콘 클릭 이벤트 리스너 추가
+                const bookmarkIcon = boardItem.querySelector('.bookmark-icon');
+                bookmarkIcon.addEventListener('click', (event) => {
+                    event.stopPropagation(); // 이벤트 전파를 막아서 클릭 시 페이지 이동 방지
+                    toggleBookmark(bookmarkIcon, board.boardId);
                 });
             });
         }
     }
 
+
     // 초기 목록을 로드
     fetchBoardList();
 
     // 검색 입력 필드에 이벤트 리스너 추가
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         const keyword = searchInput.value.trim();
         fetchBoardList(keyword); // 검색어를 이용해 게시판 목록을 가져옴
     });
+
+    function toggleBookmark(icon, boardId) {
+        fetch(`/api/v1/boards/bookmark/${boardId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(apiResponse => {
+                if (apiResponse.success) {
+                    // 현재 아이콘 클래스를 토글 (fas -> far, far -> fas)
+                    icon.classList.toggle('fas');
+                    icon.classList.toggle('far');
+                } else {
+                    alert('북마크 변경에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling bookmark:', error);
+                alert('북마크 변경 중 오류가 발생했습니다.');
+            });
+    }
+
+
 });

@@ -1,12 +1,16 @@
 package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.List;
 import like.lion.way.feed.domain.Post;
 import like.lion.way.feed.domain.Question;
+import like.lion.way.feed.domain.dto.PostDto;
+import like.lion.way.feed.service.PostBoxService;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
-import like.lion.way.jwt.util.JwtUtil;
+import like.lion.way.feed.util.UserUtil;
+import like.lion.way.file.service.S3Service;
 import like.lion.way.user.domain.Block;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.BlockService;
@@ -18,7 +22,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,116 +34,157 @@ public class PostController {
     private final UserService userService;
     private final QuestionService questionService;
     private final FollowService followService;
-    private final JwtUtil jwtUtil;
     private final BlockService blockService;
+    private final UserUtil userUtil;
+    private final S3Service s3Service;
+    private final PostBoxService postBoxService;
 
-    // 로그인한 사용자 정보 조회
-    private User getLoginUser(HttpServletRequest request) {
-        String token = jwtUtil.getCookieValue(request, "accessToken");
-        if (token == null || token.isEmpty()) {
-            System.out.println("Token is null or empty");
-            return null;
-        }
-        Long loginId = jwtUtil.getUserIdFromToken(token);
-        if (loginId == null) {
-            System.out.println("Login ID is null");
-            return null;
-        }
-//        System.out.println(loginId);
-        return userService.findByUserId(loginId);
-    }
-
-    // 공통된 Model 설정 메서드(새 질문, 답변 완료, 보낸 질문, 거절한 질문)
-    private void setCommonModelFilterAttributes(Model model, User user,HttpServletRequest request) {
-        if (user == null) {
-            log.error("User object is null");
-            model.addAttribute("posts", null);
-            model.addAttribute("pinPosts", null);
-            model.addAttribute("rejectedQuestions", 0);
-            model.addAttribute("newQuestions", 0);
-            model.addAttribute("replyQuestions", 0);
-            model.addAttribute("sendQuestions", 0);
-        } else {
-            model.addAttribute("user", user);
-            log.info("user::::" + user.getUsername());
-
-            List<Post> posts = postService.getPostByUser(user,request);
-            List<Question> questions= questionService.getQuestionByAnswerer(user,request);
-            if (posts != null) {
-                model.addAttribute("posts", posts.stream().filter(p -> !p.isPostPinStatus()).toList());
-                model.addAttribute("pinPosts", posts.stream().filter(Post::isPostPinStatus).toList());
-            } else {
-                model.addAttribute("posts", null);
-                model.addAttribute("pinPosts", null);
-            }
-            if (questions != null){
-                model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).toList());
-            }else{
-                model.addAttribute("questions", null);
-            }
-
-            model.addAttribute("rejectedQuestions",
-                    questionService.getQuestionByAnswerer(user,request).stream()
-                            .filter(q -> Boolean.TRUE.equals(q.getQuestionRejected())).toList().size());
-
-            model.addAttribute("newQuestions",
-                    questionService.getQuestionByAnswerer(user,request).stream()
-                            .filter(q -> Boolean.FALSE.equals(q.getQuestionRejected()) && q.getAnswer() == null)
-                            .toList().size());
-
-            model.addAttribute("replyQuestions",
-                    questionService.getQuestionByAnswerer(user,request).stream()
-                            .filter(q -> Boolean.FALSE.equals(q.getQuestionRejected()) && q.getAnswer() != null)
-                            .toList().size());
-
-            model.addAttribute("sendQuestions",
-                    questionService.getQuestionByQuestioner(user).stream().toList().size());
-        }
-    }
-
-    // 내 게시판 보여주기
+    //자기 자신 피드
     @GetMapping("/posts")
-    public String getPosts(Model model, HttpServletRequest request){
-        User user = getLoginUser(request);
+    public String getPosts(Model model, HttpServletRequest request) {
+
+        return getPostsForUser(null, model, request);
+    }
+
+    //다른 사람의 피드
+    @GetMapping("/posts/{username}")
+    public String getPostsByUsername(@PathVariable("username") String username,
+                                     Model model,
+                                     HttpServletRequest request) {
+
+        return getPostsForUser(username, model, request);
+    }
+
+    //고정 핀 설정
+    @PostMapping("/posts/pin/{postId}")
+    public String pinPost(@PathVariable("postId") Long postId) {
+
+        postService.pinPost(postId);
+        return "redirect:/posts";
+    }
+
+    // 게시판 생성
+    @PostMapping("/posts/create")
+    public String savePost(PostDto postDto,
+                           @RequestPart(value = "image") MultipartFile file,
+                           HttpServletRequest request) {
+
+        User user = userUtil.getLoginUser(request);
+
+        if (file.isEmpty()) {
+            postService.savePost(postDto, null, user);
+        } else {
+            String key = s3Service.uploadFile(file);
+            postService.savePost(postDto, key, user);
+        }
+        return "redirect:/posts";
+    }
+
+    // 게시판 생성 페이지로 넘어감
+    @GetMapping("/posts/create")
+    public String createPost() {
+        return "/pages/feed/feedCreate";
+    }
+
+    // 게시글 상세
+    @GetMapping("/posts/detail/{postId}")
+    public String showDetailPost(@PathVariable("postId") Long postId,
+                                 Model model,
+                                 HttpServletRequest request) {
+
+        Post post = postService.getPostById(postId);
+        model.addAttribute("post", post);
+
+        model.addAttribute("postBox", postBoxService.getPostBoxByPostId(post).size());
+
+        User loginUser = userUtil.getLoginUser(request);
+        model.addAttribute("loginUser", loginUser);
+        return "/pages/feed/detailFeed";
+    }
+
+    //필터
+    private String getPostsForUser(String username,
+                                   Model model,
+                                   HttpServletRequest request) {
+
+        User user = (username != null) ? userService.findByUsername(username) : userUtil.getLoginUser(request);
+
+        if (user == null) {
+            log.error("사용자 찾을 수 없음", (username != null) ? "이름: " + username : "로그인 돼 있지 않음");
+            return "redirect:/posts";
+        }
+
+        if (isUserBlocked(user, request)) {
+            return "redirect:/main";
+        }
+
+        //팔로워, 팔로잉, 로그인 유저 정보
         model.addAttribute("followers", followService.getFollowerList(user).size());
         model.addAttribute("followings", followService.getFollowingList(user).size());
-        setCommonModelFilterAttributes(model, user,request);
-        model.addAttribute("loginUser", user);
+        model.addAttribute("loginUser", userUtil.getLoginUser(request));
+
+        populateModelWithUserPostsAndQuestions(model, user, request);
+
         return "/pages/feed/userFeed";
     }
 
-    // userId에 해당하는 게시판 보여주기
-    @GetMapping("/posts/{username}")
-    public String getPostsByUserId(@PathVariable("username") String username, Model model, HttpServletRequest request) {
-        log.info("username::::" + username);
-        // username으로 User 객체 조회
-        User user = userService.findByUsername(username);
-        if (user == null) {
-            log.error("User with username {} not found", username);
-            return "redirect:/posts"; // 유저가 없으면 게시판 목록 페이지로 리다이렉트
+    private boolean isUserBlocked(User user,
+                                  HttpServletRequest request) {
+
+        User loginUser = userUtil.getLoginUser(request);
+        if (loginUser != null) {
+            Block block = blockService.findByUser(user, request);
+            return block != null;
         }
+        return false;
+    }
 
+    private void populateModelWithUserPostsAndQuestions(Model model,
+                                                        User user,
+                                                        HttpServletRequest request) {
 
-//         팔로워, 팔로잉 정보 추가
-        model.addAttribute("followers", followService.getFollowerList(user).size());
-        model.addAttribute("followings", followService.getFollowingList(user).size());
-//        request 로 가져와야 되는데 비로그인 같은 경우는 못 가져옴
-        //임시로
-        // 로그인 사용자 정보 조회
-        User loginUser = getLoginUser(request);
-        if(loginUser == null){
-            System.out.println("loginUser is null");
-        }else{
-            Block block = blockService.findByUser(user,request);
-            if(block!=null){
-                return "redirect:/main";
-            }
-        }
-        model.addAttribute("loginUser", loginUser);
+        List<Post> posts = postService.getPostByUser(user, request);
+        List<Question> questions = questionService.getQuestionByAnswerer(user, request);
 
-        // 공통 모델 속성 설정
-        setCommonModelFilterAttributes(model, user,request);
+        model.addAttribute("user", user);
+        model.addAttribute("posts", filterNonPinnedPosts(posts));
+        model.addAttribute("pinPosts", filterPinnedPosts(posts));
+        model.addAttribute("questions", filterAnsweredQuestions(questions));
+        model.addAttribute("rejectedQuestions", countRejectedQuestions(questions));
+        model.addAttribute("newQuestions", countNewQuestions(questions));
+        model.addAttribute("replyQuestions", countReplyQuestions(questions));
+        model.addAttribute("sendQuestions", questionService.getQuestionByQuestioner(user).size());
+    }
 
-        return "/pages/feed/userFeed";
+    private List<Post> filterNonPinnedPosts(List<Post> posts) {
+        return posts.stream().filter(p -> !p.isPostPinStatus())
+                .sorted(Comparator.comparing(Post::getPostCreatedAt))
+                .toList();
+    }
+
+    private List<Post> filterPinnedPosts(List<Post> posts) {
+        return posts.stream()
+                .filter(Post::isPostPinStatus)
+                .sorted(Comparator.comparing(Post::getPostCreatedAt))
+                .toList();
+    }
+
+    private List<Question> filterAnsweredQuestions(List<Question> questions) {
+        return questions.stream()
+                .filter(q -> !q.getQuestionRejected() && q.getAnswer() != null)
+                .sorted(Comparator.comparing(Question::getQuestionDate))
+                .toList();
+    }
+
+    private int countRejectedQuestions(List<Question> questions) {
+        return (int) questions.stream().filter(Question::getQuestionRejected).count();
+    }
+
+    private int countNewQuestions(List<Question> questions) {
+        return (int) questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() == null).count();
+    }
+
+    private int countReplyQuestions(List<Question> questions) {
+        return (int) questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).count();
     }
 }

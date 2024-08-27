@@ -4,7 +4,6 @@ import like.lion.way.feed.domain.PostComment;
 import like.lion.way.feed.domain.dto.PostCommentDto;
 
 
-
 public interface PostCommentService {
     PostComment getCommentById(Long commentId);
 

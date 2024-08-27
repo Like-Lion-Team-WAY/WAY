@@ -39,12 +39,14 @@ body {
     font-size: 13px;
     color: #000000;
 }
+
 .form-group {
     margin-bottom: 10px;
     display: flex;
     justify-content: end;
     align-items: end;
 }
+
 .send-button {
     width: 100px;
     padding: 10px;
@@ -70,6 +72,7 @@ body {
     font-size: 20px;
     margin-bottom: 10px;
 }
+
 .answered-category {
     font-size: 17px;
     margin-bottom: 10px;
@@ -92,6 +95,7 @@ body {
     margin-bottom: 5px;
     margin-left: 10px;
 }
+
 .question-image-container {
     display: flex;
     justify-content: center;
@@ -109,7 +113,7 @@ body {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color:#ff6746;
+    background-color: #ff6746;
     color: white;
     font-weight: bolder;
     font-size: 13px;
@@ -135,17 +139,20 @@ body {
 .answer-text {
     margin-top: 10px;
     margin-left: 40px;
+    margin-right: 40px;
     font-size: 17px;
     font-weight: bold;
     color: #ff6746;
 }
-.question-date , .answer-date {
+
+.question-date, .answer-date {
     display: flex;
     justify-content: end;
     align-items: end;
     font-size: 13px;
 }
-.answer-input{
+
+.answer-input {
     width: 700px;
     height: 50px;
     padding: 10px;
@@ -159,7 +166,8 @@ body {
     justify-content: center;
     align-items: center;
 }
-.edit-button{
+
+.edit-button {
     width: 80px;
     padding: 5px;
     margin-top: 3px;
@@ -172,7 +180,8 @@ body {
     font-size: 13px;
     cursor: pointer;
 }
-.save-button{
+
+.save-button {
     width: 50px;
     padding: 5px;
     margin-top: 10px;
@@ -186,7 +195,8 @@ body {
     cursor: pointer;
     margin-right: 20px;
 }
-.cancel-button{
+
+.cancel-button {
     width: 50px;
     padding: 5px;
     margin-top: 10px;
@@ -199,15 +209,19 @@ body {
     font-size: 10px;
     cursor: pointer;
 }
+
 .edit-button:hover {
     background-color: #FF8E75;
 }
+
 .save-button:hover {
     background-color: #FF8E75;
 }
+
 .cancel-button:hover {
     background-color: #FF8E75;
 }
+
 .rejectedBtn, .archieveBtn, .deleteBtn, .reportBtn {
     display: flex;
     justify-content: end;
@@ -220,7 +234,8 @@ body {
     border: 1px solid #f9916e;
     border-radius: 20px;
 }
-.likeBtn{
+
+.likeBtn {
     margin-top: 20px;
     margin-bottom: 20px;
     display: flex;
@@ -234,15 +249,18 @@ body {
     color: #FF6746;
     margin-right: 10px;
 }
+
 .likeCount {
     margin-left: 5px;
     font-size: 16px;
     color: #FF6347; /* Text color */
 }
-.pinIcon{
+
+.pinIcon {
     display: flex;
     justify-content: end;
 }
+
 .icon-button {
     display: flex;
     justify-items: center;
@@ -259,7 +277,8 @@ body {
 .icon-button:focus {
     outline: none; /* 포커스 시 외곽선 제거 */
 }
-.icon-button2{
+
+.icon-button2 {
     display: flex;
     justify-items: center;
     background: none; /* 배경 제거 */
@@ -271,9 +290,11 @@ body {
     color: #f60303; /* 아이콘 색상 설정 (필요에 따라 변경) */
     cursor: pointer; /* 클릭 가능하게 설정 */
 }
+
 .icon-button2:focus {
     outline: none; /* 포커스 시 외곽선 제거 */
 }
+
 .answered-question:nth-child(odd) {
     background-color: #f1f1f1; /* 회색 */
 }

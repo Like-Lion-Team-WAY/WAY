@@ -15,6 +15,7 @@ public class ApiResponse<T> {
     private boolean success;
     private T data;
 
+    @Builder
     public ApiResponse(
             HttpStatus status,
             String message,
