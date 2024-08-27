@@ -1,30 +1,66 @@
 package like.lion.way.admin.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.net.http.HttpRequest;
+import like.lion.way.admin.service.BlueCheckService;
+import like.lion.way.feed.util.UserUtil;
+import like.lion.way.user.domain.User;
+import like.lion.way.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/way")
+@RequiredArgsConstructor
 public class CustomerServiceController {
+    private final BlueCheckService blueCheckService;
+    private final UserUtil userUtil;
+
     //고객센터
-    @GetMapping("/customerService")
+    @GetMapping("/way/customerService")
     public String customerService() {
         return "pages/admin/customerService";
     }
+
     //이용약관
-    @GetMapping("/termsOfuse")
+    @GetMapping("/way/termsOfuse")
     public String termsOfUse() {
         return "pages/admin/termsOfUse";
     }
+
     //개인정보처리방침
-    @GetMapping("/policyPersonalInfo")
+    @GetMapping("/way/policyPersonalInfo")
     public String policyPersonalInfo() {
         return "pages/admin/policyPersonalInfo";
     }
+
     //청소년보호정책
-    @GetMapping("/youthProtectionPolicy")
+    @GetMapping("/way/youthProtectionPolicy")
     public String youthProtectionPolicy() {
         return "pages/admin/youthProtectionPolicy";
+    }
+
+    //블루체크 뱃지 신청창
+    @GetMapping("/blueCheck/application")
+    public String blueCheck(HttpServletRequest request, Model model) {
+
+        User user = userUtil.getLoginUser(request);
+
+        if (user == null) {
+            return "redirect:/user/login";
+        } else {
+            //이미 신청한 사용자
+            if(blueCheckService.findByUser(user) != null) {
+                model.addAttribute("userId", null);
+            }
+            //신청 안 한 사용자
+            else{
+                Long userId = user.getUserId();
+                model.addAttribute("userId", userId);
+            }
+        }
+        return "pages/admin/bluecheckApplication";
     }
 }
