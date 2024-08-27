@@ -2,9 +2,11 @@ package like.lion.way.chat.service.impl;
 
 import static like.lion.way.chat.constant.ChatMessageType.DELETE;
 import static like.lion.way.chat.constant.ChatMessageType.LEAVE;
+import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import like.lion.way.chat.constant.OpenNicknameState;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.repository.ChatRepository;
 import like.lion.way.chat.repository.MessageRepository;
@@ -35,6 +37,9 @@ public class ChatServiceImpl implements ChatService {
         chat.setQuestion(question);
         chat.setName(question.getQuestion());
         chat.setCreatedAt(LocalDateTime.now());
+        if(!question.getIsAnonymous()){
+            chat.setNicknameOpen(NICKNAME_OPEN_STATE.get());
+        }
 
         return chatRepository.save(chat);
     }
