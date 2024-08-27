@@ -1,8 +1,6 @@
 package like.lion.way.admin.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
-import like.lion.way.admin.service.BlueCheckService;
 import like.lion.way.feed.util.UserUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -10,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
 public class CustomerServiceController {
-    private final BlueCheckService blueCheckService;
+    private final UserService userService;
     private final UserUtil userUtil;
 
     //고객센터
@@ -52,11 +49,11 @@ public class CustomerServiceController {
             return "redirect:/user/login";
         } else {
             //이미 신청한 사용자
-            if(blueCheckService.findByUser(user) != null) {
+            if (user.getRoles().stream().anyMatch(role -> role.getRoleId().equals(9L))) {
                 model.addAttribute("userId", null);
             }
             //신청 안 한 사용자
-            else{
+            else {
                 Long userId = user.getUserId();
                 model.addAttribute("userId", userId);
             }
