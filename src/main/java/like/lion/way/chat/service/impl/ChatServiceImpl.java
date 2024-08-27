@@ -36,7 +36,7 @@ public class ChatServiceImpl implements ChatService {
         chat.setQuestion(question);
         chat.setName(question.getQuestion());
         chat.setCreatedAt(LocalDateTime.now());
-        if(!question.getIsAnonymous()){
+        if (!question.getIsAnonymous()) {
             chat.setNicknameOpen(NICKNAME_OPEN_STATE.get());
         }
 
@@ -78,7 +78,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void withdrawProcessing(User user) {
         Long userId = user.getUserId();
-        List<Chat> chats = chatRepository.findByAnswererAndAnswererActiveTrueOrQuestionerAndQuestionerActiveTrue(user, user);
+        List<Chat> chats = chatRepository.findByAnswererAndAnswererActiveTrueOrQuestionerAndQuestionerActiveTrue(user,
+                user);
         for (Chat chat : chats) {
             String result = userLeave(chat, userId);
             messageService.createWithdrawalMessage(chat, userId, result);

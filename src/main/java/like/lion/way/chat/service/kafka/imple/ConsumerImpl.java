@@ -45,7 +45,6 @@ public class ConsumerImpl implements Consumer {
             Long senderId = receiveMessageDTO.getSenderId();
             Set<Long> chatIds = enterUser.get(chatId);
 
-
             if (type.equals(OPEN.get())) {
                 enterProcessing(chatIds, chatId, senderId);
 
