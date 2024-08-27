@@ -67,17 +67,6 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 
-    function updateBellBadge(count) {
-        console.log("[SSE] update bell badge : " + count);
-
-        if (count > 0) {
-            bellBadge.style.display = "block";
-            bellBadge.textContent = count;
-        } else {
-            bellBadge.style.display = "none";
-        }
-    }
-
     function updateChatBadge(count) {
         console.log("[SSE] update chat badge : " + count);
 

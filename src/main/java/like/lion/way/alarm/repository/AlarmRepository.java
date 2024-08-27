@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     Long countByUser(User user);
     Long countByUser_UserId(Long userId);
-
     Page<Alarm> findByUser_UserId(Long userID, Pageable pageable);
+    void deleteByUser_UserId(Long userId);
 }
