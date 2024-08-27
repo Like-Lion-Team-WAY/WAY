@@ -6,7 +6,6 @@ import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import like.lion.way.chat.constant.OpenNicknameState;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.repository.ChatRepository;
 import like.lion.way.chat.repository.MessageRepository;
