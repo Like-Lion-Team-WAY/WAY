@@ -44,4 +44,5 @@ public interface UserService {
     boolean removeRoleLimited(String username);
     boolean addRoleBlueCheck(String username);
     boolean removeRoleBlueCheck(String username);
+    boolean isBlueCheck(String username);
 }

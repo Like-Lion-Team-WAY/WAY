@@ -40,4 +40,11 @@ public class BlueCheckServiceImpl implements BlueCheckService {
     public List<BlueCheck> findAll() {
         return blueCheckRepository.findAll();
     }
+
+    @Override
+    public void removeBlueCheck(String username) throws IllegalArgumentException, NullPointerException {
+        User user = userService.findByUsername(username);
+        BlueCheck blueCheck = blueCheckRepository.findByUser(user);
+        blueCheckRepository.delete(blueCheck);
+    }
 }

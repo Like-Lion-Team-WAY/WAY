@@ -12,12 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class adminController {
     private final BlueCheckService blueCheckService;
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "redirect:/admin/report";
+    }
+
     @GetMapping("/admin/report")
     public String report() {
         return "/pages/admin/report";
     }
 
-    @GetMapping("/admin/blueCheck/application")
+    @GetMapping("/admin/bluecheck")
     public String blueCheckApplication(Model model) {
         model.addAttribute("bluecheck", blueCheckService.findAll()
                 .stream()
