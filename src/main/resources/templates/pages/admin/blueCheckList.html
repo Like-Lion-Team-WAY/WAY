@@ -27,9 +27,12 @@
                 </div>
             </div>
 <!--            배지 신청 허용 여부에 대한 컬럼을 추가해서 if 문으로 승인여부에 따른 버튼 보이게 처리하는 것도 좋을거 같아요-->
-            <button type="submit" class="bluecheckBtn" th:value="${b.getUser().userId}">승인</button>
+            <button type="submit" class="bluecheckBtn" th:value="${b.getUser().getUsername()}">승인</button>
         </div>
     </div>
+
+    <!-- javascript 파일 추가-->
+    <script src="/js/admin/bluecheckList.js"></script>
 </div>
 </body>
 </html>
