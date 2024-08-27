@@ -28,6 +28,24 @@
         </div>
     </div>
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+
+        // 'blocked' 에러가 있는 경우 alert 창 띄우기
+        if (error === 'blocked') {
+            alert('차단된 계정입니다.');
+        }
+
+        // 로그인 버튼 클릭 시 OAuth2 인증 요청
+        $('#kakao-login').click(function(){
+            window.location.href = "/oauth2/authorization/kakao";
+        });
+        $('#naver-login').click(function(){
+            window.location.href = "/oauth2/authorization/naver";
+        });
+        $('#google-login').click(function(){
+            window.location.href = "/oauth2/authorization/google";
+        });
         $('#kakao-login').click(function(){
             window.location.href = "/oauth2/authorization/kakao"
         })
@@ -37,6 +55,7 @@
         $('#google-login').click(function(){
             window.location.href = "/oauth2/authorization/google"
         })
+
     </script>
 </div>
 </body>
