@@ -122,6 +122,7 @@ public class PostController {
         model.addAttribute("followers", followService.getFollowerList(user).size());
         model.addAttribute("followings", followService.getFollowingList(user).size());
         model.addAttribute("loginUser", userUtil.getLoginUser(request));
+        model.addAttribute("isBluecheck", userService.isBlueCheck(user.getUsername()));
 
         populateModelWithUserPostsAndQuestions(model, user, request);
 

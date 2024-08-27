@@ -287,6 +287,14 @@ public class UserServiceImpl implements UserService {
         return removeRole(username, roleService.findByRoleName("ROLE_BLUECHECK"));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isBlueCheck(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) throw new EntityNotFoundException("User not found");
+        return user.getRoles().contains(roleService.findByRoleName("ROLE_BLUECHECK"));
+    }
+
     @Transactional
     public boolean addRole(String username, Role role) {
         User user = userRepository.findByUsername(username);
