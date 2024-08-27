@@ -51,7 +51,7 @@ public class ConsumerImpl implements Consumer {
             } else if (type.equals(CLOSE.get())) {
                 leaveProcessing(chatIds, chatId, senderId);
 
-            } else if (!type.startsWith(CREATE.get()) && !type.equals(DELETE.get()) && chatIds != null) {
+            } else if (!type.startsWith(CREATE.get()) && !type.startsWith(DELETE.get()) && chatIds != null) {
                 if (chatIds.contains(receiveMessageDTO.getReceiverId())) {
                     readProcessing(receiveMessageDTO);
                 } else {

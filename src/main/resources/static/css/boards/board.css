@@ -50,12 +50,11 @@
 /*    background-color: #FFD6B0;*/
 /*    border-radius: 20px;*/
 /*}*/
-
 .board-item {
     background-color: #FFD6B0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* 내용이 수직으로 정렬되도록 유지 */
+    align-items: flex-start; /* 아이템을 왼쪽에 맞춤 */
     border-radius: 15px;
     margin-top: 10px;
     font-weight: 700;
@@ -64,6 +63,7 @@
     padding: 15px 30px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease; /* Transition 효과 추가 */
+    position: relative; /* 자식 요소를 절대 위치로 배치하기 위해 필요 */
 }
 
 .board-item:last-child {
@@ -82,6 +82,38 @@
     padding: 20px;
     font-size: 20px;
 }
+
+.board-item .underline {
+    font-size: 16px; /* 설명 텍스트 크기 */
+    color: #7c7b7b;
+    margin-top: 10px; /* 이름과 설명 사이의 간격 추가 */
+    padding-top: 10px; /* 선과 설명 사이의 간격 추가 */
+    width: 100%; /* 설명을 board-item의 전체 너비로 설정 */
+}
+
+.board-item .arrow-icon {
+    position: absolute;
+    margin-left: 5px;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: inherit;
+}
+
+.board-item .underline:hover {
+    color: white;
+}
+
+.board-item .bookmark-icon {
+    left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: inherit;
+}
+
 
 .create-board {
     display: flex;
