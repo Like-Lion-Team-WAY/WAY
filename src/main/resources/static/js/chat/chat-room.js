@@ -165,6 +165,8 @@ function loadMessages(firstCall) {
     const currentScrollHeight = scrollArea.scrollHeight; // 현재 스크롤 높이 저장
     const currentScrollTop = scrollArea.scrollTop; // 현재 스크롤 위치 저장
 
+    const withNonMember = (document.getElementById('with-non-member').value) === 'true';
+
     $.ajax({
         url: '/api/messages/' + chatId + '?lastLoadMessageId=' + lastLoadMessageId,
         type: 'GET',
@@ -192,11 +194,13 @@ function loadMessages(firstCall) {
                         <div class="user-nickname">${message.userNickname}</div>
                         <div class="text-group">
                             <div class="text">${message.text}</div>
-                            <div class="report-chat-btn">신고</div>                        
+                            ${!withNonMember ? '<div class="report-chat-btn">신고</div>' : ''}                       
                         </div>
                         <div class="message-time">${message.sendTime}</div>
                     `;
-                    messageDiv.querySelector('.report-chat-btn').setAttribute('value', message.id);
+                    if (!withNonMember) {
+                        messageDiv.querySelector('.report-chat-btn').setAttribute('value', message.id);
+                    }
                 }
 
                 observerElement.after(messageDiv);

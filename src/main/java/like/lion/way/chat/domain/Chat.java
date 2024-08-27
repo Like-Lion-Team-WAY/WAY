@@ -89,4 +89,8 @@ public class Chat {
     public String getQuestionerNickname(boolean isOpen) {
         return questioner != null ? questioner.getNickname(isOpen) : "탈퇴한 유저입니다";
     }
+
+    public boolean withNonMember() {
+        return questioner == null || answerer == null;
+    }
 }
