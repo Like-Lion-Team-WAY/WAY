@@ -46,6 +46,7 @@ public class ProducerImpl implements Producer {
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), null);
 
             } else {
+                System.out.println("hi");
                 Chat chat = chatRepository.findById(message.getChatId()).orElse(null);
                 settingMessageReceiverId(chat, message);
 

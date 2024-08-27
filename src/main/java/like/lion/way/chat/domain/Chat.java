@@ -27,15 +27,15 @@ public class Chat {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "answerer_id", nullable = false)
+    @JoinColumn(name = "answerer_id")
     private User answerer;
 
     @ManyToOne
-    @JoinColumn(name = "questioner_id", nullable = false)
+    @JoinColumn(name = "questioner_id")
     private User questioner;
 
     @ManyToOne
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name = "question_id")
     private Question question;
 
     @Column(name = "chat_nickname_open", nullable = false)
@@ -54,16 +54,16 @@ public class Chat {
     private LocalDateTime createdAt;
 
     public boolean isAccessibleUser(Long userId) {
-        return (userId.equals(answerer.getUserId()) && answererActive) ||
-                (userId.equals(questioner.getUserId()) && questionerActive);
+        return (answerer != null && userId.equals(answerer.getUserId()) && answererActive) ||
+                (questioner != null && userId.equals(questioner.getUserId()) && questionerActive);
     }
 
     public boolean isAnswerer(Long userId) {
-        return userId.equals(answerer.getUserId());
+        return answerer != null && userId.equals(answerer.getUserId());
     }
 
     public boolean isQuestioner(Long userId) {
-        return userId.equals(questioner.getUserId());
+        return questioner != null && userId.equals(questioner.getUserId());
     }
 
     public boolean isActive() {
@@ -75,18 +75,18 @@ public class Chat {
     }
 
     public Long getQuestionerId() {
-        return questioner.getUserId();
+        return questioner != null ? questioner.getUserId() : null;
     }
 
     public Long getAnswererId() {
-        return answerer.getUserId();
+        return answerer != null ? answerer.getUserId() : null;
     }
 
     public String getAnswererNickname() {
-        return answerer.getNickname();
+        return answerer != null ? answerer.getNickname() : "탈퇴한 유저입니다";
     }
 
     public String getQuestionerNickname(boolean isOpen) {
-        return questioner.getNickname(isOpen);
+        return questioner != null ? questioner.getNickname(isOpen) : "탈퇴한 유저입니다";
     }
 }

@@ -36,6 +36,7 @@ public class ChatController {
 
     @GetMapping("/{chatId}")
     public String chatRoom(@PathVariable("chatId") Long chatId, Model model, HttpServletRequest request) {
+
         Chat chat = chatService.findById(chatId);
         if (chat == null) {
             return "error";
