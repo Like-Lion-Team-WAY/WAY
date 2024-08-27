@@ -10,4 +10,6 @@ public interface BlueCheckService {
     BlueCheck findByUser(User user);
 
     List<BlueCheck> findAll();
+
+    void removeBlueCheck(String username);
 }

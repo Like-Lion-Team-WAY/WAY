@@ -17,7 +17,7 @@ public class adminController {
         return "/pages/admin/report";
     }
 
-    @GetMapping("/admin/blueCheck/application")
+    @GetMapping("/admin/bluecheck")
     public String blueCheckApplication(Model model) {
         model.addAttribute("bluecheck", blueCheckService.findAll()
                 .stream()
