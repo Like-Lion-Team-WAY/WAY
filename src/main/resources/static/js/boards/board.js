@@ -71,11 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayName = board.name.substring(0, maxLength) + '...';
                 }
 
-                // 북마크 상태에 따라 아이콘 설정
-                const bookmarkClass = board.bookmark ? 'fas fa-bookmark' : 'far fa-bookmark';
-
                 boardItem.innerHTML = `
-                <i class="bookmark-icon ${bookmarkClass}" data-board-id="${board.boardId}"></i>
                 <span>${displayName}</span>
                 <div class="underline">
                     <p>${displayDescription}</p>
@@ -88,13 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 boardItem.querySelector('span').addEventListener('click', () => {
                     // 클릭 시 /boards/posts로 이동하며 boardId를 포함
                     window.location.href = `/boards/${board.boardId}`;
-                });
-
-                // 북마크 아이콘 클릭 이벤트 리스너 추가
-                const bookmarkIcon = boardItem.querySelector('.bookmark-icon');
-                bookmarkIcon.addEventListener('click', (event) => {
-                    event.stopPropagation(); // 이벤트 전파를 막아서 클릭 시 페이지 이동 방지
-                    toggleBookmark(bookmarkIcon, board.boardId);
                 });
             });
         }
