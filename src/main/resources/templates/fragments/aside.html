@@ -3,7 +3,10 @@
 <div th:fragment="asideFragment">
     <div class="sidebar">
         <div class="sidebar-header">
-            <h1><a th:href="@{/main}">WAY</a></h1>
+            <h1><a th:href="@{/main}" onclick="function changeStorage() {
+                localStorage.setItem('activeTab', 'questionTab');
+            }
+            changeStorage()">WAY</a></h1>
         </div>
         <div class="profile">
 <!--            <img src="텀블벅.jpg" alt="Profile Picture" />-->
