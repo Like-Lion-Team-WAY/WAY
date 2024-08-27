@@ -1,6 +1,8 @@
 package like.lion.way.chat.service.impl;
 
 import static like.lion.way.chat.constant.ChatMessageType.CREATE;
+import static like.lion.way.chat.constant.ChatMessageType.WITHDRAWAL;
+import static like.lion.way.chat.constant.OpenNicknameState.NICKNAME_OPEN_STATE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,6 +67,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public void createWithdrawalMessage(Chat chat, Long userId, String result) {
+        String nickname = getNickname(chat, userId);
+        String text = "[" + nickname + "] 님이 나가겼습니다.";
+        Message message = new Message();
+        message.setChatId(chat.getId());
+        message.setText(text);
+        message.setSenderId(userId);
+        message.setType(result + WITHDRAWAL.get());
+        producer.sendMessage(message);
+    }
+
+    @Override
     @Async
     public void readMessage(Long userId, Long chatId) {
         List<Message> messages;
@@ -74,12 +88,21 @@ public class MessageServiceImpl implements MessageService {
             }
             messageRepository.saveAll(messages);
         }
-        ChatAlarmEvent event = new ChatAlarmEvent(this, userRepository.findById(userId).orElse(null), messages.size() * -1L);
+        ChatAlarmEvent event = new ChatAlarmEvent(this, userRepository.findById(userId).orElse(null),
+                messages.size() * -1L);
         publisher.publishEvent(event);
     }
 
     @Override
     public Message findById(String id) {
         return messageRepository.findById(id).orElse(null);
+    }
+
+    private String getNickname(Chat chat, Long userId) {
+        if (chat.isAnswerer(userId)) {
+            return chat.getAnswererNickname();
+        } else {
+            return chat.getQuestionerNickname(chat.getNicknameOpen() != NICKNAME_OPEN_STATE.get());
+        }
     }
 }
