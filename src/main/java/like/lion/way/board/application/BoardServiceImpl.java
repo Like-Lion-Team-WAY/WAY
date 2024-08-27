@@ -55,16 +55,18 @@ public class BoardServiceImpl implements BoardService {
 
     // 게시글 목록 find
     @Override
-    public List<BoardTitleResponse> getBoardFindAll() {
+    public Page<BoardTitleResponse> getBoardFindAll(Pageable pageable) {
 
-        List<Board> boards = boardRepository.findAll();
-        return boards.stream()
+        Page<Board> boardsPage = boardRepository.findAll(pageable);
+        List<BoardTitleResponse> boardTitles = boardsPage.stream()
                 .map(board -> BoardTitleResponse.builder()
                         .boardId(board.getId())
                         .name(board.getName())
                         .introduction(board.getIntroduction())
                         .build())
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(boardTitles, pageable, boardsPage.getTotalElements());
 
     }
 

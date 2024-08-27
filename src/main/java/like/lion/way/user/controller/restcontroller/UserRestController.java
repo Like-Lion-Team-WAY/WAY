@@ -3,6 +3,7 @@ package like.lion.way.user.controller.restcontroller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
+import like.lion.way.chat.service.ChatService;
 import like.lion.way.file.service.S3Service;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
@@ -26,6 +27,8 @@ public class UserRestController {
     private final UserService userService;
 
     private final S3Service s3Service;
+
+    private final ChatService chatService;
 
     @GetMapping("/duplicate")
     public ResponseEntity<Boolean> duplicateCheck(@RequestParam("username") String username){
@@ -61,6 +64,7 @@ public class UserRestController {
     @DeleteMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(HttpServletRequest request , HttpServletResponse response){
         User user = userService.getUserByToken(request);
+        chatService.withdrawProcessing(user);
         userService.deleteUser(user.getUserId());
         User delUser = userService.findByUserId(user.getUserId());
         if(delUser==null){

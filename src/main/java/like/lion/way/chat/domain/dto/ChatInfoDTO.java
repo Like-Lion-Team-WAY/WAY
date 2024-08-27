@@ -29,7 +29,7 @@ public class ChatInfoDTO {
     }
 
     private void setDTO(Long id, String name, String lastMessage, Long senderId, LocalDateTime lastMessageTime,
-                       Boolean isRead) {
+                        Boolean isRead) {
         this.id = id;
         this.name = name;
         this.senderId = senderId;

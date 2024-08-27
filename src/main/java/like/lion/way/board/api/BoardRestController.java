@@ -48,9 +48,13 @@ public class BoardRestController {
 
     // 게시판 목록 요청
     @GetMapping
-    public ApiResponse<List<BoardTitleResponse>> getBoardList() {
+    public ApiResponse<Page<BoardTitleResponse>> getBoardList(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
 
-        return ApiResponse.ok(boardService.getBoardFindAll());
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return ApiResponse.ok(boardService.getBoardFindAll(pageable));
 
     }
 

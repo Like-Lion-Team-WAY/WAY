@@ -13,6 +13,7 @@
 <input type="hidden" id="is-active" th:value="${chatRoomViewDTO.isActive}">
 <input type="hidden" id="is-questioner" th:value="${chatRoomViewDTO.isQuestioner}">
 <input type="hidden" id="is-nicknameOpen" th:value="${chatRoomViewDTO.isNicknameOpen}">
+<input type="hidden" id="with-non-member" th:value="${chatRoomViewDTO.withNonMember}">
 <div class="header">
     <h2 class="title" th:text="${chatRoomViewDTO.chatName}"></h2>
     <button class="open-btn" onclick="openSide()">☰</button>

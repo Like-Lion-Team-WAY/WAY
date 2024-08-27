@@ -7,6 +7,7 @@ public enum ChatMessageType {
     CLOSE("close"),
     LEAVE("leave"),
     DELETE("delete"),
+    WITHDRAWAL("withdrawal"),
     NO_CHANGE("noChange"),
     CHANGE("change"),
     REQUEST("request"),
