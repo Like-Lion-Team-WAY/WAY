@@ -14,23 +14,27 @@
 <body>
 
 <div layout:fragment="content">
-    <div class="category">
-        <span class="bookmark">즐겨 찾는 게시판</span>
-        <span class="all-boards">전체 게시판</span>
-    </div>
-    <div class="search">
-        <label for="search-board"></label>
-        <input type="text" class="form-control" id="search-board" placeholder="검색할 내용을 입력해주세요">
-    </div>
-    <div class="container"> <!-- 여기 .container 클래스 추가 -->
+    <div class="container">
+        <div class="category">
+            <span class="bookmark">즐겨 찾는 게시판</span>
+            <span class="all-boards">전체 게시판</span>
+        </div>
+        <div class="search">
+            <label for="search-board"></label>
+            <input type="text" class="form-control" id="search-board" placeholder="검색할 내용을 입력해주세요">
+        </div>
         <div class="board-list" id="boardList">
             <!-- Board List will be populated here by JavaScript -->
             <div class="board-item-placeholder">게시판 목록이 없습니다.</div>
         </div>
-    </div> <!-- .container 닫기 -->
-    <div class="create-board">
-        <!-- Create Board -->
-        <button type="button" id="createBoardButton" class="btn btn-primary custom-btn">게시판 생성</button>
+        <div class="pagination-container">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination Buttons will be populated here by JavaScript -->
+            </ul>
+        </div>
+        <div class="create-board">
+            <button type="button" id="createBoardButton" class="btn btn-primary custom-btn">게시판 생성</button>
+        </div>
     </div>
 </div>
 

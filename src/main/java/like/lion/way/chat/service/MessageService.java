@@ -14,6 +14,8 @@ public interface MessageService {
 
     void createStartMessage(Chat newChat);
 
+    void createWithdrawalMessage(Chat chat, Long userId, String result);
+
     void readMessage(Long userId, Long chatId);
 
     Message findById(String id);
