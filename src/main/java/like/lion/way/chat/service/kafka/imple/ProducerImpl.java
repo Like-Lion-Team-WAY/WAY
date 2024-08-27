@@ -36,7 +36,7 @@ public class ProducerImpl implements Producer {
             ReceiveMessageDTO receiveMessageDTO = null;
             String messageType = message.getType();
 
-            if (messageType.equals(DELETE.get()) || messageType.equals(OPEN.get()) || messageType.equals(CLOSE.get())) {
+            if (messageType.startsWith(DELETE.get()) || messageType.equals(OPEN.get()) || messageType.equals(CLOSE.get())) {
                 message.setReceiverId(0L);
                 receiveMessageDTO = new ReceiveMessageDTO(message, null, null);
 
@@ -46,7 +46,6 @@ public class ProducerImpl implements Producer {
                 receiveMessageDTO = new ReceiveMessageDTO(message, chat.getName(), null);
 
             } else {
-                System.out.println("hi");
                 Chat chat = chatRepository.findById(message.getChatId()).orElse(null);
                 settingMessageReceiverId(chat, message);
 

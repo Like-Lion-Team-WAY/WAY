@@ -5,7 +5,7 @@ let observer = null;
 let lastLoadMessageId = "";
 
 /////////
-function noActiveSetting() {
+function noActiveSetting(isWithdrawal) {
     document.getElementById("change-name-btn").remove();
     const requestBtn = document.getElementById("nickname-request-btn");
     if (requestBtn) {
@@ -18,6 +18,11 @@ function noActiveSetting() {
     }
     document.getElementById("message-input").disabled = true;
     document.getElementById("submit-button").disabled = true;
+
+    if (isWithdrawal) {
+        const elements = document.querySelectorAll('.report-chat-btn');
+        elements.forEach(element => element.remove());
+    }
 }
 
 function removeNicknameRequestBtn() {
@@ -91,38 +96,38 @@ function sendMessage(text, type) {
 
 ////////// 메세지 수신
 function showMessageOutput(messageOutput) {
-    if (messageOutput.type === 'close') {
+    const type = messageOutput.type;
+    if (type === 'close') {
         return;
     }
 
     const chatBody = document.getElementById('chat-container');
-
     const isScrolledToBottom = chatBody.scrollHeight - chatBody.clientHeight <= chatBody.scrollTop + 1;
     const userId = Number(document.getElementById('user-id').value);
 
-    if (messageOutput.type === 'open') {
+    if (type === 'open') {
         const unreadElements = document.querySelectorAll('.unread');
         unreadElements.forEach(element => element.remove());
         return;
     }
 
     const messageDiv = document.createElement('div');
-    if (messageOutput.type !== "message") {
+    if (type !== "message") {
         messageDiv.classList.add('system-message');
         messageDiv.innerHTML = `
             <div class="text">${messageOutput.text}</div>
         `;
 
-        if (messageOutput.type === 'change') {
+        if (type === 'change') {
             updateNameField(messageOutput.chatName);
             updateTitle(messageOutput.chatName);
-        } else if (messageOutput.type === 'leave') {
-            noActiveSetting();
-        } else if (messageOutput.type === 'request') {
+        } else if (type.startsWith('leave')) {
+            type.endsWith('withdrawal') ? noActiveSetting(true) : noActiveSetting(false);
+        } else if (type === 'request') {
             nicknameRequestingSetting(true);
-        } else if (messageOutput.type === 'cancel' || messageOutput.type === 'reject') {
+        } else if (type === 'cancel' || type === 'reject') {
             nicknameRequestingSetting(false);
-        } else if (messageOutput.type === 'accept') {
+        } else if (type === 'accept') {
             updateAcceptNickname(messageOutput.userNickname);
         }
 
@@ -499,7 +504,7 @@ document.addEventListener('DOMContentLoaded', function () {
     connect(chatId);
 
     if (isActive === 'false') {
-        noActiveSetting();
+        noActiveSetting(false);
     } else {
         if (isNicknameOpen === '1') {
             nicknameRequestingSetting(true);
