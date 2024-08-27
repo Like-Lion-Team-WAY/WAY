@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface BoardPostRepository extends JpaRepository<BoardPost, Long> {
 
     List<BoardPost> findAllByBoard(Board board);
-    Page<BoardPost> findAllByBoard(Board board, Pageable pageable);
+    Page<BoardPost> findAllByBoardOrderByCreatedAtDesc(Board board, Pageable pageable);
 
     @Query("SELECT bp FROM BoardPost bp WHERE bp.id = :boardPostId")
     BoardPost findByBoardPostId(@Param("boardPostId") Long boardPostId);

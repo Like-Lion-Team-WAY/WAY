@@ -127,7 +127,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
-        Page<BoardPost> postsPage = boardPostRepository.findAllByBoard(board, pageable);
+        Page<BoardPost> postsPage = boardPostRepository.findAllByBoardOrderByCreatedAtDesc(board, pageable);
 
         List<BoardPostResponse> postResponses = postsPage.stream()
                 .map(post -> BoardPostResponse.builder()
@@ -340,6 +340,7 @@ public class BoardServiceImpl implements BoardService {
                 .map(board -> BoardTitleResponse.builder()
                         .boardId(board.getId())
                         .name(board.getName())
+                        .introduction(board.getIntroduction())
                         .build())
                 .toList();
 

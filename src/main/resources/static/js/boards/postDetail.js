@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deletePost = document.getElementById('deletePostBtn');
 
     returnPage.addEventListener('click', () => {
-        window.location.href = '/boards';
+        window.location.href = `/boards/${boardId}`;
     });
 
     likeAction.addEventListener('click', likePost);
@@ -44,15 +44,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', function(event) {
         if (event.target.matches('.comment-username, .post-author')) {
-            const username = event.target.dataset.username || event.target.textContent.trim();
-            if (username !== '익명') {
+            const nickname = event.target.textContent.trim();
+            const username = event.target.dataset.username;
+
+            if (nickname !== '익명') {
+                // nickname이 '익명'이 아닐 때만 페이지 이동
                 window.location.href = `/posts/${username}`;
             } else {
-                // 익명을 클릭한 경우 아무 동작도 하지 않음
+                // nickname이 '익명'일 때는 아무 동작도 하지 않음
                 event.preventDefault();
             }
         }
     });
+
 
     fetchPostDetails();
 });
@@ -68,32 +72,29 @@ function fetchPostDetails() {
             const data = apiResponse.data;
             const profileImageElement = document.getElementById('profileImage');
             const imageUrl = data.authorProfileImgUrl;
-            if (imageUrl) {
-                profileImageElement.src = `/display?filename=${imageUrl}`;
-            } else {
-                profileImageElement.src = '/image/image.jpg'; // 기본 이미지
-            }
 
             const postAuthorElement = document.querySelector('.post-author');
             postAuthorElement.textContent = data.nickname;
             postAuthorElement.setAttribute('data-username', data.username);
 
-            // 익명일 경우 anonymous 클래스를 추가
+            // 닉네임이 '익명'일 경우 기본 이미지 사용
             if (data.nickname.trim() === '익명') {
+                profileImageElement.src = '/image/image.jpg'; // 기본 이미지 경로로 수정
                 postAuthorElement.classList.add('anonymous');
             } else {
+                // 닉네임이 익명이 아닌 경우 프로필 이미지를 설정
+                profileImageElement.src = imageUrl ? `/display?filename=${imageUrl}` : '/image/default-profile.png';
                 postAuthorElement.classList.remove('anonymous');
             }
 
             document.querySelector('.post-date').textContent = new Date(data.postCreatedAt).toLocaleDateString();
             document.querySelector('.post-title').textContent = data.postTitle;
-            // document.querySelector('.post-content').textContent = data.postContent;
             document.querySelector('.post-content').innerHTML = data.postContent;
 
             document.querySelector('.likes').textContent = `👍 ${data.postLikes}`;
             document.querySelector('.comments').textContent = `💬 ${data.postComments}`;
             document.querySelector('.scraps').textContent = `⭐ ${data.postScraps}`;
-            // 댓글 목록을 업데이트합니다.
+
             updateComments(data.boardPostCommentsList);
 
             // userOwnerMatch가 true일 때만 '게시판 수정'과 '게시글 생성' 버튼을 표시
@@ -107,6 +108,7 @@ function fetchPostDetails() {
         })
         .catch(error => console.error('Error fetching post details:', error));
 }
+
 
 function likePost() {
     fetch(`/api/v1/boards/posts/likes/${postId}`, {
