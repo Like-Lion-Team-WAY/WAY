@@ -7,14 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     const boardsPerPage = 8;
 
-    if (createBoardButton) {
-        createBoardButton.addEventListener('click', () => {
-            window.location.href = '/boards/create';
-        });
-    }
+    createBoardButton.addEventListener('click', () => {
+        window.location.href = '/boards/create'; // GET 요청을 통해 페이지 이동
+    });
 
     function fetchBoardList(page = 1, keyword = '') {
         let url = `/api/v1/boards?page=${page}&size=${boardsPerPage}`;
+
+        if (keyword) {
+            url = `/api/v1/boards/search?page=${page}&size=${boardsPerPage}`;
+        }
 
         const options = keyword
             ? {
@@ -26,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             : {};
 
-        // Perform the fetch request
         fetch(url, options)
             .then(response => response.json())
             .then(apiResponse => {
@@ -38,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const boards = data.content;
                 const totalPages = data.totalPages;
 
-                boardList.innerHTML = '';
-                pagination.innerHTML = '';
+                boardList.innerHTML = ''; // Clear the board list
+                pagination.innerHTML = ''; // Clear the pagination
 
                 if (boards.length === 0) {
                     const placeholder = document.createElement('div');
@@ -47,24 +48,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     placeholder.textContent = '게시판 목록이 없습니다.';
                     boardList.appendChild(placeholder);
                 } else {
-                    boards.forEach((board, index) => {
+                    boards.forEach(board => {
+                        const boardItem = document.createElement('div');
+                        boardItem.className = 'board-item';
+
                         const maxLength = 20;
                         let displayName = board.name;
+                        let displayDescription = board.introduction;
                         if (board.name.length > maxLength) {
                             displayName = board.name.substring(0, maxLength) + '...';
                         }
 
-                        const boardItem = document.createElement('div');
-                        boardItem.className = 'board-item';
-                        boardItem.innerHTML = `<span>${displayName}</span><span>➔</span>`;
+                        boardItem.innerHTML = `
+                        <span>${displayName}</span>
+                        <div class="underline">
+                            <p>${displayDescription}</p>
+                        </div>
+                        <span class="arrow-icon">➔</span>`;
+
                         boardList.appendChild(boardItem);
 
+                        // 게시판 클릭 이벤트 리스너 추가
                         boardItem.addEventListener('click', () => {
                             window.location.href = `/boards/${board.boardId}`;
                         });
                     });
                 }
 
+                // 페이지네이션 생성
                 for (let i = 1; i <= totalPages; i++) {
                     const pageItem = document.createElement('li');
                     pageItem.className = `page-item ${i === page ? 'active' : ''}`;
