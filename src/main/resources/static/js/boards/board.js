@@ -7,16 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     const boardsPerPage = 8;
 
-    createBoardButton.addEventListener('click', () => {
-        window.location.href = '/boards/create';
-    });
+    if (createBoardButton) {
+        createBoardButton.addEventListener('click', () => {
+            window.location.href = '/boards/create';
+        });
+    }
 
     function fetchBoardList(page = 1, keyword = '') {
         let url = `/api/v1/boards?page=${page}&size=${boardsPerPage}`;
-
-        if (keyword) {
-            url = `/api/v1/boards/search?page=${page}&size=${boardsPerPage}`;
-        }
 
         const options = keyword
             ? {
@@ -24,31 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                body: JSON.stringify({ keyword: keyword })
+            }
+            : {};
 
-                body: JSON.stringify({keyword: keyword})
-            })
-                .then(response => response.json())
-                .then(apiResponse => {
-                    displayBoardList(apiResponse);
-                })
-                .catch(error => {
-                    console.error('Error fetching search results:', error);
-                    alert('게시판 검색에 실패했습니다.');
-                });
-        } else {
-            // 검색어가 없으면 전체 목록을 가져옴
-            fetch(url)
-                .then(response => response.json())
-                .then(apiResponse => {
-                    displayBoardList(apiResponse);
-                })
-                .catch(error => {
-                    console.error('Error fetching board list:', error);
-                    alert('게시판 목록을 가져오는 데 실패했습니다.');
-                });
-        }
-    }
-
+        // Perform the fetch request
         fetch(url, options)
             .then(response => response.json())
             .then(apiResponse => {
@@ -109,6 +87,4 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage = 1;
         fetchBoardList(currentPage, keyword);
     });
-
-
 });
