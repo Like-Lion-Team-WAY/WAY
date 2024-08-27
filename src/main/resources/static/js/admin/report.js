@@ -119,6 +119,10 @@ function createReportBoxes(reports) {
         const completeButton = reportBox.querySelector(".btn-complete");
         completeButton.addEventListener("click", () => deleteReport(report.id, reportBox));
 
+        // 계정 정지 버튼 클릭 시 이벤트 추가
+        const accountButton = reportBox.querySelector(".btn-account");
+        accountButton.addEventListener("click", () => addRoleLimited(report.reported));
+
         // 신고 박스를 컨테이너에 추가
         reportContainer.appendChild(reportBox);
     });
@@ -171,4 +175,19 @@ function deleteReport(reportId, reportBox) {
             }
         })
         .catch(error => console.error("Error deleting report:", error));
+}
+
+// 계정 정지
+function addRoleLimited(username) {
+    fetch(`/api/role/limited?username=${username}`, {
+        method: "POST"
+    })
+        .then((response) => {
+            if (response.ok) {
+                alert("계정이 성공적으로 정지되었습니다.");
+            } else {
+                alert("계정 정지에 실패했습니다.");
+            }
+        })
+        .catch((error) => console.error("Error updating user role:", error));
 }
