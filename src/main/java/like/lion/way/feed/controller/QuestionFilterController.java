@@ -42,6 +42,7 @@ public class QuestionFilterController {
 
         model.addAttribute("question", questionService.getQuestionByAnswerer(user, request).stream()
                 .filter(filter)
+                .sorted(Comparator.comparing(Question::getQuestionDate))
                 .collect(Collectors.toList()));
     }
 
