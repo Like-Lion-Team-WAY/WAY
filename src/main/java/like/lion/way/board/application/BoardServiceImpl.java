@@ -104,7 +104,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
-        board.updateBoard(request.getName(), request.getIntroduction(), request.isAnonymousPermission());
+        board.updateBoard(request.getName(), request.getIntroduction());
 
     }
 
