@@ -49,7 +49,7 @@ public class CustomerServiceController {
             return "redirect:/user/login";
         } else {
             //이미 신청한 사용자
-            if (user.getRoles().stream().anyMatch(role -> role.getRoleId().equals(9L))) {
+            if (user.getRoles().stream().anyMatch(role -> role.getRoleId().equals(4L))) {
                 model.addAttribute("userId", null);
             }
             //신청 안 한 사용자
