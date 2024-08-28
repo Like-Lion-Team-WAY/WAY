@@ -24,13 +24,13 @@ public class PostCommentRestController {
     //피드의 댓글 저장
     @PostMapping("/posts/comments/{postId}")
     public ResponseEntity<String> saveComments(@PathVariable("postId") Long postId,
-                               @RequestParam("userId") Long userId,
-                               PostCommentDto postCommentDto) {
+                                               @RequestParam("userId") Long userId,
+                                               PostCommentDto postCommentDto) {
 
-        try{
+        try {
             postCommentService.saveComment(postId, postCommentDto, userId);
             return ResponseEntity.ok("댓글 저장 성공");
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 저장 실패");
         }
     }
@@ -38,9 +38,9 @@ public class PostCommentRestController {
     //피드의 대댓글 저장
     @PostMapping("/posts/comments/pre/{postId}")
     public ResponseEntity<String> savePreComments(@PathVariable("postId") Long postId,
-                                  @RequestParam("userId") Long userId,
-                                  @RequestParam("postCommentContent") String postCommentContent,
-                                  @RequestParam("parentCommentPreCommentId") Long parentCommentPreCommentId) {
+                                                  @RequestParam("userId") Long userId,
+                                                  @RequestParam("postCommentContent") String postCommentContent,
+                                                  @RequestParam("parentCommentPreCommentId") Long parentCommentPreCommentId) {
 
         try {
             postCommentService.savePreComment(postId, userId, postCommentContent, parentCommentPreCommentId);
