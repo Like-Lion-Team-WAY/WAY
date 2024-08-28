@@ -37,29 +37,22 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "board_anonymous_permission")
-    private boolean anonymousPermission;
-
-
     @Builder
     public Board(
             User user,
             String name,
-            String introduction,
-            boolean anonymousPermission) {
+            String introduction) {
 
         this.user = user;
         this.name = name;
         this.introduction = introduction;
-        this.anonymousPermission = anonymousPermission;
 
     }
 
-    public void updateBoard(String name, String introduction, boolean anonymousPermission) {
+    public void updateBoard(String name, String introduction) {
 
         this.name = name;
         this.introduction = introduction;
-        this.anonymousPermission = anonymousPermission;
 
     }
 

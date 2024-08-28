@@ -12,17 +12,14 @@ public class BoardCreateServiceRequest {
 
     private String name;
     private String introduction;
-    private boolean anonymousPermission;
 
     @Builder
     public BoardCreateServiceRequest(
             String name,
-            String introduction,
-            boolean anonymousPermission) {
+            String introduction) {
 
         this.name = name;
         this.introduction = introduction;
-        this.anonymousPermission = anonymousPermission;
 
     }
 
@@ -31,7 +28,6 @@ public class BoardCreateServiceRequest {
         return Board.builder()
                 .name(name)
                 .introduction(introduction)
-                .anonymousPermission(anonymousPermission)
                 .user(user)
                 .build();
 
