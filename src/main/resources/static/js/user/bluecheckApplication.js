@@ -10,10 +10,11 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify({userId: userId}),
             success: function (response) {
-                alert('파란 배지 신청이 완료되었습니다.');
-            },
-            error: function (error) {
-                alert('신청 중 오류가 발생했습니다.');
+                if (response.success) {
+                    alert('파란 배지 신청이 완료되었습니다..');
+                } else {
+                    alert('이미 파란 배지를 신청했거나 신청할 수 없는 사용자입니다.');
+                }
             }
         });
     });
