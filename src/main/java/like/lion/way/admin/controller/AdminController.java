@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class adminController {
+public class AdminController {
     private final BlueCheckService blueCheckService;
 
     @GetMapping("/admin")
