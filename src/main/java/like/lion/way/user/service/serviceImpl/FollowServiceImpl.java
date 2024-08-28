@@ -72,6 +72,7 @@ public class FollowServiceImpl implements FollowService {
         return ResponseEntity.ok("success");
     }
 
+    @Transactional
     @Override
     public ResponseEntity<?> following(HttpServletRequest request, String username) {
 
