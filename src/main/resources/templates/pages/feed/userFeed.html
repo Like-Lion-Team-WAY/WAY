@@ -52,7 +52,7 @@
                         <span th:text="${user.getNickname()+' ('+user.getUsername()+')'}"></span>
                         <i class="bi bi-check-circle-fill" th:if="${isBluecheck}" style="color: #1DA1F2; margin-left: 8px; display: inline-block;"></i>
                     </h1>
-                    <a th:if="${loginUser != null}" th:href="@{/user/followSetting}">
+                    <a th:if="${loginUser != null}" th:href="@{/user/followList(userId=${user.userId})}">
                         <p th:text="'팔로워 '+${followers}+' | 팔로잉 '+${followings}"></p>
                     </a>
                     <a th:if="${loginUser == null}" th:href="@{/user/login}">
