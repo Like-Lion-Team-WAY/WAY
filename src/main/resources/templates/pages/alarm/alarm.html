@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Community</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- 파일 -->
+    <link rel="stylesheet" href="/css/alarm/alarm.css">
+
+    <h1 class="title">📮 알림 목록</h1>
+
+    <div class="container">
+        <!-- 알림 전체 삭제 버튼 -->
+        <div class="row">
+            <button id="delete-all-alarms-btn" class="btn" onclick="deleteAllAlarms()">알림 전체 삭제</button>
+        </div>
+
+        <div id="alarm-container" class="row">
+            <!-- 게시글이 추가될 영역 -->
+        </div>
+        <div id="no-alarms" class="row" style="display: none;">
+            도착한 알림이 없습니다
+        </div>
+    </div>
+
+
+    <!-- javascript 파일 추가 -->
+    <script src="/js/alarm/alarmCommon.js"></script>
+    <script src="/js/alarm/alarm.js"></script>
+</div>
+</body>
+</html>

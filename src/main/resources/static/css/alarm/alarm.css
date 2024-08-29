@@ -1,0 +1,62 @@
+.alarm {
+    background-color: #FFD6B0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 아이템을 수직 중앙 정렬 */
+}
+
+.alarm p {
+    margin: 0; /* p 태그의 기본 마진 제거 */
+    line-height: 1.5; /* 텍스트의 line-height 조정 */
+    flex: 1; /* 메시지가 버튼과 공간을 균등하게 차지하도록 설정 */
+}
+
+.btn-copy {
+    padding: 10px 15px;
+    color: #ff6746;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0; /* 버튼이 너무 커지지 않도록 방지 */
+}
+
+.btn-copy:hover {
+    background-color: #ff6746;
+    color: white;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    color: white;
+    background-color: #ff6746;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.title {
+    text-align: center;
+    margin: 20px;
+    font-size: 28px;
+    color: #ff6746;
+}
+#no-alarms {
+    text-align: center;
+    margin-top: 20px;
+    color: gray;
+}
+
+#alarm-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    gap: 20px; /* 각 알람 div 사이 간격 */
+}

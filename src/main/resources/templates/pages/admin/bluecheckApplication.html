@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>bluecheck 신청 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/admin/bluecheckApplication.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/user/bluecheckApplication.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="text-container">
+        <h2><i class="bi bi-check-circle-fill"></i> 파란 배지 신청</h2>
+        <p class="descriptionbold">파란 배지는 WAY의 인증된 사용자를 나타내는 특별한 뱃지입니다. 파란 배지를 신청하시면 WAY의 다양한 기능을 더욱 편리하게 이용할 수 있습니다.</p>
+        <ol>
+            <li class="fontbold">파란 배지 신청 조건</li>
+            <ul>
+                <li>WAY의 인증된 사용자</li>
+                <li>WAY의 이용 약관을 준수하는 사용자</li>
+            </ul>
+            <li class="fontbold">파란 배지 신청 방법</li>
+            <ul>
+                <li>아래의 버튼을 누르시면 신청이 완료됩니다.</li>
+            </ul>
+        </ol>
+        <form id="bluecheckApplicationForm" th:if="${userId != null}">
+            <div class="form-group">
+                <button type="submit" class="bluecheckBtn">파란 배지 신청</button>
+            </div>
+            <input type="hidden" name="userId" th:value="${userId}">
+        </form>
+        <p class="enrollYn" th:if="${userId == null}">이미 배지 신청을 한 사용자입니다.</p>
+    </div>
+</div>
+</body>
+</html>

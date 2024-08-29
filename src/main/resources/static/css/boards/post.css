@@ -1,0 +1,157 @@
+/* 페이지 중앙에 위치하는 컨테이너, 전체 레이아웃의 크기와 배경 설정 */
+.container {
+    width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* "← 전체 게시판" 링크 부분 스타일링 */
+.returnPage {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.returnPage a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff6746;
+}
+.returnPage a:hover {
+    color: #058593;
+}
+
+/* 페이지 중앙에 위치하는 제목("보드게임 게시판") 부분 스타일링 */
+#boardTitle {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* "게시판 수정", "게시글 생성" 버튼의 레이아웃과 스타일링 */
+.board-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.board-actions button {
+    background-color: #ff9c82;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.board-actions button:hover {
+    background-color: #058593;
+    color: white;
+}
+
+/* 게시글 목록을 나타내는 테이블 스타일링 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+table th, table td {
+    padding: 8px;
+    text-align: center;
+    font-size: 18px;
+}
+
+table th {
+    font-weight: bold;
+}
+
+table tr {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+
+/* Hover 효과 설정: th 요소 제외 */
+table tr:hover td {
+    background-color: #035259; /* Hover 시 배경색 변경 */
+    color: white;
+    /*transform: scale(1.2, 1.1); !* Hover 시 확대 효과 *!*/
+}
+
+/* 1열의 너비 줄이기 */
+table th:first-child, table td:first-child {
+    width: 90px; /* 1열의 너비를 80px로 설정 */
+}
+
+/* 2열(제목)의 넓이 조정 */
+table th:nth-child(2), table td:nth-child(2) {
+    width: 200px;
+}
+
+/*!* 2열(제목) 왼쪽 정렬 *!*/
+/*table td:nth-child(2) {*/
+/*    text-align: left;*/
+/*}*/
+
+/* 3열(작성자)의 넓이 조정 */
+table th:nth-child(3), table td:nth-child(3) {
+    width: 50px;
+}
+
+/* 4열(작성일자)의 넓이 조정 */
+table th:nth-child(4), table td:nth-child(4) {
+    width: 90px;
+}
+
+
+
+/* 페이지 하단에 위치한 페이지네이션(페이지 번호) 스타일링 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #035259;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.pagination a:hover {
+    background-color: #035259;
+    color: #ffffff;
+}
+
+.pagination .active a {
+    background-color: #ff6746;
+    color: white;
+    border-color: #ff6746;
+}
+
+.pagination .active a:hover {
+    background-color: #035259;
+    border-color: #035259;
+}
+
+#editBoardButton {
+    display: none;
+}

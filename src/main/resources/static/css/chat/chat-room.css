@@ -1,0 +1,306 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+    overflow: hidden; /* Prevent scrolling on the main window */
+}
+
+.header {
+    background-color: #ff6746;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+.header .title {
+    margin: 0;
+}
+
+.header .menu {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.request-banner {
+    background-color: lightgrey;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 50px;
+    width: 100%;
+    z-index: 1;
+    box-sizing: border-box;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Optional: Adds space above the buttons */
+}
+
+.button-container button {
+    border-radius: 20px;
+    border: 0;
+    background-color: white;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.button-container button:hover {
+    background-color: #e55a34;
+    color: white;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 100px); /* Adjust based on header and footer height */
+    margin-top: 50px; /* Height of the header */
+    margin-bottom: 50px; /* Height of the footer */
+    overflow-y: auto; /* Enable scrolling within the container */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.with-banner {
+    height: calc(100% - 170px); /* Adjust based on header and footer height */
+    margin-top: 120px;
+}
+
+.chat-message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.user-message {
+    margin-top: 10px;
+    margin-right: 20px;
+    text-align: right;
+}
+
+.partner-message {
+    margin-top: 10px;
+    margin-right: 20px;
+    text-align: left;
+}
+
+.user-message .text-group {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 10px; /* 요소들 사이에 간격 추가 */
+    justify-content: flex-end; /* 오른쪽 정렬 (user-message만) */
+}
+
+.partner-message .text-group {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 10px; /* 요소들 사이에 간격 추가 */
+    justify-content: flex-start;
+}
+
+.report-chat-btn {
+    color: #035259;
+}
+
+.report-chat-btn:hover {
+    color: #e55a34;
+    cursor: pointer;
+}
+
+.unread {
+    color: red; /* "안읽음" 텍스트의 색상 (필요 시 조정) */
+    font-size: 0.8em; /* 텍스트 크기 (필요 시 조정) */
+}
+
+.user-message .text,
+.partner-message .text {
+    display: inline-block;
+    position: relative;
+    background-color: #FFD6B0;
+    border-radius: 20px;
+    color: black;
+    padding: 7px 12px;
+    margin-bottom: 10px;
+    max-width: 230px;
+}
+
+.message-time {
+    color: #aaa;
+    font-size: 0.8em;
+}
+
+.user-nickname, .text, .message-time {
+    margin: 5px 0;
+}
+
+.system-message {
+    display: flex;
+    flex-direction: column;
+    background-color: #058593;
+    border-radius: 20px;
+    padding: 3px;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #ddd;
+}
+
+.footer form {
+    display: flex; /* Use flexbox for the form */
+    width: 100%; /* Make the form take full width */
+}
+
+.footer input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    outline: none;
+    text-decoration: none;
+}
+
+.footer button {
+    background-color: #ff6746;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.footer button:hover {
+    background-color: #035259;
+}
+
+.open-btn {
+    background-color: white;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+}
+
+.open-btn:hover {
+    background-color: #058593;
+    color: white;
+}
+
+.side-menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #FFD6B0;
+    border-left: 3px solid white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+.side-menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #363636;
+    display: block;
+    transition: 0.3s;
+}
+
+.side-menu .close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 36px;
+    margin: 10px; /* 마진 추가 */
+}
+
+.side-menu .close-btn:hover {
+    color: #058593;
+}
+
+.side-menu div {
+    text-align: center;
+    color: black;
+    margin: 10px 0; /* 각 요소 사이에 마진 추가 */
+}
+
+.chat-name, .chat-func {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+.chat-name button, .chat-func button {
+    margin-top: 10px; /* 버튼 사이에 마진 추가 */
+    background-color: white;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+}
+
+.chat-name button:hover,
+.chat-func button:hover {
+    background-color: #058593;
+    color: white;
+}
+
+@media screen and (max-height: 450px) {
+    .side-menu {
+        padding-top: 15px;
+    }
+
+    .side-menu a {
+        font-size: 18px;
+    }
+}
+
+.chat-name input {
+    border-radius: 5px;
+    border: 0;
+    border-bottom: 1px solid white;
+    padding: 2px;
+    background-color: #FFD6B0;
+    text-align: center;
+    outline: none;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.chat-name form {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+}

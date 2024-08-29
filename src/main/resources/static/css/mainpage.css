@@ -1,0 +1,51 @@
+/* styles.css */
+
+
+#login-container {
+    text-align: center;
+    margin-top: 200px;
+}
+
+#logo {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+#button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+#button-container button {
+    margin: 0 auto;
+    width: 500px;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#help-container {
+    font-size: 14px;
+    margin : 0 auto;
+}
+
+#way-help {
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+#kakao-login{
+    background-color: #f9e000;
+}
+#naver-login{
+    background-color: #2db400;
+}
+#google-login{
+    background-color: #e8e5e5;
+}

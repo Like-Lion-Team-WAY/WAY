@@ -1,0 +1,90 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* "← 전체 게시판" 링크 부분 스타일링 */
+.returnPage {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.returnPage a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff6746;
+    cursor: pointer;
+}
+
+.returnPage a:hover {
+    color: #058593;
+}
+
+#boardTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.group-column {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.group-row {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 7px;
+}
+
+p {
+    font-size: 14px;
+    color: gray;
+}
+
+.group-column label {
+    font-weight: bold;
+    font-size: 1.5rem !important;
+    margin-left: 0.5rem;
+}
+
+#postTitle, #postContent {
+    font-size: 1.1rem !important;
+}
+
+#postContent {
+    resize: none;
+    border-radius: 5px;
+    width: 100%; /* 상위 요소와 너비를 같게 설정 */
+    box-sizing: border-box;
+}
+
+.btn-common {
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 4px 10px;
+    text-align: center;
+    color: white;
+    border: none;
+}
+.btn-primary {
+    background-color: #ff6746;
+}
+
+.btn-secondary {
+    width: 300px;
+    background-color: #058593;
+}
+
+.btn-primary:hover {
+    background-color: #FFD6B0;
+}
+
+.btn-secondary:hover {
+    width: 300px;
+    background-color: #66d6e5;
+}

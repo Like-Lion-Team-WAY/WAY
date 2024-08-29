@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>검색창</title>
+    <link rel="stylesheet" href="/css/user/userSearch.css">
+    <script src="/js/user/userSearch.js"></script>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+    <input type="text" id="search-input" placeholder="사용자 이름을 입력해주세요." oninput="searchUsers()">
+    <div id="user-list"></div>
+</div>
+</body>
+</html>

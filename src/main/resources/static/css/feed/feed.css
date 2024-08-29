@@ -1,0 +1,215 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    margin-top: 100px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-container {
+    background-color: white;
+    width: 800px;
+    height: auto;
+    padding: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-info p {
+    margin: 0;
+    color: gray;
+    margin-bottom: 10px;
+}
+
+.profile-info a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.button-container {
+    text-align: right;
+}
+
+.button-container a {
+    text-decoration: none;
+}
+
+.write-post-button {
+    width: 150px;
+    padding: 5px;
+    background-color: #FF8E75;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+.feed {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    width: 800px;
+}
+
+.feed-item {
+    background-color: #FFD6B0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.feed-item p {
+    margin: 0 0 10px;
+}
+
+.feed-item img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 100px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.feed-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: end;
+}
+
+.feed-actions button {
+    background-color: #eee;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.question-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: end;
+}
+
+.question-actions button {
+    background-color: #FF8E75;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+.pinIcon {
+    display: flex;
+    justify-content: end;
+}
+
+.icon-button {
+    display: flex;
+    justify-items: center;
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    padding: 0; /* 패딩 제거 */
+    font-size: 20px; /* 아이콘 크기 조절 */
+    color: #FF6746; /* 아이콘 색상 설정 (필요에 따라 변경) */
+    cursor: pointer; /* 클릭 가능하게 설정 */
+}
+
+.icon-button:focus {
+    outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+.icon-button2 {
+    display: flex;
+    justify-items: center;
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    padding: 0; /* 패딩 제거 */
+    font-size: 20px; /* 아이콘 크기 조절 */
+    color: #f90707; /* 아이콘 색상 설정 (필요에 따라 변경) */
+    cursor: pointer; /* 클릭 가능하게 설정 */
+}
+
+.icon-button2:focus {
+    outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+.update-date {
+    display: flex;
+    justify-content: end;
+}
+
+#followButton {
+    background-color: #FF8E75;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bolder;
+    margin-top: 10px;
+}
+
+.sharebox {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+.sharebtn {
+    background-color: #FF8E75;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    border: white 1px solid;
+    font-size: 12px;
+    font-weight: bolder;
+}

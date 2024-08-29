@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>스크랩</title>
+    <link rel="stylesheet" href="/css/boards/scrap.css">
+    <script th:src="@{/js/boards/scrap.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+        <h1 id="Title">스크랩 게시글</h1>
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th scope="col">게시글번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일자</th>
+            </tr>
+            </thead>
+            <tbody id="scrapList">
+            <!-- 게시글 목록이 여기 동적으로 채워집니다 -->
+            </tbody>
+        </table>
+        <div class="pagination-container">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination Buttons -->
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

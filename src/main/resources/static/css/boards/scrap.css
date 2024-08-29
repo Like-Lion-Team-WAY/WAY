@@ -1,0 +1,110 @@
+/* 페이지 중앙에 위치하는 컨테이너, 전체 레이아웃의 크기와 배경 설정 */
+.container {
+    width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+#Title {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.custom-table th, .custom-table td {
+    padding: 8px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.custom-table th {
+    font-weight: bold;
+}
+.custom-table tr {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+/* Hover 효과 설정: th 요소 제외 */
+.custom-table tr:hover td {
+    background-color: #035259; /* Hover 시 배경색 변경 */
+    /*transform: scale(1.2, 1.1); !* Hover 시 확대 효과 *!*/
+    color: white;
+}
+
+/* 1열의 너비 줄이기 */
+.custom-table th:first-child, .custom-table td:first-child {
+    width: 90px; /* 1열의 너비를 80px로 설정 */
+}
+
+/* 2열(제목)의 넓이 조정 */
+.custom-table th:nth-child(2), .custom-table td:nth-child(2) {
+    width: 200px;
+}
+
+/* 2열(제목) 왼쪽 정렬 */
+.custom-table td:nth-child(2) {
+    text-align: left;
+}
+
+/* 3열(작성자)의 넓이 조정 */
+.custom-table th:nth-child(3), .custom-table td:nth-child(3) {
+    width: 50px;
+}
+
+/* 4열(작성일자)의 넓이 조정 */
+.custom-table th:nth-child(4), .custom-table td:nth-child(4) {
+    width: 90px;
+}
+
+/* 페이지 하단에 위치한 페이지네이션(페이지 번호) 스타일링 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #035259;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.pagination a:hover {
+    background-color: #035259;
+    color: #ffffff;
+}
+
+.pagination .active a {
+    background-color: #035259;
+    color: white;
+    border-color: #035259;
+}
+
+.pagination .active a:hover {
+    background-color: #035259;
+    border-color: #035259;
+}

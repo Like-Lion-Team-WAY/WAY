@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>bluecheck 신청 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/admin/blueCheckList.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/user/bluecheckApplication.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="text-container">
+        <h2><i class="bi bi-check-circle-fill"></i>파란 배지 신청자 목록</h2>
+        <div class="form-group" th:each="b : ${bluecheck}">
+            <img th:if="${b.getUser().getUserImage() != null}" th:src="'/display?filename='+${b.getUser().getUserImage()}"
+                 alt="profileImgUrl" class="profile-image" width="50px">
+            <img th:if="${b.getUser().getUserImage() == null}" th:src="@{/image/image.jpg}"
+                 alt="profileImgUrl" class="profile-image" width="50px">
+
+            <div class="font-group">
+                <a th:href="@{/posts/{username}(username=${b.getUser().username})}" th:text="${b.getUser().nickname+' ('+b.getUser().username+')'}"></a>
+                <div class="rightside">
+                    <p th:text="'신청일: '+${#temporals.format(b.getBlueCheckDate(), 'yyyy년 MM월 dd일')}"></p>
+                </div>
+            </div>
+<!--            배지 신청 허용 여부에 대한 컬럼을 추가해서 if 문으로 승인여부에 따른 버튼 보이게 처리하는 것도 좋을거 같아요-->
+            <button type="submit" class="bluecheckBtn" th:value="${b.getUser().getUsername()}">승인</button>
+        </div>
+    </div>
+
+    <!-- javascript 파일 추가-->
+    <script src="/js/admin/bluecheckList.js"></script>
+</div>
+</body>
+</html>

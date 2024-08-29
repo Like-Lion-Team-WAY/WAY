@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+    <link rel="stylesheet" href="/css/boards/post.css">
+    <script th:src="@{/js/boards/post.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="returnPage">
+            <a id="returnPage" href="#">← 전체 게시판</a>
+
+            <label for="search-boardPost"></label>
+            <input type="text" class="form-control" id="search-boardPost" placeholder="검색할 내용을 입력해주세요">
+
+        </div>
+
+        <h1 id="boardTitle"></h1>
+
+        <div class="board-actions">
+            <button id="createBoardButton">게시글 생성</button>
+            <button id="editBoardButton">게시판 수정</button>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">게시글번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일자</th>
+            </tr>
+            </thead>
+            <tbody id="boardPostList">
+            <!-- 게시글 목록이 여기 동적으로 채워집니다 -->
+            </tbody>
+        </table>
+        <div class="pagination-container">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination Buttons -->
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

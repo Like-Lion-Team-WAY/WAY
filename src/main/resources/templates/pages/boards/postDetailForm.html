@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세보기</title>
+    <link rel="stylesheet" href="/css/boards/postDetail.css">
+    <script th:src="@{/js/boards/postDetail.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="header">
+            <a id="returnPage">← 돌아가기</a>
+            <div class="actions">
+                <button id="editPostBtn">게시글 수정</button>
+                <button id="deletePostBtn">게시글 삭제</button>
+            </div>
+        </div>
+        <div class="post">
+            <div class="post-header">
+                <div class="user-avatar">
+                    <img id="profileImage" alt="User profile picture" />
+                </div>
+                <div class="post-info">
+                    <div class="post-date"></div>
+                    <div class="post-author"></div>
+                </div>
+            </div>
+            <div class="post-title"></div>
+            <div class="post-content"></div>
+            <div class="post-interactions">
+                <div class="likes">👍 0</div>
+                <div class="comments">💬 0</div>
+                <div class="scraps">⭐ 0</div>
+            </div>
+            <div class="post-actions">
+                <button class="action-button" id="likeAction">공감</button>
+                <button class="action-button" id="scrapAction">스크랩</button>
+            </div>
+        </div>
+        <div class="comment-section">
+            <div class="comment-input">
+                <input type="text" placeholder="댓글을 입력하세요..." class="comment-box">
+                <input type="checkbox" id="anonymousPermission" class="anonymous-checkbox"> 익명
+                <button class="send-button" onclick="submitComment(0)">➤</button>
+            </div>
+            <div class="comments-list">
+                <!-- 댓글 목록이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

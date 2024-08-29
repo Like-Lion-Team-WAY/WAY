@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/mainpage.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div id="login-container">
+        <div id="logo">WAY</div>
+        <div id="button-container">
+            <button id="kakao-login">카카오 로그인</button>
+            <button id="naver-login">네이버 로그인</button>
+            <button id="google-login">구글 로그인</button>
+        </div>
+        <div id="help-container">
+            <span id="way-help">🔍 'WAY' 도움말</span>
+        </div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+
+        // 'blocked' 에러가 있는 경우 alert 창 띄우기
+        if (error === 'blocked') {
+            alert('차단된 계정입니다.');
+        }
+
+        // 로그인 버튼 클릭 시 OAuth2 인증 요청
+        $('#kakao-login').click(function(){
+            window.location.href = "/oauth2/authorization/kakao";
+        });
+        $('#naver-login').click(function(){
+            window.location.href = "/oauth2/authorization/naver";
+        });
+        $('#google-login').click(function(){
+            window.location.href = "/oauth2/authorization/google";
+        });
+        $('#kakao-login').click(function(){
+            window.location.href = "/oauth2/authorization/kakao"
+        })
+        $('#naver-login').click(function(){
+            window.location.href = "/oauth2/authorization/naver"
+        })
+        $('#google-login').click(function(){
+            window.location.href = "/oauth2/authorization/google"
+        })
+
+    </script>
+</div>
+</body>
+</html>

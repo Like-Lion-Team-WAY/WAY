@@ -1,0 +1,144 @@
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}
+
+.title {
+    text-align: center;
+    margin: 20px;
+    font-size: 28px;
+    color: #ff6746;
+}
+
+/* 검색 조건 */
+.condition {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    font-palette: light;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-sort {
+    display: flex;
+    gap: 20px;
+    margin-right: 20px;
+}
+
+.filter-sort label {
+    color: #ff6746;
+    margin-right: 5px;
+}
+
+.filter-sort select {
+    padding: 5px;
+    border: #fff none;
+    border-radius: 10px;
+    background-color: #FFD6B0;
+    width: 200px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ff6746;
+}
+
+.search input {
+    font-size: 16px;
+    background-color: #FFD6B0;
+    border: #ff6746 none;
+    border-radius: 15px;
+}
+
+.search button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 100px;
+    background-color: #ff6746;
+    color: white;
+}
+
+/* 버튼 */
+.btn-group {
+    display: flex;
+    justify-content: right;
+}
+
+.btn-delete, .btn-account, .btn-complete {
+    padding: 5px 10px;
+    margin-right: 10px;
+    border: 2px solid #ff6746;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 150px;
+    background-color: #fff;
+    color: #ff6746;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover, .btn-account:hover, .btn-complete:hover {
+    background-color: #ff6746;
+    color: white;
+}
+
+/* 신고 박스 */
+.report-list {
+    background-color: #FFD6B0;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.report-table {
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    background-color: transparent;
+    table-layout: fixed;
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.header-column {
+    width: 10%;
+    text-align: right;
+}
+
+.wide-column {
+    width: 15%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.highlight-text {
+    background-color: #fff;
+    padding: 5px;
+    margin: 5px;
+}
+
+
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 설정</title>
+    <link rel="stylesheet" href="/css/boards/boardSetting.css">
+    <script th:src="@{/js/boards/boardSetting.js}"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="returnPage">
+            <a id="returnPage">← 돌아가기</a>
+        </div>
+        <div class="main-container">
+            <h1> 게시판 설정</h1>
+            <div class="input-container">
+                <div class="input-element-container">
+                    <label for="boardName">이름</label>
+                    <input type="text" id="boardName" name="name">
+                </div>
+                <div class="input-element-container">
+                    <label for="boardDescription">설명</label>
+                    <input type="text" id="boardDescription" name="introduction">
+                </div>
+                <div class="input-element-container">
+                    <div class="toggleContainer">
+                        <span>익명 허용</span>
+                        <div class="toggleSwitchContainer">
+                            <input type="checkbox" id="allowAnonymous" hidden>
+                            <label for="allowAnonymous" class="toggleSwitch">
+                                <span class="toggleButton"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button id="deleteBoardButton">삭제 하기</button>
+                    <button id="updateBoardButton">게시판 수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

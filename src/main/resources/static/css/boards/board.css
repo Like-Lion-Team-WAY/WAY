@@ -1,0 +1,169 @@
+/*body {*/
+/*    font-family: 'Inter', sans-serif;*/
+/*    background-color: #f8f9fa;*/
+/*}*/
+
+.container {
+    width: 900px;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+.category {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.bookmark, .all-boards {
+    margin: 0 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.bookmark:hover, .all-boards:hover {
+    text-decoration: underline;
+}
+
+.search {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    margin-right: 0;
+}
+
+.search input {
+    width: 300px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+.board-item {
+    background-color: #FFD6B0;
+    display: flex;
+    flex-direction: column; /* 내용이 수직으로 정렬되도록 유지 */
+    align-items: flex-start; /* 아이템을 왼쪽에 맞춤 */
+    border-radius: 15px;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 40px 30px 15px 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+    position: relative; /* 자식 요소를 절대 위치로 배치하기 위해 필요 */
+}
+
+.board-item:last-child {
+    border-bottom: none;
+}
+
+.board-item:hover {
+    background-color: #058593; /* Hover 시 배경색 변경 */
+    transform: translateX(5px); /* Hover 시 오른쪽으로 약간 이동 */
+    color: white;
+}
+
+/* board-item이 hover될 때 underline의 색상도 변경되도록 설정 */
+.board-item:hover .underline {
+    color: white;
+}
+
+.board-item-placeholder {
+    text-align: center;
+    color: #058593;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.board-item .underline {
+    font-size: 16px; /* 설명 텍스트 크기 */
+    color: #7c7b7b;
+    margin-top: 10px; /* 이름과 설명 사이의 간격 추가 */
+    padding-top: 10px; /* 선과 설명 사이의 간격 추가 */
+    width: 100%; /* 설명을 board-item의 전체 너비로 설정 */
+}
+
+.board-item .arrow-icon {
+    position: absolute;
+    margin-left: 5px;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: inherit;
+}
+
+.board-item .bookmark-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: inherit;
+}
+
+.create-board {
+    display: flex;
+    margin-top: 60px; /* 버튼과 상단 요소 간의 여백 */
+    justify-content: center;
+}
+
+.custom-btn {
+    background-color: #ff6746;
+    padding: 10px 15px; /* 버튼의 크기를 조정 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 1.2em; /* 글자 크기 조정 */
+}
+
+.custom-btn:hover {
+    background-color: #035259;
+    border-color: #035259;
+}
+
+/* 페이지 하단에 위치한 페이지네이션(페이지 번호) 스타일링 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #035259;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.pagination a:hover {
+    background-color: #035259;
+    color: #ffffff;
+}
+
+.pagination .active a {
+    background-color: #ff6746;
+    color: white;
+    border-color: #ff6746;
+}
+
+.pagination .active a:hover {
+    background-color: #035259;
+    border-color: #035259;
+}

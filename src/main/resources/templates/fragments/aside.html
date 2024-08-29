@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="asideFragment">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1><a th:href="@{/main}" onclick="function changeStorage() {
+                localStorage.setItem('activeTab', 'questionTab');
+            }
+            changeStorage()">WAY</a></h1>
+        </div>
+        <div class="profile">
+        </div>
+        <nav id="questionTab">
+            <ul>
+<!--                url 다시 설정하기-->
+                <li><a th:href="@{/posts}">내 피드</a></li>
+                <li><a th:href="@{/user/setting}">내 프로필 설정</a></li>
+                <li><a th:href="@{/user/followSetting}">친구 관리</a></li>
+                <li><a th:href="@{/alarm/setting}">알림 설정</a></li>
+                <li><a th:href="@{/way/customerService}">고객센터</a></li>
+                <li><a href="#" id="logout">로그아웃</a></li>
+            </ul>
+        </nav>
+        <nav style="display: none" id="communityTab">
+            <ul>
+                <!--                url 다시 설정하기-->
+                <li><a th:href="@{/boards}">전체 게시판</a></li>
+                <li><a th:href="@{/boards/best}">베스트 게시판</a></li>
+<!--                <li><a href="#">내 게시글</a></li>-->
+                <li><a th:href="@{/boards/scraps}">스크랩</a></li>
+                <li><a th:href="@{/way/customerService}">고객센터</a></li>
+            </ul>
+        </nav>
+        <nav style="display: none" id="no-loginTab">
+            <ul>
+                <li><a th:href="@{/user/login}">로그인</a></li>
+                <li><a th:href="@{/way/customerService}">고객센터</a></li>
+            </ul>
+        </nav>
+        <nav id="adminTab">
+            <ul>
+                <li><a th:href="@{/admin/report}">신고 관리</a></li>
+                <li><a th:href="@{/admin/bluecheck}">배지 신청 관리</a></li>
+                <li><a th:href="@{/posts/way_official}">공지사항 관리</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</html>

@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff; /* 배경색 추가 */
+}
+
+.container {
+    margin-top: 50px;
+    width: 1000px;
+    background-color: #FFD6B0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.container h1 {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #FF6746;
+    margin: 0;
+    font-size: 18px;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    border-top: 1px solid #FF6746;
+}
+
+.menu li:first-child {
+    border-top: none;
+}
+
+.menu li a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+}
+
+.menu li a:after {
+    content: '>';
+    position: absolute;
+    right: 15px;
+    color: #FF6746;
+}
+
+.menu li a:hover {
+    background-color: #FF8E75;
+}

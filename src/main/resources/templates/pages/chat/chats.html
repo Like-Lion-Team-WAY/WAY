@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/sockjs/1.0.2/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/chat/chat.css">
+    <script src="/js/chat/chat.js"></script>
+    <title th:text="${nickname} + '님의 채팅방 리스트'"></title>
+</head>
+<body>
+<div layout:fragment="content" class="center">
+    <input type=hidden id="user-id" th:value="${userId}">
+    <h1 id="nickname" th:text="${nickname} + '님의 채팅방 리스트'" th:value="${nickname}"></h1>
+    <div class="chat-room-list"></div>
+    <div id="elementToObserve"></div>
+</div>
+</body>
+</html>

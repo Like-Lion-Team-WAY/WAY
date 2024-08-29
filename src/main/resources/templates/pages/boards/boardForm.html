@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>커뮤니티 게시판</title>
+    <link rel="stylesheet" href="/css/boards/board.css">
+    <script th:src="@{/js/boards/board.js}"></script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="container">
+        <h1>전체 게시판</h1>
+        <div class="search">
+            <label for="search-board"></label>
+            <input type="text" class="form-control" id="search-board" placeholder="검색할 내용을 입력해주세요">
+        </div>
+        <div class="board-list" id="boardList">
+            <!-- Board List will be populated here by JavaScript -->
+            <div class="board-item-placeholder">게시판 목록이 없습니다.</div>
+        </div>
+        <div class="pagination-container">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination Buttons will be populated here by JavaScript -->
+            </ul>
+        </div>
+        <div class="create-board">
+            <button type="button" id="createBoardButton" class="btn btn-primary custom-btn">게시판 생성</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
