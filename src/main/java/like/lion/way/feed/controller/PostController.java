@@ -83,7 +83,7 @@ public class PostController {
     // 게시판 생성 페이지로 넘어감
     @GetMapping("/posts/create")
     public String createPost() {
-        return "/pages/feed/feedCreate";
+        return "pages/feed/feedCreate";
     }
 
     // 게시글 상세
@@ -99,7 +99,7 @@ public class PostController {
 
         User loginUser = userUtil.getLoginUser(request);
         model.addAttribute("loginUser", loginUser);
-        return "/pages/feed/detailFeed";
+        return "pages/feed/detailFeed";
     }
 
     //필터
@@ -126,7 +126,7 @@ public class PostController {
 
         populateModelWithUserPostsAndQuestions(model, user, request);
 
-        return "/pages/feed/userFeed";
+        return "pages/feed/userFeed";
     }
 
     private boolean isUserBlocked(User user,

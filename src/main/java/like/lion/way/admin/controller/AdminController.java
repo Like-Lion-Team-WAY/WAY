@@ -20,7 +20,7 @@ public class AdminController {
 
     @GetMapping("/admin/report")
     public String report() {
-        return "/pages/admin/report";
+        return "pages/admin/report";
     }
 
     @GetMapping("/admin/bluecheck")
@@ -29,6 +29,6 @@ public class AdminController {
                 .stream()
                 .sorted(Comparator.comparing(BlueCheck::getBlueCheckDate))
                 .toList());
-        return "/pages/admin/blueCheckList";
+        return "pages/admin/blueCheckList";
     }
 }

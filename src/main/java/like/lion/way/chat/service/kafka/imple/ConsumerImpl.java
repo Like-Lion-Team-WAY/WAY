@@ -34,8 +34,8 @@ public class ConsumerImpl implements Consumer {
 //    private String serverPort;
 
     @Override
-//    @KafkaListener(topics = "topic-messages", groupId = "chat-group-#{@environment.getProperty('server.port')}")
-    @KafkaListener(topics = "topic-messages", groupId = "chat-group")
+    @KafkaListener(topics = "topic-messages", groupId = "chat-group-#{@environment.getProperty('server.port')}")
+//    @KafkaListener(topics = "topic-messages", groupId = "chat-group-2")
     public void listen(String message) {
         try {
             // JSON 문자열을 Message 객체로 변환
