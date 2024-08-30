@@ -59,7 +59,7 @@ pipeline {
 
         stage('Upload to S3') {
             steps {
-                withAWS(credentials: 'way_hohyeon') {
+                withAWS(credentials: 'aws_hohyeon') {
                     script {
                         try {
                             s3Upload(bucket: env.S3_BUCKET, file: "${env.WORKSPACE}/${env.DEPLOY_ZIP}", path: "${env.DEPLOY_ZIP}")
@@ -74,7 +74,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                withAWS(credentials: 'way_hohyeon') {
+                withAWS(credentials: 'aws_hohyeon') {
                     sh """
                     aws deploy create-deployment \
                         --application-name ${env.APP_NAME} \
