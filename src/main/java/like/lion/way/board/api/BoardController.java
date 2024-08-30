@@ -13,7 +13,7 @@ public class BoardController {
     @GetMapping
     public String showBoardList() {
 
-        return "/pages/boards/boardForm";
+        return "pages/boards/boardForm";
 
     }
 
