@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         AWS_DEFAULT_REGION = 'ap-northeast-2'
-        S3_BUCKET = 'likelionway-image'
+        S3_BUCKET = 'hohyeon-build'
         JAR_FILE = 'build/libs/WAY-0.0.1-SNAPSHOT.jar'
         APP_NAME = 'test_deploy'
         DEPLOY_GROUP = 'test_deploy_group'
