@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import like.lion.way.config.SecurityConfig;
+import like.lion.way.jwt.exception.CustomAuthenticationEntryPoint;
 import like.lion.way.jwt.exception.JwtExceptionCode;
 import like.lion.way.jwt.token.JwtAuthenticationToken;
 import like.lion.way.jwt.util.JwtUtil;
@@ -23,6 +25,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,34 +36,30 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+        if (SecurityConfig.PERMIT_ALL_PATHS.stream().anyMatch(path -> new AntPathRequestMatcher(path).matches(request))) {
+            chain.doFilter(request, response);
+            return;
+        }
         String token = getToken(request);
         if(StringUtils.hasText(token)){
             try{
                 getAuthentication(token);
-            }catch (ExpiredJwtException e){
+            }catch (Exception e){
                 request.setAttribute("exception", JwtExceptionCode.EXPIRED_TOKEN.getCode());
-                log.error("Expired Token : {}",token,e);
-                throw new BadCredentialsException("Expired token exception", e);
-            }catch (UnsupportedJwtException e){
-                request.setAttribute("exception", JwtExceptionCode.UNSUPPORTED_TOKEN.getCode());
-                log.error("Unsupported Token: {}", token, e);
-                throw new BadCredentialsException("Unsupported token exception", e);
-            } catch (MalformedJwtException e) {
-                request.setAttribute("exception", JwtExceptionCode.INVALID_TOKEN.getCode());
-                log.error("Invalid Token: {}", token, e);
-                throw new BadCredentialsException("Invalid token exception", e);
-            } catch (IllegalArgumentException e) {
-                request.setAttribute("exception", JwtExceptionCode.NOT_FOUND_TOKEN.getCode());
-                log.error("Token not found: {}", token, e);
-                throw new BadCredentialsException("Token not found exception", e);
-            } catch (Exception e) {
-                log.error("JWT Filter - Internal Error: {}", token, e);
-                throw new BadCredentialsException("JWT filter internal exception", e);
+                log.error("Token processing error: {}", token, e);
+                throw new BadCredentialsException("Token not found or invalid", e);
             }
+        }else{
+            customAuthenticationEntryPoint.commence(request,response);
+            return;
         }
         chain.doFilter(request, response);
     }

@@ -6,6 +6,7 @@ import like.lion.way.admin.dto.ReportRequestDto;
 import like.lion.way.admin.domain.ReportType;
 import like.lion.way.admin.dto.ReportResponseDto;
 import like.lion.way.admin.repository.ReportRepository;
+import like.lion.way.admin.repository.ReportRepositoryCustom;
 import like.lion.way.admin.repository.ReportSpecification;
 import like.lion.way.admin.service.ReportService;
 import like.lion.way.chat.service.MessageService;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor // for constructor injection
 public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
+    private final ReportRepositoryCustom reportRepositoryCustom;
 
     private final UserService userService;
     private final QuestionService questionService;
@@ -76,12 +78,8 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional(readOnly = true)
     public List<ReportResponseDto> getReports(String type, String reportedUsername, String sortDirection) {
-        User reported = userService.findByUsername(reportedUsername);
-        Specification<Report> spec = Specification.where(ReportSpecification.hasStatus(false))
-                .and(ReportSpecification.hasType(type))
-                .and(ReportSpecification.hasReportedUser(reported))
-                .and(ReportSpecification.sortByCreatedAt(sortDirection));
-        return reportRepository.findAll(spec).stream().map(ReportResponseDto::new).toList();
+        var list = reportRepositoryCustom.findReportsByCriteria(type, reportedUsername, sortDirection);
+        return list.stream().map(ReportResponseDto::new).toList();
     }
 
     @Override

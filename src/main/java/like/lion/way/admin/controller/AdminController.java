@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminController {
     private final BlueCheckService blueCheckService;
 
-    @GetMapping("/admin")
+    @GetMapping("/super")
     public String admin() {
-        return "redirect:/admin/report";
+        return "redirect:/super/report";
     }
 
-    @GetMapping("/admin/report")
+    @GetMapping("/super/report")
     public String report() {
-        return "/pages/admin/report";
+        return "pages/admin/report";
     }
 
-    @GetMapping("/admin/bluecheck")
+    @GetMapping("/super/bluecheck")
     public String blueCheckApplication(Model model) {
         model.addAttribute("bluecheck", blueCheckService.findAll()
                 .stream()
                 .sorted(Comparator.comparing(BlueCheck::getBlueCheckDate))
                 .toList());
-        return "/pages/admin/blueCheckList";
+        return "pages/admin/blueCheckList";
     }
 }

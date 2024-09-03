@@ -10,6 +10,7 @@ import like.lion.way.alarm.service.ChatAlarmService;
 import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
@@ -40,33 +41,5 @@ public class SseRestController {
         Long loginId = jwtUtil.getUserIdFromToken(token);
         SseEmitter emitter = emitters.add(loginId, windowId);
         return emitter;
-    }
-
-/* end point for test */
-
-    private final UserService userService;
-    private final ApplicationEventPublisher publisher;
-    @GetMapping("/sse/send")
-    public void send() {
-        // test
-        log.debug("[SseRestController] 알람 추가 테스트 : AlarmEvent 발생");
-        AlarmEvent event = new AlarmEvent(this, AlarmType.NEW_QUESTION,
-                userService.findByUserId(1L), userService.findByUserId(1L),
-                "1");
-        publisher.publishEvent(event);
-    }
-    
-    @GetMapping("/admin/sse/addChat")
-    public void addChat() {
-        log.debug("[chat alarm test] 채팅 알림 개수 1 추가");
-        ChatAlarmEvent event = new ChatAlarmEvent(this, userService.findByUserId(1L), 1L);
-        publisher.publishEvent(event);
-    }
-
-    @GetMapping("/admin/sse/decreaseChat")
-    public void decreaseChat() {
-        log.debug("[chat alarm test] 채팅 알림 개수 1 감소");
-        ChatAlarmEvent event = new ChatAlarmEvent(this, userService.findByUserId(1L), -1L);
-        publisher.publishEvent(event);
     }
 }

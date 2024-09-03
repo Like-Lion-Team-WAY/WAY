@@ -7,6 +7,8 @@ function connect() {
         stompClient.subscribe('/topic/messages/0', function (messageOutput) {
             addNewChatRoomInfo(JSON.parse(messageOutput.body));
         });
+
+        loadChatList();
     });
 }
 
@@ -138,7 +140,6 @@ function formatDateTime(dateTimeStr) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadChatList();
     connect();
 });
 

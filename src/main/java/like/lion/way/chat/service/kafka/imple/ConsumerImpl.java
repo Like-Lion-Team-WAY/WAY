@@ -14,6 +14,7 @@ import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.kafka.Consumer;
 import like.lion.way.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,12 +31,11 @@ public class ConsumerImpl implements Consumer {
     private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher;
 
-//    @Value("${server.port}")
-//    private String serverPort;
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
 
     @Override
-//    @KafkaListener(topics = "topic-messages", groupId = "chat-group-#{@environment.getProperty('server.port')}")
-    @KafkaListener(topics = "topic-messages", groupId = "chat-group")
+    @KafkaListener(topics = "topic-messages")
     public void listen(String message) {
         try {
             // JSON 문자열을 Message 객체로 변환
@@ -54,7 +54,7 @@ public class ConsumerImpl implements Consumer {
             } else if (!type.startsWith(CREATE.get()) && !type.startsWith(DELETE.get()) && chatIds != null) {
                 if (chatIds.contains(receiveMessageDTO.getReceiverId())) {
                     readProcessing(receiveMessageDTO);
-                } else {
+                } else if (groupId.equals("group1")) {
                     ChatAlarmEvent event = new ChatAlarmEvent(
                             this, userRepository.findById(receiveMessageDTO.getReceiverId()).orElse(null), 1L);
                     publisher.publishEvent(event);
@@ -82,9 +82,11 @@ public class ConsumerImpl implements Consumer {
     }
 
     private void readProcessing(ReceiveMessageDTO receiveMessageDTO) {
-        Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
-        messageFromDB.setIsRead(true);
-        messageRepository.save(messageFromDB);
+        if (groupId.equals("group1")) {
+            Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();
+            messageFromDB.setIsRead(true);
+            messageRepository.save(messageFromDB);
+        }
 
         receiveMessageDTO.setIsRead(true);
     }

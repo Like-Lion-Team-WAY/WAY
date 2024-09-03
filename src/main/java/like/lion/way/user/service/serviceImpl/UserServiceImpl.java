@@ -200,10 +200,6 @@ public class UserServiceImpl implements UserService {
 
         elsUser.setInterests(interestNames);
 
-        for (String interestName : interestNames) {
-            System.out.println(interestName);
-        }
-
         elsUserService.saveOrUpdate(elsUser);
 
         return userRepository.save(user);

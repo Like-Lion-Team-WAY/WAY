@@ -1,4 +1,4 @@
-package like.lion.way.admin.controller;
+package like.lion.way.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.feed.util.UserUtil;

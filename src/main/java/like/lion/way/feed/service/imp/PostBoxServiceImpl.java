@@ -30,14 +30,12 @@ public class PostBoxServiceImpl implements PostBoxService {
 
         if (existingPostBox.isPresent()) {
             postBoxRepository.delete(existingPostBox.get());
-            log.info("Post with ID {} removed from user {}'s archive", postId, userId);
             return null;
         } else {
             PostBox postBox = new PostBox();
             postBox.setPost(post);
             postBox.setUser(user);
             PostBox savedPostBox = postBoxRepository.save(postBox);
-            log.info("Post with ID {} added to user {}'s archive", postId, userId);
             return savedPostBox;
         }
     }
