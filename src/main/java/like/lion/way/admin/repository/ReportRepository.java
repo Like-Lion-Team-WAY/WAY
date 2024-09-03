@@ -10,5 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface ReportRepository extends JpaRepository<Report, Long>, JpaSpecificationExecutor<Report> {
     List<Report> findByType(String type);
     List<Report> findByReported_Username(String username);
-
 }

@@ -10,9 +10,9 @@ import like.lion.way.alarm.dto.AlarmMessageDto;
 import like.lion.way.alarm.service.AlarmService;
 import like.lion.way.alarm.service.AlarmSseEmitters;
 import like.lion.way.alarm.service.ChatAlarmService;
+import like.lion.way.alarm.service.kafka.SseEventProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     private final AlarmService alarmService;
     private final ChatAlarmService chatAlarmService;
+    private final SseEventProducer kafkaSseEventProducer;  // Kafka Producer 주입
     private final Map<Long, Map<String, SseEmitter>> emitters = new ConcurrentHashMap<>(); // thread-safe
 
     public SseEmitter add(Long userId, String windowId) {
@@ -29,13 +30,10 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         SseEmitter emitter = new SseEmitter(10 * 60 * 1000L); // 10분
         userEmitters.put(windowId, emitter);
 
-//        log.debug("[SseEmitters][add] userId={}, windowId={}", userId, windowId);
-//        log.debug("[SseEmitters][add] number of emitters: {}", userEmitters.size());
-
-        // 첫 데이터 전송
+        // 클라이언트에게 첫 데이터를 전송합니다.
         sendSubscriptions(userId);
 
-        // set callbacks
+        // 콜백 설정
         emitter.onCompletion(() -> {
             log.debug("[SseEmitters] onComplete callback");
             removeEmitter(userId, windowId);
@@ -58,14 +56,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         data.put("count", alarmService.countAlarm(userId));
         data.put("chat", chatAlarmService.getCount(userId));
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
-
-            send(userId, "subscription", jsonData);
-        } catch (Exception e) {
-            log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
-        }
+        sendJsonData(userId, "subscription", data);
     }
 
     @Override
@@ -73,14 +64,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         Map<String, Object> data = new HashMap<>();
         data.put("count", alarmService.countAlarm(userId));
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
-
-            send(userId, "count", jsonData);
-        } catch (Exception e) {
-            log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
-        }
+        sendJsonData(userId, "count", data);
     }
 
     @Override
@@ -88,14 +72,7 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         Map<String, Object> data = new HashMap<>();
         data.put("chat", chatAlarmService.getCount(userId));
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
-
-            send(userId, "chat", jsonData);
-        } catch (Exception e) {
-            log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
-        }
+        sendJsonData(userId, "chat", data);
     }
 
     @Override
@@ -104,61 +81,62 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         data.put("count", alarmService.countAlarm(userId));
         data.put("alarm", new AlarmMessageDto(alarm));
 
+        sendJsonData(userId, "alarm", data);
+    }
+
+    /**
+     * JSON 데이터를 Kafka를 통해 전송합니다.
+     */
+    private void sendJsonData(Long userId, String eventName, Map<String, Object> data) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(data);  // JSON 문자열로 변환
+            String jsonData = objectMapper.writeValueAsString(data);
 
-            send(userId, "alarm", jsonData);
+            // Kafka를 통해 이벤트 전송
+            kafkaSseEventProducer.sendEvent(userId, eventName, jsonData);
         } catch (Exception e) {
-            log.error("[SseEmitters][send] JSON 변환 오류: {}", e.getMessage());
+            log.error("[SseEmitters][sendJsonData] JSON 변환 오류: {}", e.getMessage());
         }
     }
 
-    public void send(Long userId, String name, String jsonData) {
-        // user가 emitter를 가지고 있는지 확인
+    /**
+     * Kafka에서 수신한 메시지를 클라이언트에게 전송합니다.
+     */
+    @Override
+    public synchronized void send(Long userId, String name, String jsonData) {
         var userEmitters = this.emitters.get(userId);
         if (userEmitters == null) {
             log.debug("[SseEmitters][send] userEmitters is null");
             return;
         }
 
-        // 전송
-        for (String windowId : userEmitters.keySet()) {
-            SseEmitter emitter = userEmitters.get(windowId);
-            if (emitter != null) {
-                if (isValid(emitter)) {
-                    send(emitter, name, jsonData);
-                } else {
-                    removeEmitter(userId, windowId);
+        userEmitters.forEach((windowId, emitter) -> {
+            if (isValid(emitter)) {
+                try {
+                    emitter.send(SseEmitter.event()
+                            .name(name)
+                            .data(jsonData));
+                    log.debug("[SseEmitters][send] succeeded !!!");
+                } catch (IOException | IllegalStateException e) {
+                    log.error("[SseEmitters][send] Exception: {}", e.getMessage());
+                    emitter.completeWithError(e);
+                } catch (Exception e) {
+                    log.error("[SseEmitters][send]error: {}", e.getMessage());
+                    emitter.complete();
                 }
+            } else {
+                removeEmitter(userId, windowId);
             }
-        }
-    }
-
-    public synchronized void send(SseEmitter emitter, String name, String jsonData) {
-        // 전송
-        try {
-            emitter.send(SseEmitter.event()
-                    .name(name)
-                    .data(jsonData));
-            log.debug("[SseEmitters][send] succeeded !!!");
-        } catch (IOException | IllegalStateException e) {
-            log.error("[SseEmitters][send] Exception: {}", e.getMessage());
-            emitter.completeWithError(e);
-        } catch (Exception e) {
-            log.error("[SseEmitters][send]error: {}", e.getMessage());
-            emitter.complete();
-        }
+        });
     }
 
     private void removeEmitter(Long userId, String windowId) {
         var userEmitters = this.emitters.get(userId);
-        if (userEmitters == null) {
-            return;
-        }
-        userEmitters.remove(windowId);
-        if (userEmitters.isEmpty()) {
-            this.emitters.remove(userId);
+        if (userEmitters != null) {
+            userEmitters.remove(windowId);
+            if (userEmitters.isEmpty()) {
+                this.emitters.remove(userId);
+            }
         }
     }
 

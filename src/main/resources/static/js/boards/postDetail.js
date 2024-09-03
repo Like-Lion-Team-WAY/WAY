@@ -83,7 +83,7 @@ function fetchPostDetails() {
                 postAuthorElement.classList.add('anonymous');
             } else {
                 // 닉네임이 익명이 아닌 경우 프로필 이미지를 설정
-                profileImageElement.src = imageUrl ? `/display?filename=${imageUrl}` : '/image/default-profile.png';
+                profileImageElement.src = imageUrl ? `/display?filename=${imageUrl}` : '/image/image.jpg';
                 postAuthorElement.classList.remove('anonymous');
             }
 

@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Transactional
     @Override
     public User saveOrUpdate(OAuthAttributes attributes) {
         var optionalUser = userRepository.findByEmail(attributes.getEmail());
@@ -82,6 +83,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Transactional
     @Override
     public void addCookies(HttpServletResponse response, User user) {
         String accessToken = jwtUtil.createAccessToken(
@@ -113,6 +115,7 @@ public class UserServiceImpl implements UserService {
         response.addCookie(refreshTokenCookie);
     }
 
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         //elasticSearch 에서도 지워지게
@@ -121,6 +124,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Transactional
     @Override
     public void deleteCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie("username" , null);
@@ -140,6 +144,7 @@ public class UserServiceImpl implements UserService {
         response.addCookie(accessToken);
     }
 
+    @Transactional
     @Override
     public User updateLoginInfo(SettingLoginInfoDto loginInfoDto, HttpServletRequest request, HttpServletResponse response) {
         User user = getUserByToken(request);
@@ -159,12 +164,15 @@ public class UserServiceImpl implements UserService {
       
         return saveOrUpdateUser(user);
     }
+
+    @Transactional
     @Override
     public User saveOrUpdateUser(User user){
         return userRepository.save(user);
 
     }
 
+    @Transactional
     @Override
     public User addInterests(HttpServletRequest request, HttpServletResponse response, Set<String> interests) {
 
@@ -192,10 +200,6 @@ public class UserServiceImpl implements UserService {
 
         elsUser.setInterests(interestNames);
 
-        for (String interestName : interestNames) {
-            System.out.println(interestName);
-        }
-
         elsUserService.saveOrUpdate(elsUser);
 
         return userRepository.save(user);
@@ -214,6 +218,7 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+    @Transactional
     @Override
     public User updateUserInfo(SettingLoginInfoDto updateUserDto, HttpServletRequest request) {
         User user = getUserByToken(request);
@@ -224,6 +229,7 @@ public class UserServiceImpl implements UserService {
         return saveOrUpdateUser(user);
     }
 
+    @Transactional
     @Override
     public ResponseEntity<String> updateOrSaveImg( String deleteFileName , HttpServletRequest request , String key) {
         User user = getUserByToken(request);

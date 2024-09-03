@@ -23,8 +23,12 @@ public class BlueCheckRestController {
 
     @PostMapping("/bluecheck/application")
     public ApiResponse<BlueCheck> blueCheckApplication(@RequestBody BlueCheckDto blueCheckDto) {
-        BlueCheck blueCheck = blueCheckService.applyBlueCheck(blueCheckDto.getUserId());
-        return ApiResponse.ok(blueCheck);
+        try {
+            BlueCheck blueCheck = blueCheckService.applyBlueCheck(blueCheckDto.getUserId());
+            return ApiResponse.ok(blueCheck);
+        } catch (Exception e) {
+            return ApiResponse.statusAndData(HttpStatus.CONFLICT, null);
+        }
     }
 
     @DeleteMapping("/bluecheck")

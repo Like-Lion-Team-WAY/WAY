@@ -22,20 +22,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
         String exception = (String)request.getAttribute("exception");
-        if(isRestRequest(request)){
-            System.out.println("rest");
-            handleRestResponse(request,response, exception);
-        }else{
-            System.out.println("page");
-            handlePageResponse(request,response, exception);
-        }
-
+        handlePageResponse(request,response, exception);
     }
     private void handlePageResponse(HttpServletRequest request, HttpServletResponse response, String exception) throws IOException {
         log.error("Page Request - Commence Get Exception : {}", exception);
-        if (exception != null) {
-            // 추가적인 페이지 요청에 대한 예외 처리 로직을 여기에 추가할 수 있습니다.
-        }
         response.sendRedirect("/user/login");
     }
     private void handleRestResponse(HttpServletRequest request, HttpServletResponse response, String exception) throws IOException {
@@ -81,5 +71,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private boolean isRestRequest(HttpServletRequest request) {
         String requestedWithHeader = request.getHeader("X-Requested-With");
         return "XMLHttpRequest".equals(requestedWithHeader) || request.getRequestURI().startsWith("/api/user");
+    }
+
+    public void commence(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String exception = (String)request.getAttribute("exception");
+        handlePageResponse(request,response,exception);
     }
 }

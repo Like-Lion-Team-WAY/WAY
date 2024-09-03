@@ -30,9 +30,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     public static final List<String> PERMIT_ALL_PATHS = List.of(
-            "/","/main" ,"/css/**", "/js/**","/user/login","/like","/duplicate","/addInterests","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao","/admin/**","/image/**", "/interest/**",
+            "/","/main" ,"/css/**", "/js/**","/user/login","/like","/duplicate","/addInterests","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao","/image/**","/interest/**",
             "https://kauth.kakao.com/oauth/authorize","https://kauth.kakao.com/oauth/token","https://kapi.kakao.com/v2/user/me","/posts/**","/posts/detail/**","/questions/send/**","/questions/reply/**","/questions/new/**"
-            ,"/questions/create/**","/questions/create/**","/upload","/user/delete/**","/user/searchform","/user/search","/user/all","/display","/way/**"
+            ,"/questions/create/**","/questions/create/**","/upload","/user/delete/**","/user/searchform","/user/search","/user/all","/display","/sse/subscribe","/api/alarm/**"
         );
 
 
@@ -69,13 +69,9 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/","/main" ,"/css/**", "/js/**","/user/login","/like","/duplicate","/addInterests","/oauth2/**","/oauth2/authorization/kakao","/login/oauth2/code/kakao","/image/**","/interest/**",
                                 "https://kauth.kakao.com/oauth/authorize","https://kauth.kakao.com/oauth/token","https://kapi.kakao.com/v2/user/me","/posts/**","/posts/detail/**","/questions/send/**","/questions/reply/**","/questions/new/**"
-                        ,"/questions/create/**","/questions/create/**","/upload","/user/delete/**","/user/searchform","/user/search","/user/all","/display").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        .anyRequest().authenticated()
-                )
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        ,"/questions/create/**","/questions/create/**","/upload","/user/delete/**","/user/searchform","/user/search","/user/all","/display","/sse/subscribe","/api/alarm/**").permitAll()
+                        .requestMatchers("/super/**").hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -88,11 +84,16 @@ public class SecurityConfig {
                         .successHandler(customOAuth2SuccessHandler)
                         .failureHandler(customOAuth2FailureHandler)
 
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                 );
 
         return http.build();
     }
 
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();

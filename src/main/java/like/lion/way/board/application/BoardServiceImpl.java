@@ -93,7 +93,6 @@ public class BoardServiceImpl implements BoardService {
     public void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest) {
 
         User user = getUserByHttpServletRequest(httpServletRequest);
-        log.info("사용자 정보 테스트 :::" + user);
         boardRepository.save(request.toEntity(user));
 
     }
@@ -105,7 +104,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
-        board.updateBoard(request.getName(), request.getIntroduction(), request.isAnonymousPermission());
+        board.updateBoard(request.getName(), request.getIntroduction());
 
     }
 
@@ -149,7 +148,6 @@ public class BoardServiceImpl implements BoardService {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
-        log.info("게시판 정보 ::: " + board);
         User user = getUserByHttpServletRequest(httpServletRequest);
         boardPostRepository.save(request.toEntity(user, board));
 
@@ -195,7 +193,6 @@ public class BoardServiceImpl implements BoardService {
         BoardPost boardPost = boardPostRepository.findByBoardPostId(postId);
 
         boardPost.editBoardPost(request.getTitle(), request.getContent());
-        log.info("게시글 수정 :::" + request.getTitle() + "///" + request.getContent());
     }
 
     // 게시글 삭제
@@ -350,21 +347,8 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Page<BoardPostResponse> getSearchBoardPosts(BoardSearchServiceRequest request, Pageable pageable) {
 
-//        Page<BoardPostScrap> scrapsPage = boardPostScrapRepository.findAllBoardPostScrapByUser(getUserByHttpServletRequest(httpServletRequest), pageable);
-//        List<BoardPostScrapsResponse> scrapsResponses = scrapsPage.stream()
-//                .map(scrap -> BoardPostScrapsResponse.builder()
-//                        .title(scrap.getBoardPost().getTitle())
-//                        .nickname(nullUserNickCheck(scrap.getBoardPost().getUser(), scrap.getBoardPost().isAnonymousPermission()))
-//                        .username(nullUserCheck(scrap.getBoardPost().getUser()))
-//                        .createdAt(scrap.getBoardPost().getCreatedAt())
-//                        .boardId(scrap.getBoardPost().getBoard().getId())
-//                        .boardPostId(scrap.getBoardPost().getId())
-//                        .build())
-//                .toList();
-//
-//        return new PageImpl<>(scrapsResponses, pageable, scrapsPage.getTotalElements());
 
-        Page<BoardPost> postsPage = boardPostRepository.findBySearchKeywords(request.getKeyword(), pageable);
+        Page<BoardPost> postsPage = boardPostRepository.findByBoardIdAndSearchKeywords(request.getBoardId(), request.getKeyword(), pageable);
         List<BoardPostResponse> postResponses = postsPage.stream()
                 .map(post -> BoardPostResponse.builder()
                         .boardPostId(post.getId())
@@ -374,6 +358,7 @@ public class BoardServiceImpl implements BoardService {
                         .build())
                 .toList();
         return new PageImpl<>(postResponses, pageable, postsPage.getTotalElements());
+
     }
 
 

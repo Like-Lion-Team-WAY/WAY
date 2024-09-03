@@ -32,7 +32,7 @@ public class FollowServiceImpl implements FollowService {
             User followUser = follow.getFollowing();
             FollowDto followDto = new FollowDto();
             followDto.setUsername(followUser.getUsername());
-//            followDto.setUserImgPath(followUser.getImgPath());
+            followDto.setUserImgPath(followUser.getUserImage());
             followDtos.add(followDto);
         }
         return followDtos;
@@ -46,7 +46,7 @@ public class FollowServiceImpl implements FollowService {
             User followUser = follow.getFollower();
             FollowDto followDto = new FollowDto();
             followDto.setUsername(followUser.getUsername());
-//            followDto.setUserImgPath(followUser.getImgPath());
+            followDto.setUserImgPath(followUser.getUserImage());
             followingDtos.add(followDto);
 
         }
@@ -72,6 +72,7 @@ public class FollowServiceImpl implements FollowService {
         return ResponseEntity.ok("success");
     }
 
+    @Transactional
     @Override
     public ResponseEntity<?> following(HttpServletRequest request, String username) {
 

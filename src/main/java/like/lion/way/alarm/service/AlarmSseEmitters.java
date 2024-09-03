@@ -15,4 +15,6 @@ public interface AlarmSseEmitters {
     void sendChatCount(Long userId);
     // 새로운 알람 전송
     void sendAlarm(Long userId, Alarm alarm);
+    // Kafka에서 수신한 메시지를 클라이언트에게 전송
+    void send(Long userId, String name, String jsonData);
 }

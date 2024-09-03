@@ -14,7 +14,7 @@ $(document).ready(function() {
     const currentPath = window.location.pathname;
 
     // 특정 URL일 경우 adminTab을 보여줌
-    if (currentPath.startsWith('/admin')) {
+    if (currentPath.startsWith('/super')) {
         showTab('adminTab');
     } else if (activeTab === 'communityTab') {
         showTab('communityTab');

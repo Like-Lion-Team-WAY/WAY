@@ -10,9 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const name = document.getElementById('name').value;
         const introduction = document.getElementById('introduction').value;
-        const toggle = document.getElementById('toggle').checked;
 
-        const data = { name, introduction, anonymousPermission: toggle };
+        const data = { name, introduction};
 
 
         fetch('/api/v1/boards/create', {

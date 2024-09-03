@@ -18,7 +18,7 @@
 
     <div id="followers" class="tab-content">
         <div class="user-item" th:each="followers:${follower}" >
-            <img th:if="${followers.userImgPath}!=null" th:src="${followers.userImgPath}" alt="사용자1" class="user-img">
+            <img th:if="${followers.userImgPath}!=null" th:src="'/display?filename='+${followers.userImgPath}" alt="사용자1" class="user-img">
             <img th:unless="${followers.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
             <a th:href="@{/posts/{username}(username=${followers.username})}" th:text="${followers.username}" class="postname">사용자1</a>
@@ -28,7 +28,7 @@
     </div>
     <div id="following" class="tab-content" style="display:none">
         <div class="user-item" th:each="followings:${following}" >
-            <img th:if="${followings.userImgPath}!=null" th:src="${followings.userImgPath}" alt="사용자1" class="user-img">
+            <img th:if="${followings.userImgPath}!=null" th:src="'/display?filename='+${followings.userImgPath}" alt="사용자1" class="user-img">
             <img th:unless="${followings.userImgPath}!=null" src="/image/image.jpg" alt="사용자1" class="user-img">
 
             <a th:href="@{/posts/{username}(username=${followings.username})}" th:text="${followings.username}" class="postname">사용자1</a>

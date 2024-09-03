@@ -1,4 +1,4 @@
-package like.lion.way.common.controller;
+package like.lion.way.feed.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import like.lion.way.feed.domain.Question;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.feed.service.QuestionService;
 import like.lion.way.feed.util.UserUtil;
-import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.FollowDto;
 import like.lion.way.user.service.FollowService;
@@ -62,7 +61,7 @@ public class CommonController {
             model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).sorted(
                     Comparator.comparing(Question::getQuestionDate)).toList());
         }
-        return "pages/common/main";
+        return "pages/feed/main";
     }
     @GetMapping("/")
     public String mainPage(){

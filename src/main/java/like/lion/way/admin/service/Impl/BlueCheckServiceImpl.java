@@ -23,6 +23,8 @@ public class BlueCheckServiceImpl implements BlueCheckService {
 
         if (user == null) {
             throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
+        } else if(blueCheckRepository.findByUser(user) != null) {
+            throw new IllegalArgumentException("이미 블루체크를 신청한 유저입니다.");
         }
 
         BlueCheck blueCheck = new BlueCheck();

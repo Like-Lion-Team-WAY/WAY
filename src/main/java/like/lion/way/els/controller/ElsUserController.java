@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ElsUserController {
     @GetMapping("/searchform")
     public String showSearchPage() {
-        return "/pages/user/searchform";
+        return "pages/user/searchform";
     }
 }
