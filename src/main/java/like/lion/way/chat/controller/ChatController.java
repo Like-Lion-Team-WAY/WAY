@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * 채팅방에 대한 view controller
+ *
+ * @author Lee NaYeon
+ */
 @Controller
 @RequestMapping("/chats")
 @RequiredArgsConstructor
@@ -23,6 +28,13 @@ public class ChatController {
     private final ChatService chatService;
     private final MessageService messageService;
 
+    /**
+     * 채팅방 리스트 페이지 호출
+     *
+     * @param model view로 보낼 데이터
+     * @param request 유저 정보 추출 용도
+     * @return
+     */
     @GetMapping
     public String chatList(Model model, HttpServletRequest request) {
         Long userId = getUserId(request);
@@ -34,6 +46,14 @@ public class ChatController {
         return "pages/chat/chats";
     }
 
+    /**
+     * 채팅방 페이지 호출
+     *
+     * @param chatId 호출할 채팅방 Id
+     * @param model view로 보낼 데이터
+     * @param request 유저 정보 추출 용도
+     * @return
+     */
     @GetMapping("/{chatId}")
     public String chatRoom(@PathVariable("chatId") Long chatId, Model model, HttpServletRequest request) {
 
