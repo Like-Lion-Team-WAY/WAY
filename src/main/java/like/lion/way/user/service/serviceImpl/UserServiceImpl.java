@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * userId로 유저찾기
+     * @param userId 유저아이디
      */
     @Override
     public User findByUserId(Long userId) {
@@ -52,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * username으로 유저찾기
+     * @param username 유저네임
      */
     @Override
     public User findByUsername(String username) {
@@ -60,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 회원가입(social login save)
+     * @param attributes 소셜로그인한 사용자 정보
      */
     @Transactional
     @Override
@@ -88,6 +91,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      *  email로 user찾기
+     * @param email 이메일
      */
     @Override
     public User findByEmail(String email) {
@@ -97,6 +101,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      *  AccessToken , RefreshToken 발급
+     * @param user 토큰발급할 user 객체
      */
     @Transactional
     @Override
@@ -132,6 +137,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 회원탈퇴
+     * @param userId 유저아이디
      */
     @Transactional
     @Override
@@ -167,6 +173,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 회원가입 시 추가정보입력(username , nickname) 저장
+     * @param loginInfoDto username , nickname 있음
      */
     @Transactional
     @Override
@@ -191,6 +198,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      *  회원정보 수정 , 생성
+     * @param user 수정 , 생성하기위한 User객체
      */
     @Transactional
     @Override
@@ -201,6 +209,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      *  관심 생성
+     * @param interests 설정한 관심이름들
      */
     @Transactional
     @Override
@@ -253,6 +262,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 회원 프로필 이미지 저장 , 수정
+     * @param deleteFileName 삭제한 파일경로+파일이름
+     * @param key s3에 올라간 파일경로+파일이름
      */
     @Transactional
     @Override
