@@ -28,6 +28,12 @@ public class AlarmServiceImpl implements AlarmService {
     private final AlarmSettingRepository alarmSettingRepository;
     private final AlarmRepository alarmRepository;
 
+    /**
+     * 타입에 따른 알림 세팅 설정 여부 조회
+     * @param user 조회할 대상자
+     * @param type 알림 타입
+     * @return 알림 설정 여부
+     */
     @Override
     public boolean isAlarmEnabled(User user, AlarmType type) {
         return alarmSettingRepository.findByUser(user)
@@ -35,6 +41,11 @@ public class AlarmServiceImpl implements AlarmService {
                 .orElse(false);
     }
 
+    /**
+     * 알림 타입에 따라 메시지, url 생성
+     * @param alarmEvent 알림 이벤트
+     * @return 생성된 알림
+     */
     @Override
     public Alarm createAlarm(AlarmEvent alarmEvent) {
         AlarmType type = alarmEvent.getType();
@@ -46,6 +57,10 @@ public class AlarmServiceImpl implements AlarmService {
         return new Alarm(alarmEvent.getToUser(), message, url);
     }
 
+    /**
+     * 알림 저장
+     * @param alarm 저장할 알림
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveAlarm(Alarm alarm) {
@@ -53,6 +68,12 @@ public class AlarmServiceImpl implements AlarmService {
         alarmRepository.save(alarm);
     }
 
+    /**
+     * 특정 타입의 알림 설정 여부 조회
+     * @param alarmSetting 알림 설정
+     * @param alarmType 알림 타입
+     * @return 알림 설정 여부
+     */
     private boolean getAlarmStatus(AlarmSetting alarmSetting, AlarmType alarmType) {
         return switch (alarmType) {
             case NEW_QUESTION -> alarmSetting.isNewQuestion();
@@ -64,18 +85,35 @@ public class AlarmServiceImpl implements AlarmService {
         };
     }
 
+    /**
+     * 특정 유저의 알림 개수 조회
+     * @param user 조회할 대상자
+     * @return 알림 개수
+     */
     @Override
     @Transactional(readOnly = true)
     public Long countAlarm(User user) {
         return alarmRepository.countByUser(user);
     }
 
+    /**
+     * 특정 유저의 알림 개수 조회
+     * @param userId 조회할 대상자의 userId
+     * @return 알림 개수
+     */
     @Override
     @Transactional(readOnly = true)
     public Long countAlarm(Long userId) {
         return alarmRepository.countByUser_UserId(userId);
     }
 
+    /**
+     * 알림 조회
+     * @param userId 조회할 대상자의 userId
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 알림 목록
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<AlarmMessageDto> getAlarm(Long userId, int page, int size) {
@@ -84,18 +122,32 @@ public class AlarmServiceImpl implements AlarmService {
                 .map(AlarmMessageDto::new);
     }
 
+    /**
+     * 특정 알림 삭제
+     * @param alarmId 삭제할 알림의 id
+     */
     @Override
     @Transactional
     public void deleteAlarm(Long alarmId) {
         alarmRepository.deleteById(alarmId);
     }
 
+    /**
+     * 모든 알림 삭제
+     * @param userId 삭제할 대상자의 userId
+     */
     @Override
     @Transactional
     public void deleteAllAlarms(Long userId) {
         alarmRepository.deleteByUser_UserId(userId);
     }
 
+    /**
+     * 알림 설정 변경
+     * @param userId 변경할 대상자의 userId
+     * @param type 변경할 알림 타입
+     * @param enabled 변경할 알림 설정 여부
+     */
     @Override
     @Transactional
     public void updateAlarmSetting(Long userId, AlarmType type, boolean enabled) {
@@ -111,6 +163,11 @@ public class AlarmServiceImpl implements AlarmService {
         alarmSettingRepository.save(alarmSetting);
     }
 
+    /**
+     * 알림 설정 조회
+     * @param userId 조회할 대상자의 userId
+     * @return 알림 설정
+     */
     @Override
     @Transactional(readOnly = true)
     public Map<String, Boolean> getAlarmSetting(Long userId) {
