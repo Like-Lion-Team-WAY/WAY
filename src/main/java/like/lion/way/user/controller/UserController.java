@@ -42,6 +42,7 @@ public class UserController {
 
     /**
      * 로그인 정보 입력 저장(아이디 , 닉네임)
+     * @param loginInfoDto (username, nickname)
      */
     @PostMapping("/loginInfo")
     public String loginInfo(@ModelAttribute SettingLoginInfoDto loginInfoDto,
@@ -75,6 +76,7 @@ public class UserController {
 
     /**
      * 내 정보 수정
+     * @param updateUserDto
      */
     @PostMapping("/updateUserInfo")
     public String updateUserInfo(@ModelAttribute SettingLoginInfoDto updateUserDto , HttpServletRequest request,HttpServletResponse response){

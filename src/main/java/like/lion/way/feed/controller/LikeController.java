@@ -16,16 +16,24 @@ public class LikeController {
     private final LikeService likeService;
     private final QuestionService questionService;
 
-    // 게시글에 대한 좋아요
+    /**
+     * 게시글에 대한 좋아요
+     * @param postId
+     * @param userId
+     */
     @PostMapping("/posts/like")
     public String likePost(@RequestParam("postId") Long postId,
                            @RequestParam("userId") Long userId) {
-        
+
         likeService.likePost(postId, userId);
         return "redirect:/posts/detail/" + postId;
     }
 
-    //질문에 대한 좋아요
+    /**
+     * 질문에 대한 좋아요
+     * @param questionId
+     * @param userId
+     */
     @PostMapping("/questions/like")
     public String likeQuestion(@RequestParam("questionId") Long questionId,
                                @RequestParam("userId") Long userId) {

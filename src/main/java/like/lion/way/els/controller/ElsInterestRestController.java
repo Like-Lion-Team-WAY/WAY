@@ -20,16 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class ElsInterestRestController {
     private final ElsInterestService elsInterestService;
 
+    /**
+     * 키워드 검색
+     * @param keyword
+     */
     @GetMapping("/search")
     public List<String> searchInterests(@RequestParam("keyword") String keyword){
         return elsInterestService.searchInterestsByDescription(keyword);
     }
 
+    /**
+     * 전체 검색
+     */
     @GetMapping("/all")
     public ResponseEntity<List<ElsInterest>> getAllInterests() {
         List<ElsInterest> interests = elsInterestService.getAllInterests();
         return new ResponseEntity<>(interests, HttpStatus.OK);
     }
+
+    /**
+     * 관심사 등록
+     */
     @PostMapping("/createInterest")
     public ResponseEntity<ElsInterest> createInterest(@RequestBody ElsInterest interest) {
         ElsInterest savedInterest = elsInterestService.saveInterest(interest);

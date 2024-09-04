@@ -46,7 +46,7 @@ public class UserRestController {
 
     /**
      *  관심 등록
-     * @param interests
+     * @param interests 내가 선택한 관심 이름들
      */
     @PostMapping("/addInterests")
     public ResponseEntity<String> addInterests(HttpServletRequest request

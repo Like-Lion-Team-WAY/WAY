@@ -21,9 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class BlockServiceImpl implements BlockService {
+
     private final BlockRepository blockRepository;
     private final JwtUtil jwtUtil;
     private final UserService userService;
+
+    /**
+     * 차단 리스트
+     * @param user 해당유저의 차단리스트
+     */
     @Override
     public List<String> getBlcokList(User user) {
         List<Block> blocks = blockRepository.findAllByBlockerUserId(user);
@@ -35,6 +41,10 @@ public class BlockServiceImpl implements BlockService {
         return blockedNames;
     }
 
+    /**
+     * 차단해제
+     * @param username 차단해제당하는 user
+     */
     @Transactional
     @Override
     public ResponseEntity<?> unblock(HttpServletRequest request, String username) {
@@ -46,6 +56,10 @@ public class BlockServiceImpl implements BlockService {
         return ResponseEntity.ok("success");
     }
 
+    /**
+     * 차단 로직
+     * @param checkContents 컨텐츠들 ( post , question)
+     */
     @Override
     public List<?> blockFilter(List<?> checkContents, HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
@@ -108,6 +122,10 @@ public class BlockServiceImpl implements BlockService {
         return list;
     }
 
+    /**
+     * 차단 했는지 안했는지 체크
+     * @param feedUser 현재 피드유저
+     */
     @Override
     public Block findByUser(User feedUser, HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");

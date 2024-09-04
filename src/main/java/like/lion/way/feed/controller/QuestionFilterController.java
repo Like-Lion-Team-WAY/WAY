@@ -24,7 +24,12 @@ public class QuestionFilterController {
     private final QuestionService questionService;
     private final UserUtil userUtil;
 
-    // 공통된 로그인 부분 model 설정 메서드
+    /**
+     * 공통된 로그인 부분 설정 (중복된 부분을 메서드로 추출)
+     * @param model
+     * @param user
+     * @param request
+     */
     private void setCommonModelAttributes(Model model,
                                           User user,
                                           HttpServletRequest request) {
@@ -34,7 +39,13 @@ public class QuestionFilterController {
         model.addAttribute("user", user);
     }
 
-    // 필터된 질문 리스트를 설정하는 메서드
+    /**
+     * 질문 필터링
+     * @param model
+     * @param user
+     * @param filter
+     * @param request
+     */
     private void setFilteredQuestions(Model model,
                                       User user,
                                       Predicate<Question> filter,
@@ -46,7 +57,11 @@ public class QuestionFilterController {
                 .collect(Collectors.toList()));
     }
 
-    // 거절 질문 리스트
+    /**
+     * 거절 질문들
+     * @param model
+     * @param request
+     */
     @GetMapping("/questions/rejected")
     public String rejectedQuestion(Model model,
                                    HttpServletRequest request) {
@@ -57,7 +72,12 @@ public class QuestionFilterController {
         return "pages/feed/rejectedQuestionPage";
     }
 
-    // 새 질문 리스트 내림차순 정렬
+    /**
+     * 새로운 질문들 (답변 안 된걸 기준)
+     * @param userId
+     * @param model
+     * @param request
+     */
     @GetMapping("/questions/new/{userId}")
     public String showNewQuestion(@PathVariable("userId") Long userId,
                                   Model model,
@@ -73,7 +93,12 @@ public class QuestionFilterController {
         return "pages/feed/filterQuestionPage";
     }
 
-    // 답변 질문 리스트
+    /**
+     * 답변된 질문들
+     * @param userId
+     * @param model
+     * @param request
+     */
     @GetMapping("/questions/reply/{userId}")
     public String showReplyQuestion(@PathVariable("userId") Long userId,
                                     Model model,
@@ -85,7 +110,12 @@ public class QuestionFilterController {
         return "pages/feed/filterQuestionPage";
     }
 
-    // 보낸 질문 리스트
+    /**
+     * 보낸 질문들
+     * @param userId
+     * @param model
+     * @param request
+     */
     @GetMapping("/questions/send/{userId}")
     public String showSendQuestion(@PathVariable("userId") Long userId,
                                    Model model,

@@ -12,6 +12,7 @@ import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,13 @@ public class PostBoxServiceImpl implements PostBoxService {
     private final PostBoxRepository postBoxRepository;
     private final UserService userService;
 
+    /**
+     * 게시글 보관
+     * @param postId
+     * @param userId
+     */
     @Override
+    @Transactional
     public PostBox archievePost(Long postId, Long userId) {
         User user = userService.findByUserId(userId);
         Post post = postService.getPostById(postId);
@@ -29,6 +36,7 @@ public class PostBoxServiceImpl implements PostBoxService {
         Optional<PostBox> existingPostBox = postBoxRepository.findByUserAndPost(user, post);
 
         if (existingPostBox.isPresent()) {
+            // 이미 보관된 게시글이면 삭제
             postBoxRepository.delete(existingPostBox.get());
             return null;
         } else {
@@ -40,11 +48,19 @@ public class PostBoxServiceImpl implements PostBoxService {
         }
     }
 
+    /**
+     * 게시글 보관함 조회
+     * @param post
+     */
     @Override
     public List<PostBox> getPostBoxByPostId(Post post) {
         return postBoxRepository.findByPost(post);
     }
 
+    /**
+     * 사용자별 게시글 보관함 조회
+     * @param user
+     */
     @Override
     public List<PostBox> getPostBoxByUserId(User user) {
         return postBoxRepository.findByUser(user);

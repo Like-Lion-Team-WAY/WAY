@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class UserUtil {
+public class  UserUtil {
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
