@@ -31,8 +31,6 @@ public class CommonController {
 
     /**
      * 메인 페이지
-     * @param model
-     * @param request
      */
     @GetMapping("/main")
     public String mainView(Model model, HttpServletRequest request) {

@@ -24,8 +24,8 @@ public class PostBoxServiceImpl implements PostBoxService {
 
     /**
      * 게시글 보관
-     * @param postId
-     * @param userId
+     * @param postId 게시글 Id
+     * @param userId 게시글 보관을 원하는 사용자 Id
      */
     @Override
     @Transactional
@@ -50,7 +50,7 @@ public class PostBoxServiceImpl implements PostBoxService {
 
     /**
      * 게시글 보관함 조회
-     * @param post
+     * @param post 게시글
      */
     @Override
     public List<PostBox> getPostBoxByPostId(Post post) {
@@ -59,7 +59,7 @@ public class PostBoxServiceImpl implements PostBoxService {
 
     /**
      * 사용자별 게시글 보관함 조회
-     * @param user
+     * @param user 사용자
      */
     @Override
     public List<PostBox> getPostBoxByUserId(User user) {

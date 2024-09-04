@@ -26,7 +26,7 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     /**
      * 댓글 조회
-     * @param commentId
+     * @param commentId 댓글 Id
      */
     public PostComment getCommentById(Long commentId) {
         return postCommentRepository.findById(commentId)
@@ -35,9 +35,9 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     /**
      * 댓글 저장
-     * @param postId
-     * @param postCommentDto
-     * @param userId
+     * @param postId 게시글 Id
+     * @param postCommentDto 댓글 작성 정보
+     * @param userId 댓글 작성한 사용자 Id
      */
     @Override
     @Transactional
@@ -65,9 +65,9 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     /**
-     * 댓글 수정
-     * @param commentId
-     * @param content
+     * 댓글(대댓글) 수정
+     * @param commentId 댓글(대댓글) Id
+     * @param content 댓글(대댓글) 내용
      */
     @Override
     @Transactional
@@ -80,7 +80,7 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     /**
      * 댓글 삭제
-     * @param commentId
+     * @param commentId 댓글 Id
      */
     @Override
     @Transactional
@@ -90,10 +90,10 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     /**
      * 대댓글 저장
-     * @param postId
-     * @param userId
-     * @param postCommentContent
-     * @param parentCommentPreCommentId
+     * @param postId 게시글 Id
+     * @param userId 대댓글 단 사용자 Id
+     * @param postCommentContent 댓글 내용
+     * @param parentCommentPreCommentId 부모 댓글 Id (앞 댓글)
      */
     @Override
     @Transactional

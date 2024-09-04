@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 id 에 따른 조회
-     * @param questionId
+     * @param questionId 질문 Id
      */
     @Override
     public Question getQuestionById(Long questionId) {
@@ -50,8 +50,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 답변 수정
-     * @param questionId
-     * @param answer
+     * @param questionId 질문 Id
+     * @param answer 질문 답변
      */
     @Override
     @Transactional
@@ -71,7 +71,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 답변자의 질문 데이터 조회
-     * @param user
+     * @param user 사용자
      */
     @Override
     public List<Question> getQuestionByAnswerer(User user) {
@@ -80,8 +80,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 답변자의 질문 데이터 조회 (차단된 사용자 필터링)
-     * @param user
-     * @param request
+     * @param user 사용자
      */
     @Override
     public List<Question> getQuestionByAnswerer(User user, HttpServletRequest request) {
@@ -91,7 +90,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문자의 질문 데이터 조회
-     * @param user
+     * @param user 사용자
      */
     @Override
     public List<Question> getQuestionByQuestioner(User user) {
@@ -100,8 +99,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 고정 (핀)
-     * @param questionId
-     * @return
+     * @param questionId 질문 Id
      */
     @Override
     @Transactional
@@ -117,8 +115,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 거절 질문 등록
-     * @param question
-     * @return
+     * @param question 질문
      */
     @Override
     @Transactional
@@ -133,7 +130,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 삭제
-     * @param questionId
+     * @param questionId 질문 Id
      */
     @Override
     @Transactional
@@ -144,12 +141,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 저장 (로그인 된 사용자)
-     * @param user
-     * @param userId
-     * @param question
-     * @param isAnonymous
-     * @param key
-     * @param request
+     * @param user 질문자
+     * @param userId 피드 주인 Id
+     * @param question 질문 내용
+     * @param isAnonymous 익명 여부
+     * @param key 이미지 파일
      */
     @Override
     @Transactional
@@ -186,8 +182,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문에 대한 답변 저장
-     * @param question
-     * @param answer
+     * @param question 질문
+     * @param answer 질문의 답변
      */
     @Override
     @Transactional
@@ -207,10 +203,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 질문 저장 (비로그인 사용자)
-     * @param userId
-     * @param question
-     * @param key
-     * @param request
+     * @param userId 피드 주인 Id
+     * @param question 질문 내용
+     * @param key 이미지 파일
      */
     @Override
     @Transactional

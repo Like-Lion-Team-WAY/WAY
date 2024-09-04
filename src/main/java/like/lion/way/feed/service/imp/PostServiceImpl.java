@@ -36,7 +36,6 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 게시글 전체 조회 (차단된 사용자 필터링)
-     * @param request
      */
     @Override
     public List<Post> getAllPosts(HttpServletRequest request) {
@@ -46,7 +45,7 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 게시글 조회
-     * @param id
+     * @param id 게시글 Id
      */
     @Override
     public Post getPostById(Long id) {
@@ -55,9 +54,9 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 게시글 수정
-     * @param id
-     * @param title
-     * @param content
+     * @param id 게시글 Id
+     * @param title 게시글 제목
+     * @param content 게시글 내용
      */
     @Override
     @Transactional
@@ -71,7 +70,7 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 게시글 삭제
-     * @param id
+     * @param id 게시글 Id
      */
     @Override
     @Transactional
@@ -81,7 +80,7 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 사용자별 게시글 조회
-     * @param user
+     * @param user 사용자 정보
      */
     @Override
     public List<Post> getPostByUser(User user) {
@@ -90,8 +89,7 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 사용자별 게시글 조회 (차단된 사용자 필터링)
-     * @param user
-     * @param request
+     * @param user 사용자 정보
      */
     @Override
     public List<Post> getPostByUser(User user, HttpServletRequest request) {
@@ -101,7 +99,7 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 게시글 고정 (핀)
-     * @param postId
+     * @param postId 게시글 Id
      */
     @Override
     @Transactional
@@ -117,9 +115,9 @@ public class PostServiceImpl implements PostService {
 
     /**
      * 게시글 작성(등록)
-     * @param postDto
-     * @param key
-     * @param user
+     * @param postDto 게시글 정보
+     * @param key 이미지 파일
+     * @param user 사용자 정보(게시글 작성한)
      */
     @Override
     @Transactional

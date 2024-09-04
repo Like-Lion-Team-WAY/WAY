@@ -21,8 +21,8 @@ public class QuestionBoxServiceImpl implements QuestionBoxService {
 
     /**
      * 질문 보관
-     * @param questionId
-     * @param userId
+     * @param questionId 질문 Id
+     * @param userId 질문 보관을 한 사용자 Id
      */
     @Override
     @Transactional
@@ -44,7 +44,7 @@ public class QuestionBoxServiceImpl implements QuestionBoxService {
 
     /**
      * 질문 보관함 조회 (사용자로)
-     * @param user
+     * @param user 사용자
      */
     @Override
     public List<QuestionBox> getQuestionBoxByUserId(User user) {

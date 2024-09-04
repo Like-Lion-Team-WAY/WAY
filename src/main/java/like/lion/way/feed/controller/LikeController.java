@@ -18,8 +18,8 @@ public class LikeController {
 
     /**
      * 게시글에 대한 좋아요
-     * @param postId
-     * @param userId
+     * @param postId 게시글 Id
+     * @param userId 사용자 Id
      */
     @PostMapping("/posts/like")
     public String likePost(@RequestParam("postId") Long postId,
@@ -31,8 +31,8 @@ public class LikeController {
 
     /**
      * 질문에 대한 좋아요
-     * @param questionId
-     * @param userId
+     * @param questionId 좋아요를 누른 질문 Id
+     * @param userId 좋아요를 누른 사용자 Id
      */
     @PostMapping("/questions/like")
     public String likeQuestion(@RequestParam("questionId") Long questionId,

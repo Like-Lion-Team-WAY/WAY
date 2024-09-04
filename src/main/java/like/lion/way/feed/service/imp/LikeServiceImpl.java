@@ -25,8 +25,8 @@ public class LikeServiceImpl implements LikeService {
 
     /**
      * 게시글 좋아요
-     * @param postId
-     * @param userId
+     * @param postId 게시글 Id
+     * @param userId 게시글 좋아요를 누른 사용자 Id
      */
     @Override
     @Transactional
@@ -54,8 +54,8 @@ public class LikeServiceImpl implements LikeService {
 
     /**
      * 질문 좋아요
-     * @param questionId
-     * @param userId
+     * @param questionId 질문 Id
+     * @param userId 질문에 좋아요를 누른 사용자 Id
      */
     @Override
     @Transactional

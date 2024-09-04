@@ -31,8 +31,6 @@ public class QuestionController {
 
     /**
      * 질문 페이지
-     * @param model
-     * @param request
      */
     @GetMapping("/questions/create")
     public String createMyQuestion(Model model,
@@ -44,9 +42,7 @@ public class QuestionController {
 
     /**
      * 질문 페이지 (다른 사용자)
-     * @param model
-     * @param request
-     * @param userId
+     * @param userId 다른 사용자의 질문 페이지에 가기 위해 사용되는 사용자 Id
      */
     @GetMapping("/questions/create/{userId}")
     public String createQuestion(Model model,
@@ -58,11 +54,10 @@ public class QuestionController {
 
     /**
      * 질문 작성
-     * @param userId
-     * @param question
-     * @param isAnonymous
-     * @param image
-     * @param request
+     * @param userId 질문 페이지 소유자의 Id
+     * @param question 질문
+     * @param isAnonymous 익명 여부
+     * @param image 이미지 파일
      */
     @PostMapping("/questions/create/{userId}")
     public String createQuestion(@PathVariable("userId") Long userId,
@@ -87,8 +82,8 @@ public class QuestionController {
 
     /**
      * 질문 답변
-     * @param answer
-     * @param questionId
+     * @param answer 질문 답변 내용
+     * @param questionId 답변한 질문 Id
      */
     @PostMapping("/questions/answer/{questionId}")
     public String answerQuestion(@RequestParam("answer") String answer,
@@ -101,7 +96,7 @@ public class QuestionController {
 
     /**
      * 거절 질문 등록
-     * @param questionId
+     * @param questionId 거절할 질문 Id
      */
     @PostMapping("/questions/enroll/rejected")
     public String enrollRejected(@RequestParam("questionId") Long questionId) {
@@ -113,7 +108,7 @@ public class QuestionController {
 
     /**
      * 질문 고정 (핀)
-     * @param questionId
+     * @param questionId 고정된 질문 Id
      */
     @PostMapping("/questions/pin/{questionId}")
     public String pinQuestion(@PathVariable("questionId") Long questionId) {
@@ -124,7 +119,7 @@ public class QuestionController {
 
     /**
      * 질문 삭제
-     * @param questionId
+     * @param questionId 고정된 질문 Id
      */
     @PostMapping("/questions/delete")
     public String deleteQuestion(@RequestParam("questionId") Long questionId) {
@@ -139,9 +134,7 @@ public class QuestionController {
 
     /**
      * 공통적으로 질문 페이지에 띄우는 데이터들
-     * @param model
-     * @param request
-     * @param userId
+     * @param userId 사용자 Id
      */
     private String loadQuestionPage(Model model,
                                     HttpServletRequest request,
@@ -167,7 +160,7 @@ public class QuestionController {
 
     /**
      * 고정되지 않은 질문 필터링
-     * @param questions
+     * @param questions 질문 리스트
      */
     private List<Question> filterNonPinnedQuestions(List<Question> questions) {
         return questions.stream()
@@ -178,8 +171,7 @@ public class QuestionController {
 
     /**
      * 고정된 질문 필터링
-     * @param questions
-     * @return
+     * @param questions 질문 리스트
      */
     private List<Question> filterPinnedQuestions(List<Question> questions) {
         return questions.stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus())

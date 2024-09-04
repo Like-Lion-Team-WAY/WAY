@@ -41,8 +41,6 @@ public class PostController {
 
     /**
      * 게시글 목록 (자기 자신의 피드)
-     * @param model
-     * @param request
      */
     @GetMapping("/posts")
     public String getPosts(Model model, HttpServletRequest request) {
@@ -52,9 +50,7 @@ public class PostController {
 
     /**
      * 게시글 목록 (다른 사용자의 피드)
-     *  @param username
-     *  @param model
-     *  @param request
+     *  @param username 특정 사용자의 피드를 보기 위해 사용하는 사용자 이름
      */
     @GetMapping("/posts/{username}")
     public String getPostsByUsername(@PathVariable("username") String username,
@@ -66,7 +62,7 @@ public class PostController {
 
     /**
      * 게시글 고정 (핀)
-     * @param postId
+     * @param postId 고정하고 싶은 게시글 Id
      */
     @PostMapping("/posts/pin/{postId}")
     public String pinPost(@PathVariable("postId") Long postId) {
@@ -77,9 +73,8 @@ public class PostController {
 
     /**
      * 게시글 작성(등록)
-     * @param postDto
-     * @param file
-     * @param request
+     * @param postDto 게시글 정보
+     * @param file 이미지 파일
      */
     @PostMapping("/posts/create")
     public String savePost(PostDto postDto,
@@ -107,9 +102,7 @@ public class PostController {
 
     /**
      * 게시글 상세 페이지
-     * @param postId
-     * @param model
-     * @param request
+     * @param postId 자세히 보고 싶은 게시글의 Id
      */
     @GetMapping("/posts/detail/{postId}")
     public String showDetailPost(@PathVariable("postId") Long postId,
@@ -128,9 +121,7 @@ public class PostController {
 
     /**
      * 사용자 피드에 뜨는 정보 (게시글, 질문)
-     * @param username
-     * @param model
-     * @param request
+     * @param username 자신의 피드 또는 다른 사용자의 피드를 보기 위해 사용하는 사용자 이름
      */
     private String getPostsForUser(String username,
                                    Model model,
@@ -160,8 +151,7 @@ public class PostController {
 
     /**
      * 사용자 차단 여부 확인
-     * @param user
-     * @param request
+     * @param user 사용자
      */
     private boolean isUserBlocked(User user,
                                   HttpServletRequest request) {
@@ -176,9 +166,7 @@ public class PostController {
 
     /**
      * 사용자 게시글, 질문 정보
-     * @param model
-     * @param user
-     * @param request
+     * @param user 사용자
      */
     private void populateModelWithUserPostsAndQuestions(Model model,
                                                         User user,
@@ -199,7 +187,7 @@ public class PostController {
 
     /**
      * 고정되지 않은 게시글 필터링
-     * @param posts
+     * @param posts 게시글
      */
     private List<Post> filterNonPinnedPosts(List<Post> posts) {
         return posts.stream().filter(p -> !p.isPostPinStatus())
@@ -209,7 +197,7 @@ public class PostController {
 
     /**
      * 고정된 게시글 필터링
-     * @param posts
+     * @param posts 게시글
      */
     private List<Post> filterPinnedPosts(List<Post> posts) {
         return posts.stream()
@@ -220,7 +208,7 @@ public class PostController {
 
     /**
      * 답변된 질문 필터링
-     * @param questions
+     * @param questions 질문
      */
     private List<Question> filterAnsweredQuestions(List<Question> questions) {
         return questions.stream()
@@ -231,7 +219,7 @@ public class PostController {
 
     /**
      * 거절된 질문 수
-     * @param questions
+     * @param questions 질문
      */
     private int countRejectedQuestions(List<Question> questions) {
         return (int) questions.stream().filter(Question::getQuestionRejected).count();
@@ -239,7 +227,7 @@ public class PostController {
 
     /**
      * 답변되지 않은 질문 수
-     * @param questions
+     * @param questions 질문
      */
     private int countNewQuestions(List<Question> questions) {
         return (int) questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() == null).count();
@@ -247,7 +235,7 @@ public class PostController {
 
     /**
      * 답변된 질문 수
-     * @param questions
+     * @param questions 질문
      */
     private int countReplyQuestions(List<Question> questions) {
         return (int) questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).count();

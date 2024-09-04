@@ -24,8 +24,7 @@ public class ArchieveController {
 
     /**
      * 전체 보관함 페이지
-     * @param userId
-     * @param model
+     * @param userId 사용자 Id
      */
     @GetMapping("/all/archieve/{userId}")
     public String archieveAll(@PathVariable("userId") Long userId,
@@ -42,8 +41,8 @@ public class ArchieveController {
 
     /**
      * 질문 보관
-     * @param questionId
-     * @param userId
+     * @param questionId 보관하고 싶은 질문 Id
+     * @param userId 질문을 보관하는 사용자 Id
      */
     @PostMapping("/questions/archieve")
     public String archieveQuestion(@RequestParam("questionId") Long questionId,
@@ -55,8 +54,8 @@ public class ArchieveController {
 
     /**
      * 게시글 보관
-     * @param postId
-     * @param userId
+     * @param postId 보관하고 싶은 게시글 Id
+     * @param userId 해당 게시글을 보관하는 사용자 Id
      */
     @PostMapping("/posts/archieve/{postId}")
     public String archievePost(@PathVariable("postId") Long postId,

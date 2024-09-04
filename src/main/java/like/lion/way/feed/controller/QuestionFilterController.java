@@ -26,9 +26,7 @@ public class QuestionFilterController {
 
     /**
      * 공통된 로그인 부분 설정 (중복된 부분을 메서드로 추출)
-     * @param model
-     * @param user
-     * @param request
+     * @param user 질문 페이지의 소유자
      */
     private void setCommonModelAttributes(Model model,
                                           User user,
@@ -41,10 +39,8 @@ public class QuestionFilterController {
 
     /**
      * 질문 필터링
-     * @param model
-     * @param user
-     * @param filter
-     * @param request
+     * @param user 질문 페이지의 소유자
+     * @param filter 질문 필터
      */
     private void setFilteredQuestions(Model model,
                                       User user,
@@ -59,8 +55,6 @@ public class QuestionFilterController {
 
     /**
      * 거절 질문들
-     * @param model
-     * @param request
      */
     @GetMapping("/questions/rejected")
     public String rejectedQuestion(Model model,
@@ -74,9 +68,7 @@ public class QuestionFilterController {
 
     /**
      * 새로운 질문들 (답변 안 된걸 기준)
-     * @param userId
-     * @param model
-     * @param request
+     * @param userId 질문 페이지의 소유자 Id
      */
     @GetMapping("/questions/new/{userId}")
     public String showNewQuestion(@PathVariable("userId") Long userId,
@@ -95,9 +87,7 @@ public class QuestionFilterController {
 
     /**
      * 답변된 질문들
-     * @param userId
-     * @param model
-     * @param request
+     * @param userId 질문 페이지의 소유자 Id
      */
     @GetMapping("/questions/reply/{userId}")
     public String showReplyQuestion(@PathVariable("userId") Long userId,
@@ -112,9 +102,7 @@ public class QuestionFilterController {
 
     /**
      * 보낸 질문들
-     * @param userId
-     * @param model
-     * @param request
+     * @param userId 질문 페이지의 소유자 Id
      */
     @GetMapping("/questions/send/{userId}")
     public String showSendQuestion(@PathVariable("userId") Long userId,
