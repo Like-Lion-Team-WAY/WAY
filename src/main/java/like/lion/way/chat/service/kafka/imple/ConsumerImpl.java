@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import like.lion.way.alarm.event.ChatAlarmEvent;
 import like.lion.way.chat.domain.Message;
-import like.lion.way.chat.domain.dto.ReceiveMessageDTO;
+import like.lion.way.chat.dto.ReceiveMessageDTO;
 import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.kafka.Consumer;
 import like.lion.way.user.repository.UserRepository;

@@ -1,8 +1,6 @@
 package like.lion.way.board.repository;
 
-import java.util.Arrays;
 import java.util.List;
-import like.lion.way.board.application.response.BoardPostCommentResponse;
 import like.lion.way.board.domain.BoardPostComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
