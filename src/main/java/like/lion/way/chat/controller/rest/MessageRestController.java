@@ -109,6 +109,12 @@ public class MessageRestController {
         return receiveMessageDTOs;
     }
 
+    /**
+     * 유저 Id 추출
+     *
+     * @param request 유저 정보 추출 용도
+     * @return 유저 Id
+     */
     private Long getUserId(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         return jwtUtil.getUserIdFromToken(token);

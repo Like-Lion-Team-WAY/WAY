@@ -473,11 +473,24 @@ public class ChatRestController {
 
     //////////////////////////////////
 
+    /**
+     * 유저 Id 추출
+     *
+     * @param request 유저 정보 추출 용도
+     * @return 유저 Id
+     */
     private Long getUserId(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
         return jwtUtil.getUserIdFromToken(token);
     }
 
+    /**
+     * 닉네임 오픈 상태에 따른 유저 닉네임 추출
+     *
+     * @param chat 닉네임 오픈 상태 확인 위한 채팅방 정보
+     * @param userId 닉네임 추출할 유저 Id
+     * @return 닉네임
+     */
     private String getNickname(Chat chat, Long userId) {
         if (chat.isAnswerer(userId)) {
             return chat.getAnswererNickname();
