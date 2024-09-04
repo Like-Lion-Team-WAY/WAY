@@ -24,15 +24,26 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 로그인페이지 이동
+     */
     @GetMapping("/login")
     public String testView(){
         return "pages/user/login";
     }
 
+    /**
+     * 로그인정보입력창 입력 페이지 이동
+     */
     @GetMapping("/loginInfo")
     public String loginInfoView(){
         return "pages/user/loginInfo";
     }
+
+    /**
+     * 로그인 정보 입력 저장(아이디 , 닉네임)
+     * @param loginInfoDto (username, nickname)
+     */
     @PostMapping("/loginInfo")
     public String loginInfo(@ModelAttribute SettingLoginInfoDto loginInfoDto,
                             HttpServletRequest request, HttpServletResponse response){
@@ -43,11 +54,18 @@ public class UserController {
             return "redirect:/user/loginInfo";
         }
     }
+
+    /**
+     * 관심설정 페이지 이동
+     */
     @GetMapping("/like")
     public String likeView(){
         return "pages/user/like";
     }
 
+    /**
+     *  내 정보 수정 페이지 이동
+     */
     @GetMapping("/setting")
     public ModelAndView settingView(HttpServletRequest request , ModelAndView model){
         UserProfileDto dto = userService.getProfile(request);
@@ -56,6 +74,10 @@ public class UserController {
         return model;
     }
 
+    /**
+     * 내 정보 수정
+     * @param updateUserDto
+     */
     @PostMapping("/updateUserInfo")
     public String updateUserInfo(@ModelAttribute SettingLoginInfoDto updateUserDto , HttpServletRequest request,HttpServletResponse response){
         User user = userService.updateLoginInfo(updateUserDto,request, response);
@@ -67,6 +89,9 @@ public class UserController {
         }
     }
 
+    /**
+     * 로그아웃
+     */
     @GetMapping("/logout")
     public String logout(HttpServletResponse response){
         userService.logout(response);

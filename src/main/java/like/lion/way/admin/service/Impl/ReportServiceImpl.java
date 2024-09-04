@@ -32,6 +32,11 @@ public class ReportServiceImpl implements ReportService {
     private final PostCommentService postCommentService;
     private final MessageService messageService;
 
+    /**
+     * 신고 신청
+     * @param reporterId 신고자 id
+     * @param reportRequestDto 신고 신청 정보
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void report(Long reporterId, ReportRequestDto reportRequestDto) {
@@ -43,6 +48,12 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
+    /**
+     * 신고 객체 생성 (QUESTION, POST, COMMENT, CHATTING)
+     * @param reporterId 신고자 id
+     * @param reportRequestDto 신고 신청 정보
+     * @return 생성된 신고 객체
+     */
     public Report createReportByType(Long reporterId, ReportRequestDto reportRequestDto) {
         ReportType type = reportRequestDto.getType();
         User reporter = userService.findByUserId(reporterId);
@@ -75,6 +86,13 @@ public class ReportServiceImpl implements ReportService {
         return new Report(reporter, reported, type.toString(), reportRequestDto.getId(), content);
     }
 
+    /**
+     * 신고 신청 목록 조회
+     * @param type 신고 타입
+     * @param reportedUsername 신고 당한 사용자
+     * @param sortDirection 정렬 방향
+     * @return 필터링 된 신고 신청 목록
+     */
     @Override
     @Transactional(readOnly = true)
     public List<ReportResponseDto> getReports(String type, String reportedUsername, String sortDirection) {
@@ -82,6 +100,10 @@ public class ReportServiceImpl implements ReportService {
         return list.stream().map(ReportResponseDto::new).toList();
     }
 
+    /**
+     * 신고 삭제
+     * @param id 삭제할 신고 id
+     */
     @Override
     @Transactional
     public void deleteReport(Long id) {
