@@ -22,11 +22,11 @@ pipeline {
             steps {
                 dir('src/main/resources') {
                     withCredentials([file(credentialsId: 'yml', variable: 'YML_FILE')]) {
-                        sh """
+                        sh '''
                         echo "Copying configuration file..."
                         cp ${YML_FILE} application.yml
                         ls -l
-                        """
+                        '''
                     }
                 }
             }
