@@ -6,10 +6,7 @@ import like.lion.way.user.domain.User;
 
 public interface BlueCheckService {
     BlueCheck applyBlueCheck(Long userId);
-
     BlueCheck findByUser(User user);
-
     List<BlueCheck> findAll();
-
     void removeBlueCheck(String username);
 }

@@ -20,6 +20,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+/**
+ * kafka-consumer 처리
+ *
+ * @author Lee NaYeon
+ */
 @Service
 @RequiredArgsConstructor
 public class ConsumerImpl implements Consumer {
@@ -34,6 +39,13 @@ public class ConsumerImpl implements Consumer {
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
+    /**
+     * 다중 서버 위한 채팅방 입장 유저 처리<br/>
+     * 읽음 여부에 따른 처리 및 알림 전송
+     * 유저측으로 메세지 전송
+     *
+     * @param message 받은 메세지
+     */
     @Override
     @KafkaListener(topics = "topic-messages")
     public void listen(String message) {
@@ -67,6 +79,13 @@ public class ConsumerImpl implements Consumer {
         }
     }
 
+    /**
+     * 유저 채팅방 입장 처리
+     *
+     * @param chatIds 현재 관리중인 채팅방 Id 리스트
+     * @param chatId 입장할 채팅방 Id
+     * @param senderId 입장할 유저 Id
+     */
     private void enterProcessing(Set<Long> chatIds, Long chatId, Long senderId) {
         if (chatIds == null) {
             enterUser.put(chatId, new HashSet<>());
@@ -74,6 +93,13 @@ public class ConsumerImpl implements Consumer {
         enterUser.get(chatId).add(senderId);
     }
 
+    /**
+     * 유저 채팅방 나감 처리
+     *
+     * @param chatIds 현재 관리중인 채팅방 Id 리스트
+     * @param chatId 나갈 채팅방 Id
+     * @param senderId 나갈 유저 Id
+     */
     private void leaveProcessing(Set<Long> chatIds, Long chatId, Long senderId) {
         chatIds.remove(senderId);
         if (chatIds.isEmpty()) {
@@ -81,6 +107,11 @@ public class ConsumerImpl implements Consumer {
         }
     }
 
+    /**
+     * 메세지 읽음 처리
+     *
+     * @param receiveMessageDTO 읽은 메세지 데이터
+     */
     private void readProcessing(ReceiveMessageDTO receiveMessageDTO) {
         if (groupId.equals("group1")) {
             Message messageFromDB = messageRepository.findById(receiveMessageDTO.getId()).get();

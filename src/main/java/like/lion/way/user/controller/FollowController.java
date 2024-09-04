@@ -19,9 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class FollowController {
+
     private final FollowService followService;
     private final BlockService blockService;
     private final UserService userService;
+
+    /**
+     * 팔로우 팔로잉 차단 페이지 이동(본인)
+     */
     @GetMapping("/followSetting")
     public String followSetting(HttpServletRequest request,Model model){
         User user = userService.getUserByToken(request);
@@ -34,6 +39,11 @@ public class FollowController {
         model.addAttribute("another","itsme");
         return "pages/user/followSetting";
     }
+
+    /**
+     * 팔로우 팔로잉 페이지 이동(타유저)
+     * @param userId
+     */
     @GetMapping("/followList")
     public String followList(@RequestParam("userId")Long userId , Model model , HttpServletRequest request){
         User nowUser = userService.getUserByToken(request);

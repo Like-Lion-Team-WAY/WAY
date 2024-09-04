@@ -17,6 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+/**
+ * kafka-producer 처리
+ *
+ * @author Lee NaYeon
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,6 +32,12 @@ public class ProducerImpl implements Producer {
     private final MessageRepository messageRepository;
     private final ChatRepository chatRepository;
 
+    /**
+     * 받은 메세지의 타입에 따른기본 처리<br/>
+     * consumer 로 전송
+     *
+     * @param message 받은 메세지
+     */
     @Override
     public void sendMessage(Message message) {
 
@@ -65,6 +76,12 @@ public class ProducerImpl implements Producer {
         }
     }
 
+    /**
+     * 메세지 수신인 설정
+     *
+     * @param chat 메세지가 소속된 채팅방
+     * @param message 메세지
+     */
     private void settingMessageReceiverId(Chat chat, Message message) {
         if (chat.isAnswerer(message.getSenderId())) {
             message.setReceiverId(chat.getQuestionerId());
@@ -73,6 +90,13 @@ public class ProducerImpl implements Producer {
         }
     }
 
+    /**
+     * 메세지 보낸 유저의 닉네임 추출
+     *
+     * @param chat 메세지가 소속된 채팅방
+     * @param message 메세지
+     * @return 닉네임
+     */
     private String getSenderNickname(Chat chat, Message message) {
         if (chat.isAnswerer(message.getSenderId())) {
             return chat.getAnswererNickname();

@@ -20,25 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class ElsUserRestController {
     private final ElsUserService elsUserService;
 
+    /**
+     * 모든 사용자 조회
+     */
     @GetMapping("/all")
     public ApiResponse<List<ElsUser>> getAllUsers() {
         List<ElsUser> users = elsUserService.getAllUsers();
         return ApiResponse.ok(users);
     }
 
+    /**
+     * 사용자 검색 (관심사 + username + nickname)
+     * @param username
+     */
     @GetMapping("/search")
     public ApiResponse<List<ElsUser>> searchUsers(@RequestParam String username) {
-//        List<ElsUser> users = elsUserService.searchUsersByUsername(username);
-        List<ElsUser> users= elsUserService.searchUsersByInterest(username);
+        List<ElsUser> users = elsUserService.searchUsersByInterest(username);
         return ApiResponse.ok(users);
-    }
-    @GetMapping("/delete/{userId}")
-    public ResponseEntity<String> deleteUserById(@PathVariable String userId) {
-        boolean isDeleted = elsUserService.deleteByUserId(userId);
-        if (isDeleted) {
-            return ResponseEntity.ok("삭제 완료");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자 찾을 수 없음");
-        }
     }
 }

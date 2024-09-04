@@ -13,17 +13,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ElsUserServiceImpl implements ElsUserService {
     private final ElsUserRepository elsUserRepository;
-
+    /**
+     * 사용자 저장
+     * @param elsUser
+     */
     @Override
     public ElsUser saveOrUpdate(ElsUser elsUser) { //수정 등록
         return elsUserRepository.save(elsUser);
     }
-
+    /**
+     * 사용자 조회
+     * @param userId
+     */
     @Override
     public ElsUser findByUserId(Long userId) {
         return elsUserRepository.findById(String.valueOf(userId)).orElse(null);
     }
-
+    /**
+     * 모든 사용자 조회
+     */
     @Override
     public List<ElsUser> getAllUsers() {
         // Iterable을 List로 변환
@@ -32,12 +40,10 @@ public class ElsUserServiceImpl implements ElsUserService {
         iterable.forEach(elsUsers::add);
         return elsUsers;
     }
-
-//    @Override
-//    public List<ElsUser> searchUsersByUsername(String username) {
-//        return elsUserRepository.findByUsernameContaining(username);
-//    }
-
+    /**
+     * 사용자 삭제
+     * @param userId
+     */
     @Override
     public boolean deleteByUserId(String userId) {
         if (elsUserRepository.existsById(userId)) {
@@ -46,7 +52,10 @@ public class ElsUserServiceImpl implements ElsUserService {
         }
         return false;
     }
-
+    /**
+     * 사용자 검색 (관심사 + username + nickname)
+     * @param interest
+     */
     public List<ElsUser> searchUsersByInterest(String interest) {
         List<ElsUser> users = elsUserRepository.findByInterestsContaining(interest);
         return users;

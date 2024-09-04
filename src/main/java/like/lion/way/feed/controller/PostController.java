@@ -39,14 +39,19 @@ public class PostController {
     private final S3Service s3Service;
     private final PostBoxService postBoxService;
 
-    //자기 자신 피드
+    /**
+     * 게시글 목록 (자기 자신의 피드)
+     */
     @GetMapping("/posts")
     public String getPosts(Model model, HttpServletRequest request) {
 
         return getPostsForUser(null, model, request);
     }
 
-    //다른 사람의 피드
+    /**
+     * 게시글 목록 (다른 사용자의 피드)
+     *  @param username 특정 사용자의 피드를 보기 위해 사용하는 사용자 이름
+     */
     @GetMapping("/posts/{username}")
     public String getPostsByUsername(@PathVariable("username") String username,
                                      Model model,
@@ -55,7 +60,10 @@ public class PostController {
         return getPostsForUser(username, model, request);
     }
 
-    //고정 핀 설정
+    /**
+     * 게시글 고정 (핀)
+     * @param postId 고정하고 싶은 게시글 Id
+     */
     @PostMapping("/posts/pin/{postId}")
     public String pinPost(@PathVariable("postId") Long postId) {
 
@@ -63,7 +71,11 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    // 게시판 생성
+    /**
+     * 게시글 작성(등록)
+     * @param postDto 게시글 정보
+     * @param file 이미지 파일
+     */
     @PostMapping("/posts/create")
     public String savePost(PostDto postDto,
                            @RequestPart(value = "image") MultipartFile file,
@@ -80,13 +92,18 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    // 게시판 생성 페이지로 넘어감
+    /**
+     * 게시글 생성 페이지
+     */
     @GetMapping("/posts/create")
     public String createPost() {
         return "pages/feed/feedCreate";
     }
 
-    // 게시글 상세
+    /**
+     * 게시글 상세 페이지
+     * @param postId 자세히 보고 싶은 게시글의 Id
+     */
     @GetMapping("/posts/detail/{postId}")
     public String showDetailPost(@PathVariable("postId") Long postId,
                                  Model model,
@@ -102,7 +119,10 @@ public class PostController {
         return "pages/feed/detailFeed";
     }
 
-    //필터
+    /**
+     * 사용자 피드에 뜨는 정보 (게시글, 질문)
+     * @param username 자신의 피드 또는 다른 사용자의 피드를 보기 위해 사용하는 사용자 이름
+     */
     private String getPostsForUser(String username,
                                    Model model,
                                    HttpServletRequest request) {
@@ -129,6 +149,10 @@ public class PostController {
         return "pages/feed/userFeed";
     }
 
+    /**
+     * 사용자 차단 여부 확인
+     * @param user 사용자
+     */
     private boolean isUserBlocked(User user,
                                   HttpServletRequest request) {
 
@@ -140,6 +164,10 @@ public class PostController {
         return false;
     }
 
+    /**
+     * 사용자 게시글, 질문 정보
+     * @param user 사용자
+     */
     private void populateModelWithUserPostsAndQuestions(Model model,
                                                         User user,
                                                         HttpServletRequest request) {
@@ -157,12 +185,20 @@ public class PostController {
         model.addAttribute("sendQuestions", questionService.getQuestionByQuestioner(user).size());
     }
 
+    /**
+     * 고정되지 않은 게시글 필터링
+     * @param posts 게시글
+     */
     private List<Post> filterNonPinnedPosts(List<Post> posts) {
         return posts.stream().filter(p -> !p.isPostPinStatus())
                 .sorted(Comparator.comparing(Post::getPostCreatedAt))
                 .toList();
     }
 
+    /**
+     * 고정된 게시글 필터링
+     * @param posts 게시글
+     */
     private List<Post> filterPinnedPosts(List<Post> posts) {
         return posts.stream()
                 .filter(Post::isPostPinStatus)
@@ -170,6 +206,10 @@ public class PostController {
                 .toList();
     }
 
+    /**
+     * 답변된 질문 필터링
+     * @param questions 질문
+     */
     private List<Question> filterAnsweredQuestions(List<Question> questions) {
         return questions.stream()
                 .filter(q -> !q.getQuestionRejected() && q.getAnswer() != null)
@@ -177,14 +217,26 @@ public class PostController {
                 .toList();
     }
 
+    /**
+     * 거절된 질문 수
+     * @param questions 질문
+     */
     private int countRejectedQuestions(List<Question> questions) {
         return (int) questions.stream().filter(Question::getQuestionRejected).count();
     }
 
+    /**
+     * 답변되지 않은 질문 수
+     * @param questions 질문
+     */
     private int countNewQuestions(List<Question> questions) {
         return (int) questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() == null).count();
     }
 
+    /**
+     * 답변된 질문 수
+     * @param questions 질문
+     */
     private int countReplyQuestions(List<Question> questions) {
         return (int) questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).count();
     }

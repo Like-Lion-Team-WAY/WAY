@@ -12,6 +12,10 @@ public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
 
+    /**
+     * ROLENAME으로 ROLE 찾기
+     * @param roleName 권한이름
+     */
     @Override
     public Role findByRoleName(String roleName) {
         return roleRepository.findByRoleName(roleName);

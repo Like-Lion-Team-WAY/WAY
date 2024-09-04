@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/boards")
 public class BoardController {
 
+    /**
+     * 게시판 목록 페이지를 반환.
+     *
+     * @return 게시판 목록 페이지의 뷰 이름을 반환.
+     */
     @GetMapping
     public String showBoardList() {
 
@@ -17,6 +22,11 @@ public class BoardController {
 
     }
 
+    /**
+     * 게시판 생성 페이지를 반환.
+     *
+     * @return 게시판 생성 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/create")
     public String showCreateBoardForm() {
 
@@ -24,6 +34,11 @@ public class BoardController {
 
     }
 
+    /**
+     * 게시판 설정 페이지를 반환.
+     *
+     * @return 게시판 설정 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/setting/{boardId}")
     public String showBoardSettingForm() {
 
@@ -31,6 +46,11 @@ public class BoardController {
 
     }
 
+    /**
+     * 게시판 목록 페이지를 반환.
+     *
+     * @return 게시판 목록 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/{boardId}")
     public String  showPostForm() {
 
@@ -38,6 +58,12 @@ public class BoardController {
 
     }
 
+
+    /**
+     * 게시글 생성 페이지를 반환.
+     *
+     * @return 게시글 생성 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/posts/create/{boardId}")
     public String showPostCreateForm() {
 
@@ -45,6 +71,12 @@ public class BoardController {
 
     }
 
+
+    /**
+     * 게시글 상세보기 페이지를 반환.
+     *
+     * @return 게시글 상세보기 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/posts/{boardId}/{postId}")
     public String showPostDetail() {
 
@@ -52,6 +84,11 @@ public class BoardController {
 
     }
 
+    /**
+     * 게시글 수정 페이지를 반환.
+     *
+     * @return 게시글 수정 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/posts/edit/{boardId}/{postId}")
     public String showPostEditForm() {
 
@@ -59,6 +96,11 @@ public class BoardController {
 
     }
 
+    /**
+     * 내 스크랩 페이지를 반환.
+     *
+     * @return 내 스크랩 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/scraps")
     public String showScrapForm() {
 
@@ -66,6 +108,11 @@ public class BoardController {
 
     }
 
+    /**
+     * 베스트 게시글 페이지를 반환.
+     *
+     * @return 베스트 게시글 페이지의 뷰 이름을 반환.
+     */
     @GetMapping("/best")
     public String showBestPosts() {
 
