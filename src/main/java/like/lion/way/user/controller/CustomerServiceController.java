@@ -15,31 +15,43 @@ public class CustomerServiceController {
     private final UserService userService;
     private final UserUtil userUtil;
 
-    //고객센터
+    /**
+     * 고객센터 페이지
+     */
     @GetMapping("/way/customerService")
     public String customerService() {
         return "pages/admin/customerService";
     }
 
-    //이용약관
+    /**
+     * 이용약관 페이지
+     */
     @GetMapping("/way/termsOfuse")
     public String termsOfUse() {
         return "pages/admin/termsOfUse";
     }
 
-    //개인정보처리방침
+    /**
+     * 개인정보처리방침 페이지
+     */
     @GetMapping("/way/policyPersonalInfo")
     public String policyPersonalInfo() {
         return "pages/admin/policyPersonalInfo";
     }
 
-    //청소년보호정책
+    /**
+     * 청소년보호정책 페이지
+     */
     @GetMapping("/way/youthProtectionPolicy")
     public String youthProtectionPolicy() {
         return "pages/admin/youthProtectionPolicy";
     }
 
-    //블루체크 뱃지 신청창
+    /**
+     * 블루체크 신청 페이지
+     * @param request
+     * @param model
+     */
     @GetMapping("/blueCheck/application")
     public String blueCheck(HttpServletRequest request, Model model) {
 

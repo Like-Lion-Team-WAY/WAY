@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class QuestionRestcontroller {
     private final QuestionService questionService;
 
-    //답변 수정
+    /**
+     * 질문에 대한 답변 수정
+     * @param questionId 답변할 질문 Id
+     * @param response 질문 답변 내용
+     */
     @PatchMapping("/questions/answer/edit/{questionId}")
     public ResponseEntity<String> editAnswer(@PathVariable("questionId") Long questionId,
                                              @RequestParam(name = "answer") String response) {

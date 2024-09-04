@@ -3,12 +3,10 @@ package like.lion.way.user.service.serviceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import like.lion.way.jwt.util.JwtUtil;
 import like.lion.way.user.domain.Follow;
 import like.lion.way.user.domain.User;
 import like.lion.way.user.dto.FollowDto;
 import like.lion.way.user.repository.FollowRepository;
-import like.lion.way.user.repository.UserRepository;
 import like.lion.way.user.service.FollowService;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class FollowServiceImpl implements FollowService {
-    private final JwtUtil jwtUtil;
+
     private final UserService userService;
     private final FollowRepository followRepository;
-    private final UserRepository userRepository;
 
+    /**
+     * 팔로워 리스트
+     * @param user user객체의 팔로워
+     */
     @Override
     public List<FollowDto> getFollowerList(User user) {
         List<Follow> followers = followRepository.findAllByFollower(user);
@@ -38,6 +39,10 @@ public class FollowServiceImpl implements FollowService {
         return followDtos;
     }
 
+    /**
+     * 팔로잉 리스트
+     * @param user user객체의 팔로잉
+     */
     @Override
     public List<FollowDto> getFollowingList(User user) {
         List<Follow> followings = followRepository.findAllByFollowing(user);
@@ -53,6 +58,10 @@ public class FollowServiceImpl implements FollowService {
         return followingDtos;
     }
 
+    /**
+     * 팔로워 삭제
+     * @param username 삭제당하는 username
+     */
     @Transactional
     @Override
     public ResponseEntity<?> deleteFollower(HttpServletRequest request, String username) {
@@ -63,6 +72,10 @@ public class FollowServiceImpl implements FollowService {
         return ResponseEntity.ok("success");
     }
 
+    /**
+     * 언팔로잉
+     * @param username 언팔로잉 당하는 user
+     */
     @Transactional
     @Override
     public ResponseEntity<?> unFollowing(HttpServletRequest request, String username) {
@@ -72,6 +85,10 @@ public class FollowServiceImpl implements FollowService {
         return ResponseEntity.ok("success");
     }
 
+    /**
+     * 팔로잉
+     * @param username 팔로잉 당하는 user
+     */
     @Transactional
     @Override
     public ResponseEntity<?> following(HttpServletRequest request, String username) {
@@ -89,6 +106,10 @@ public class FollowServiceImpl implements FollowService {
         }
     }
 
+    /**
+     * 팔로우 여부 체크
+     * @param username 현재 피드유저
+     */
     @Override
     public ResponseEntity<?> followCheck(HttpServletRequest request, String username) {
         User nowUser = userService.getUserByToken(request);

@@ -53,7 +53,12 @@ public class BoardServiceImpl implements BoardService {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
-    // 게시글 목록 find
+    /**
+     * 게시판 목록을 조회.
+     *
+     * @param pageable 페이지네이션 정보
+     * @return 페이지네이션된 게시판 목록을 반환.
+     */
     @Override
     public Page<BoardTitleResponse> getBoardFindAll(Pageable pageable) {
 
@@ -70,7 +75,13 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시판 제목(소유자 일치) 요청
+    /**
+     * 게시판 제목과 소유자 일치 여부를 조회.
+     *
+     * @param boardId 게시판 ID
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     * @return 게시판 제목과 소유자 일치 여부 정보를 반환.
+     */
     @Override
     public BoardTitleResponse getBoardTitle(Long boardId, HttpServletRequest httpServletRequest) {
 
@@ -87,7 +98,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시판 생성
+    /**
+     * 게시판을 생성.
+     *
+     * @param request 게시판 생성 요청 DTO
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     */
     @Override
     @Transactional
     public void createBoard(BoardCreateServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -97,7 +113,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시판 수정
+    /**
+     * 게시판을 수정.
+     *
+     * @param request 게시판 수정 요청 DTO
+     * @param boardId 수정할 게시판의 ID
+     */
     @Override
     @Transactional
     public void updateBoard(BoardEditServiceRequest request, Long boardId) {
@@ -108,7 +129,11 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시판 삭제
+    /**
+     * 게시판을 삭제.
+     *
+     * @param boardId 삭제할 게시판의 ID
+     */
     @Override
     @Transactional
     public void deleteBoard(Long boardId) {
@@ -120,7 +145,13 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 목록 find
+    /**
+     * 게시판의 게시글 목록을 조회.
+     *
+     * @param boardId 게시판 ID
+     * @param pageable 페이지네이션 정보
+     * @return 페이지네이션된 게시글 목록을 반환.
+     */
     @Override
     public Page<BoardPostResponse> getPostFindAll(Long boardId, Pageable pageable) {
         Board board = boardRepository.findById(boardId)
@@ -141,7 +172,13 @@ public class BoardServiceImpl implements BoardService {
         return new PageImpl<>(postResponses, pageable, postsPage.getTotalElements());
     }
 
-    // 게시글 생성
+    /**
+     * 게시글을 생성.
+     *
+     * @param boardId 게시판 ID
+     * @param request 게시글 생성 요청 DTO
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     */
     @Override
     @Transactional
     public void createPost(Long boardId, BoardPostCreateServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -153,7 +190,13 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 상세보기
+    /**
+     * 게시글의 상세 정보를 조회.
+     *
+     * @param postId 게시글 ID
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     * @return 게시글의 상세 정보를 반환.
+     */
     @Override
     public BoardPostDetailResponse getPostDetails(Long postId, HttpServletRequest httpServletRequest) {
         BoardPost post = boardPostRepository.findByBoardPostId(postId);
@@ -185,7 +228,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 수정
+    /**
+     * 게시글을 수정.
+     *
+     * @param postId 수정할 게시글의 ID
+     * @param request 게시글 수정 요청 DTO
+     */
     @Override
     @Transactional
     public void editBoardPost(Long postId, BoardPostEditServiceRequest request) {
@@ -195,7 +243,11 @@ public class BoardServiceImpl implements BoardService {
         boardPost.editBoardPost(request.getTitle(), request.getContent());
     }
 
-    // 게시글 삭제
+    /**
+     * 게시글을 삭제.
+     *
+     * @param postId 삭제할 게시글의 ID
+     */
     @Override
     @Transactional
     public void deleteBoardPost(Long postId) {
@@ -203,7 +255,12 @@ public class BoardServiceImpl implements BoardService {
         boardPostRepository.delete(post);
     }
 
-    // 게시글 좋아요 갯수 count
+    /**
+     * 게시글의 좋아요 수를 반환.
+     *
+     * @param postId 게시글 ID
+     * @return 게시글의 좋아요 수를 반환.
+     */
     @Override
     public BoardPostLikeCountResponse getPostLikeCount(Long postId) {
         Long likes = boardPostLikeRepository.countLikesByBoardPostId(postId);
@@ -212,7 +269,12 @@ public class BoardServiceImpl implements BoardService {
                 .build();
     }
 
-    // 게시글 좋아요
+    /**
+     * 게시글에 좋아요를 추가하거나 제거.
+     *
+     * @param postId 게시글 ID
+     * @param request 요청의 HttpServletRequest 객체
+     */
     @Override
     @Transactional
     public void likePost(Long postId, HttpServletRequest request) {
@@ -233,7 +295,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 스크랩 갯수 count
+    /**
+     * 게시글의 스크랩 수를 반환.
+     *
+     * @param postId 게시글 ID
+     * @return 게시글의 스크랩 수를 반환.
+     */
     @Override
     public BoardPostScrapCountResponse getPostScrapCount(Long postId) {
         Long scraps = boardPostScrapRepository.countScrapsByBoardPostId(postId);
@@ -242,7 +309,12 @@ public class BoardServiceImpl implements BoardService {
                 .build();
     }
 
-    // 게시글 스크랩
+    /**
+     * 게시글을 스크랩하거나 스크랩을 제거.
+     *
+     * @param postId 게시글 ID
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     */
     @Override
     @Transactional
     public void scrapPost(Long postId, HttpServletRequest httpServletRequest) {
@@ -265,7 +337,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 댓글 갯수 count
+    /**
+     * 게시글의 댓글 수를 반환.
+     *
+     * @param postId 게시글 ID
+     * @return 게시글의 댓글 수를 반환.
+     */
     @Override
     public BoardPostCommentCountResponse getPostCommentCount(Long postId) {
 
@@ -276,7 +353,13 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 댓글 달기
+    /**
+     * 게시글에 댓글을 추가.
+     *
+     * @param postId 게시글 ID
+     * @param request 댓글 작성 요청 DTO
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     */
     @Override
     @Transactional
     public void commentPost(Long postId, BoardPostCommentServiceRequest request, HttpServletRequest httpServletRequest) {
@@ -290,7 +373,13 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 내 스크랩 확인
+    /**
+     * 스크랩한 게시글 목록을 조회.
+     *
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     * @param pageable 페이지네이션 정보
+     * @return 페이지네이션된 스크랩한 게시글 목록을 반환.
+     */
     @Override
     public Page<BoardPostScrapsResponse> getPostScraps(HttpServletRequest httpServletRequest, Pageable pageable) {
 
@@ -310,6 +399,11 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    /**
+     * 베스트 게시판 게시글 목록을 조회.
+     *
+     * @return 베스트 게시판 게시글 목록을 반환.
+     */
     @Override
     public List<BoardBestPostResponse> getBestBoardPosts() {
         Pageable pageable = PageRequest.of(0, 10); // 첫 페이지의 10개 항목
@@ -326,8 +420,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-
-    // 게시판 검색
+    /**
+     * 게시판을 검색.
+     *
+     * @param request 검색 요청 DTO
+     * @return 검색된 게시판 목록을 반환.
+     */
     @Override
     public List<BoardTitleResponse> getSearchBoards(BoardSearchServiceRequest request) {
 
@@ -343,7 +441,13 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 게시글 검색
+    /**
+     * 게시글을 검색.
+     *
+     * @param request 검색 요청 DTO
+     * @param pageable 페이지네이션 정보
+     * @return 페이지네이션된 게시글 목록을 반환.
+     */
     @Override
     public Page<BoardPostResponse> getSearchBoardPosts(BoardSearchServiceRequest request, Pageable pageable) {
 
@@ -361,8 +465,12 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-
-    // HttpServletRequest로 User 찾기
+    /**
+     * HttpServletRequest에서 사용자 정보를 가져옴.
+     *
+     * @param httpRequest HttpServletRequest 객체
+     * @return 사용자 정보를 반환.
+     */
     private User getUserByHttpServletRequest(HttpServletRequest httpRequest) {
 
         try {
@@ -376,24 +484,49 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    // 로그인 사용자와 소유자 일치 여부
+    /**
+     * 로그인한 사용자와 게시물 소유자 일치 여부를 확인.
+     *
+     * @param httpServletRequest 요청의 HttpServletRequest 객체
+     * @param owner 게시물 소유자
+     * @return 일치 여부를 반환.
+     */
     private boolean userOwnerMatch(HttpServletRequest httpServletRequest, User owner) {
         User user = getUserByHttpServletRequest(httpServletRequest);
         return user != null && user.equals(owner);
     }
 
+    /**
+     * 사용자 정보가 없을 경우 메시지를 반환.
+     *
+     * @param user 사용자 객체
+     * @return 사용자 이름 또는 탈퇴 회원 메시지를 반환.
+     */
     private String nullUserCheck(User user) {
 
         return user == null ? "탈퇴한 회원입니다." : user.getUsername();
 
     }
 
+    /**
+     * 사용자 닉네임을 반환하거나, 정보가 없을 경우 메시지를 반환.
+     *
+     * @param user 사용자 객체
+     * @param permission 익명 여부 확인
+     * @return 닉네임 또는 탈퇴 회원 메시지를 반환.
+     */
     private String nullUserNickCheck(User user, boolean permission) {
 
         return user == null ? "탈퇴한 회원입니다." : user.getNickname(permission);
 
     }
 
+    /**
+     * 사용자 프로필 이미지를 반환하거나, 정보가 없을 경우 "null"을 반환.
+     *
+     * @param user 사용자 객체
+     * @return 사용자 프로필 이미지 URL을 반환.
+     */
     private String nullUserImgCheck(User user) {
 
         return user == null ? "null" : user.getUserImage();

@@ -25,6 +25,12 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     private final SseEventProducer kafkaSseEventProducer;  // Kafka Producer 주입
     private final Map<Long, Map<String, SseEmitter>> emitters = new ConcurrentHashMap<>(); // thread-safe
 
+    /**
+     * SSE 구독 신청
+     * @param userId 신청자 userId
+     * @param windowId 신청하는 창의 고유 ID
+     * @return
+     */
     public SseEmitter add(Long userId, String windowId) {
         var userEmitters = this.emitters.computeIfAbsent(userId, k -> new ConcurrentHashMap<>());
         SseEmitter emitter = new SseEmitter(10 * 60 * 1000L); // 10분
@@ -50,6 +56,10 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         return emitter;
     }
 
+    /**
+     * 구독 후 첫 데이터 (알람 개수, 채팅 개수) 전송
+     * @param userId 구독자 userId
+     */
     @Override
     public void sendSubscriptions(Long userId) {
         Map<String, Object> data = new HashMap<>();
@@ -59,6 +69,10 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         sendJsonData(userId, "subscription", data);
     }
 
+    /**
+     * 알람 개수 전송 (헤더)
+     * @param userId 구독자 userId
+     */
     @Override
     public void sendAlarmCount(Long userId) {
         Map<String, Object> data = new HashMap<>();
@@ -67,6 +81,10 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         sendJsonData(userId, "count", data);
     }
 
+    /**
+     * 채팅 개수 전송 (헤더)
+     * @param userId 구독자 userId
+     */
     @Override
     public void sendChatCount(Long userId) {
         Map<String, Object> data = new HashMap<>();
@@ -75,6 +93,11 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         sendJsonData(userId, "chat", data);
     }
 
+    /**
+     * 새로운 알람 전송
+     * @param userId 구독자 userId
+     * @param alarm 전송할 알람
+     */
     @Override
     public void sendAlarm(Long userId, Alarm alarm) {
         Map<String, Object> data = new HashMap<>();
@@ -85,7 +108,10 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     /**
-     * JSON 데이터를 Kafka를 통해 전송합니다.
+     * JSON 데이터를 Kafka를 통해 전송
+     * @param userId 구독자 userId
+     * @param eventName subscribe, count, chat, alarm
+     * @param data 전송할 데이터
      */
     private void sendJsonData(Long userId, String eventName, Map<String, Object> data) {
         try {
@@ -100,7 +126,10 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
     }
 
     /**
-     * Kafka에서 수신한 메시지를 클라이언트에게 전송합니다.
+     * Kafka에서 수신한 메시지를 클라이언트에게 전송
+     * @param userId 구독자 userId
+     * @param name 이벤트 subscribe, count, chat, alarm
+     * @param jsonData 전송할 JSON 데이터
      */
     @Override
     public synchronized void send(Long userId, String name, String jsonData) {
@@ -130,6 +159,11 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         });
     }
 
+    /**
+     * SSE 구독 해제
+     * @param userId 구독자 userId
+     * @param windowId 구독 창의 고유 ID
+     */
     private void removeEmitter(Long userId, String windowId) {
         var userEmitters = this.emitters.get(userId);
         if (userEmitters != null) {
@@ -140,6 +174,11 @@ public class AlarmSseEmittersImpl implements AlarmSseEmitters {
         }
     }
 
+    /**
+     * SSE 연결 상태 확인
+     * @param emitter SseEmitter
+     * @return 연결 상태
+     */
     private boolean isValid(SseEmitter emitter) {
         try {
             emitter.send(SseEmitter.event().name("ping").data("keep-alive"));

@@ -22,7 +22,10 @@ public class ArchieveController {
     private final QuestionBoxService questionBoxService;
     private final UserService userService;
 
-    //전체 보관함 (스크랩한 질문과 피드)
+    /**
+     * 전체 보관함 페이지
+     * @param userId 사용자 Id
+     */
     @GetMapping("/all/archieve/{userId}")
     public String archieveAll(@PathVariable("userId") Long userId,
                               Model model) {
@@ -36,7 +39,11 @@ public class ArchieveController {
         return "pages/feed/archievePage";
     }
 
-    //질문 보관
+    /**
+     * 질문 보관
+     * @param questionId 보관하고 싶은 질문 Id
+     * @param userId 질문을 보관하는 사용자 Id
+     */
     @PostMapping("/questions/archieve")
     public String archieveQuestion(@RequestParam("questionId") Long questionId,
                                    @RequestParam("userId") Long userId) {
@@ -45,7 +52,11 @@ public class ArchieveController {
         return "redirect:/posts";
     }
 
-    //게시글 보관
+    /**
+     * 게시글 보관
+     * @param postId 보관하고 싶은 게시글 Id
+     * @param userId 해당 게시글을 보관하는 사용자 Id
+     */
     @PostMapping("/posts/archieve/{postId}")
     public String archievePost(@PathVariable("postId") Long postId,
                                @RequestParam("userId") Long userId) {

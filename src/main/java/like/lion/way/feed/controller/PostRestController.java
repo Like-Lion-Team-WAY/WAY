@@ -19,7 +19,12 @@ public class PostRestController {
     private final PostService postService;
     private final S3Service s3Service;
 
-    //게시글 수정
+    /**
+     * 게시글 수정
+     * @param postId 수정할 게시글 Id
+     * @param title 수정할 게시글 제목
+     * @param content 수정할 게시글 내용
+     */
     @PatchMapping("/posts/{postId}")
     public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId,
                                              @RequestParam("title") String title,
@@ -33,7 +38,10 @@ public class PostRestController {
         }
     }
 
-    //게시글 삭제
+    /**
+     * 게시글 삭제
+     * @param id 삭제할 게시글 Id
+     */
     @DeleteMapping("/posts")
     public ResponseEntity<String> deletePost(@RequestParam("id") Long id) {
 
