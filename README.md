@@ -230,7 +230,7 @@
 | [이나연](https://github.com/leenayeonnn) | 팀장 | 채팅 |
 | [변혜빈](https://github.com/hye2021) | 팀원 | 알림 |
 | [이유준](https://github.com/L-U-Ready) | 팀원 | 커뮤니티 |
-| [정호현](https://github.com/Firemanhyeon) | 팀원 | 로그인 (유저) + CI/CD |
+| [정호현](https://github.com/Firemanhyeon) | 팀원 | 유저 + CI/CD |
 | [최혜진](https://github.com/chhyejin) | 팀원 | 질문 + 피드 |
 
 ## 🌳 프로젝트 구조
