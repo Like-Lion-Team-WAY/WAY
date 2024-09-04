@@ -26,23 +26,40 @@ public class PostServiceImpl implements PostService {
     @Value("${image.upload.dir}")
     private String uploadDir;
 
+    /**
+     * 게시글 전체 조회
+     */
     @Override
     public List<Post> getAllPosts() {
         return postRepository.findAllByOrderByPostCreatedAtAsc();
     }
 
+    /**
+     * 게시글 전체 조회 (차단된 사용자 필터링)
+     */
     @Override
     public List<Post> getAllPosts(HttpServletRequest request) {
         List<Post> post = postRepository.findAllByOrderByPostCreatedAtAsc();
         return (List<Post>) blockService.blockFilter(post, request);
     }
 
+    /**
+     * 게시글 조회
+     * @param id 게시글 Id
+     */
     @Override
     public Post getPostById(Long id) {
         return postRepository.findById(id).orElse(null);
     }
 
+    /**
+     * 게시글 수정
+     * @param id 게시글 Id
+     * @param title 게시글 제목
+     * @param content 게시글 내용
+     */
     @Override
+    @Transactional
     public Post updatePost(Long id, String title, String content) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
         post.setPostTitle(title);
@@ -51,23 +68,41 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post);
     }
 
+    /**
+     * 게시글 삭제
+     * @param id 게시글 Id
+     */
     @Override
+    @Transactional
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
 
+    /**
+     * 사용자별 게시글 조회
+     * @param user 사용자 정보
+     */
     @Override
     public List<Post> getPostByUser(User user) {
         return postRepository.findPostByUser(user);
     }
 
+    /**
+     * 사용자별 게시글 조회 (차단된 사용자 필터링)
+     * @param user 사용자 정보
+     */
     @Override
     public List<Post> getPostByUser(User user, HttpServletRequest request) {
         List<Post> posts = postRepository.findPostByUser(user);
         return (List<Post>) blockService.blockFilter(posts, request);
     }
 
+    /**
+     * 게시글 고정 (핀)
+     * @param postId 게시글 Id
+     */
     @Override
+    @Transactional
     public Post pinPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
         if (post.isPostPinStatus() == true) {
@@ -78,6 +113,12 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post);
     }
 
+    /**
+     * 게시글 작성(등록)
+     * @param postDto 게시글 정보
+     * @param key 이미지 파일
+     * @param user 사용자 정보(게시글 작성한)
+     */
     @Override
     @Transactional
     public Post savePost(PostDto postDto, String key, User user) {

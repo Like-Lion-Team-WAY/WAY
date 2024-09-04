@@ -20,20 +20,38 @@ import org.springframework.web.bind.annotation.RestController;
 public class FollowRestController {
     private final FollowService followService;
 
+    /**
+     * 팔로워 삭제
+     * @param username
+     */
     @DeleteMapping("/deleteFollower")
     public ResponseEntity<?> deleteFollower(HttpServletRequest request, @RequestParam("username") String username){
 
         return followService.deleteFollower(request,username);
     }
+
+    /**
+     * 언팔로잉
+     * @param username
+     */
     @DeleteMapping("/unFollowing")
     public ResponseEntity<?>unFollowing(HttpServletRequest request,@RequestParam("username")String username){
         return followService.unFollowing(request,username);
     }
+
+    /**
+     * 팔로잉
+     * @param username
+     */
     @PostMapping("/following")
     public ResponseEntity<?>following(HttpServletRequest request , @RequestParam("username") String username){
         return followService.following(request,username);
     }
 
+    /**
+     * 팔로우 여부
+     * @param username
+     */
     @GetMapping("/followCheck")
     public ResponseEntity<?> followCheck(HttpServletRequest request,@RequestParam("username")String username){
         return followService.followCheck(request,username);

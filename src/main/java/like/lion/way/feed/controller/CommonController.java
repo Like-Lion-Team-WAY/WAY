@@ -29,7 +29,9 @@ public class CommonController {
     private final UserUtil userUtil;
     private final FollowService followService;
 
-
+    /**
+     * 메인 페이지
+     */
     @GetMapping("/main")
     public String mainView(Model model, HttpServletRequest request) {
 
@@ -37,16 +39,21 @@ public class CommonController {
 
         if (loginUser == null) {
             //비로그인 (우선 전체 게시글, 질문)
-            model.addAttribute("posts", postService.getAllPosts().stream().sorted(Comparator.comparing(Post::getPostCreatedAt)).toList());
-            model.addAttribute("questions", questionService.getAllQuestions().stream().sorted(Comparator.comparing(Question::getQuestionDate)).toList());
+            model.addAttribute("posts",
+                    postService.getAllPosts().stream().sorted(Comparator.comparing(Post::getPostCreatedAt)).toList());
+
+            model.addAttribute("questions",
+                    questionService.getAllQuestions().stream().sorted(Comparator.comparing(Question::getQuestionDate))
+                            .toList());
 
         } else {
             //로그인 (팔로우 한 사람들 게시글, 질문)
             List<FollowDto> follows = followService.getFollowingList(loginUser);
-            List<Post> posts= new ArrayList<>();
+            List<Post> posts = new ArrayList<>();
+
             for (FollowDto follow : follows) {
                 User user = userService.findByUsername(follow.getUsername());
-                posts.addAll(postService.getPostByUser(user,request));
+                posts.addAll(postService.getPostByUser(user, request));
             }
 
             model.addAttribute("posts", posts.stream().sorted(Comparator.comparing(Post::getPostCreatedAt)).toList());
@@ -55,16 +62,21 @@ public class CommonController {
 
             for (FollowDto follow : follows) {
                 User user = userService.findByUsername(follow.getUsername());
-                questions.addAll(questionService.getQuestionByAnswerer(user,request));
+                questions.addAll(questionService.getQuestionByAnswerer(user, request));
             }
 
-            model.addAttribute("questions", questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).sorted(
-                    Comparator.comparing(Question::getQuestionDate)).toList());
+            model.addAttribute("questions",
+                    questions.stream().filter(q -> !q.getQuestionRejected() && q.getAnswer() != null).sorted(
+                            Comparator.comparing(Question::getQuestionDate)).toList());
         }
         return "pages/feed/main";
     }
+
+    /**
+     * 메인 페이지
+     */
     @GetMapping("/")
-    public String mainPage(){
+    public String mainPage() {
         return "redirect:/main";
     }
 }

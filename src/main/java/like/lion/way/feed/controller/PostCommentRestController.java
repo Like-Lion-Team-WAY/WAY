@@ -21,7 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostCommentRestController {
     private final PostCommentService postCommentService;
 
-    //피드의 댓글 저장
+    /**
+     * 피드의 댓글 저장
+     * @param postId 해당 댓글을 단 게시글 Id
+     * @param userId 댓글을 작성한 사용자 Id
+     * @param postCommentDto 댓글 작성 정보
+     */
     @PostMapping("/posts/comments/{postId}")
     public ResponseEntity<String> saveComments(@PathVariable("postId") Long postId,
                                                @RequestParam("userId") Long userId,
@@ -35,12 +40,18 @@ public class PostCommentRestController {
         }
     }
 
-    //피드의 대댓글 저장
+    /**
+     * 피드의 대댓글 저장
+     * @param postId 대댓글을 작성한 게시글의 Id
+     * @param userId 대댓글을 작성한 사용자 Id
+     * @param postCommentContent 댓글 내용
+     * @param parentCommentPreCommentId 부모 댓글 Id (앞 댓글)
+     */
     @PostMapping("/posts/comments/pre/{postId}")
-    public ResponseEntity<String> savePreComments(@PathVariable("postId") Long postId,
-                                                  @RequestParam("userId") Long userId,
-                                                  @RequestParam("postCommentContent") String postCommentContent,
-                                                  @RequestParam("parentCommentPreCommentId") Long parentCommentPreCommentId) {
+    public ResponseEntity<String> saveReplies(@PathVariable("postId") Long postId,
+                                              @RequestParam("userId") Long userId,
+                                              @RequestParam("postCommentContent") String postCommentContent,
+                                              @RequestParam("parentCommentPreCommentId") Long parentCommentPreCommentId) {
 
         try {
             postCommentService.savePreComment(postId, userId, postCommentContent, parentCommentPreCommentId);
@@ -50,7 +61,11 @@ public class PostCommentRestController {
         }
     }
 
-    //댓글 수정
+    /**
+     * 댓글(대댓글) 수정
+     * @param commentId 수정을 원하는 댓글의 Id
+     * @param payload 수정할 내용
+     */
     @PatchMapping("/posts/comments/{commentId}")
     public ResponseEntity<String> updateComment(@PathVariable("commentId") Long commentId,
                                                 @RequestBody Map<String, String> payload) {
@@ -63,7 +78,10 @@ public class PostCommentRestController {
         }
     }
 
-    //댓글 삭제
+    /**
+     * 댓글(대댓글) 삭제
+     * @param commentId 삭제할 댓글의 Id
+     */
     @DeleteMapping("/posts/comments/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
         try {

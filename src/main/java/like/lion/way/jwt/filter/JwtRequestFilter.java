@@ -1,9 +1,6 @@
 package like.lion.way.jwt.filter;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,7 +15,7 @@ import like.lion.way.jwt.exception.CustomAuthenticationEntryPoint;
 import like.lion.way.jwt.exception.JwtExceptionCode;
 import like.lion.way.jwt.token.JwtAuthenticationToken;
 import like.lion.way.jwt.util.JwtUtil;
-import like.lion.way.user.controller.security.CustomUserDetails;
+import like.lion.way.user.security.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

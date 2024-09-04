@@ -29,7 +29,9 @@ public class QuestionController {
     private final UserService userService;
     private final S3Service s3Service;
 
-    //내 질문 페이지
+    /**
+     * 질문 페이지
+     */
     @GetMapping("/questions/create")
     public String createMyQuestion(Model model,
                                    HttpServletRequest request) {
@@ -38,7 +40,10 @@ public class QuestionController {
         return loadQuestionPage(model, request, loginUser != null ? loginUser.getUserId() : null);
     }
 
-    //다른 사람 질문 페이지
+    /**
+     * 질문 페이지 (다른 사용자)
+     * @param userId 다른 사용자의 질문 페이지에 가기 위해 사용되는 사용자 Id
+     */
     @GetMapping("/questions/create/{userId}")
     public String createQuestion(Model model,
                                  HttpServletRequest request,
@@ -47,7 +52,13 @@ public class QuestionController {
         return loadQuestionPage(model, request, userId);
     }
 
-    //질문 작성
+    /**
+     * 질문 작성
+     * @param userId 질문 페이지 소유자의 Id
+     * @param question 질문
+     * @param isAnonymous 익명 여부
+     * @param image 이미지 파일
+     */
     @PostMapping("/questions/create/{userId}")
     public String createQuestion(@PathVariable("userId") Long userId,
                                  @RequestParam("question") String question,
@@ -59,15 +70,21 @@ public class QuestionController {
         String imageUrl = (image != null && !image.isEmpty()) ? s3Service.uploadFile(image) : null;
 
         if (loginUser != null) {
+            // 로그인
             questionService.saveQuestion(loginUser, userId, question, isAnonymous, imageUrl, request);
         } else {
+            // 비로그인
             questionService.saveQuestion(userId, question, imageUrl, request);
         }
 
         return "redirect:/questions/create/" + userId;
     }
 
-    //질문 답변
+    /**
+     * 질문 답변
+     * @param answer 질문 답변 내용
+     * @param questionId 답변한 질문 Id
+     */
     @PostMapping("/questions/answer/{questionId}")
     public String answerQuestion(@RequestParam("answer") String answer,
                                  @PathVariable("questionId") Long questionId) {
@@ -77,7 +94,10 @@ public class QuestionController {
         return "redirect:/questions/create";
     }
 
-    //거절 질문 등록
+    /**
+     * 거절 질문 등록
+     * @param questionId 거절할 질문 Id
+     */
     @PostMapping("/questions/enroll/rejected")
     public String enrollRejected(@RequestParam("questionId") Long questionId) {
 
@@ -86,7 +106,10 @@ public class QuestionController {
         return "redirect:/questions/rejected";
     }
 
-    //질문 고정
+    /**
+     * 질문 고정 (핀)
+     * @param questionId 고정된 질문 Id
+     */
     @PostMapping("/questions/pin/{questionId}")
     public String pinQuestion(@PathVariable("questionId") Long questionId) {
 
@@ -94,7 +117,10 @@ public class QuestionController {
         return "redirect:/questions/create";
     }
 
-    //질문 삭제
+    /**
+     * 질문 삭제
+     * @param questionId 고정된 질문 Id
+     */
     @PostMapping("/questions/delete")
     public String deleteQuestion(@RequestParam("questionId") Long questionId) {
 
@@ -106,6 +132,10 @@ public class QuestionController {
         return "redirect:/questions/create";
     }
 
+    /**
+     * 공통적으로 질문 페이지에 띄우는 데이터들
+     * @param userId 사용자 Id
+     */
     private String loadQuestionPage(Model model,
                                     HttpServletRequest request,
                                     Long userId) {
@@ -128,6 +158,10 @@ public class QuestionController {
         return "pages/feed/questionPage";
     }
 
+    /**
+     * 고정되지 않은 질문 필터링
+     * @param questions 질문 리스트
+     */
     private List<Question> filterNonPinnedQuestions(List<Question> questions) {
         return questions.stream()
                 .filter(q -> !q.getQuestionRejected() && !q.getQuestionPinStatus())
@@ -135,6 +169,10 @@ public class QuestionController {
                 .toList();
     }
 
+    /**
+     * 고정된 질문 필터링
+     * @param questions 질문 리스트
+     */
     private List<Question> filterPinnedQuestions(List<Question> questions) {
         return questions.stream().filter(q -> !q.getQuestionRejected() && q.getQuestionPinStatus())
                 .sorted(Comparator.comparing(Question::getQuestionDate))

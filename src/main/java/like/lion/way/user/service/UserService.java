@@ -29,13 +29,10 @@ public interface UserService {
 
     UserProfileDto getProfile(HttpServletRequest request);
 
-    User updateUserInfo(SettingLoginInfoDto updateUserDto, HttpServletRequest request);
-
     ResponseEntity<String> updateOrSaveImg(String deleteFileName , HttpServletRequest request , String key);
     User getUserByToken(HttpServletRequest request);
 
     void logout(HttpServletResponse response);
-    String getUserImagePath(HttpServletRequest request);
 
     /*
      * ROLE 관련 매서드

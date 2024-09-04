@@ -28,7 +28,9 @@ public class SseRestController {
     private final ChatAlarmService chatAlarmService;
 
     /**
-     * 클라이언트가 SSE를 구독할 때 사용하는 엔드포인트
+     * SSE 알림 구독을 신청하는 엔드포인트
+     * @param windowId 구독은 신청한 브라우저 윈도우의 고유 ID
+     * @return 생성한 SseEmitter
      */
     @GetMapping(value = "/sse/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(HttpServletRequest request,

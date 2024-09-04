@@ -31,6 +31,12 @@ public class AlarmRestController {
     private final AlarmService alarmService;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 알림 목록 조회
+     * @param page 조회할 페이지
+     * @param size 페이지 당 조회할 알림 수
+     * @return 알림 목록
+     */
     @GetMapping
     public ResponseEntity<Page<AlarmMessageDto>> getAlarm(HttpServletRequest request,
                                                           @RequestParam(value = "page", defaultValue = "0") int page,
@@ -52,6 +58,10 @@ public class AlarmRestController {
         return ResponseEntity.ok(alarmDto);
     }
 
+    /**
+     * 알림 전체 삭제
+     * @return 삭제 성공 여부
+     */
     @DeleteMapping
     public ApiResponse<Void> deletAllAlarms(HttpServletRequest request) {
         String token = jwtUtil.getCookieValue(request, "accessToken");
@@ -64,12 +74,21 @@ public class AlarmRestController {
         return ApiResponse.ok();
     }
 
+    /**
+     * 알림 삭제
+     * @param id 삭제할 알림 id
+     * @return 삭제 성공 여부
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAlarm(@PathVariable(value = "id") Long id) {
         alarmService.deleteAlarm(id);
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 알림 설정 조회
+     * @return 알림 설정 정보
+     */
     @GetMapping("/setting")
     public ResponseEntity<Map<String, Boolean>> getAlarmSetting(HttpServletRequest request) {
         // user 정보 받아오기
@@ -84,6 +103,11 @@ public class AlarmRestController {
         return ResponseEntity.ok(alarmSetting);
     }
 
+    /**
+     * 알림 설정 변경
+     * @param alarmRequestDto 변경할 알림 설정 정보
+     * @return 변경한 알림 설정 정보
+     */
     @PutMapping("/setting")
     public ResponseEntity<Map<String, Boolean>> updateAlarmSetting(HttpServletRequest request,
                                                    @RequestBody AlarmRequestDto alarmRequestDto) {

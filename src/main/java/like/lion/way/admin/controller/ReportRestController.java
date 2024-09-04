@@ -19,11 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor // for constructor injection
+@RequestMapping("/api/report")
 public class ReportRestController {
     private final ReportService reportService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("/api/report")
+    /**
+     * 신고 신청 api
+     * @param reportRequestDto 신고 신청 정보
+     * @return 신고 신청 결과
+     */
+    @PostMapping()
     public ResponseEntity<Void> report(HttpServletRequest request,
                                        @RequestBody ReportRequestDto reportRequestDto) {
         // 로그인 여부 확인
@@ -42,7 +48,14 @@ public class ReportRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/api/report")
+    /**
+     * 신고 신청 목록 조회 api
+     * @param type 신고 타입
+     * @param reported 신고 당한 사용자
+     * @param sortDirection 정렬 방향
+     * @return 필터링 된 신고 신청 목록
+     */
+    @GetMapping()
     public ApiResponse<List<ReportResponseDto>> getReports(@RequestParam(required = false) String type,
                                                            @RequestParam(required = false) String reported,
                                                            @RequestParam(required = false) String sortDirection) {
@@ -50,7 +63,12 @@ public class ReportRestController {
         return ApiResponse.ok(reports);
     }
 
-    @DeleteMapping("/api/report")
+    /**
+     * 신고 신청 삭제 api
+     * @param id 삭제할 신고 신청 id
+     * @return 삭제 결과
+     */
+    @DeleteMapping()
     public ApiResponse<Void> deleteReport(@RequestParam Long id) {
         reportService.deleteReport(id);
         return ApiResponse.ok(null);
