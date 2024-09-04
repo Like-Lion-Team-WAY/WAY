@@ -10,6 +10,7 @@ import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,13 @@ public class QuestionBoxServiceImpl implements QuestionBoxService {
     private final UserService userService;
     private final QuestionBoxRepository questionBoxRepository;
 
+    /**
+     * 질문 보관
+     * @param questionId
+     * @param userId
+     */
     @Override
+    @Transactional
     public QuestionBox archieveQuestion(Long questionId, Long userId) {
         Question question = questionService.getQuestionById(questionId);
         User user = userService.findByUserId(userId);
@@ -35,6 +42,10 @@ public class QuestionBoxServiceImpl implements QuestionBoxService {
         }
     }
 
+    /**
+     * 질문 보관함 조회 (사용자로)
+     * @param user
+     */
     @Override
     public List<QuestionBox> getQuestionBoxByUserId(User user) {
         return questionBoxRepository.findByUser(user);

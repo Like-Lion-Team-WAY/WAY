@@ -12,6 +12,7 @@ import like.lion.way.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,13 @@ public class LikeServiceImpl implements LikeService {
     private final PostRepository postRepository;
     private final QuestionRepository questionRepository;
 
+    /**
+     * 게시글 좋아요
+     * @param postId
+     * @param userId
+     */
     @Override
+    @Transactional
     public void likePost(Long postId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("invalid userId"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("invalid postId"));
@@ -45,7 +52,13 @@ public class LikeServiceImpl implements LikeService {
         }
     }
 
+    /**
+     * 질문 좋아요
+     * @param questionId
+     * @param userId
+     */
     @Override
+    @Transactional
     public void likeQuestion(Long questionId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("invalid userId"));
         Question question = questionRepository.findById(questionId)

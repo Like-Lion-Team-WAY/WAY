@@ -24,11 +24,21 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final UserService userService;
     private final ApplicationEventPublisher publisher;
 
+    /**
+     * 댓글 조회
+     * @param commentId
+     */
     public PostComment getCommentById(Long commentId) {
         return postCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
     }
 
+    /**
+     * 댓글 저장
+     * @param postId
+     * @param postCommentDto
+     * @param userId
+     */
     @Override
     @Transactional
     public PostComment saveComment(Long postId, PostCommentDto postCommentDto, Long userId) {
@@ -54,6 +64,11 @@ public class PostCommentServiceImpl implements PostCommentService {
         return value;
     }
 
+    /**
+     * 댓글 수정
+     * @param commentId
+     * @param content
+     */
     @Override
     @Transactional
     public PostComment updateComment(Long commentId, String content) {
@@ -63,11 +78,23 @@ public class PostCommentServiceImpl implements PostCommentService {
         return postCommentRepository.save(postComment);
     }
 
+    /**
+     * 댓글 삭제
+     * @param commentId
+     */
     @Override
+    @Transactional
     public void deleteComment(Long commentId) {
         postCommentRepository.deleteById(commentId);
     }
 
+    /**
+     * 대댓글 저장
+     * @param postId
+     * @param userId
+     * @param postCommentContent
+     * @param parentCommentPreCommentId
+     */
     @Override
     @Transactional
     public PostComment savePreComment(Long postId, Long userId, String postCommentContent,

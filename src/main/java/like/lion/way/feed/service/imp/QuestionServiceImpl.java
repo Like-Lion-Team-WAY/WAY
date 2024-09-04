@@ -31,17 +31,30 @@ public class QuestionServiceImpl implements QuestionService {
     @Value("${image.upload.dir}")
     private String uploadDir;
 
+    /**
+     * 질문 전체 조회
+     */
     @Override
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
+    /**
+     * 질문 id 에 따른 조회
+     * @param questionId
+     */
     @Override
     public Question getQuestionById(Long questionId) {
         return questionRepository.getByQuestionId(questionId);
     }
 
+    /**
+     * 질문 답변 수정
+     * @param questionId
+     * @param answer
+     */
     @Override
+    @Transactional
     public Question updateAnswer(Long questionId, String answer) {
         Question question = questionRepository.getByQuestionId(questionId);
         question.setAnswer(answer);
@@ -56,27 +69,45 @@ public class QuestionServiceImpl implements QuestionService {
         return value;
     }
 
+    /**
+     * 질문 답변자의 질문 데이터 조회
+     * @param user
+     */
     @Override
     public List<Question> getQuestionByAnswerer(User user) {
         return questionRepository.findQuestionsByAnswerer(user);
     }
 
+    /**
+     * 질문 답변자의 질문 데이터 조회 (차단된 사용자 필터링)
+     * @param user
+     * @param request
+     */
     @Override
     public List<Question> getQuestionByAnswerer(User user, HttpServletRequest request) {
         List<Question> list = questionRepository.findQuestionsByAnswerer(user);
         return (List<Question>) blockService.blockFilter(list, request);
     }
 
-
+    /**
+     * 질문자의 질문 데이터 조회
+     * @param user
+     */
     @Override
     public List<Question> getQuestionByQuestioner(User user) {
         return questionRepository.findQuestionsByQuestioner(user);
     }
 
+    /**
+     * 질문 고정 (핀)
+     * @param questionId
+     * @return
+     */
     @Override
+    @Transactional
     public Question pinQuestion(Long questionId) {
         Question question = questionRepository.getByQuestionId(questionId);
-        if (question.getQuestionPinStatus() == true) {
+        if (question.getQuestionPinStatus() == true){
             question.setQuestionPinStatus(false);
         } else {
             question.setQuestionPinStatus(true);
@@ -84,7 +115,13 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.save(question);
     }
 
+    /**
+     * 거절 질문 등록
+     * @param question
+     * @return
+     */
     @Override
+    @Transactional
     public Question rejectedQuestion(Question question) {
         if (question.getQuestionRejected() == true) {
             question.setQuestionRejected(false);
@@ -94,12 +131,26 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.save(question);
     }
 
+    /**
+     * 질문 삭제
+     * @param questionId
+     */
     @Override
+    @Transactional
     public void deleteQuestion(Long questionId) {
         Question question = questionRepository.getByQuestionId(questionId);
         questionRepository.delete(question);
     }
 
+    /**
+     * 질문 저장 (로그인 된 사용자)
+     * @param user
+     * @param userId
+     * @param question
+     * @param isAnonymous
+     * @param key
+     * @param request
+     */
     @Override
     @Transactional
     public Question saveQuestion(User user, Long userId, String question, boolean isAnonymous, String key,
@@ -133,6 +184,11 @@ public class QuestionServiceImpl implements QuestionService {
         return value;
     }
 
+    /**
+     * 질문에 대한 답변 저장
+     * @param question
+     * @param answer
+     */
     @Override
     @Transactional
     public Question saveQuestion(Question question, String answer) {
@@ -149,6 +205,13 @@ public class QuestionServiceImpl implements QuestionService {
         return value;
     }
 
+    /**
+     * 질문 저장 (비로그인 사용자)
+     * @param userId
+     * @param question
+     * @param key
+     * @param request
+     */
     @Override
     @Transactional
     public Question saveQuestion(Long userId, String question, String key, HttpServletRequest request) {
