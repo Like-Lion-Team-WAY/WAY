@@ -21,6 +21,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+/**
+ * 메세지 관련 서비스
+ *
+ * @author Lee NaYeon
+ */
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -30,21 +35,48 @@ public class MessageServiceImpl implements MessageService {
     private final Producer producer;
     private final ApplicationEventPublisher publisher;
 
+    /**
+     * 채팅방의 마지막 메세지 찾기
+     *
+     * @param id 채팅방 Id
+     * @return 마지막 메세지
+     */
     @Override
     public Message findLastByChatId(Long id) {
         return messageRepository.findFirstByChatIdOrderByCreatedAtDesc(id);
     }
 
+    /**
+     * 채팅방의 메세지 찾기 (pageable)
+     *
+     * @param chatId 채팅방 Id
+     * @param pageable 페이징 정보
+     * @return 메세지 데이터
+     */
     @Override
     public Page<Message> findAllByChatId(Long chatId, Pageable pageable) {
         return messageRepository.findAllByChatId(chatId, pageable);
     }
 
+    /**
+     * 이전 불러온 메세지를 기준으로 채팅방 메세지 찾기 (pageable)
+     *
+     * @param chatId 채팅방 Id
+     * @param lastLoadMessageId 이전 불러온 마지막 메세지 Id
+     * @param pageable 페이징 정보
+     * @return 메세지 데이터
+     */
     @Override
     public Page<Message> findAllByChatIdAndIdLessThan(Long chatId, String lastLoadMessageId, Pageable pageable) {
         return messageRepository.findAllByChatIdAndIdLessThan(chatId, lastLoadMessageId, pageable);
     }
 
+    /**
+     * 채팅 시작 메세지 생성<br/>
+     * 상대에게 알림 전송
+     *
+     * @param chat 메세지가 소속될 채팅방
+     */
     @Override
     public void createStartMessage(Chat chat) {
         User chatMaker = chat.getAnswerer();
@@ -66,10 +98,18 @@ public class MessageServiceImpl implements MessageService {
         publisher.publishEvent(event);
     }
 
+    /**
+     * 탈퇴시 나가기 메세지 생성<br/>
+     * 메세지 보내기
+     *
+     * @param chat 메세지가 소속될 채팅방
+     * @param userId 보낸 유저 Id
+     * @param result 나가기 타입 (leave, delete)
+     */
     @Override
     public void createWithdrawalMessage(Chat chat, Long userId, String result) {
         String nickname = getNickname(chat, userId);
-        String text = "[" + nickname + "] 님이 나가겼습니다.";
+        String text = "[" + nickname + "] 님이 나가셨습니다.";
         Message message = new Message();
         message.setChatId(chat.getId());
         message.setText(text);
@@ -78,6 +118,13 @@ public class MessageServiceImpl implements MessageService {
         producer.sendMessage(message);
     }
 
+    /**
+     * 메세지 읽음 처리<br/>
+     * 알림 전송
+     *
+     * @param userId 읽은 유저 Id
+     * @param chatId 읽은 메세지가 소속된 채팅방 Id
+     */
     @Override
     @Async
     public void readMessage(Long userId, Long chatId) {
@@ -93,11 +140,24 @@ public class MessageServiceImpl implements MessageService {
         publisher.publishEvent(event);
     }
 
+    /**
+     * Id 통해서 메세지 찾기
+     *
+     * @param id 메세지 Id
+     * @return 찾은 메세지
+     */
     @Override
     public Message findById(String id) {
         return messageRepository.findById(id).orElse(null);
     }
 
+    /**
+     * 닉네임 오픈 상태에 따른 유저 닉네임 추출
+     *
+     * @param chat 닉네임 오픈 상태 확인 위한 채팅방 정보
+     * @param userId 닉네임 추출할 유저 Id
+     * @return 닉네임
+     */
     private String getNickname(Chat chat, Long userId) {
         if (chat.isAnswerer(userId)) {
             return chat.getAnswererNickname();
