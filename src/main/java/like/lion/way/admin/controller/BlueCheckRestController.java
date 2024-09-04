@@ -2,7 +2,7 @@ package like.lion.way.admin.controller;
 
 import like.lion.way.ApiResponse;
 import like.lion.way.admin.domain.BlueCheck;
-import like.lion.way.admin.domain.dto.BlueCheckDto;
+import like.lion.way.admin.dto.BlueCheckDto;
 import like.lion.way.admin.service.BlueCheckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

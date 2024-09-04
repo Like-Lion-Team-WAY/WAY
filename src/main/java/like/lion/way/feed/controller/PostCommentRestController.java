@@ -1,7 +1,7 @@
 package like.lion.way.feed.controller;
 
 import java.util.Map;
-import like.lion.way.feed.domain.dto.PostCommentDto;
+import like.lion.way.feed.dto.PostCommentDto;
 import like.lion.way.feed.service.PostCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

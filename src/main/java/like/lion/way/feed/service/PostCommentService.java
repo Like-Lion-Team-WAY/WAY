@@ -1,7 +1,7 @@
 package like.lion.way.feed.service;
 
 import like.lion.way.feed.domain.PostComment;
-import like.lion.way.feed.domain.dto.PostCommentDto;
+import like.lion.way.feed.dto.PostCommentDto;
 
 
 public interface PostCommentService {

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import like.lion.way.alarm.domain.AlarmType;
 import like.lion.way.alarm.event.AlarmEvent;
 import like.lion.way.feed.domain.PostComment;
-import like.lion.way.feed.domain.dto.PostCommentDto;
+import like.lion.way.feed.dto.PostCommentDto;
 import like.lion.way.feed.repository.PostCommentRepository;
 import like.lion.way.feed.service.PostCommentService;
 import like.lion.way.feed.service.PostService;

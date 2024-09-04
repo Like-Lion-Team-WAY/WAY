@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import like.lion.way.feed.domain.Post;
-import like.lion.way.feed.domain.dto.PostDto;
+import like.lion.way.feed.dto.PostDto;
 import like.lion.way.feed.repository.PostRepository;
 import like.lion.way.feed.service.PostService;
 import like.lion.way.jwt.util.JwtUtil;

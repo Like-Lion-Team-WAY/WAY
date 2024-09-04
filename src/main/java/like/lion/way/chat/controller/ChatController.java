@@ -2,7 +2,7 @@ package like.lion.way.chat.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import like.lion.way.chat.domain.Chat;
-import like.lion.way.chat.domain.dto.ChatRoomViewDTO;
+import like.lion.way.chat.dto.ChatRoomViewDTO;
 import like.lion.way.chat.service.ChatService;
 import like.lion.way.chat.service.MessageService;
 import like.lion.way.jwt.util.JwtUtil;

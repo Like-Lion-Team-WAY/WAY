@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import like.lion.way.chat.domain.Chat;
 import like.lion.way.chat.domain.Message;
-import like.lion.way.chat.domain.dto.ReceiveMessageDTO;
+import like.lion.way.chat.dto.ReceiveMessageDTO;
 import like.lion.way.chat.repository.ChatRepository;
 import like.lion.way.chat.repository.MessageRepository;
 import like.lion.way.chat.service.kafka.Producer;
