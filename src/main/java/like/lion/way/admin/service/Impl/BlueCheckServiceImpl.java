@@ -16,6 +16,11 @@ public class BlueCheckServiceImpl implements BlueCheckService {
     private final UserService userService;
     private final BlueCheckRepository blueCheckRepository;
 
+    /**
+     * 인증 배지 신청
+     * @param userId 인증 배지 신청할 유저의 userId
+     * @return 생성한 인증 배지 신청서
+     */
     @Override
     public BlueCheck applyBlueCheck(Long userId) {
 
@@ -33,16 +38,31 @@ public class BlueCheckServiceImpl implements BlueCheckService {
         return blueCheckRepository.save(blueCheck);
     }
 
+    /**
+     * 해당 사용자의 인증 배지 신청 여부 조회
+     * @param user 조회할 사용자
+     * @return 조회한 인증 배지 신청서
+     */
     @Override
     public BlueCheck findByUser(User user) {
         return blueCheckRepository.findByUser(user);
     }
 
+    /**
+     * 모든 사용자의 인증 배지 신청 목록 조회
+     * @return 인증 배지 신청서 목록
+     */
     @Override
     public List<BlueCheck> findAll() {
         return blueCheckRepository.findAll();
     }
 
+    /**
+     * 인증 배지 신청 내역 삭제
+     * @param username 삭제할 사용자의 username
+     * @throws IllegalArgumentException 사용자가 존재하지 않거나 인증배지를 신청하지 않은 경우
+     * @throws NullPointerException 인증배지를 신청하지 않은 사용자의 경우
+     */
     @Override
     public void removeBlueCheck(String username) throws IllegalArgumentException, NullPointerException {
         User user = userService.findByUsername(username);
