@@ -30,6 +30,10 @@ public class UserRestController {
 
     private final ChatService chatService;
 
+    /**
+     * username 중복체크
+     * @param username
+     */
     @GetMapping("/duplicate")
     public ResponseEntity<Boolean> duplicateCheck(@RequestParam("username") String username){
         User user =userService.findByUsername(username);
@@ -40,6 +44,10 @@ public class UserRestController {
         }
     }
 
+    /**
+     *  관심 등록
+     * @param interests
+     */
     @PostMapping("/addInterests")
     public ResponseEntity<String> addInterests(HttpServletRequest request
                                                 , HttpServletResponse response
@@ -51,6 +59,11 @@ public class UserRestController {
         return ResponseEntity.ok("fail");
     }
 
+    /**
+     *  이미지 수정 or 저장
+     * @param file
+     * @param deleteFileName
+     */
     @PostMapping("/updateOrSaveImg")
     public ResponseEntity<String> updateOrSaveImg(@RequestParam("image") MultipartFile file
                                                 ,@RequestParam("existingImageName") String deleteFileName
@@ -61,6 +74,10 @@ public class UserRestController {
         String key = s3Service.uploadFile(file);
         return  userService.updateOrSaveImg(deleteFileName, request , key);
     }
+
+    /**
+     * 회원탈퇴
+     */
     @DeleteMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(HttpServletRequest request , HttpServletResponse response){
         User user = userService.getUserByToken(request);

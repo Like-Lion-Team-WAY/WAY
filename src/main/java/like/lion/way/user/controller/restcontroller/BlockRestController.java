@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class BlockRestController {
     private final BlockService blockService;
 
+    /**
+     * 차단 해제
+     * @param username
+     */
     @DeleteMapping("/unblock")
     public ResponseEntity<?> unblock(HttpServletRequest request , @RequestParam("username") String username){
         return blockService.unblock(request,username);

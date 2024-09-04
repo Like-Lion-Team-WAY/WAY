@@ -1,4 +1,4 @@
-package like.lion.way.user.controller.security;
+package like.lion.way.user.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
