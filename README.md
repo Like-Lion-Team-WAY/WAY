@@ -196,7 +196,7 @@
 
 ## 🗃️ ERD
 
-![erd](https://github.com/user-attachments/assets/3a3b0484-b659-46ee-b894-f5a09358de11)
+![erd](https://github.com/user-attachments/assets/dc9392ee-23c5-4395-966a-653f2ee71cf3)
 
 ## 🛠️ 기능
 
@@ -335,6 +335,8 @@ way
 
 [[트러블슈팅] AWS RDS 현재 활동](https://www.notion.so/AWS-RDS-6f84846a71194581927d6c636f3d6b5b?pvs=21)
 
+[[트러블슈팅] nginx - 카카오 로그인](https://www.notion.so/nginx-OAuth-497f7a3321bd4867a2b7aed1c998c719)
+
 ## 😙 향후 계획
 
 - 코드 리펙토링
@@ -347,3 +349,4 @@ way
 [2차 최종 발표](https://www.canva.com/design/DAGPlbu1KaY/_PhW511rIiq1eFw2Shn7UA/view?utm_content=DAGPlbu1KaY&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 
 ## 🎥 데모
+[![Video Label](http://img.youtube.com/vi/sB7hmC_JN1E/0.jpg)](https://youtu.be/sB7hmC_JN1E)
