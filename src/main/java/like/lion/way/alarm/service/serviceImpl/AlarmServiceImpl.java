@@ -48,6 +48,10 @@ public class AlarmServiceImpl implements AlarmService {
      */
     @Override
     public Alarm createAlarm(AlarmEvent alarmEvent) {
+        // 자기 자신에게 알림을 보낼 수 없음
+        if (alarmEvent.getFromUser().equals(alarmEvent.getToUser())) {
+            return null;
+        }
         AlarmType type = alarmEvent.getType();
         String message =
                 alarmEvent.getFromUser() == null ? type.getMessage("익명")
@@ -81,6 +85,7 @@ public class AlarmServiceImpl implements AlarmService {
             case COMMENT -> alarmSetting.isComment();
             case ANSWER -> alarmSetting.isAnswer();
             case BOARD_COMMENT -> alarmSetting.isBoardComment();
+            case BOARD_REPLY -> alarmSetting.isBoardReply();
             default -> false;
         };
     }
@@ -159,6 +164,7 @@ public class AlarmServiceImpl implements AlarmService {
             case COMMENT -> alarmSetting.setComment(enabled);
             case ANSWER -> alarmSetting.setAnswer(enabled);
             case BOARD_COMMENT -> alarmSetting.setBoardComment(enabled);
+            case BOARD_REPLY -> alarmSetting.setBoardReply(enabled);
         }
         alarmSettingRepository.save(alarmSetting);
     }
@@ -178,6 +184,8 @@ public class AlarmServiceImpl implements AlarmService {
         settings.put(AlarmType.ANSWER.getType(), alarmSetting.isAnswer());
         settings.put(AlarmType.COMMENT.getType(), alarmSetting.isComment());
         settings.put(AlarmType.REPLY.getType(), alarmSetting.isReply());
+        settings.put(AlarmType.BOARD_COMMENT.getType(), alarmSetting.isBoardComment());
+        settings.put(AlarmType.BOARD_REPLY.getType(), alarmSetting.isBoardReply());
 
         return settings;
     }

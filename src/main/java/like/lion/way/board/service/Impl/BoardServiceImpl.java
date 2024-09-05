@@ -3,6 +3,8 @@ package like.lion.way.board.service.Impl;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
+import like.lion.way.alarm.domain.AlarmType;
+import like.lion.way.alarm.event.AlarmEvent;
 import like.lion.way.board.dto.request.BoardCreateServiceRequest;
 import like.lion.way.board.dto.request.BoardEditServiceRequest;
 import like.lion.way.board.dto.request.BoardPostCommentServiceRequest;
@@ -33,6 +35,7 @@ import like.lion.way.user.domain.User;
 import like.lion.way.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +56,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardPostCommentRepository boardPostCommentRepository;
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final ApplicationEventPublisher publisher;
 
     /**
      * 게시판 목록을 조회.
@@ -188,7 +192,6 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
         User user = getUserByHttpServletRequest(httpServletRequest);
         boardPostRepository.save(request.toEntity(user, board));
-
     }
 
     /**
@@ -370,8 +373,22 @@ public class BoardServiceImpl implements BoardService {
 
         User user = getUserByHttpServletRequest(httpServletRequest);
 
-        boardPostCommentRepository.save(request.toEntity(post, user));
+        var value = boardPostCommentRepository.save(request.toEntity(post, user));
 
+        // 트랜잭션 종료 후 이벤트 발생
+        String urlParam = post.getBoard().getId().toString() + "/" + post.getId().toString();
+        User fromUser = value.getUser();
+        AlarmType type;
+        User toUser;
+        if (value.getPreCommentId() == 0) {
+            type = AlarmType.BOARD_COMMENT;
+            toUser = post.getUser();
+        } else {
+            type = AlarmType.BOARD_REPLY;
+            toUser = boardPostCommentRepository.findById(value.getPreCommentId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID")).getUser();
+        }
+        publisher.publishEvent(new AlarmEvent(this, type, fromUser, toUser, urlParam));
     }
 
     /**
@@ -482,7 +499,6 @@ public class BoardServiceImpl implements BoardService {
             log.error("Invalid token", e);
             return null;
         }
-
     }
 
     /**
