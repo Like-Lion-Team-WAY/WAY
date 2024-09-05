@@ -347,7 +347,7 @@ way
 [1차 기획 발표](https://www.canva.com/design/DAGL6Azijjk/XFunBHtoLC4nzzufzPrcsw/edit?utm_content=DAGL6Azijjk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) <br>
 [1차 중간 발표](https://www.canva.com/design/DAGNtVmtYeI/-sWADMXqv5v0ajQSte3aBg/view?utm_content=DAGNtVmtYeI&utm_campaign=designshare&utm_medium=link&utm_source=editor) <br>
 [2차 기획 발표](https://dog-lightning-b4b.notion.site/2-0e296198df364989ac8406fb1a5327c1?pvs=74) <br>
-[2차 최종 발표](https://www.canva.com/design/DAGP2N8ESTw/Anp9AscWm3QC-NoC6kHh_A/edit)
+[2차 최종 발표](https://www.canva.com/design/DAGPlbu1KaY/_PhW511rIiq1eFw2Shn7UA/view?utm_content=DAGPlbu1KaY&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 
 ## 🎥 데모
 [![Video Label](http://img.youtube.com/vi/wQImY0ZIj74/0.jpg)](https://youtu.be/wQImY0ZIj74)
