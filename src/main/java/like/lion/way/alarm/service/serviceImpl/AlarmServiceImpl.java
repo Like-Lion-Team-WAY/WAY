@@ -1,6 +1,7 @@
 package like.lion.way.alarm.service.serviceImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.domain.AlarmSetting;
 import like.lion.way.alarm.domain.AlarmType;
@@ -30,6 +31,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 타입에 따른 알림 세팅 설정 여부 조회
+     *
      * @param user 조회할 대상자
      * @param type 알림 타입
      * @return 알림 설정 여부
@@ -43,11 +45,16 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 타입에 따라 메시지, url 생성
+     *
      * @param alarmEvent 알림 이벤트
      * @return 생성된 알림
      */
     @Override
     public Alarm createAlarm(AlarmEvent alarmEvent) {
+        // 자기 자신에게 알림을 보낼 수 없음
+        if (alarmEvent.getFromUser().equals(alarmEvent.getToUser())) {
+            return null;
+        }
         AlarmType type = alarmEvent.getType();
         String message =
                 alarmEvent.getFromUser() == null ? type.getMessage("익명")
@@ -59,6 +66,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 저장
+     *
      * @param alarm 저장할 알림
      */
     @Override
@@ -70,8 +78,9 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 타입의 알림 설정 여부 조회
+     *
      * @param alarmSetting 알림 설정
-     * @param alarmType 알림 타입
+     * @param alarmType    알림 타입
      * @return 알림 설정 여부
      */
     private boolean getAlarmStatus(AlarmSetting alarmSetting, AlarmType alarmType) {
@@ -81,12 +90,14 @@ public class AlarmServiceImpl implements AlarmService {
             case COMMENT -> alarmSetting.isComment();
             case ANSWER -> alarmSetting.isAnswer();
             case BOARD_COMMENT -> alarmSetting.isBoardComment();
+            case BOARD_REPLY -> alarmSetting.isBoardReply();
             default -> false;
         };
     }
 
     /**
      * 특정 유저의 알림 개수 조회
+     *
      * @param user 조회할 대상자
      * @return 알림 개수
      */
@@ -98,6 +109,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 유저의 알림 개수 조회
+     *
      * @param userId 조회할 대상자의 userId
      * @return 알림 개수
      */
@@ -109,9 +121,10 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 조회
+     *
      * @param userId 조회할 대상자의 userId
-     * @param page 페이지 번호
-     * @param size 페이지 크기
+     * @param page   페이지 번호
+     * @param size   페이지 크기
      * @return 알림 목록
      */
     @Override
@@ -124,6 +137,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 알림 삭제
+     *
      * @param alarmId 삭제할 알림의 id
      */
     @Override
@@ -134,18 +148,23 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 모든 알림 삭제
+     *
      * @param userId 삭제할 대상자의 userId
      */
     @Override
     @Transactional
     public void deleteAllAlarms(Long userId) {
-        alarmRepository.deleteByUser_UserId(userId);
+        List<Alarm> alarms = alarmRepository.findByUser_UserId(userId);
+        if (!alarms.isEmpty()) {
+            alarmRepository.deleteAll(alarms);
+        }
     }
 
     /**
      * 알림 설정 변경
-     * @param userId 변경할 대상자의 userId
-     * @param type 변경할 알림 타입
+     *
+     * @param userId  변경할 대상자의 userId
+     * @param type    변경할 알림 타입
      * @param enabled 변경할 알림 설정 여부
      */
     @Override
@@ -159,12 +178,14 @@ public class AlarmServiceImpl implements AlarmService {
             case COMMENT -> alarmSetting.setComment(enabled);
             case ANSWER -> alarmSetting.setAnswer(enabled);
             case BOARD_COMMENT -> alarmSetting.setBoardComment(enabled);
+            case BOARD_REPLY -> alarmSetting.setBoardReply(enabled);
         }
         alarmSettingRepository.save(alarmSetting);
     }
 
     /**
      * 알림 설정 조회
+     *
      * @param userId 조회할 대상자의 userId
      * @return 알림 설정
      */
@@ -178,6 +199,8 @@ public class AlarmServiceImpl implements AlarmService {
         settings.put(AlarmType.ANSWER.getType(), alarmSetting.isAnswer());
         settings.put(AlarmType.COMMENT.getType(), alarmSetting.isComment());
         settings.put(AlarmType.REPLY.getType(), alarmSetting.isReply());
+        settings.put(AlarmType.BOARD_COMMENT.getType(), alarmSetting.isBoardComment());
+        settings.put(AlarmType.BOARD_REPLY.getType(), alarmSetting.isBoardReply());
 
         return settings;
     }

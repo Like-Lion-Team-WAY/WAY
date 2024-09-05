@@ -45,6 +45,9 @@ public class AlarmSetting {
     @Column(name = "alarm_setting_board_comment")
     private boolean boardComment;
 
+    @Column(name = "alarm_setting_board_reply")
+    private boolean boardReply;
+
     // User와의 관계를 설정하는 생성자
     public AlarmSetting(User user) {
         this.user = user;
@@ -53,5 +56,6 @@ public class AlarmSetting {
         comment = true;
         answer = true;
         boardComment = true;
+        boardReply = true;
     }
 }
