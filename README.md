@@ -349,4 +349,4 @@ way
 [2차 최종 발표](https://www.canva.com/design/DAGPlbu1KaY/_PhW511rIiq1eFw2Shn7UA/view?utm_content=DAGPlbu1KaY&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 
 ## 🎥 데모
-[![Video Label](http://img.youtube.com/vi/sB7hmC_JN1E/0.jpg)](https://youtu.be/sB7hmC_JN1E)
+[![Video Label](http://img.youtube.com/vi/wQImY0ZIj74/0.jpg)](https://youtu.be/wQImY0ZIj74)
