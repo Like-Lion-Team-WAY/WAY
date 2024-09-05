@@ -377,7 +377,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 트랜잭션 종료 후 이벤트 발생
         String urlParam = post.getBoard().getId().toString() + "/" + post.getId().toString();
-        User fromUser = value.getUser();
+        User fromUser = value.isAnonymousPermission() ? null : user;
         AlarmType type;
         User toUser;
         if (value.getPreCommentId() == 0) {
