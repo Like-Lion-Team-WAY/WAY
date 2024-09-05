@@ -1,6 +1,7 @@
 package like.lion.way.alarm.service.serviceImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import like.lion.way.alarm.domain.Alarm;
 import like.lion.way.alarm.domain.AlarmSetting;
 import like.lion.way.alarm.domain.AlarmType;
@@ -30,6 +31,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 타입에 따른 알림 세팅 설정 여부 조회
+     *
      * @param user 조회할 대상자
      * @param type 알림 타입
      * @return 알림 설정 여부
@@ -43,6 +45,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 타입에 따라 메시지, url 생성
+     *
      * @param alarmEvent 알림 이벤트
      * @return 생성된 알림
      */
@@ -63,6 +66,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 저장
+     *
      * @param alarm 저장할 알림
      */
     @Override
@@ -74,8 +78,9 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 타입의 알림 설정 여부 조회
+     *
      * @param alarmSetting 알림 설정
-     * @param alarmType 알림 타입
+     * @param alarmType    알림 타입
      * @return 알림 설정 여부
      */
     private boolean getAlarmStatus(AlarmSetting alarmSetting, AlarmType alarmType) {
@@ -92,6 +97,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 유저의 알림 개수 조회
+     *
      * @param user 조회할 대상자
      * @return 알림 개수
      */
@@ -103,6 +109,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 유저의 알림 개수 조회
+     *
      * @param userId 조회할 대상자의 userId
      * @return 알림 개수
      */
@@ -114,9 +121,10 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 조회
+     *
      * @param userId 조회할 대상자의 userId
-     * @param page 페이지 번호
-     * @param size 페이지 크기
+     * @param page   페이지 번호
+     * @param size   페이지 크기
      * @return 알림 목록
      */
     @Override
@@ -129,6 +137,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 특정 알림 삭제
+     *
      * @param alarmId 삭제할 알림의 id
      */
     @Override
@@ -139,18 +148,23 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 모든 알림 삭제
+     *
      * @param userId 삭제할 대상자의 userId
      */
     @Override
     @Transactional
     public void deleteAllAlarms(Long userId) {
-        alarmRepository.deleteByUser_UserId(userId);
+        List<Alarm> alarms = alarmRepository.findByUser_UserId(userId);
+        if (!alarms.isEmpty()) {
+            alarmRepository.deleteAll(alarms);
+        }
     }
 
     /**
      * 알림 설정 변경
-     * @param userId 변경할 대상자의 userId
-     * @param type 변경할 알림 타입
+     *
+     * @param userId  변경할 대상자의 userId
+     * @param type    변경할 알림 타입
      * @param enabled 변경할 알림 설정 여부
      */
     @Override
@@ -171,6 +185,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     /**
      * 알림 설정 조회
+     *
      * @param userId 조회할 대상자의 userId
      * @return 알림 설정
      */
