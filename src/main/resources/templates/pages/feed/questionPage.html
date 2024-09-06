@@ -21,14 +21,14 @@
     <a th:if="${loginUser == null || user.getUserId() != loginUser.getUserId()}">
         <p class="subtitle" th:text="${user.nickname+' ('+user.username+')'} + '님에게 익명으로 질문을 보내세요!!'"></p>
         <div class="question-section">
-            <form class="question-form" method="post" th:action="@{/questions/create/{userId}(userId=${user.userId})}"
+            <form class="question-form" method="post"
+                  th:action="@{/questions/create/{userId}(userId=${user.userId})}"
                   enctype="multipart/form-data">
-                <input type="text" name="question" class="question-input" placeholder="질문 쓰기">
+                <input type="text" name="question" class="question-input" placeholder="질문 쓰기" id="questionInput">
                 <div>
                     <input type="radio" name="isAnonymous" id="anonymousTrue" value="true" checked>
                     <label for="anonymousTrue">익명</label>
-                    <input th:if="${loginUser != null}" type="radio" name="isAnonymous" id="anonymousFalse"
-                           value="false">
+                    <input th:if="${loginUser != null}" type="radio" name="isAnonymous" id="anonymousFalse" value="false">
                     <label th:if="${loginUser != null}" for="anonymousFalse">실명</label>
                 </div>
                 <div class="form-group">
