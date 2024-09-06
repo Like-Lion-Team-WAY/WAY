@@ -1,10 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // 댓글 작성 폼 제출 이벤트 핸들러
     $('.comment-input').on('submit', function(event) {
         event.preventDefault();
 
         var postId = $(this).find('input[name="postId"]').val();
         var userId = $(this).find('input[name="userId"]').val();
-        var postCommentContent = $(this).find('input[name="postCommentContent"]').val();
+        var postCommentContent = $(this).find('input[name="postCommentContent"]').val().trim(); // Trim spaces
+
+
+        if (!postCommentContent) {
+            alert('댓글 내용을 입력해 주세요.');
+            return;
+        }
 
         $.ajax({
             url: `/posts/comments/${postId}`,
@@ -35,12 +42,19 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#replyCommentForm-' + commentId).hide();
     });
 
+    // 답글 작성 버튼 클릭 이벤트 핸들러
     $('.submit-reply-btn').click(function(event) {
         event.preventDefault();
         var commentId = $(this).data('comment-id');
-        var replyContent = $('#replyCommentContent-' + commentId).val();
+        var replyContent = $('#replyCommentContent-' + commentId).val().trim(); // Trim spaces
         var postId = $('input[name="postId"]').val();
         var userId = $('input[name="userId"]').val();
+
+        // Validation: Check if reply content is empty
+        if (!replyContent) {
+            alert('답글 내용을 입력해 주세요.');
+            return; // Prevent the AJAX request if the content is empty
+        }
 
         $.ajax({
             type: 'POST',
@@ -56,11 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             error: function(error) {
                 console.log('Error:', error);
+                alert('답글 저장에 실패했습니다.');
             }
         });
     });
 
-    // Edit button click handler for both comments and replies
+    // 댓글 수정 버튼 클릭 이벤트 핸들러
     document.querySelectorAll('.edit-comment-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
@@ -77,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Cancel button click handler for both comments and replies
+    // 대댓글 수정 버튼 클릭 이벤트 핸들러
     document.querySelectorAll('.cancel-edit-btn, .cancel-reply-edit-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
@@ -94,12 +109,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Save button click handler for both comments and replies
+    // 댓글 저장
     document.querySelectorAll('.save-comment-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');
-            const updatedContent = document.getElementById(`editCommentContent-${commentId}`).value;
-            console.log(commentId, updatedContent);
+            const updatedContent = document.getElementById(`editCommentContent-${commentId}`).value.trim(); // Trim spaces
+
+
+            if (!updatedContent) {
+                alert('댓글 내용을 입력해 주세요.');
+                return;
+            }
+
             $.ajax({
                 url: `/posts/comments/`+commentId,
                 method: 'PATCH',
@@ -128,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Delete button click handler for both comments and replies
+    //댓글 삭제
     document.querySelectorAll('.delete-comment-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             const commentId = button.getAttribute('data-comment-id');

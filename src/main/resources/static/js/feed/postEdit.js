@@ -38,11 +38,16 @@ $(document).ready(function() {
     })
     //수정 내용 저장
     $("#savePostBtn").click(function() {
-        var newTitle = $("#editPostTitle").val();
-        var newContent = $("#editPostContent").val();
+        var newTitle = $("#editPostTitle").val().trim();
+        var newContent = $("#editPostContent").val().trim();
         var postId = $('#postId').val();
 
-        console.log(postId,newTitle,newContent);
+        if (!newTitle || !newContent) {
+            alert("제목과 내용을 모두 입력해 주세요.");
+            return;
+        }
+
+        console.log(postId, newTitle, newContent);
 
         $.ajax({
             url: "/posts/" + postId,
@@ -73,7 +78,7 @@ $(document).ready(function() {
                 data: { id: postId },
                 success: function(result) {
                     alert("게시글 삭제가 완료되었습니다.");
-                    window.location.href = "/posts"; // Redirect to a success page or refresh
+                    window.location.href = "/posts";
                 },
                 error: function(err) {
                     console.log(err);
